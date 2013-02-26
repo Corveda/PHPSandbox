@@ -1,1 +1,0 @@
-#A full-scale PHP 5.3+ sandbox class that utilizes PHPParser to prevent sandboxed code from running unsafe code.#
