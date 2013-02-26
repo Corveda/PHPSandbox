@@ -1,1 +1,1 @@
-This file was created by JetBrains PhpStorm 5.0.4 for binding GitHub repository
+#A full-scale PHP 5.3+ sandbox class that utilizes PHPParser to prevent sandboxed code from running unsafe code.#
