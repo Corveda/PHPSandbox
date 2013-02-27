@@ -10,7 +10,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 - Can selectively allow and disallow function creation, class declarations, constant definitions, and even keywords!
 
 ##Example usage:
-    $sandbox = PHPSandbox\PHPSandbox::create();
+    $sandbox = new PHPSandbox\PHPSandbox;
     $sandbox->execute(function(){
-        eval('evil code'); //this will generate an exception and fail
+        eval('phpinfo();'); //this will generate an exception and fail
     });

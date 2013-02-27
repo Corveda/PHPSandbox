@@ -294,6 +294,7 @@
          *
          * You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor
          *
+         * @param   array   $options            Optional array of options to set for the sandbox
          * @param   array   $functions          Optional array of functions to define for the sandbox
          * @param   array   $variables          Optional array of variables to define for the sandbox
          * @param   array   $constants          Optional array of constants to define for the sandbox
@@ -304,7 +305,8 @@
          * @param   array   $magic_constants    Optional array of magic constants to define for the sandbox
          * @return  null
          */
-		public function __construct(array $functions = array(),
+		public function __construct(array $options = array(),
+                                    array $functions = array(),
                                     array $variables = array(),
                                     array $constants = array(),
                                     array $namespaces = array(),
@@ -313,7 +315,8 @@
                                     array $superglobals = array(),
                                     array $magic_constants = array()){
             $this->name = static::$function_prefix . md5(uniqid());
-            $this->define_funcs($functions)
+            $this->set_options($options)
+                ->define_funcs($functions)
                 ->define_vars($variables)
                 ->define_consts($constants)
                 ->define_namespaces($namespaces)
@@ -326,6 +329,7 @@
          *
          * You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor
          *
+         * @param   array   $options            Optional array of options to set for the sandbox
          * @param   array   $functions          Optional array of functions to define for the sandbox
          * @param   array   $variables          Optional array of variables to define for the sandbox
          * @param   array   $constants          Optional array of constants to define for the sandbox
@@ -337,7 +341,8 @@
          *
          * @return  PHPSandbox                  The returned PHPSandbox variable
          */
-        public static function create(array $functions = array(),
+        public static function create(array $options = array(),
+                                      array $functions = array(),
                                       array $variables = array(),
                                       array $constants = array(),
                                       array $namespaces = array(),
@@ -345,7 +350,7 @@
                                       array $globals = array(),
                                       array $superglobals = array(),
                                       array $magic_constants = array()){
-            return new static($functions, $variables, $constants, $namespaces, $aliases, $globals, $superglobals, $magic_constants);
+            return new static($options, $functions, $variables, $constants, $namespaces, $aliases, $globals, $superglobals, $magic_constants);
         }
         /** PHPSandbox invoke magic method
          *
