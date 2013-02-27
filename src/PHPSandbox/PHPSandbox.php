@@ -1,4 +1,7 @@
 <?php
+    /** PHPSandbox class declaration
+     * @package PHPSandbox
+     */
     namespace PHPSandbox;
 
     /**
@@ -303,7 +306,6 @@
          * @param   array   $constants          Optional array of constants to define for the sandbox
          * @param   array   $namespaces         Optional array of namespaces to define for the sandbox
          * @param   array   $aliases            Optional array of aliases to define for the sandbox
-         * @param   array   $globals            Optional array of globals to define for the sandbox
          * @param   array   $superglobals       Optional array of superglobals to define for the sandbox
          * @param   array   $magic_constants    Optional array of magic constants to define for the sandbox
          * @return  $this                       The returned PHPSandbox variable
@@ -339,7 +341,6 @@
          * @param   array   $constants          Optional array of constants to define for the sandbox
          * @param   array   $namespaces         Optional array of namespaces to define for the sandbox
          * @param   array   $aliases            Optional array of aliases to define for the sandbox
-         * @param   array   $globals            Optional array of globals to define for the sandbox
          * @param   array   $superglobals       Optional array of superglobals to define for the sandbox
          * @param   array   $magic_constants    Optional array of magic constants to define for the sandbox
          *
@@ -351,10 +352,9 @@
                                       array $constants = array(),
                                       array $namespaces = array(),
                                       array $aliases = array(),
-                                      array $globals = array(),
                                       array $superglobals = array(),
                                       array $magic_constants = array()){
-            return new static($options, $functions, $variables, $constants, $namespaces, $aliases, $globals, $superglobals, $magic_constants);
+            return new static($options, $functions, $variables, $constants, $namespaces, $aliases, $superglobals, $magic_constants);
         }
         /** PHPSandbox invoke magic method
          *
@@ -1862,43 +1862,95 @@
         public function undefine_uses(array $uses = array()){
             return $this->undefine_aliases($uses);
         }
-
+        /** Normalize function name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the function $name to normalize
+         *
+         * @return  string          Returns the normalized function string
+         */
         protected function normalize_func($name){
             return strtolower($name);
         }
-
+        /** Normalize superglobal name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the superglobal $name to normalize
+         *
+         * @return  string          Returns the normalized superglobal string
+         */
         protected function normalize_superglobal($name){
             return strtoupper(ltrim($name, '_'));
         }
-
+        /** Normalize magic constant name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the magic constant $name to normalize
+         *
+         * @return  string          Returns the normalized magic constant string
+         */
         protected function normalize_magic_const($name){
             return strtoupper(trim($name, '_'));
         }
-
+        /** Normalize namespace name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the namespace $name to normalize
+         *
+         * @return  string          Returns the normalized namespace string
+         */
         protected function normalize_namespace($name){
             return strtolower($name);
         }
-
+        /** Normalize alias name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the alias $name to normalize
+         *
+         * @return  string          Returns the normalized alias string
+         */
         protected function normalize_alias($name){
             return strtolower($name);
         }
-
+        /** Normalize use (or alias) name.  This is an internal PHPSandbox function.
+         *
+         * @alias   normalize_alias();
+         *
+         * @param   string          $name       String of the use (or alias) $name to normalize
+         *
+         * @return  string          Returns the normalized use (or alias) string
+         */
         protected function normalize_use($name){
             return $this->normalize_alias($name);
         }
-
+        /** Normalize class name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the class $name to normalize
+         *
+         * @return  string          Returns the normalized class string
+         */
         protected function normalize_class($name){
             return strtolower($name);
         }
-
+        /** Normalize interface name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the interface $name to normalize
+         *
+         * @return  string          Returns the normalized interface string
+         */
         protected function normalize_interface($name){
             return strtolower($name);
         }
-
+        /** Normalize trait name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the trait $name to normalize
+         *
+         * @return  string          Returns the normalized trait string
+         */
         protected function normalize_trait($name){
             return strtolower($name);
         }
-
+        /** Normalize keyword name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the keyword $name to normalize
+         *
+         * @return  string          Returns the normalized keyword string
+         */
         protected function normalize_keyword($name){
             $name = strtolower($name);
             switch($name){
@@ -1929,7 +1981,12 @@
             }
             return $name;
         }
-
+        /** Normalize primitive name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the primitive $name to normalize
+         *
+         * @return  string          Returns the normalized primitive string
+         */
         protected function normalize_primitive($name){
             $name = strtolower($name);
             if(strpos($name, '++') !== false){
@@ -1943,7 +2000,12 @@
             }
             return $name;
         }
-
+        /** Normalize type name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the type $name to normalize
+         *
+         * @return  string          Returns the normalized type string
+         */
         protected function normalize_type($name){
             return strtolower($name);
         }

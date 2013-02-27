@@ -1,16 +1,40 @@
 <?php
+    /** WhitelistVisitor class declaration
+     * @package PHPSandbox
+     */
     namespace PHPSandbox;
 
+    /**
+     * Whitelister class for PHP Sandboxes.
+     *
+     * This class takes parsed AST code and checks it against the passed PHPSandbox instance configuration to
+     * autmatically whitelist trusted code functions, classes, etc. if the appropriate settings are configured.
+     *
+     * @namespace PHPSandbox
+     *
+     * @author  Elijah Horton <fieryprophet@yahoo.com>
+     * @version 1.0
+     */
     class WhitelistVisitor extends \PHPParser_NodeVisitorAbstract {
-        /**
+        /** The PHPSandbox instance to check against
          * @var PHPSandbox
          */
         protected $sandbox;
-
+        /** WhitelistVisitor class constructor
+         *
+         * This constructor takes a passed PHPSandbox instance to check against for whitelisting trusted code.
+         *
+         * @param   PHPSandbox   $sandbox            The PHPSandbox instance to check against
+         */
         public function __construct(PHPSandbox $sandbox){
             $this->sandbox = $sandbox;
         }
-
+        /** Examine the current PHPParser_Node node against the PHPSandbox configuration for whitelisting trusted code
+         *
+         * @param   \PHPParser_Node   $node          The trusted $node to examine
+         *
+         * @return  null|bool         Return false if node must be removed, or null if no changes to the node are made
+         */
         public function leaveNode(\PHPParser_Node $node){
             if($node instanceof \PHPParser_Node_Expr_FuncCall && $node->name instanceof \PHPParser_Node_Name){
                 $this->sandbox->whitelist_func($node->name->toString());
@@ -59,5 +83,6 @@
                 }
                 return false;
             }
+            return null;
         }
     }

@@ -18,7 +18,10 @@
 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
 <li class="dropdown">
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
-                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu"></ul>
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
 </li>
 <li class="dropdown" id="charts-menu">
 <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
@@ -28,7 +31,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">206</span></a></li>
+                <span class="label label-info">170</span></a></li>
 <li><a href="markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -53,9 +56,6 @@
 <li class="nav-header">Navigation</li>
 <li><a href="#Error.php"><i class="icon-file"></i>Error.php</a></li>
 <li><a href="#PHPSandbox.php"><i class="icon-file"></i>PHPSandbox.php</a></li>
-<li><a href="#SandboxWhitelistVisitor.php"><i class="icon-file"></i>SandboxWhitelistVisitor.php</a></li>
-<li><a href="#ValidatorVisitor.php"><i class="icon-file"></i>ValidatorVisitor.php</a></li>
-<li><a href="#WhitelistVisitor.php"><i class="icon-file"></i>WhitelistVisitor.php</a></li>
 </ul></div>
 <div class="span8">
 <ul class="breadcrumb">
@@ -66,7 +66,7 @@
 </ul>
 <div class="package-contents">
 <a name="Error.php" id="Error.php"></a><h3>
-<i class="icon-file"></i>Error.php<small style="float: right;padding-right: 10px;">2</small>
+<i class="icon-file"></i>Error.php<small style="float: right;padding-right: 10px;">1</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -74,23 +74,16 @@
 <th>Line</th>
 <th>Description</th>
 </tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>0</td>
-<td>No page-level DocBlock was found in file Error.php</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>4</td>
-<td>No DocBlock was found for \PHPSandbox\Error</td>
-</tr>
-</tbody>
+<tbody><tr class="critical">
+<td>critical</td>
+<td>2</td>
+<td>No short description for file Error.php</td>
+</tr></tbody>
 </table></div>
 </div>
 <div class="package-contents">
 <a name="PHPSandbox.php" id="PHPSandbox.php"></a><h3>
-<i class="icon-file"></i>PHPSandbox.php<small style="float: right;padding-right: 10px;">185</small>
+<i class="icon-file"></i>PHPSandbox.php<small style="float: right;padding-right: 10px;">169</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -101,1075 +94,861 @@
 <tbody>
 <tr class="error">
 <td>error</td>
-<td>0</td>
-<td>No page-level DocBlock was found in file PHPSandbox.php</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>63</td>
+<td>66</td>
 <td>No DocBlock was found for property $definitions</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>73</td>
+<td>76</td>
 <td>No DocBlock was found for property $whitelist</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>91</td>
+<td>94</td>
 <td>No DocBlock was found for property $blacklist</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>294</td>
-<td>Name of argument $superglobals does not match with the DocBlock's name $globals in __construct()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>294</td>
-<td>Name of argument $magic_constants does not match with the DocBlock's name $superglobals in __construct()</td>
-</tr>
-<tr class="notice">
-<td>notice</td>
-<td>294</td>
-<td>Parameter $globals could not be found in __construct()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1866</td>
-<td>No DocBlock was found for method normalize_func()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1870</td>
-<td>No DocBlock was found for method normalize_superglobal()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1874</td>
-<td>No DocBlock was found for method normalize_magic_const()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1878</td>
-<td>No DocBlock was found for method normalize_namespace()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1882</td>
-<td>No DocBlock was found for method normalize_alias()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1886</td>
-<td>No DocBlock was found for method normalize_use()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1890</td>
-<td>No DocBlock was found for method normalize_class()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1894</td>
-<td>No DocBlock was found for method normalize_interface()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1898</td>
-<td>No DocBlock was found for method normalize_trait()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1902</td>
-<td>No DocBlock was found for method normalize_keyword()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1933</td>
-<td>No DocBlock was found for method normalize_primitive()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1947</td>
-<td>No DocBlock was found for method normalize_type()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1951</td>
+<td>2013</td>
 <td>No DocBlock was found for method whitelist()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>1976</td>
+<td>2038</td>
 <td>No DocBlock was found for method blacklist()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2001</td>
+<td>2063</td>
 <td>No DocBlock was found for method dewhitelist()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2020</td>
+<td>2082</td>
 <td>No DocBlock was found for method deblacklist()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2039</td>
+<td>2101</td>
 <td>No DocBlock was found for method has_whitelist()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2043</td>
+<td>2105</td>
 <td>No DocBlock was found for method has_blacklist()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2047</td>
+<td>2109</td>
 <td>No DocBlock was found for method is_whitelisted()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2051</td>
+<td>2113</td>
 <td>No DocBlock was found for method is_blacklisted()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2055</td>
+<td>2117</td>
 <td>No DocBlock was found for method has_whitelist_funcs()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2059</td>
+<td>2121</td>
 <td>No DocBlock was found for method has_blacklist_funcs()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2063</td>
+<td>2125</td>
 <td>No DocBlock was found for method is_whitelisted_func()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2068</td>
+<td>2130</td>
 <td>No DocBlock was found for method is_blacklisted_func()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2073</td>
+<td>2135</td>
 <td>No DocBlock was found for method has_whitelist_vars()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2077</td>
+<td>2139</td>
 <td>No DocBlock was found for method has_blacklist_vars()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2081</td>
+<td>2143</td>
 <td>No DocBlock was found for method is_whitelisted_var()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2085</td>
+<td>2147</td>
 <td>No DocBlock was found for method is_blacklisted_var()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2089</td>
+<td>2151</td>
 <td>No DocBlock was found for method has_whitelist_globals()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2093</td>
+<td>2155</td>
 <td>No DocBlock was found for method has_blacklist_globals()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2097</td>
+<td>2159</td>
 <td>No DocBlock was found for method is_whitelisted_global()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2101</td>
+<td>2163</td>
 <td>No DocBlock was found for method is_blacklisted_global()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2105</td>
+<td>2167</td>
 <td>No DocBlock was found for method has_whitelist_superglobals()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2110</td>
+<td>2172</td>
 <td>No DocBlock was found for method has_blacklist_superglobals()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2115</td>
+<td>2177</td>
 <td>No DocBlock was found for method is_whitelisted_superglobal()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2120</td>
+<td>2182</td>
 <td>No DocBlock was found for method is_blacklisted_superglobal()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2125</td>
+<td>2187</td>
 <td>No DocBlock was found for method has_whitelist_consts()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2129</td>
+<td>2191</td>
 <td>No DocBlock was found for method has_blacklist_consts()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2133</td>
+<td>2195</td>
 <td>No DocBlock was found for method is_whitelisted_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2137</td>
+<td>2199</td>
 <td>No DocBlock was found for method is_blacklisted_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2141</td>
+<td>2203</td>
 <td>No DocBlock was found for method has_whitelist_magic_consts()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2145</td>
+<td>2207</td>
 <td>No DocBlock was found for method has_blacklist_magic_consts()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2149</td>
+<td>2211</td>
 <td>No DocBlock was found for method is_whitelisted_magic_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2154</td>
+<td>2216</td>
 <td>No DocBlock was found for method is_blacklisted_magic_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2159</td>
+<td>2221</td>
 <td>No DocBlock was found for method has_whitelist_namespaces()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2163</td>
+<td>2225</td>
 <td>No DocBlock was found for method has_blacklist_namespaces()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2167</td>
+<td>2229</td>
 <td>No DocBlock was found for method is_whitelisted_namespace()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2172</td>
+<td>2234</td>
 <td>No DocBlock was found for method is_blacklisted_namespace()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2177</td>
+<td>2239</td>
 <td>No DocBlock was found for method has_whitelist_aliases()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2181</td>
+<td>2243</td>
 <td>No DocBlock was found for method has_blacklist_aliases()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2185</td>
+<td>2247</td>
 <td>No DocBlock was found for method is_whitelisted_alias()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2190</td>
+<td>2252</td>
 <td>No DocBlock was found for method is_blacklisted_alias()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2195</td>
+<td>2257</td>
 <td>No DocBlock was found for method has_whitelist_uses()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2199</td>
+<td>2261</td>
 <td>No DocBlock was found for method has_blacklist_uses()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2203</td>
+<td>2265</td>
 <td>No DocBlock was found for method is_whitelisted_use()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2207</td>
+<td>2269</td>
 <td>No DocBlock was found for method is_blacklisted_use()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2211</td>
+<td>2273</td>
 <td>No DocBlock was found for method has_whitelist_classes()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2215</td>
+<td>2277</td>
 <td>No DocBlock was found for method has_blacklist_classes()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2219</td>
+<td>2281</td>
 <td>No DocBlock was found for method is_whitelisted_class()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2224</td>
+<td>2286</td>
 <td>No DocBlock was found for method is_blacklisted_class()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2229</td>
+<td>2291</td>
 <td>No DocBlock was found for method has_whitelist_interfaces()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2233</td>
+<td>2295</td>
 <td>No DocBlock was found for method has_blacklist_interfaces()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2237</td>
+<td>2299</td>
 <td>No DocBlock was found for method is_whitelisted_interface()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2242</td>
+<td>2304</td>
 <td>No DocBlock was found for method is_blacklisted_interface()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2247</td>
+<td>2309</td>
 <td>No DocBlock was found for method has_whitelist_traits()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2251</td>
+<td>2313</td>
 <td>No DocBlock was found for method has_blacklist_traits()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2255</td>
+<td>2317</td>
 <td>No DocBlock was found for method is_whitelisted_trait()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2260</td>
+<td>2322</td>
 <td>No DocBlock was found for method is_blacklisted_trait()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2265</td>
+<td>2327</td>
 <td>No DocBlock was found for method has_whitelist_keywords()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2269</td>
+<td>2331</td>
 <td>No DocBlock was found for method has_blacklist_keywords()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2273</td>
+<td>2335</td>
 <td>No DocBlock was found for method is_whitelisted_keyword()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2278</td>
+<td>2340</td>
 <td>No DocBlock was found for method is_blacklisted_keyword()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2283</td>
+<td>2345</td>
 <td>No DocBlock was found for method has_whitelist_operators()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2287</td>
+<td>2349</td>
 <td>No DocBlock was found for method has_blacklist_operators()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2291</td>
+<td>2353</td>
 <td>No DocBlock was found for method is_whitelisted_operator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2295</td>
+<td>2357</td>
 <td>No DocBlock was found for method is_blacklisted_operator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2299</td>
+<td>2361</td>
 <td>No DocBlock was found for method has_whitelist_primitives()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2303</td>
+<td>2365</td>
 <td>No DocBlock was found for method has_blacklist_primitives()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2307</td>
+<td>2369</td>
 <td>No DocBlock was found for method is_whitelisted_primitive()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2312</td>
+<td>2374</td>
 <td>No DocBlock was found for method is_blacklisted_primitive()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2317</td>
+<td>2379</td>
 <td>No DocBlock was found for method has_whitelist_types()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2321</td>
+<td>2383</td>
 <td>No DocBlock was found for method has_blacklist_types()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2325</td>
+<td>2387</td>
 <td>No DocBlock was found for method is_whitelisted_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2330</td>
+<td>2392</td>
 <td>No DocBlock was found for method is_blacklisted_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2335</td>
+<td>2397</td>
 <td>No DocBlock was found for method whitelist_func()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2340</td>
+<td>2402</td>
 <td>No DocBlock was found for method blacklist_func()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2345</td>
+<td>2407</td>
 <td>No DocBlock was found for method dewhitelist_func()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2350</td>
+<td>2412</td>
 <td>No DocBlock was found for method deblacklist_func()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2355</td>
+<td>2417</td>
 <td>No DocBlock was found for method whitelist_var()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2359</td>
+<td>2421</td>
 <td>No DocBlock was found for method blacklist_var()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2363</td>
+<td>2425</td>
 <td>No DocBlock was found for method dewhitelist_var()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2367</td>
+<td>2429</td>
 <td>No DocBlock was found for method deblacklist_var()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2371</td>
+<td>2433</td>
 <td>No DocBlock was found for method whitelist_global()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2375</td>
+<td>2437</td>
 <td>No DocBlock was found for method blacklist_global()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2379</td>
+<td>2441</td>
 <td>No DocBlock was found for method dewhitelist_global()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2383</td>
+<td>2445</td>
 <td>No DocBlock was found for method deblacklist_global()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2387</td>
+<td>2449</td>
 <td>No DocBlock was found for method whitelist_superglobal()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2422</td>
+<td>2484</td>
 <td>No DocBlock was found for method blacklist_superglobal()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2457</td>
+<td>2519</td>
 <td>No DocBlock was found for method dewhitelist_superglobal()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2487</td>
+<td>2549</td>
 <td>No DocBlock was found for method deblacklist_superglobal()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2517</td>
+<td>2579</td>
 <td>No DocBlock was found for method whitelist_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2521</td>
+<td>2583</td>
 <td>No DocBlock was found for method blacklist_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2525</td>
+<td>2587</td>
 <td>No DocBlock was found for method dewhitelist_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2529</td>
+<td>2591</td>
 <td>No DocBlock was found for method deblacklist_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2533</td>
+<td>2595</td>
 <td>No DocBlock was found for method whitelist_magic_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2538</td>
+<td>2600</td>
 <td>No DocBlock was found for method blacklist_magic_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2543</td>
+<td>2605</td>
 <td>No DocBlock was found for method dewhitelist_magic_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2548</td>
+<td>2610</td>
 <td>No DocBlock was found for method deblacklist_magic_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2553</td>
+<td>2615</td>
 <td>No DocBlock was found for method whitelist_namespace()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2558</td>
+<td>2620</td>
 <td>No DocBlock was found for method blacklist_namespace()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2563</td>
+<td>2625</td>
 <td>No DocBlock was found for method dewhitelist_namespace()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2568</td>
+<td>2630</td>
 <td>No DocBlock was found for method deblacklist_namespace()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2573</td>
+<td>2635</td>
 <td>No DocBlock was found for method whitelist_alias()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2578</td>
+<td>2640</td>
 <td>No DocBlock was found for method blacklist_alias()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2583</td>
+<td>2645</td>
 <td>No DocBlock was found for method dewhitelist_alias()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2588</td>
+<td>2650</td>
 <td>No DocBlock was found for method deblacklist_alias()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2593</td>
+<td>2655</td>
 <td>No DocBlock was found for method whitelist_use()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2597</td>
+<td>2659</td>
 <td>No DocBlock was found for method blacklist_use()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2601</td>
+<td>2663</td>
 <td>No DocBlock was found for method dewhitelist_use()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2605</td>
+<td>2667</td>
 <td>No DocBlock was found for method deblacklist_use()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2609</td>
+<td>2671</td>
 <td>No DocBlock was found for method whitelist_class()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2614</td>
+<td>2676</td>
 <td>No DocBlock was found for method blacklist_class()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2619</td>
+<td>2681</td>
 <td>No DocBlock was found for method dewhitelist_class()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2624</td>
+<td>2686</td>
 <td>No DocBlock was found for method deblacklist_class()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2629</td>
+<td>2691</td>
 <td>No DocBlock was found for method whitelist_interface()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2634</td>
+<td>2696</td>
 <td>No DocBlock was found for method blacklist_interface()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2639</td>
+<td>2701</td>
 <td>No DocBlock was found for method dewhitelist_interface()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2644</td>
+<td>2706</td>
 <td>No DocBlock was found for method deblacklist_interface()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2649</td>
+<td>2711</td>
 <td>No DocBlock was found for method whitelist_trait()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2654</td>
+<td>2716</td>
 <td>No DocBlock was found for method blacklist_trait()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2659</td>
+<td>2721</td>
 <td>No DocBlock was found for method dewhitelist_trait()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2664</td>
+<td>2726</td>
 <td>No DocBlock was found for method deblacklist_trait()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2669</td>
+<td>2731</td>
 <td>No DocBlock was found for method whitelist_keyword()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2674</td>
+<td>2736</td>
 <td>No DocBlock was found for method blacklist_keyword()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2679</td>
+<td>2741</td>
 <td>No DocBlock was found for method dewhitelist_keyword()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2684</td>
+<td>2746</td>
 <td>No DocBlock was found for method deblacklist_keyword()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2689</td>
+<td>2751</td>
 <td>No DocBlock was found for method whitelist_operator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2693</td>
+<td>2755</td>
 <td>No DocBlock was found for method blacklist_operator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2697</td>
+<td>2759</td>
 <td>No DocBlock was found for method dewhitelist_operator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2701</td>
+<td>2763</td>
 <td>No DocBlock was found for method deblacklist_operator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2705</td>
+<td>2767</td>
 <td>No DocBlock was found for method whitelist_primitive()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2710</td>
+<td>2772</td>
 <td>No DocBlock was found for method blacklist_primitive()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2715</td>
+<td>2777</td>
 <td>No DocBlock was found for method dewhitelist_primitive()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2720</td>
+<td>2782</td>
 <td>No DocBlock was found for method deblacklist_primitive()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2725</td>
+<td>2787</td>
 <td>No DocBlock was found for method whitelist_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2730</td>
+<td>2792</td>
 <td>No DocBlock was found for method blacklist_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2735</td>
+<td>2797</td>
 <td>No DocBlock was found for method dewhitelist_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2740</td>
+<td>2802</td>
 <td>No DocBlock was found for method deblacklist_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2745</td>
+<td>2807</td>
 <td>No DocBlock was found for method check_func()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2766</td>
+<td>2828</td>
 <td>No DocBlock was found for method check_var()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2786</td>
+<td>2848</td>
 <td>No DocBlock was found for method check_global()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2804</td>
+<td>2866</td>
 <td>No DocBlock was found for method check_superglobal()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2825</td>
+<td>2887</td>
 <td>No DocBlock was found for method check_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2849</td>
+<td>2911</td>
 <td>No DocBlock was found for method check_magic_const()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2870</td>
+<td>2932</td>
 <td>No DocBlock was found for method check_namespace()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2889</td>
+<td>2951</td>
 <td>No DocBlock was found for method check_alias()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2908</td>
+<td>2970</td>
 <td>No DocBlock was found for method check_use()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2912</td>
+<td>2974</td>
 <td>No DocBlock was found for method check_class()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2931</td>
+<td>2993</td>
 <td>No DocBlock was found for method check_interface()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2950</td>
+<td>3012</td>
 <td>No DocBlock was found for method check_trait()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2969</td>
+<td>3031</td>
 <td>No DocBlock was found for method check_keyword()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>2986</td>
+<td>3048</td>
 <td>No DocBlock was found for method check_operator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3002</td>
+<td>3064</td>
 <td>No DocBlock was found for method check_primitive()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3019</td>
+<td>3081</td>
 <td>No DocBlock was found for method check_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3038</td>
+<td>3100</td>
 <td>No DocBlock was found for method prepare_vars()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3060</td>
+<td>3122</td>
 <td>No DocBlock was found for method prepare_consts()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3082</td>
+<td>3144</td>
 <td>No DocBlock was found for method prepare_namespaces()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3094</td>
+<td>3156</td>
 <td>No DocBlock was found for method prepare_aliases()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3106</td>
+<td>3168</td>
 <td>No DocBlock was found for method prepare_uses()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3110</td>
+<td>3172</td>
 <td>No DocBlock was found for method disassemble()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3127</td>
+<td>3189</td>
 <td>No DocBlock was found for method auto_whitelist()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3140</td>
+<td>3202</td>
 <td>No short description for method auto_define()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3153</td>
+<td>3215</td>
 <td>No DocBlock was found for method prepend()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3165</td>
+<td>3227</td>
 <td>No DocBlock was found for method append()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3177</td>
+<td>3239</td>
 <td>No DocBlock was found for method clear()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3182</td>
+<td>3244</td>
 <td>No DocBlock was found for method clear_prepend()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>3186</td>
+<td>3248</td>
 <td>No DocBlock was found for method clear_append()</td>
 </tr>
 <tr class="notice">
 <td>notice</td>
-<td>3251</td>
+<td>3313</td>
 <td>Parameter $code could not be found in execute()</td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<div class="package-contents">
-<a name="SandboxWhitelistVisitor.php" id="SandboxWhitelistVisitor.php"></a><h3>
-<i class="icon-file"></i>SandboxWhitelistVisitor.php<small style="float: right;padding-right: 10px;">5</small>
-</h3>
-<div><table class="table markers table-bordered">
-<thead><tr>
-<th>Type</th>
-<th>Line</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>0</td>
-<td>No page-level DocBlock was found in file SandboxWhitelistVisitor.php</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>4</td>
-<td>No DocBlock was found for \PHPSandbox\SandboxWhitelistVisitor</td>
-</tr>
-<tr class="critical">
-<td>critical</td>
-<td>5</td>
-<td>No short description for property $sandbox</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>10</td>
-<td>No DocBlock was found for method __construct()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>14</td>
-<td>No DocBlock was found for method leaveNode()</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<div class="package-contents">
-<a name="ValidatorVisitor.php" id="ValidatorVisitor.php"></a><h3>
-<i class="icon-file"></i>ValidatorVisitor.php<small style="float: right;padding-right: 10px;">9</small>
-</h3>
-<div><table class="table markers table-bordered">
-<thead><tr>
-<th>Type</th>
-<th>Line</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>0</td>
-<td>No page-level DocBlock was found in file ValidatorVisitor.php</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>4</td>
-<td>No DocBlock was found for \PHPSandbox\ValidatorVisitor</td>
-</tr>
-<tr class="critical">
-<td>critical</td>
-<td>5</td>
-<td>No short description for property $sandbox</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>10</td>
-<td>No DocBlock was found for method __construct()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>14</td>
-<td>No DocBlock was found for method leaveNode()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>220</td>
-<td>No DocBlock was found for method is_magic_const()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>242</td>
-<td>No DocBlock was found for method is_keyword()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>302</td>
-<td>No DocBlock was found for method is_operator()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>400</td>
-<td>No DocBlock was found for method is_primitive()</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<div class="package-contents">
-<a name="WhitelistVisitor.php" id="WhitelistVisitor.php"></a><h3>
-<i class="icon-file"></i>WhitelistVisitor.php<small style="float: right;padding-right: 10px;">5</small>
-</h3>
-<div><table class="table markers table-bordered">
-<thead><tr>
-<th>Type</th>
-<th>Line</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>0</td>
-<td>No page-level DocBlock was found in file WhitelistVisitor.php</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>4</td>
-<td>No DocBlock was found for \PHPSandbox\WhitelistVisitor</td>
-</tr>
-<tr class="critical">
-<td>critical</td>
-<td>5</td>
-<td>No short description for property $sandbox</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>10</td>
-<td>No DocBlock was found for method __construct()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>14</td>
-<td>No DocBlock was found for method leaveNode()</td>
-</tr>
-</tbody>
-</table></div>
-</div>
+<div class="package-contents"></div>
+<div class="package-contents"></div>
+<div class="package-contents"></div>
 </div>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-02-27T14:00:58-05:00.<br></footer></div>
+            generated on 2013-02-27T15:50:13-05:00.<br></footer></div>
 </div>
 </body>
 </html>

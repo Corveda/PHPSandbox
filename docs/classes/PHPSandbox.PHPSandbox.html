@@ -18,7 +18,10 @@
 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
 <li class="dropdown">
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
-                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu"></ul>
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
 </li>
 <li class="dropdown" id="charts-menu">
 <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
@@ -28,7 +31,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">206</span></a></li>
+                <span class="label label-info">170</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -454,30 +457,18 @@
         </span><pre>auto_whitelist()</pre></a></li>
 <li class="method protected "><a href="#method_disassemble" title="disassemble :: "><span class="description">disassemble()
         </span><pre>disassemble()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_alias" title="normalize_alias :: "><span class="description">normalize_alias()
-        </span><pre>normalize_alias()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_class" title="normalize_class :: "><span class="description">normalize_class()
-        </span><pre>normalize_class()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_func" title="normalize_func :: "><span class="description">normalize_func()
-        </span><pre>normalize_func()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_interface" title="normalize_interface :: "><span class="description">normalize_interface()
-        </span><pre>normalize_interface()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_keyword" title="normalize_keyword :: "><span class="description">normalize_keyword()
-        </span><pre>normalize_keyword()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_magic_const" title="normalize_magic_const :: "><span class="description">normalize_magic_const()
-        </span><pre>normalize_magic_const()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_namespace" title="normalize_namespace :: "><span class="description">normalize_namespace()
-        </span><pre>normalize_namespace()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_primitive" title="normalize_primitive :: "><span class="description">normalize_primitive()
-        </span><pre>normalize_primitive()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_superglobal" title="normalize_superglobal :: "><span class="description">normalize_superglobal()
-        </span><pre>normalize_superglobal()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_trait" title="normalize_trait :: "><span class="description">normalize_trait()
-        </span><pre>normalize_trait()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_type" title="normalize_type :: "><span class="description">normalize_type()
-        </span><pre>normalize_type()</pre></a></li>
-<li class="method protected "><a href="#method_normalize_use" title="normalize_use :: "><span class="description">normalize_use()
-        </span><pre>normalize_use()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_alias" title="normalize_alias :: Normalize alias name."><span class="description">Normalize alias name.</span><pre>normalize_alias()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_class" title="normalize_class :: Normalize class name."><span class="description">Normalize class name.</span><pre>normalize_class()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_func" title="normalize_func :: Normalize function name."><span class="description">Normalize function name.</span><pre>normalize_func()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_interface" title="normalize_interface :: Normalize interface name."><span class="description">Normalize interface name.</span><pre>normalize_interface()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_keyword" title="normalize_keyword :: Normalize keyword name."><span class="description">Normalize keyword name.</span><pre>normalize_keyword()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_magic_const" title="normalize_magic_const :: Normalize magic constant name."><span class="description">Normalize magic constant name.</span><pre>normalize_magic_const()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_namespace" title="normalize_namespace :: Normalize namespace name."><span class="description">Normalize namespace name.</span><pre>normalize_namespace()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_primitive" title="normalize_primitive :: Normalize primitive name."><span class="description">Normalize primitive name.</span><pre>normalize_primitive()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_superglobal" title="normalize_superglobal :: Normalize superglobal name."><span class="description">Normalize superglobal name.</span><pre>normalize_superglobal()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_trait" title="normalize_trait :: Normalize trait name."><span class="description">Normalize trait name.</span><pre>normalize_trait()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_type" title="normalize_type :: Normalize type name."><span class="description">Normalize type name.</span><pre>normalize_type()</pre></a></li>
+<li class="method protected "><a href="#method_normalize_use" title="normalize_use :: Normalize use (or alias) name."><span class="description">Normalize use (or alias) name.</span><pre>normalize_use()</pre></a></li>
 <li class="method protected "><a href="#method_prepare_aliases" title="prepare_aliases :: "><span class="description">prepare_aliases()
         </span><pre>prepare_aliases()</pre></a></li>
 <li class="method protected "><a href="#method_prepare_consts" title="prepare_consts :: "><span class="description">prepare_consts()
@@ -1198,7 +1189,7 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div>
 <a id="method_create"></a><div class="element clickable method public method_create" data-toggle="collapse" data-target=".method_create .collapse">
 <h2>PHPSandbox static factory method</h2>
-<pre>create(array $options, array $functions, array $variables, array $constants, array $namespaces, array $aliases, array $globals, array $superglobals, array $magic_constants) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
+<pre>create(array $options, array $functions, array $variables, array $constants, array $namespaces, array $aliases, array $superglobals, array $magic_constants) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse">
 <div class="span4">
@@ -1226,9 +1217,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <div class="subelement argument">
 <h4>$aliases</h4>
 <code>array</code><p>Optional array of aliases to define for the sandbox</p></div>
-<div class="subelement argument">
-<h4>$globals</h4>
-<code>array</code><p>Optional array of globals to define for the sandbox</p></div>
 <div class="subelement argument">
 <h4>$superglobals</h4>
 <code>array</code><p>Optional array of superglobals to define for the sandbox</p></div>
@@ -4541,135 +4529,199 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 </div></div>
 </div>
 <a id="method_normalize_alias"></a><div class="element clickable method protected method_normalize_alias" data-toggle="collapse" data-target=".method_normalize_alias .collapse">
-<h2>normalize_alias()
-        </h2>
-<pre>normalize_alias($name) </pre>
+<h2>Normalize alias name.</h2>
+<pre>normalize_alias(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the alias $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized alias string</div>
 </div></div>
 </div>
 <a id="method_normalize_class"></a><div class="element clickable method protected method_normalize_class" data-toggle="collapse" data-target=".method_normalize_class .collapse">
-<h2>normalize_class()
-        </h2>
-<pre>normalize_class($name) </pre>
+<h2>Normalize class name.</h2>
+<pre>normalize_class(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the class $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized class string</div>
 </div></div>
 </div>
 <a id="method_normalize_func"></a><div class="element clickable method protected method_normalize_func" data-toggle="collapse" data-target=".method_normalize_func .collapse">
-<h2>normalize_func()
-        </h2>
-<pre>normalize_func($name) </pre>
+<h2>Normalize function name.</h2>
+<pre>normalize_func(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the function $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized function string</div>
 </div></div>
 </div>
 <a id="method_normalize_interface"></a><div class="element clickable method protected method_normalize_interface" data-toggle="collapse" data-target=".method_normalize_interface .collapse">
-<h2>normalize_interface()
-        </h2>
-<pre>normalize_interface($name) </pre>
+<h2>Normalize interface name.</h2>
+<pre>normalize_interface(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the interface $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized interface string</div>
 </div></div>
 </div>
 <a id="method_normalize_keyword"></a><div class="element clickable method protected method_normalize_keyword" data-toggle="collapse" data-target=".method_normalize_keyword .collapse">
-<h2>normalize_keyword()
-        </h2>
-<pre>normalize_keyword($name) </pre>
+<h2>Normalize keyword name.</h2>
+<pre>normalize_keyword(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the keyword $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized keyword string</div>
 </div></div>
 </div>
 <a id="method_normalize_magic_const"></a><div class="element clickable method protected method_normalize_magic_const" data-toggle="collapse" data-target=".method_normalize_magic_const .collapse">
-<h2>normalize_magic_const()
-        </h2>
-<pre>normalize_magic_const($name) </pre>
+<h2>Normalize magic constant name.</h2>
+<pre>normalize_magic_const(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the magic constant $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized magic constant string</div>
 </div></div>
 </div>
 <a id="method_normalize_namespace"></a><div class="element clickable method protected method_normalize_namespace" data-toggle="collapse" data-target=".method_normalize_namespace .collapse">
-<h2>normalize_namespace()
-        </h2>
-<pre>normalize_namespace($name) </pre>
+<h2>Normalize namespace name.</h2>
+<pre>normalize_namespace(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the namespace $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized namespace string</div>
 </div></div>
 </div>
 <a id="method_normalize_primitive"></a><div class="element clickable method protected method_normalize_primitive" data-toggle="collapse" data-target=".method_normalize_primitive .collapse">
-<h2>normalize_primitive()
-        </h2>
-<pre>normalize_primitive($name) </pre>
+<h2>Normalize primitive name.</h2>
+<pre>normalize_primitive(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the primitive $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized primitive string</div>
 </div></div>
 </div>
 <a id="method_normalize_superglobal"></a><div class="element clickable method protected method_normalize_superglobal" data-toggle="collapse" data-target=".method_normalize_superglobal .collapse">
-<h2>normalize_superglobal()
-        </h2>
-<pre>normalize_superglobal($name) </pre>
+<h2>Normalize superglobal name.</h2>
+<pre>normalize_superglobal(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the superglobal $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized superglobal string</div>
 </div></div>
 </div>
 <a id="method_normalize_trait"></a><div class="element clickable method protected method_normalize_trait" data-toggle="collapse" data-target=".method_normalize_trait .collapse">
-<h2>normalize_trait()
-        </h2>
-<pre>normalize_trait($name) </pre>
+<h2>Normalize trait name.</h2>
+<pre>normalize_trait(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the trait $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized trait string</div>
 </div></div>
 </div>
 <a id="method_normalize_type"></a><div class="element clickable method protected method_normalize_type" data-toggle="collapse" data-target=".method_normalize_type .collapse">
-<h2>normalize_type()
-        </h2>
-<pre>normalize_type($name) </pre>
+<h2>Normalize type name.</h2>
+<pre>normalize_type(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the type $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized type string</div>
 </div></div>
 </div>
 <a id="method_normalize_use"></a><div class="element clickable method protected method_normalize_use" data-toggle="collapse" data-target=".method_normalize_use .collapse">
-<h2>normalize_use()
-        </h2>
-<pre>normalize_use($name) </pre>
+<h2>Normalize use (or alias) name.</h2>
+<pre>normalize_use(string $name) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function.</p></div>
+<table class="table table-bordered"><tr>
+<th>alias</th>
+<td>normalize_alias();</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the use (or alias) $name to normalize</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Returns the normalized use (or alias) string</div>
 </div></div>
 </div>
 <a id="method_prepare_aliases"></a><div class="element clickable method protected method_prepare_aliases" data-toggle="collapse" data-target=".method_prepare_aliases .collapse">
@@ -5160,7 +5212,7 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-02-27T14:00:58-05:00.<br></footer></div>
+            generated on 2013-02-27T15:50:13-05:00.<br></footer></div>
 </div>
 </body>
 </html>

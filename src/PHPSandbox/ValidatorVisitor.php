@@ -1,16 +1,42 @@
 <?php
+    /** ValidatorVisitor class declaration
+     * @package PHPSandbox
+     */
     namespace PHPSandbox;
 
+    /**
+     * Validator class for PHP Sandboxes.
+     *
+     * This class takes parsed AST code and checks it against the passed PHPSandbox instance
+     * configuration for errors, and throws exceptions if they are found
+     *
+     * @namespace PHPSandbox
+     *
+     * @author  Elijah Horton <fieryprophet@yahoo.com>
+     * @version 1.0
+     */
     class ValidatorVisitor extends \PHPParser_NodeVisitorAbstract {
-        /**
+        /** The PHPSandbox instance to check against
          * @var PHPSandbox
          */
         protected $sandbox;
-
+        /** ValidatorVisitor class constructor
+         *
+         * This constructor takes a passed PHPSandbox instance to check against for validating sandboxed code.
+         *
+         * @param   PHPSandbox   $sandbox            The PHPSandbox instance to check against
+         */
         public function __construct(PHPSandbox $sandbox){
             $this->sandbox = $sandbox;
         }
-
+        /** Examine the current PHPParser_Node node against the PHPSandbox configuration for validating sandboxed code
+         *
+         * @param   \PHPParser_Node   $node          The sandboxed $node to validate
+         *
+         * @throws  Error             Throws an exception if validation fails
+         *
+         * @return  \PHPParser_Node|bool|null        Return rewritten node, false if node must be removed, or null if no changes to the node are made
+         */
         public function leaveNode(\PHPParser_Node $node){
             if($node instanceof \PHPParser_Node_Stmt_InlineHTML){
                 if(!$this->sandbox->allow_escaping){
@@ -215,8 +241,14 @@
             } else if($name = $this->is_primitive($node)){
                 $this->sandbox->check_primitive($name);
             }
+            return null;
         }
-
+        /** Test the current PHPParser_Node node to see if it is a magic constant, and return the name if it is and null if it is not
+         *
+         * @param   \PHPParser_Node   $node          The sandboxed $node to test
+         *
+         * @return  string|null       Return string name of node, or null if it is not a magic constant
+         */
         protected function is_magic_const(\PHPParser_Node $node){
             switch($node->getType()){
                 case 'Scalar_ClassConst':
@@ -238,7 +270,12 @@
             }
             return null;
         }
-
+        /** Test the current PHPParser_Node node to see if it is a keyword, and return the name if it is and null if it is not
+         *
+         * @param   \PHPParser_Node   $node          The sandboxed $node to test
+         *
+         * @return  string|null       Return string name of node, or null if it is not a keyword
+         */
         protected function is_keyword(\PHPParser_Node $node){
             switch($node->getType()){
                 case 'Expr_Eval':
@@ -298,7 +335,12 @@
             }
             return null;
         }
-
+        /** Test the current PHPParser_Node node to see if it is an operator, and return the name if it is and null if it is not
+         *
+         * @param   \PHPParser_Node   $node          The sandboxed $node to test
+         *
+         * @return  string|null       Return string name of node, or null if it is not an operator
+         */
         protected function is_operator(\PHPParser_Node $node){
             switch($node->getType()){
                 case 'Expr_Assign':
@@ -396,7 +438,14 @@
             }
             return null;
         }
-
+        /** Test the current PHPParser_Node node to see if it is a primitive, and return the name if it is and null if it is not
+         *
+         * @param   \PHPParser_Node   $node          The sandboxed $node to test
+         *
+         * @throws  Error             Throws exception if $node attempts to cast when $allow_casting is false in the PHPSandbox configuration
+         *
+         * @return  string|null       Return string name of node, or null if it is not a primitive
+         */
         protected function is_primitive(\PHPParser_Node $node){
             switch($node->getType()){
                 case 'Expr_Cast_Array':
