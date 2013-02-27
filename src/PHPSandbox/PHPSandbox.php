@@ -1987,13 +1987,13 @@
             }
             return $name;
         }
-        /** Normalize primitive name.  This is an internal PHPSandbox function.
+        /** Normalize operator name.  This is an internal PHPSandbox function.
          *
-         * @param   string          $name       String of the primitive $name to normalize
+         * @param   string          $name       String of the operator $name to normalize
          *
-         * @return  string          Returns the normalized primitive string
+         * @return  string          Returns the normalized operator string
          */
-        protected function normalize_primitive($name){
+        protected function normalize_operator($name){
             $name = strtolower($name);
             if(strpos($name, '++') !== false){
                 $name = (strpos($name, '++') === 0) ? '++n' : 'n++';
@@ -2003,6 +2003,21 @@
                 $name = '+n';
             } else if(strpos($name, '-') !== false && strlen($name) > 1){
                 $name = '-n';
+            }
+            return $name;
+        }
+        /** Normalize primitive name.  This is an internal PHPSandbox function.
+         *
+         * @param   string          $name       String of the primitive $name to normalize
+         *
+         * @return  string          Returns the normalized primitive string
+         */
+        protected function normalize_primitive($name){
+            $name = strtolower($name);
+            if($name == 'double'){
+                $name = 'float';
+            } else if($name == 'integer'){
+                $name = 'int';
             }
             return $name;
         }
@@ -2763,54 +2778,128 @@
             $name = $this->normalize_keyword($name);
             return isset($this->blacklist['keywords'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted operators.
+         *
+         * @example $sandbox->has_whitelist_operators(); //returns number of whitelisted operators, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted operators this instance has defined
+         */
         public function has_whitelist_operators(){
             return count($this->whitelist['operators']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted operators.
+         *
+         * @example $sandbox->has_blacklist_operators(); //returns number of blacklisted operators, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted operators this instance has defined
+         */
         public function has_blacklist_operators(){
             return count($this->blacklist['operators']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted operator name set
+         *
+         * @example $sandbox->is_whitelisted_operator('+');
+         *
+         * @param   string          $name       String of operator $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted operator $name, false otherwise
+         */
         public function is_whitelisted_operator($name){
+            $name = $this->normalize_operator($name);
             return isset($this->whitelist['operators'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted operator name set
+         *
+         * @example $sandbox->is_blacklisted_operator('+');
+         *
+         * @param   string          $name       String of operator $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted operator $name, false otherwise
+         */
         public function is_blacklisted_operator($name){
+            $name = $this->normalize_operator($name);
             return isset($this->blacklist['operators'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted primitives.
+         *
+         * @example $sandbox->has_whitelist_primitives(); //returns number of whitelisted primitives, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted primitives this instance has defined
+         */
         public function has_whitelist_primitives(){
             return count($this->whitelist['primitives']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted primitives.
+         *
+         * @example $sandbox->has_blacklist_primitives(); //returns number of blacklisted primitives, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted primitives this instance has defined
+         */
         public function has_blacklist_primitives(){
             return count($this->blacklist['primitives']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted primitive name set
+         *
+         * @example $sandbox->is_whitelisted_primitive('array');
+         *
+         * @param   string          $name       String of primitive $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted primitive $name, false otherwise
+         */
         public function is_whitelisted_primitive($name){
             $name = $this->normalize_primitive($name);
             return isset($this->whitelist['primitives'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted primitive name set
+         *
+         * @example $sandbox->is_blacklisted_primitive('array');
+         *
+         * @param   string          $name       String of primitive $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted primitive $name, false otherwise
+         */
         public function is_blacklisted_primitive($name){
             $name = $this->normalize_primitive($name);
             return isset($this->blacklist['primitives'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted types.
+         *
+         * @example $sandbox->has_whitelist_types(); //returns number of whitelisted types, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted types this instance has defined
+         */
         public function has_whitelist_types(){
             return count($this->whitelist['types']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted types.
+         *
+         * @example $sandbox->has_blacklist_types(); //returns number of blacklisted types, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted types this instance has defined
+         */
         public function has_blacklist_types(){
             return count($this->blacklist['types']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted type name set
+         *
+         * @example $sandbox->is_whitelisted_type('array');
+         *
+         * @param   string          $name       String of type $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted type $name, false otherwise
+         */
         public function is_whitelisted_type($name){
             $name = $this->normalize_type($name);
             return isset($this->whitelist['types'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted type name set
+         *
+         * @example $sandbox->is_blacklisted_type('array');
+         *
+         * @param   string          $name       String of type $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted type $name, false otherwise
+         */
         public function is_blacklisted_type($name){
             $name = $this->normalize_type($name);
             return isset($this->blacklist['types'][$name]);
@@ -3171,18 +3260,22 @@
         }
 
         public function whitelist_operator($name){
+            $name = $this->normalize_operator($name);
             return $this->whitelist('operators', $name);
         }
 
         public function blacklist_operator($name){
+            $name = $this->normalize_operator($name);
             return $this->blacklist('operators', $name);
         }
 
         public function dewhitelist_operator($name){
+            $name = $this->normalize_operator($name);
             return $this->dewhitelist('operators', $name);
         }
 
         public function deblacklist_operator($name){
+            $name = $this->normalize_operator($name);
             return $this->deblacklist('operators', $name);
         }
 
@@ -3472,6 +3565,7 @@
             if(!$name){
                 throw new Error("Sandboxed code attempted to call unnamed operator!");
             }
+            $name = $this->normalize_operator($name);
             if(count($this->whitelist['operators'])){
                 if(!isset($this->whitelist['operators'][$name])){
                     throw new Error("Sandboxed code attempted to call non-whitelisted operator: $original_name");
