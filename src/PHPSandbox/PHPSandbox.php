@@ -63,7 +63,6 @@
         protected $definitions = array(
             'functions' => array(),
             'variables' => array(),
-            'globals' => array(),
             'superglobals' => array(),
             'constants' => array(),
             'magic_constants' => array(),
@@ -315,7 +314,6 @@
                                     array $constants = array(),
                                     array $namespaces = array(),
                                     array $aliases = array(),
-                                    array $globals = array(),
                                     array $superglobals = array(),
                                     array $magic_constants = array()){
             $this->name = static::$function_prefix . md5(uniqid());
@@ -325,7 +323,6 @@
                 ->define_consts($constants)
                 ->define_namespaces($namespaces)
                 ->define_aliases($aliases)
-                ->define_globals($globals)
                 ->define_superglobals($superglobals)
                 ->define_magic_consts($magic_constants);
             return $this;
@@ -926,8 +923,6 @@
                         return $this->define_func($name, $value);
                     case 'variables':
                         return $this->define_var($name, $value);
-                    case 'globals':
-                        return $this->define_global($name, $value);
                     case 'superglobals':
                         return $this->define_superglobal($name, $value);
                     case 'constants':
@@ -978,8 +973,6 @@
                         return $this->undefine_func($name);
                     case 'variables':
                         return $this->undefine_var($name);
-                    case 'globals':
-                        return $this->undefine_global($name);
                     case 'superglobals':
                         return $this->undefine_superglobal($name);
                     case 'constants':
@@ -1004,6 +997,8 @@
          *
          * @param   array|string    $name       Associative array or string of function $name to define
          * @param   callable        $function   Callable to define $function to
+         *
+         * @throws  Error           Throws exception if unnamed or uncallable $function is defined
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1053,7 +1048,7 @@
          *
          * @param   string          $name       String of function $name to query
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  bool            Returns true if PHPSandbox instance has defined function, false otherwise
          */
         public function is_defined_func($name){
             $name = $this->normalize_func($name);
@@ -1110,6 +1105,8 @@
          * @param   array|string    $name       Associative array or string of variable $name to define
          * @param   mixed           $value      Value to define variable to
          *
+         * @throws  Error           Throws exception if unnamed variable is defined
+         *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
         public function define_var($name, $value){
@@ -1153,7 +1150,7 @@
          *
          * @param   string          $name       String of variable $name to query
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  bool            Returns true if PHPSandbox instance has defined variable, false otherwise
          */
         public function is_defined_var($name){
             return isset($this->definitions['variables'][$name]);
@@ -1169,6 +1166,9 @@
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
         public function undefine_var($name){
+            if(is_array($name)){
+                return $this->undefine_vars($name);
+            }
             if(isset($this->definitions['variables'][$name])){
                 unset($this->definitions['variables'][$name]);
             }
@@ -1194,45 +1194,21 @@
             }
             return $this;
         }
-
-        public function define_global($name, $value){
-            if(is_array($name)){
-                return $this->define_globals($name);
-            }
-            if(!$name){
-                throw new Error("Cannot define unnamed global!");
-            }
-            $this->definitions['globals'][$name] = $value;
-            return $this;
-        }
-
-        public function define_globals(array $globals = array()){
-            foreach($globals as $name => $value){
-                $this->define_global($name, $value);
-            }
-            return $this;
-        }
-
-        public function has_defined_globals(){
-            return count($this->definitions['globals']);
-        }
-
-        public function is_defined_global($name){
-            return isset($this->definitions['globals'][$name]);
-        }
-
-        public function undefine_global($name){
-            if(isset($this->definitions['globals'][$name])){
-                unset($this->definitions['globals'][$name]);
-            }
-            return $this;
-        }
-
-        public function undefine_globals(){
-            $this->definitions['globals'] = array();
-            return $this;
-        }
-
+        /** Define PHPSandbox superglobal
+         *
+         * You can pass an associative array of superglobals to define, or the superglobal $name and $value to define
+         *
+         * @example $sandbox->define_superglobal(array('_GET' => array('page' => 1)));
+         *
+         * @example $sandbox->define_superglobal('_GET',  array('page' => 1));
+         *
+         * @param   array|string    $name       Associative array or string of superglobal $name to define
+         * @param   mixed           $value      Value to define superglobal to
+         *
+         * @throws  Error           Throws exception if unnamed superglobal is defined
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_superglobal($name, $value){
             if(is_array($name)){
                 return $this->define_superglobals($name);
@@ -1241,49 +1217,105 @@
                 throw new Error("Cannot define unnamed superglobal!");
             }
             $name = $this->normalize_superglobal($name);
-            if(func_num_args() > 2){
-                $key = $value;
-                $value = func_get_arg(2);
-                $this->definitions['superglobals'][$name][$key] = $value;
-            } else {
-                $this->definitions['superglobals'][$name] = $value;
+            if(isset($this->definitions['superglobals'][$name])){
+                if(func_num_args() > 2){
+                    $key = $value;
+                    $value = func_get_arg(2);
+                    $this->definitions['superglobals'][$name][$key] = $value;
+                } else {
+                    $this->definitions['superglobals'][$name] = $value;
+                }
             }
             return $this;
         }
-
+        /** Define PHPSandbox superglobals by array
+         *
+         * You can pass an associative array of superglobals to define
+         *
+         * @example $sandbox->define_superglobal(array('_GET' => array('page' => 1)));
+         *
+         * @param   array           $superglobals  Associative array of $superglobals to define
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_superglobals(array $superglobals = array()){
             foreach($superglobals as $name => $value){
                 $this->define_superglobal($name, $value);
             }
             return $this;
         }
-
+        /** Query whether PHPSandbox instance has defined superglobals, or if superglobal $name has defined keys
+         *
+         * @example $sandbox->has_defined_superglobals(); //returns number of defined superglobals, or zero if none defined
+         *
+         * @example $sandbox->has_defined_superglobals('_GET'); //returns number of defined superglobal _GET keys, or zero if none defined
+         *
+         * @param   string|null     $name       String of superglobal $name to check for keys
+         *
+         * @return  int|bool        Returns the number of superglobals or superglobal keys this instance has defined, or false if invalid superglobal name specified
+         */
         public function has_defined_superglobals($name = null){
-            $name = $this->normalize_superglobal($name);
-            return $name ? count($this->definitions['superglobals'][$name]) : count($this->definitions['superglobals']);
+            $name = $name ? $this->normalize_superglobal($name) : null;
+            return $name ? (isset($this->definitions['superglobals'][$name]) ? count($this->definitions['superglobals'][$name]) : false) : count($this->definitions['superglobals']);
         }
-
+        /** Check if PHPSandbox instance has $name superglobal defined, or if superglobal $name key is defined
+         *
+         * @example $sandbox->is_defined_superglobal('_GET');
+         *
+         * @example $sandbox->is_defined_superglobal('_GET', 'page');
+         *
+         * @param   string          $name       String of superglobal $name to query
+         * @param   string|null     $key        String of key to to query in superglobal
+         *
+         * @return  bool            Returns true if PHPSandbox instance has defined superglobal, false otherwise
+         */
         public function is_defined_superglobal($name, $key = null){
             $name = $this->normalize_superglobal($name);
             return $key !== null ? isset($this->definitions['superglobals'][$name][$key]) : isset($this->definitions['superglobals'][$name]);
         }
-
+        /** Undefine PHPSandbox superglobal or superglobal key
+         *
+         * @example $sandbox->undefine_superglobal(array('_GET', '_POST'));
+         *
+         * @example $sandbox->undefine_superglobal('_GET');
+         *
+         * @example $sandbox->undefine_superglobal('_GET', 'page');
+         *
+         * @param   array|string          $name       Associative array of superglobal names or string of superglobal name to undefine
+         * @param   string|null           $key        String of superglobal key to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_superglobal($name, $key = null){
+            if(is_array($name)){
+                return $this->undefine_superglobals($name);
+            }
             $name = $this->normalize_superglobal($name);
             if($key !== null){
                 if(isset($this->definitions['superglobals'][$name][$key])){
                     unset($this->definitions['superglobals'][$name][$key]);
                 }
             } else if(isset($this->definitions['superglobals'][$name])){
-                unset($this->definitions['superglobals'][$name]);
+                $this->definitions['superglobals'][$name] = array();
             }
             return $this;
         }
-
-        public function undefine_superglobals($name = null){
-            $name = $this->normalize_superglobal($name);
-            if($name){
-                $this->definitions['superglobals'][$name] = array();
+        /** Undefine PHPSandbox superglobals by array
+         *
+         * @example $sandbox->undefine_superglobals(array('_GET', '_POST'));
+         *
+         * @example $sandbox->undefine_superglobals(array('_GET' => 'page', '_POST' => 'page'));
+         *
+         * @param   array          $superglobals       Associative array of superglobal names and keys or array of superglobal names to undefine
+         *
+         * @return  $this          Returns the PHPSandbox instance for chainability
+         */
+        public function undefine_superglobals(array $superglobals = array()){
+            if(count($superglobals)){
+                foreach($superglobals as $superglobal => $name){
+                    $name = $this->normalize_superglobal($name);
+                    $this->undefine_superglobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) ? null : $name);
+                }
             } else {
                 $this->definitions['superglobals'] = array();
             }
@@ -1317,14 +1349,23 @@
         }
 
         public function undefine_const($name){
+            if(is_array($name)){
+                return $this->undefine_consts($name);
+            }
             if(isset($this->definitions['constants'][$name])){
                 unset($this->definitions['constants'][$name]);
             }
             return $this;
         }
 
-        public function undefine_consts(){
-            $this->definitions['constants'] = array();
+        public function undefine_consts(array $constants = array()){
+            if(count($constants)){
+                foreach($constants as $constant){
+                    $this->undefine_const($constant);
+                }
+            } else {
+                $this->definitions['constants'] = array();
+            }
             return $this;
         }
 
@@ -1357,6 +1398,9 @@
         }
 
         public function undefine_magic_const($name){
+            if(is_array($name)){
+                return $this->undefine_magic_consts($name);
+            }
             $name = $this->normalize_magic_const($name);
             if(isset($this->definitions['magic_constants'][$name])){
                 unset($this->definitions['magic_constants'][$name]);
@@ -1364,8 +1408,14 @@
             return $this;
         }
 
-        public function undefine_magic_consts(){
-            $this->definitions['magic_constants'] = array();
+        public function undefine_magic_consts(array $magic_constants = array()){
+            if(count($magic_constants)){
+                foreach($magic_constants as $magic_constant){
+                    $this->undefine_magic_const($magic_constant);
+                }
+            } else {
+                $this->definitions['magic_constants'] = array();
+            }
             return $this;
         }
 
@@ -1396,14 +1446,23 @@
         }
 
         public function undefine_namespace($name){
+            if(is_array($name)){
+                return $this->undefine_namespaces($name);
+            }
             if(isset($this->definitions['namespaces'][$name])){
                 unset($this->definitions['namespaces'][$name]);
             }
             return $this;
         }
 
-        public function undefine_namespaces(){
-            $this->definitions['namespaces'] = array();
+        public function undefine_namespaces(array $namespaces = array()){
+            if(count($namespaces)){
+                foreach($namespaces as $namespace){
+                    $this->undefine_namespace($namespace);
+                }
+            } else {
+                $this->definitions['namespaces'] = array();
+            }
             return $this;
         }
 
@@ -1434,14 +1493,23 @@
         }
 
         public function undefine_alias($name){
+            if(is_array($name)){
+                return $this->undefine_aliases($name);
+            }
             if(isset($this->definitions['aliases'][$name])){
                 unset($this->definitions['aliases'][$name]);
             }
             return $this;
         }
 
-        public function undefine_aliases(){
-            $this->definitions['aliases'] = array();
+        public function undefine_aliases(array $aliases = array()){
+            if(count($aliases)){
+                foreach($aliases as $alias){
+                    $this->undefine_alias($alias);
+                }
+            } else {
+                $this->definitions['aliases'] = array();
+            }
             return $this;
         }
 
@@ -1465,8 +1533,8 @@
             return $this->undefine_alias($name);
         }
 
-        public function undefine_uses(){
-            return $this->undefine_aliases();
+        public function undefine_uses(array $uses = array()){
+            return $this->undefine_aliases($uses);
         }
 
         protected function normalize_func($name){
@@ -2394,18 +2462,16 @@
             if(!$name){
                 throw new Error("Sandboxed code attempted to call unnamed global!");
             }
-            if(!isset($this->definitions['globals'][$name])){
-                if(count($this->whitelist['globals'])){
-                    if(!isset($this->whitelist['globals'][$name])){
-                        throw new Error("Sandboxed code attempted to call non-whitelisted global: $original_name");
-                    }
-                } else if(count($this->blacklist['globals'])){
-                    if(isset($this->blacklist['globals'][$name])){
-                        throw new Error("Sandboxed code attempted to call blacklisted global: $original_name");
-                    }
-                } else {
-                    throw new Error("Sandboxed code attempted to call invalid global: $original_name");
+            if(count($this->whitelist['globals'])){
+                if(!isset($this->whitelist['globals'][$name])){
+                    throw new Error("Sandboxed code attempted to call non-whitelisted global: $original_name");
                 }
+            } else if(count($this->blacklist['globals'])){
+                if(isset($this->blacklist['globals'][$name])){
+                    throw new Error("Sandboxed code attempted to call blacklisted global: $original_name");
+                }
+            } else {
+                throw new Error("Sandboxed code attempted to call invalid global: $original_name");
             }
         }
 
