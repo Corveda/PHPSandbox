@@ -12,7 +12,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/fieryprophet/PHPSandbox"
+            "url": "https://github.com/fieryprophet/php-sandbox"
         }
     ],
     "require": {
