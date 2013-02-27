@@ -31,7 +31,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">170</span></a></li>
+                <span class="label label-info">106</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -68,8 +68,7 @@
 <li class="method public "><a href="#method__get_superglobal" title="_get_superglobal :: Get PHPSandbox redefined superglobal."><span class="description">Get PHPSandbox redefined superglobal.</span><pre>_get_superglobal()</pre></a></li>
 <li class="method public "><a href="#method_append" title="append :: "><span class="description">append()
         </span><pre>append()</pre></a></li>
-<li class="method public "><a href="#method_blacklist" title="blacklist :: "><span class="description">blacklist()
-        </span><pre>blacklist()</pre></a></li>
+<li class="method public "><a href="#method_blacklist" title="blacklist :: Blacklist PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Blacklist PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>blacklist()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_alias" title="blacklist_alias :: "><span class="description">blacklist_alias()
         </span><pre>blacklist_alias()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_class" title="blacklist_class :: "><span class="description">blacklist_class()
@@ -142,8 +141,7 @@
 <li class="method public "><a href="#method_clear_prepend" title="clear_prepend :: "><span class="description">clear_prepend()
         </span><pre>clear_prepend()</pre></a></li>
 <li class="method public "><a href="#method_create" title="create :: PHPSandbox static factory method"><span class="description">PHPSandbox static factory method</span><pre>create()</pre></a></li>
-<li class="method public "><a href="#method_deblacklist" title="deblacklist :: "><span class="description">deblacklist()
-        </span><pre>deblacklist()</pre></a></li>
+<li class="method public "><a href="#method_deblacklist" title="deblacklist :: Remove PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Remove PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>deblacklist()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_alias" title="deblacklist_alias :: "><span class="description">deblacklist_alias()
         </span><pre>deblacklist_alias()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_class" title="deblacklist_class :: "><span class="description">deblacklist_class()
@@ -193,8 +191,7 @@
 <li class="method public "><a href="#method_define_uses" title="define_uses :: Define PHPSandbox uses (or aliases) by array"><span class="description">Define PHPSandbox uses (or aliases) by array</span><pre>define_uses()</pre></a></li>
 <li class="method public "><a href="#method_define_var" title="define_var :: Define PHPSandbox variable"><span class="description">Define PHPSandbox variable</span><pre>define_var()</pre></a></li>
 <li class="method public "><a href="#method_define_vars" title="define_vars :: Define PHPSandbox variables by array"><span class="description">Define PHPSandbox variables by array</span><pre>define_vars()</pre></a></li>
-<li class="method public "><a href="#method_dewhitelist" title="dewhitelist :: "><span class="description">dewhitelist()
-        </span><pre>dewhitelist()</pre></a></li>
+<li class="method public "><a href="#method_dewhitelist" title="dewhitelist :: Remove PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Remove PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>dewhitelist()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_alias" title="dewhitelist_alias :: "><span class="description">dewhitelist_alias()
         </span><pre>dewhitelist_alias()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_class" title="dewhitelist_class :: "><span class="description">dewhitelist_class()
@@ -239,40 +236,26 @@
 <li class="method public "><a href="#method_get_prepared_code" title="get_prepared_code :: Get PHPSandbox prepared code"><span class="description">Get PHPSandbox prepared code</span><pre>get_prepared_code()</pre></a></li>
 <li class="method public "><a href="#method_get_preparsed_code" title="get_preparsed_code :: Get PHPSandbox preparsed code"><span class="description">Get PHPSandbox preparsed code</span><pre>get_preparsed_code()</pre></a></li>
 <li class="method public "><a href="#method_get_prepended_code" title="get_prepended_code :: Get PHPSandbox prepended code"><span class="description">Get PHPSandbox prepended code</span><pre>get_prepended_code()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist" title="has_blacklist :: "><span class="description">has_blacklist()
-        </span><pre>has_blacklist()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_aliases" title="has_blacklist_aliases :: "><span class="description">has_blacklist_aliases()
-        </span><pre>has_blacklist_aliases()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_classes" title="has_blacklist_classes :: "><span class="description">has_blacklist_classes()
-        </span><pre>has_blacklist_classes()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_consts" title="has_blacklist_consts :: "><span class="description">has_blacklist_consts()
-        </span><pre>has_blacklist_consts()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_funcs" title="has_blacklist_funcs :: "><span class="description">has_blacklist_funcs()
-        </span><pre>has_blacklist_funcs()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_globals" title="has_blacklist_globals :: "><span class="description">has_blacklist_globals()
-        </span><pre>has_blacklist_globals()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_interfaces" title="has_blacklist_interfaces :: "><span class="description">has_blacklist_interfaces()
-        </span><pre>has_blacklist_interfaces()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_keywords" title="has_blacklist_keywords :: "><span class="description">has_blacklist_keywords()
-        </span><pre>has_blacklist_keywords()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_magic_consts" title="has_blacklist_magic_consts :: "><span class="description">has_blacklist_magic_consts()
-        </span><pre>has_blacklist_magic_consts()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_namespaces" title="has_blacklist_namespaces :: "><span class="description">has_blacklist_namespaces()
-        </span><pre>has_blacklist_namespaces()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist" title="has_blacklist :: Query whether PHPSandbox instance has blacklist type."><span class="description">Query whether PHPSandbox instance has blacklist type.</span><pre>has_blacklist()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_aliases" title="has_blacklist_aliases :: Query whether PHPSandbox instance has blacklisted aliases."><span class="description">Query whether PHPSandbox instance has blacklisted aliases.</span><pre>has_blacklist_aliases()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_classes" title="has_blacklist_classes :: Query whether PHPSandbox instance has blacklisted classes."><span class="description">Query whether PHPSandbox instance has blacklisted classes.</span><pre>has_blacklist_classes()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_consts" title="has_blacklist_consts :: Query whether PHPSandbox instance has blacklisted constants."><span class="description">Query whether PHPSandbox instance has blacklisted constants.</span><pre>has_blacklist_consts()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_funcs" title="has_blacklist_funcs :: Query whether PHPSandbox instance has blacklisted functions."><span class="description">Query whether PHPSandbox instance has blacklisted functions.</span><pre>has_blacklist_funcs()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_globals" title="has_blacklist_globals :: Query whether PHPSandbox instance has blacklisted globals."><span class="description">Query whether PHPSandbox instance has blacklisted globals.</span><pre>has_blacklist_globals()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_interfaces" title="has_blacklist_interfaces :: Query whether PHPSandbox instance has blacklisted interfaces."><span class="description">Query whether PHPSandbox instance has blacklisted interfaces.</span><pre>has_blacklist_interfaces()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_keywords" title="has_blacklist_keywords :: Query whether PHPSandbox instance has blacklisted keywords."><span class="description">Query whether PHPSandbox instance has blacklisted keywords.</span><pre>has_blacklist_keywords()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_magic_consts" title="has_blacklist_magic_consts :: Query whether PHPSandbox instance has blacklisted magic constants."><span class="description">Query whether PHPSandbox instance has blacklisted magic constants.</span><pre>has_blacklist_magic_consts()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_namespaces" title="has_blacklist_namespaces :: Query whether PHPSandbox instance has blacklisted namespaces."><span class="description">Query whether PHPSandbox instance has blacklisted namespaces.</span><pre>has_blacklist_namespaces()</pre></a></li>
 <li class="method public "><a href="#method_has_blacklist_operators" title="has_blacklist_operators :: "><span class="description">has_blacklist_operators()
         </span><pre>has_blacklist_operators()</pre></a></li>
 <li class="method public "><a href="#method_has_blacklist_primitives" title="has_blacklist_primitives :: "><span class="description">has_blacklist_primitives()
         </span><pre>has_blacklist_primitives()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_superglobals" title="has_blacklist_superglobals :: "><span class="description">has_blacklist_superglobals()
-        </span><pre>has_blacklist_superglobals()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_traits" title="has_blacklist_traits :: "><span class="description">has_blacklist_traits()
-        </span><pre>has_blacklist_traits()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_superglobals" title="has_blacklist_superglobals :: Query whether PHPSandbox instance has blacklisted superglobals, or superglobal keys"><span class="description">Query whether PHPSandbox instance has blacklisted superglobals, or superglobal keys</span><pre>has_blacklist_superglobals()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_traits" title="has_blacklist_traits :: Query whether PHPSandbox instance has blacklisted traits."><span class="description">Query whether PHPSandbox instance has blacklisted traits.</span><pre>has_blacklist_traits()</pre></a></li>
 <li class="method public "><a href="#method_has_blacklist_types" title="has_blacklist_types :: "><span class="description">has_blacklist_types()
         </span><pre>has_blacklist_types()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_uses" title="has_blacklist_uses :: "><span class="description">has_blacklist_uses()
-        </span><pre>has_blacklist_uses()</pre></a></li>
-<li class="method public "><a href="#method_has_blacklist_vars" title="has_blacklist_vars :: "><span class="description">has_blacklist_vars()
-        </span><pre>has_blacklist_vars()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_uses" title="has_blacklist_uses :: Query whether PHPSandbox instance has blacklisted uses (or aliases.)"><span class="description">Query whether PHPSandbox instance has blacklisted uses (or aliases.)</span><pre>has_blacklist_uses()</pre></a></li>
+<li class="method public "><a href="#method_has_blacklist_vars" title="has_blacklist_vars :: Query whether PHPSandbox instance has blacklisted variables."><span class="description">Query whether PHPSandbox instance has blacklisted variables.</span><pre>has_blacklist_vars()</pre></a></li>
 <li class="method public "><a href="#method_has_defined_aliases" title="has_defined_aliases :: Query whether PHPSandbox instance has defined aliases"><span class="description">Query whether PHPSandbox instance has defined aliases</span><pre>has_defined_aliases()</pre></a></li>
 <li class="method public "><a href="#method_has_defined_consts" title="has_defined_consts :: Query whether PHPSandbox instance has defined constants"><span class="description">Query whether PHPSandbox instance has defined constants</span><pre>has_defined_consts()</pre></a></li>
 <li class="method public "><a href="#method_has_defined_funcs" title="has_defined_funcs :: Query whether PHPSandbox instance has defined functions"><span class="description">Query whether PHPSandbox instance has defined functions</span><pre>has_defined_funcs()</pre></a></li>
@@ -281,74 +264,46 @@
 <li class="method public "><a href="#method_has_defined_superglobals" title="has_defined_superglobals :: Query whether PHPSandbox instance has defined superglobals, or if superglobal $name has defined keys"><span class="description">Query whether PHPSandbox instance has defined superglobals, or if superglobal $name has defined keys</span><pre>has_defined_superglobals()</pre></a></li>
 <li class="method public "><a href="#method_has_defined_uses" title="has_defined_uses :: Query whether PHPSandbox instance has defined uses (or aliases)"><span class="description">Query whether PHPSandbox instance has defined uses (or aliases)</span><pre>has_defined_uses()</pre></a></li>
 <li class="method public "><a href="#method_has_defined_vars" title="has_defined_vars :: Query whether PHPSandbox instance has defined variables"><span class="description">Query whether PHPSandbox instance has defined variables</span><pre>has_defined_vars()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist" title="has_whitelist :: "><span class="description">has_whitelist()
-        </span><pre>has_whitelist()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_aliases" title="has_whitelist_aliases :: "><span class="description">has_whitelist_aliases()
-        </span><pre>has_whitelist_aliases()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_classes" title="has_whitelist_classes :: "><span class="description">has_whitelist_classes()
-        </span><pre>has_whitelist_classes()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_consts" title="has_whitelist_consts :: "><span class="description">has_whitelist_consts()
-        </span><pre>has_whitelist_consts()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_funcs" title="has_whitelist_funcs :: "><span class="description">has_whitelist_funcs()
-        </span><pre>has_whitelist_funcs()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_globals" title="has_whitelist_globals :: "><span class="description">has_whitelist_globals()
-        </span><pre>has_whitelist_globals()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_interfaces" title="has_whitelist_interfaces :: "><span class="description">has_whitelist_interfaces()
-        </span><pre>has_whitelist_interfaces()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_keywords" title="has_whitelist_keywords :: "><span class="description">has_whitelist_keywords()
-        </span><pre>has_whitelist_keywords()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_magic_consts" title="has_whitelist_magic_consts :: "><span class="description">has_whitelist_magic_consts()
-        </span><pre>has_whitelist_magic_consts()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_namespaces" title="has_whitelist_namespaces :: "><span class="description">has_whitelist_namespaces()
-        </span><pre>has_whitelist_namespaces()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist" title="has_whitelist :: Query whether PHPSandbox instance has whitelist type"><span class="description">Query whether PHPSandbox instance has whitelist type</span><pre>has_whitelist()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_aliases" title="has_whitelist_aliases :: Query whether PHPSandbox instance has whitelisted aliases."><span class="description">Query whether PHPSandbox instance has whitelisted aliases.</span><pre>has_whitelist_aliases()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_classes" title="has_whitelist_classes :: Query whether PHPSandbox instance has whitelisted classes."><span class="description">Query whether PHPSandbox instance has whitelisted classes.</span><pre>has_whitelist_classes()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_consts" title="has_whitelist_consts :: Query whether PHPSandbox instance has whitelisted constants."><span class="description">Query whether PHPSandbox instance has whitelisted constants.</span><pre>has_whitelist_consts()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_funcs" title="has_whitelist_funcs :: Query whether PHPSandbox instance has whitelisted functions."><span class="description">Query whether PHPSandbox instance has whitelisted functions.</span><pre>has_whitelist_funcs()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_globals" title="has_whitelist_globals :: Query whether PHPSandbox instance has whitelisted globals."><span class="description">Query whether PHPSandbox instance has whitelisted globals.</span><pre>has_whitelist_globals()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_interfaces" title="has_whitelist_interfaces :: Query whether PHPSandbox instance has whitelisted interfaces."><span class="description">Query whether PHPSandbox instance has whitelisted interfaces.</span><pre>has_whitelist_interfaces()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_keywords" title="has_whitelist_keywords :: Query whether PHPSandbox instance has whitelisted keywords."><span class="description">Query whether PHPSandbox instance has whitelisted keywords.</span><pre>has_whitelist_keywords()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_magic_consts" title="has_whitelist_magic_consts :: Query whether PHPSandbox instance has whitelisted magic constants."><span class="description">Query whether PHPSandbox instance has whitelisted magic constants.</span><pre>has_whitelist_magic_consts()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_namespaces" title="has_whitelist_namespaces :: Query whether PHPSandbox instance has whitelisted namespaces."><span class="description">Query whether PHPSandbox instance has whitelisted namespaces.</span><pre>has_whitelist_namespaces()</pre></a></li>
 <li class="method public "><a href="#method_has_whitelist_operators" title="has_whitelist_operators :: "><span class="description">has_whitelist_operators()
         </span><pre>has_whitelist_operators()</pre></a></li>
 <li class="method public "><a href="#method_has_whitelist_primitives" title="has_whitelist_primitives :: "><span class="description">has_whitelist_primitives()
         </span><pre>has_whitelist_primitives()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_superglobals" title="has_whitelist_superglobals :: "><span class="description">has_whitelist_superglobals()
-        </span><pre>has_whitelist_superglobals()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_traits" title="has_whitelist_traits :: "><span class="description">has_whitelist_traits()
-        </span><pre>has_whitelist_traits()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_superglobals" title="has_whitelist_superglobals :: Query whether PHPSandbox instance has whitelisted superglobals, or superglobal keys"><span class="description">Query whether PHPSandbox instance has whitelisted superglobals, or superglobal keys</span><pre>has_whitelist_superglobals()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_traits" title="has_whitelist_traits :: Query whether PHPSandbox instance has whitelisted traits."><span class="description">Query whether PHPSandbox instance has whitelisted traits.</span><pre>has_whitelist_traits()</pre></a></li>
 <li class="method public "><a href="#method_has_whitelist_types" title="has_whitelist_types :: "><span class="description">has_whitelist_types()
         </span><pre>has_whitelist_types()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_uses" title="has_whitelist_uses :: "><span class="description">has_whitelist_uses()
-        </span><pre>has_whitelist_uses()</pre></a></li>
-<li class="method public "><a href="#method_has_whitelist_vars" title="has_whitelist_vars :: "><span class="description">has_whitelist_vars()
-        </span><pre>has_whitelist_vars()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted" title="is_blacklisted :: "><span class="description">is_blacklisted()
-        </span><pre>is_blacklisted()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_alias" title="is_blacklisted_alias :: "><span class="description">is_blacklisted_alias()
-        </span><pre>is_blacklisted_alias()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_class" title="is_blacklisted_class :: "><span class="description">is_blacklisted_class()
-        </span><pre>is_blacklisted_class()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_const" title="is_blacklisted_const :: "><span class="description">is_blacklisted_const()
-        </span><pre>is_blacklisted_const()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_func" title="is_blacklisted_func :: "><span class="description">is_blacklisted_func()
-        </span><pre>is_blacklisted_func()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_global" title="is_blacklisted_global :: "><span class="description">is_blacklisted_global()
-        </span><pre>is_blacklisted_global()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_interface" title="is_blacklisted_interface :: "><span class="description">is_blacklisted_interface()
-        </span><pre>is_blacklisted_interface()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_keyword" title="is_blacklisted_keyword :: "><span class="description">is_blacklisted_keyword()
-        </span><pre>is_blacklisted_keyword()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_magic_const" title="is_blacklisted_magic_const :: "><span class="description">is_blacklisted_magic_const()
-        </span><pre>is_blacklisted_magic_const()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_namespace" title="is_blacklisted_namespace :: "><span class="description">is_blacklisted_namespace()
-        </span><pre>is_blacklisted_namespace()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_uses" title="has_whitelist_uses :: Query whether PHPSandbox instance has whitelisted uses (or aliases.)"><span class="description">Query whether PHPSandbox instance has whitelisted uses (or aliases.)</span><pre>has_whitelist_uses()</pre></a></li>
+<li class="method public "><a href="#method_has_whitelist_vars" title="has_whitelist_vars :: Query whether PHPSandbox instance has whitelisted variables."><span class="description">Query whether PHPSandbox instance has whitelisted variables.</span><pre>has_whitelist_vars()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted" title="is_blacklisted :: Check if PHPSandbox instance has blacklist type and name set"><span class="description">Check if PHPSandbox instance has blacklist type and name set</span><pre>is_blacklisted()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_alias" title="is_blacklisted_alias :: Check if PHPSandbox instance has blacklisted alias name set"><span class="description">Check if PHPSandbox instance has blacklisted alias name set</span><pre>is_blacklisted_alias()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_class" title="is_blacklisted_class :: Check if PHPSandbox instance has blacklisted class name set"><span class="description">Check if PHPSandbox instance has blacklisted class name set</span><pre>is_blacklisted_class()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_const" title="is_blacklisted_const :: Check if PHPSandbox instance has blacklisted constant name set"><span class="description">Check if PHPSandbox instance has blacklisted constant name set</span><pre>is_blacklisted_const()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_func" title="is_blacklisted_func :: Check if PHPSandbox instance has blacklisted function name set"><span class="description">Check if PHPSandbox instance has blacklisted function name set</span><pre>is_blacklisted_func()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_global" title="is_blacklisted_global :: Check if PHPSandbox instance has blacklisted global name set"><span class="description">Check if PHPSandbox instance has blacklisted global name set</span><pre>is_blacklisted_global()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_interface" title="is_blacklisted_interface :: Check if PHPSandbox instance has blacklisted interface name set"><span class="description">Check if PHPSandbox instance has blacklisted interface name set</span><pre>is_blacklisted_interface()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_keyword" title="is_blacklisted_keyword :: Check if PHPSandbox instance has blacklisted keyword name set"><span class="description">Check if PHPSandbox instance has blacklisted keyword name set</span><pre>is_blacklisted_keyword()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_magic_const" title="is_blacklisted_magic_const :: Check if PHPSandbox instance has blacklisted magic constant name set"><span class="description">Check if PHPSandbox instance has blacklisted magic constant name set</span><pre>is_blacklisted_magic_const()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_namespace" title="is_blacklisted_namespace :: Check if PHPSandbox instance has blacklisted namespace name set"><span class="description">Check if PHPSandbox instance has blacklisted namespace name set</span><pre>is_blacklisted_namespace()</pre></a></li>
 <li class="method public "><a href="#method_is_blacklisted_operator" title="is_blacklisted_operator :: "><span class="description">is_blacklisted_operator()
         </span><pre>is_blacklisted_operator()</pre></a></li>
 <li class="method public "><a href="#method_is_blacklisted_primitive" title="is_blacklisted_primitive :: "><span class="description">is_blacklisted_primitive()
         </span><pre>is_blacklisted_primitive()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_superglobal" title="is_blacklisted_superglobal :: "><span class="description">is_blacklisted_superglobal()
-        </span><pre>is_blacklisted_superglobal()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_trait" title="is_blacklisted_trait :: "><span class="description">is_blacklisted_trait()
-        </span><pre>is_blacklisted_trait()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_superglobal" title="is_blacklisted_superglobal :: Check if PHPSandbox instance has blacklisted superglobal or superglobal key set"><span class="description">Check if PHPSandbox instance has blacklisted superglobal or superglobal key set</span><pre>is_blacklisted_superglobal()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_trait" title="is_blacklisted_trait :: Check if PHPSandbox instance has blacklisted trait name set"><span class="description">Check if PHPSandbox instance has blacklisted trait name set</span><pre>is_blacklisted_trait()</pre></a></li>
 <li class="method public "><a href="#method_is_blacklisted_type" title="is_blacklisted_type :: "><span class="description">is_blacklisted_type()
         </span><pre>is_blacklisted_type()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_use" title="is_blacklisted_use :: "><span class="description">is_blacklisted_use()
-        </span><pre>is_blacklisted_use()</pre></a></li>
-<li class="method public "><a href="#method_is_blacklisted_var" title="is_blacklisted_var :: "><span class="description">is_blacklisted_var()
-        </span><pre>is_blacklisted_var()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_use" title="is_blacklisted_use :: Check if PHPSandbox instance has blacklisted use (or alias) name set"><span class="description">Check if PHPSandbox instance has blacklisted use (or alias) name set</span><pre>is_blacklisted_use()</pre></a></li>
+<li class="method public "><a href="#method_is_blacklisted_var" title="is_blacklisted_var :: Check if PHPSandbox instance has blacklisted variable name set"><span class="description">Check if PHPSandbox instance has blacklisted variable name set</span><pre>is_blacklisted_var()</pre></a></li>
 <li class="method public "><a href="#method_is_defined_alias" title="is_defined_alias :: Check if PHPSandbox instance has $name alias defined"><span class="description">Check if PHPSandbox instance has $name alias defined</span><pre>is_defined_alias()</pre></a></li>
 <li class="method public "><a href="#method_is_defined_const" title="is_defined_const :: Check if PHPSandbox instance has $name constant defined"><span class="description">Check if PHPSandbox instance has $name constant defined</span><pre>is_defined_const()</pre></a></li>
 <li class="method public "><a href="#method_is_defined_func" title="is_defined_func :: Check if PHPSandbox instance has $name function defined"><span class="description">Check if PHPSandbox instance has $name function defined</span><pre>is_defined_func()</pre></a></li>
@@ -357,40 +312,26 @@
 <li class="method public "><a href="#method_is_defined_superglobal" title="is_defined_superglobal :: Check if PHPSandbox instance has $name superglobal defined, or if superglobal $name key is defined"><span class="description">Check if PHPSandbox instance has $name superglobal defined, or if superglobal $name key is defined</span><pre>is_defined_superglobal()</pre></a></li>
 <li class="method public "><a href="#method_is_defined_use" title="is_defined_use :: Check if PHPSandbox instance has $name uses (or alias) defined"><span class="description">Check if PHPSandbox instance has $name uses (or alias) defined</span><pre>is_defined_use()</pre></a></li>
 <li class="method public "><a href="#method_is_defined_var" title="is_defined_var :: Check if PHPSandbox instance has $name variable defined"><span class="description">Check if PHPSandbox instance has $name variable defined</span><pre>is_defined_var()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted" title="is_whitelisted :: "><span class="description">is_whitelisted()
-        </span><pre>is_whitelisted()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_alias" title="is_whitelisted_alias :: "><span class="description">is_whitelisted_alias()
-        </span><pre>is_whitelisted_alias()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_class" title="is_whitelisted_class :: "><span class="description">is_whitelisted_class()
-        </span><pre>is_whitelisted_class()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_const" title="is_whitelisted_const :: "><span class="description">is_whitelisted_const()
-        </span><pre>is_whitelisted_const()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_func" title="is_whitelisted_func :: "><span class="description">is_whitelisted_func()
-        </span><pre>is_whitelisted_func()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_global" title="is_whitelisted_global :: "><span class="description">is_whitelisted_global()
-        </span><pre>is_whitelisted_global()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_interface" title="is_whitelisted_interface :: "><span class="description">is_whitelisted_interface()
-        </span><pre>is_whitelisted_interface()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_keyword" title="is_whitelisted_keyword :: "><span class="description">is_whitelisted_keyword()
-        </span><pre>is_whitelisted_keyword()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_magic_const" title="is_whitelisted_magic_const :: "><span class="description">is_whitelisted_magic_const()
-        </span><pre>is_whitelisted_magic_const()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_namespace" title="is_whitelisted_namespace :: "><span class="description">is_whitelisted_namespace()
-        </span><pre>is_whitelisted_namespace()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted" title="is_whitelisted :: Check if PHPSandbox instance has whitelist type and name set"><span class="description">Check if PHPSandbox instance has whitelist type and name set</span><pre>is_whitelisted()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_alias" title="is_whitelisted_alias :: Check if PHPSandbox instance has whitelisted alias name set"><span class="description">Check if PHPSandbox instance has whitelisted alias name set</span><pre>is_whitelisted_alias()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_class" title="is_whitelisted_class :: Check if PHPSandbox instance has whitelisted class name set"><span class="description">Check if PHPSandbox instance has whitelisted class name set</span><pre>is_whitelisted_class()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_const" title="is_whitelisted_const :: Check if PHPSandbox instance has whitelisted constant name set"><span class="description">Check if PHPSandbox instance has whitelisted constant name set</span><pre>is_whitelisted_const()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_func" title="is_whitelisted_func :: Check if PHPSandbox instance has whitelisted function name set"><span class="description">Check if PHPSandbox instance has whitelisted function name set</span><pre>is_whitelisted_func()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_global" title="is_whitelisted_global :: Check if PHPSandbox instance has whitelisted global name set"><span class="description">Check if PHPSandbox instance has whitelisted global name set</span><pre>is_whitelisted_global()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_interface" title="is_whitelisted_interface :: Check if PHPSandbox instance has whitelisted interface name set"><span class="description">Check if PHPSandbox instance has whitelisted interface name set</span><pre>is_whitelisted_interface()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_keyword" title="is_whitelisted_keyword :: Check if PHPSandbox instance has whitelisted keyword name set"><span class="description">Check if PHPSandbox instance has whitelisted keyword name set</span><pre>is_whitelisted_keyword()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_magic_const" title="is_whitelisted_magic_const :: Check if PHPSandbox instance has whitelisted magic constant name set"><span class="description">Check if PHPSandbox instance has whitelisted magic constant name set</span><pre>is_whitelisted_magic_const()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_namespace" title="is_whitelisted_namespace :: Check if PHPSandbox instance has whitelisted namespace name set"><span class="description">Check if PHPSandbox instance has whitelisted namespace name set</span><pre>is_whitelisted_namespace()</pre></a></li>
 <li class="method public "><a href="#method_is_whitelisted_operator" title="is_whitelisted_operator :: "><span class="description">is_whitelisted_operator()
         </span><pre>is_whitelisted_operator()</pre></a></li>
 <li class="method public "><a href="#method_is_whitelisted_primitive" title="is_whitelisted_primitive :: "><span class="description">is_whitelisted_primitive()
         </span><pre>is_whitelisted_primitive()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_superglobal" title="is_whitelisted_superglobal :: "><span class="description">is_whitelisted_superglobal()
-        </span><pre>is_whitelisted_superglobal()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_trait" title="is_whitelisted_trait :: "><span class="description">is_whitelisted_trait()
-        </span><pre>is_whitelisted_trait()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_superglobal" title="is_whitelisted_superglobal :: Check if PHPSandbox instance has whitelisted superglobal or superglobal key set"><span class="description">Check if PHPSandbox instance has whitelisted superglobal or superglobal key set</span><pre>is_whitelisted_superglobal()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_trait" title="is_whitelisted_trait :: Check if PHPSandbox instance has whitelisted trait name set"><span class="description">Check if PHPSandbox instance has whitelisted trait name set</span><pre>is_whitelisted_trait()</pre></a></li>
 <li class="method public "><a href="#method_is_whitelisted_type" title="is_whitelisted_type :: "><span class="description">is_whitelisted_type()
         </span><pre>is_whitelisted_type()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_use" title="is_whitelisted_use :: "><span class="description">is_whitelisted_use()
-        </span><pre>is_whitelisted_use()</pre></a></li>
-<li class="method public "><a href="#method_is_whitelisted_var" title="is_whitelisted_var :: "><span class="description">is_whitelisted_var()
-        </span><pre>is_whitelisted_var()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_use" title="is_whitelisted_use :: Check if PHPSandbox instance has whitelisted use (or alias) name set"><span class="description">Check if PHPSandbox instance has whitelisted use (or alias) name set</span><pre>is_whitelisted_use()</pre></a></li>
+<li class="method public "><a href="#method_is_whitelisted_var" title="is_whitelisted_var :: Check if PHPSandbox instance has whitelisted variable name set"><span class="description">Check if PHPSandbox instance has whitelisted variable name set</span><pre>is_whitelisted_var()</pre></a></li>
 <li class="method public "><a href="#method_prepare" title="prepare :: Prepare passed callable for execution"><span class="description">Prepare passed callable for execution</span><pre>prepare()</pre></a></li>
 <li class="method public "><a href="#method_prepend" title="prepend :: "><span class="description">prepend()
         </span><pre>prepend()</pre></a></li>
@@ -413,8 +354,7 @@
 <li class="method public "><a href="#method_undefine_uses" title="undefine_uses :: Undefine PHPSandbox uses (or aliases) by array"><span class="description">Undefine PHPSandbox uses (or aliases) by array</span><pre>undefine_uses()</pre></a></li>
 <li class="method public "><a href="#method_undefine_var" title="undefine_var :: Undefine PHPSandbox variable"><span class="description">Undefine PHPSandbox variable</span><pre>undefine_var()</pre></a></li>
 <li class="method public "><a href="#method_undefine_vars" title="undefine_vars :: Undefine PHPSandbox variables by array"><span class="description">Undefine PHPSandbox variables by array</span><pre>undefine_vars()</pre></a></li>
-<li class="method public "><a href="#method_whitelist" title="whitelist :: "><span class="description">whitelist()
-        </span><pre>whitelist()</pre></a></li>
+<li class="method public "><a href="#method_whitelist" title="whitelist :: Whitelist PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Whitelist PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>whitelist()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_alias" title="whitelist_alias :: "><span class="description">whitelist_alias()
         </span><pre>whitelist_alias()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_class" title="whitelist_class :: "><span class="description">whitelist_class()
@@ -529,10 +469,10 @@
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
-<li class="property protected "><a href="#property_blacklist" title="$blacklist :: "><span class="description"></span><pre>$blacklist</pre></a></li>
-<li class="property protected "><a href="#property_definitions" title="$definitions :: "><span class="description"></span><pre>$definitions</pre></a></li>
+<li class="property protected "><a href="#property_blacklist" title="$blacklist :: "><span class="description">Array of blacklisted functions, classes, etc. Any whitelisted array types override their counterpart in this array</span><pre>$blacklist</pre></a></li>
+<li class="property protected "><a href="#property_definitions" title="$definitions :: "><span class="description">Array of defined functions, superglobals, etc. If an array type contains elements, then it overwrites its external counterpart</span><pre>$definitions</pre></a></li>
 <li class="property protected "><a href="#property_function_prefix" title="$function_prefix :: "><span class="description">The prefix given to the obfuscated sandbox variable passed to the generated code</span><pre>$function_prefix</pre></a></li>
-<li class="property protected "><a href="#property_whitelist" title="$whitelist :: "><span class="description"></span><pre>$whitelist</pre></a></li>
+<li class="property protected "><a href="#property_whitelist" title="$whitelist :: "><span class="description">Array of whitelisted functions, classes, etc. If an array type contains elements, then it overrides its blacklist counterpart</span><pre>$whitelist</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -786,16 +726,50 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div></div>
 </div>
 <a id="method_blacklist"></a><div class="element clickable method public method_blacklist" data-toggle="collapse" data-target=".method_blacklist .collapse">
-<h2>blacklist()
-        </h2>
-<pre>blacklist($type, $name) </pre>
+<h2>Blacklist PHPSandbox definitions, such as functions, constants, classes, etc.</h2>
+<pre>blacklist(array | string $type, array | string | null $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>to set</p>
+
+<p>You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist(array('functions' => array('test')));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist('functions', array('test'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist('functions', 'test');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$type</h4></div>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>array</code><code>string</code><p>Associative array or string of blacklist type to set</p></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><code>null</code><p>Array or string of blacklist name to set</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_blacklist_alias"></a><div class="element clickable method public method_blacklist_alias" data-toggle="collapse" data-target=".method_blacklist_alias .collapse">
 <h2>blacklist_alias()
@@ -1234,16 +1208,50 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div>
 </div>
 <a id="method_deblacklist"></a><div class="element clickable method public method_deblacklist" data-toggle="collapse" data-target=".method_deblacklist .collapse">
-<h2>deblacklist()
-        </h2>
-<pre>deblacklist($type, $name) </pre>
+<h2>Remove PHPSandbox definitions, such as functions, constants, classes, etc.</h2>
+<pre>deblacklist(array | string $type, array | string | null $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>from blacklist</p>
+
+<p>You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist(array('functions' => array('test')));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist('functions', array('test'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist('functions', 'test');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$type</h4></div>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>array</code><code>string</code><p>Associative array or string of blacklist type to unset</p></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><code>null</code><p>Array or string of blacklist name to unset</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_deblacklist_alias"></a><div class="element clickable method public method_deblacklist_alias" data-toggle="collapse" data-target=".method_deblacklist_alias .collapse">
 <h2>deblacklist_alias()
@@ -2129,16 +2137,50 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div>
 </div>
 <a id="method_dewhitelist"></a><div class="element clickable method public method_dewhitelist" data-toggle="collapse" data-target=".method_dewhitelist .collapse">
-<h2>dewhitelist()
-        </h2>
-<pre>dewhitelist($type, $name) </pre>
+<h2>Remove PHPSandbox definitions, such as functions, constants, classes, etc.</h2>
+<pre>dewhitelist(array | string $type, array | string | null $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>from whitelist</p>
+
+<p>You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist(array('functions' => array('test')));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist('functions', array('test'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist('functions', 'test');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$type</h4></div>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>array</code><code>string</code><p>Associative array or string of whitelist type to unset</p></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><code>null</code><p>Array or string of whitelist name to unset</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_dewhitelist_alias"></a><div class="element clickable method public method_dewhitelist_alias" data-toggle="collapse" data-target=".method_dewhitelist_alias .collapse">
 <h2>dewhitelist_alias()
@@ -2323,7 +2365,9 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 <div class="labels"></div>
 <div class="row collapse">
 <div class="span4">
-<div class="long_description"><p>This function validates your code and automatically whitelists it according to your specified configuration, then executes it. You can also pass an unlimited number of arguments to override variables configured in the function</p></div>
+<div class="long_description"><p>This function validates your code and automatically whitelists it according to your specified configuration, then executes it.
+You can also pass an unlimited number of arguments to override variables configured in the function. If the first argument is
+not callable and a valid generated closure exists, then all arguments are passed to the executed code</p></div>
 <table class="table table-bordered">
 <tr>
 <th>example</th>
@@ -2491,78 +2535,218 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div></div>
 </div>
 <a id="method_has_blacklist"></a><div class="element clickable method public method_has_blacklist" data-toggle="collapse" data-target=".method_has_blacklist .collapse">
-<h2>has_blacklist()
-        </h2>
-<pre>has_blacklist($type) </pre>
+<h2>Query whether PHPSandbox instance has blacklist type.</h2>
+<pre>has_blacklist(string $type) : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist('functions'); //returns number of blacklisted functions, or zero if none blacklisted</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$type</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>The blacklist type to query</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklists this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_aliases"></a><div class="element clickable method public method_has_blacklist_aliases" data-toggle="collapse" data-target=".method_has_blacklist_aliases .collapse">
-<h2>has_blacklist_aliases()
-        </h2>
-<pre>has_blacklist_aliases() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted aliases.</h2>
+<pre>has_blacklist_aliases() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_aliases(); //returns number of blacklisted aliases, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted aliases this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_classes"></a><div class="element clickable method public method_has_blacklist_classes" data-toggle="collapse" data-target=".method_has_blacklist_classes .collapse">
-<h2>has_blacklist_classes()
-        </h2>
-<pre>has_blacklist_classes() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted classes.</h2>
+<pre>has_blacklist_classes() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_classes(); //returns number of blacklisted classes, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted classes this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_consts"></a><div class="element clickable method public method_has_blacklist_consts" data-toggle="collapse" data-target=".method_has_blacklist_consts .collapse">
-<h2>has_blacklist_consts()
-        </h2>
-<pre>has_blacklist_consts() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted constants.</h2>
+<pre>has_blacklist_consts() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_consts(); //returns number of blacklisted constants, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted constants this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_funcs"></a><div class="element clickable method public method_has_blacklist_funcs" data-toggle="collapse" data-target=".method_has_blacklist_funcs .collapse">
-<h2>has_blacklist_funcs()
-        </h2>
-<pre>has_blacklist_funcs() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted functions.</h2>
+<pre>has_blacklist_funcs() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_funcs(); //returns number of blacklisted functions, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted functions this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_globals"></a><div class="element clickable method public method_has_blacklist_globals" data-toggle="collapse" data-target=".method_has_blacklist_globals .collapse">
-<h2>has_blacklist_globals()
-        </h2>
-<pre>has_blacklist_globals() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted globals.</h2>
+<pre>has_blacklist_globals() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_globals(); //returns number of blacklisted globals, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted globals this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_interfaces"></a><div class="element clickable method public method_has_blacklist_interfaces" data-toggle="collapse" data-target=".method_has_blacklist_interfaces .collapse">
-<h2>has_blacklist_interfaces()
-        </h2>
-<pre>has_blacklist_interfaces() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted interfaces.</h2>
+<pre>has_blacklist_interfaces() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_interfaces(); //returns number of blacklisted interfaces, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted interfaces this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_keywords"></a><div class="element clickable method public method_has_blacklist_keywords" data-toggle="collapse" data-target=".method_has_blacklist_keywords .collapse">
-<h2>has_blacklist_keywords()
-        </h2>
-<pre>has_blacklist_keywords() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted keywords.</h2>
+<pre>has_blacklist_keywords() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_keywords(); //returns number of blacklisted keywords, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted keywords this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_magic_consts"></a><div class="element clickable method public method_has_blacklist_magic_consts" data-toggle="collapse" data-target=".method_has_blacklist_magic_consts .collapse">
-<h2>has_blacklist_magic_consts()
-        </h2>
-<pre>has_blacklist_magic_consts() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted magic constants.</h2>
+<pre>has_blacklist_magic_consts() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_magic_consts(); //returns number of blacklisted magic constants, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted magic constants this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_namespaces"></a><div class="element clickable method public method_has_blacklist_namespaces" data-toggle="collapse" data-target=".method_has_blacklist_namespaces .collapse">
-<h2>has_blacklist_namespaces()
-        </h2>
-<pre>has_blacklist_namespaces() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted namespaces.</h2>
+<pre>has_blacklist_namespaces() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_namespaces(); //returns number of blacklisted namespaces, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted namespaces this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_operators"></a><div class="element clickable method public method_has_blacklist_operators" data-toggle="collapse" data-target=".method_has_blacklist_operators .collapse">
 <h2>has_blacklist_operators()
@@ -2579,22 +2763,57 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_has_blacklist_superglobals"></a><div class="element clickable method public method_has_blacklist_superglobals" data-toggle="collapse" data-target=".method_has_blacklist_superglobals .collapse">
-<h2>has_blacklist_superglobals()
-        </h2>
-<pre>has_blacklist_superglobals($name) </pre>
+<h2>Query whether PHPSandbox instance has blacklisted superglobals, or superglobal keys</h2>
+<pre>has_blacklist_superglobals(string $name) : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_superglobals('_GET'); //returns number of blacklisted superglobal keys, or zero if none blacklisted</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_superglobals(); //returns number of blacklisted superglobals, or zero if none blacklisted</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The blacklist superglobal key to query</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted superglobals or superglobal keys this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_traits"></a><div class="element clickable method public method_has_blacklist_traits" data-toggle="collapse" data-target=".method_has_blacklist_traits .collapse">
-<h2>has_blacklist_traits()
-        </h2>
-<pre>has_blacklist_traits() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted traits.</h2>
+<pre>has_blacklist_traits() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_traits(); //returns number of blacklisted traits, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted traits this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_types"></a><div class="element clickable method public method_has_blacklist_types" data-toggle="collapse" data-target=".method_has_blacklist_types .collapse">
 <h2>has_blacklist_types()
@@ -2604,18 +2823,52 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_has_blacklist_uses"></a><div class="element clickable method public method_has_blacklist_uses" data-toggle="collapse" data-target=".method_has_blacklist_uses .collapse">
-<h2>has_blacklist_uses()
-        </h2>
-<pre>has_blacklist_uses() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted uses (or aliases.)</h2>
+<pre>has_blacklist_uses() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>alias</th>
+<td>has_blacklist_aliases();</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_uses(); //returns number of blacklisted uses (or aliases) or zero if none blacklisted</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted uses (or aliases) this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist_vars"></a><div class="element clickable method public method_has_blacklist_vars" data-toggle="collapse" data-target=".method_has_blacklist_vars .collapse">
-<h2>has_blacklist_vars()
-        </h2>
-<pre>has_blacklist_vars() </pre>
+<h2>Query whether PHPSandbox instance has blacklisted variables.</h2>
+<pre>has_blacklist_vars() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_blacklist_vars(); //returns number of blacklisted variables, or zero if none blacklisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of blacklisted variables this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_defined_aliases"></a><div class="element clickable method public method_has_defined_aliases" data-toggle="collapse" data-target=".method_has_defined_aliases .collapse">
 <h2>Query whether PHPSandbox instance has defined aliases</h2>
@@ -2804,78 +3057,218 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div>
 </div>
 <a id="method_has_whitelist"></a><div class="element clickable method public method_has_whitelist" data-toggle="collapse" data-target=".method_has_whitelist .collapse">
-<h2>has_whitelist()
-        </h2>
-<pre>has_whitelist($type) </pre>
+<h2>Query whether PHPSandbox instance has whitelist type</h2>
+<pre>has_whitelist(string $type) : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist('functions'); //returns number of whitelisted functions, or zero if none whitelisted</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$type</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>The whitelist type to query</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelists this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_aliases"></a><div class="element clickable method public method_has_whitelist_aliases" data-toggle="collapse" data-target=".method_has_whitelist_aliases .collapse">
-<h2>has_whitelist_aliases()
-        </h2>
-<pre>has_whitelist_aliases() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted aliases.</h2>
+<pre>has_whitelist_aliases() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_aliases(); //returns number of whitelisted aliases, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted aliases this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_classes"></a><div class="element clickable method public method_has_whitelist_classes" data-toggle="collapse" data-target=".method_has_whitelist_classes .collapse">
-<h2>has_whitelist_classes()
-        </h2>
-<pre>has_whitelist_classes() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted classes.</h2>
+<pre>has_whitelist_classes() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_classes(); //returns number of whitelisted classes, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted classes this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_consts"></a><div class="element clickable method public method_has_whitelist_consts" data-toggle="collapse" data-target=".method_has_whitelist_consts .collapse">
-<h2>has_whitelist_consts()
-        </h2>
-<pre>has_whitelist_consts() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted constants.</h2>
+<pre>has_whitelist_consts() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_consts(); //returns number of whitelisted constants, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted constants this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_funcs"></a><div class="element clickable method public method_has_whitelist_funcs" data-toggle="collapse" data-target=".method_has_whitelist_funcs .collapse">
-<h2>has_whitelist_funcs()
-        </h2>
-<pre>has_whitelist_funcs() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted functions.</h2>
+<pre>has_whitelist_funcs() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_funcs(); //returns number of whitelisted functions, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted functions this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_globals"></a><div class="element clickable method public method_has_whitelist_globals" data-toggle="collapse" data-target=".method_has_whitelist_globals .collapse">
-<h2>has_whitelist_globals()
-        </h2>
-<pre>has_whitelist_globals() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted globals.</h2>
+<pre>has_whitelist_globals() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_globals(); //returns number of whitelisted globals, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted globals this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_interfaces"></a><div class="element clickable method public method_has_whitelist_interfaces" data-toggle="collapse" data-target=".method_has_whitelist_interfaces .collapse">
-<h2>has_whitelist_interfaces()
-        </h2>
-<pre>has_whitelist_interfaces() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted interfaces.</h2>
+<pre>has_whitelist_interfaces() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_interfaces(); //returns number of whitelisted interfaces, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted interfaces this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_keywords"></a><div class="element clickable method public method_has_whitelist_keywords" data-toggle="collapse" data-target=".method_has_whitelist_keywords .collapse">
-<h2>has_whitelist_keywords()
-        </h2>
-<pre>has_whitelist_keywords() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted keywords.</h2>
+<pre>has_whitelist_keywords() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_keywords(); //returns number of whitelisted keywords, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted keywords this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_magic_consts"></a><div class="element clickable method public method_has_whitelist_magic_consts" data-toggle="collapse" data-target=".method_has_whitelist_magic_consts .collapse">
-<h2>has_whitelist_magic_consts()
-        </h2>
-<pre>has_whitelist_magic_consts() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted magic constants.</h2>
+<pre>has_whitelist_magic_consts() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_magic_consts(); //returns number of whitelisted magic constants, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted magic constants this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_namespaces"></a><div class="element clickable method public method_has_whitelist_namespaces" data-toggle="collapse" data-target=".method_has_whitelist_namespaces .collapse">
-<h2>has_whitelist_namespaces()
-        </h2>
-<pre>has_whitelist_namespaces() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted namespaces.</h2>
+<pre>has_whitelist_namespaces() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_namespaces(); //returns number of whitelisted namespaces, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted namespaces this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_operators"></a><div class="element clickable method public method_has_whitelist_operators" data-toggle="collapse" data-target=".method_has_whitelist_operators .collapse">
 <h2>has_whitelist_operators()
@@ -2892,22 +3285,57 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_has_whitelist_superglobals"></a><div class="element clickable method public method_has_whitelist_superglobals" data-toggle="collapse" data-target=".method_has_whitelist_superglobals .collapse">
-<h2>has_whitelist_superglobals()
-        </h2>
-<pre>has_whitelist_superglobals($name) </pre>
+<h2>Query whether PHPSandbox instance has whitelisted superglobals, or superglobal keys</h2>
+<pre>has_whitelist_superglobals(string $name) : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_superglobals('_GET'); //returns number of whitelisted superglobal keys, or zero if none whitelisted</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_superglobals(); //returns number of whitelisted superglobals, or zero if none whitelisted</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>The whitelist superglobal key to query</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted superglobals or superglobal keys this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_traits"></a><div class="element clickable method public method_has_whitelist_traits" data-toggle="collapse" data-target=".method_has_whitelist_traits .collapse">
-<h2>has_whitelist_traits()
-        </h2>
-<pre>has_whitelist_traits() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted traits.</h2>
+<pre>has_whitelist_traits() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_traits(); //returns number of whitelisted traits, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted traits this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_types"></a><div class="element clickable method public method_has_whitelist_types" data-toggle="collapse" data-target=".method_has_whitelist_types .collapse">
 <h2>has_whitelist_types()
@@ -2917,129 +3345,316 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_has_whitelist_uses"></a><div class="element clickable method public method_has_whitelist_uses" data-toggle="collapse" data-target=".method_has_whitelist_uses .collapse">
-<h2>has_whitelist_uses()
-        </h2>
-<pre>has_whitelist_uses() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted uses (or aliases.)</h2>
+<pre>has_whitelist_uses() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>alias</th>
+<td>has_whitelist_aliases();</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_uses(); //returns number of whitelisted uses (or aliases) or zero if none whitelisted</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted uses (or aliases) this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_whitelist_vars"></a><div class="element clickable method public method_has_whitelist_vars" data-toggle="collapse" data-target=".method_has_whitelist_vars .collapse">
-<h2>has_whitelist_vars()
-        </h2>
-<pre>has_whitelist_vars() </pre>
+<h2>Query whether PHPSandbox instance has whitelisted variables.</h2>
+<pre>has_whitelist_vars() : int</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->has_whitelist_vars(); //returns number of whitelisted variables, or zero if none whitelisted</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the number of whitelisted variables this instance has defined</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted"></a><div class="element clickable method public method_is_blacklisted" data-toggle="collapse" data-target=".method_is_blacklisted .collapse">
-<h2>is_blacklisted()
-        </h2>
-<pre>is_blacklisted($type, $name) </pre>
+<h2>Check if PHPSandbox instance has blacklist type and name set</h2>
+<pre>is_blacklisted(string $type, string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted('functions', 'test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$type</h4></div>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>String of blacklist $type to query</p>
+</div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of blacklist $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted $type and $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_alias"></a><div class="element clickable method public method_is_blacklisted_alias" data-toggle="collapse" data-target=".method_is_blacklisted_alias .collapse">
-<h2>is_blacklisted_alias()
-        </h2>
-<pre>is_blacklisted_alias($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted alias name set</h2>
+<pre>is_blacklisted_alias(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_alias('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of alias $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted alias $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_class"></a><div class="element clickable method public method_is_blacklisted_class" data-toggle="collapse" data-target=".method_is_blacklisted_class .collapse">
-<h2>is_blacklisted_class()
-        </h2>
-<pre>is_blacklisted_class($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted class name set</h2>
+<pre>is_blacklisted_class(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_class('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of class $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted class $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_const"></a><div class="element clickable method public method_is_blacklisted_const" data-toggle="collapse" data-target=".method_is_blacklisted_const .collapse">
-<h2>is_blacklisted_const()
-        </h2>
-<pre>is_blacklisted_const($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted constant name set</h2>
+<pre>is_blacklisted_const(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_const('TEST');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of constant $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted constant $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_func"></a><div class="element clickable method public method_is_blacklisted_func" data-toggle="collapse" data-target=".method_is_blacklisted_func .collapse">
-<h2>is_blacklisted_func()
-        </h2>
-<pre>is_blacklisted_func($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted function name set</h2>
+<pre>is_blacklisted_func(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_func('test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of function $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted function $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_global"></a><div class="element clickable method public method_is_blacklisted_global" data-toggle="collapse" data-target=".method_is_blacklisted_global .collapse">
-<h2>is_blacklisted_global()
-        </h2>
-<pre>is_blacklisted_global($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted global name set</h2>
+<pre>is_blacklisted_global(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_global('test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of global $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted global $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_interface"></a><div class="element clickable method public method_is_blacklisted_interface" data-toggle="collapse" data-target=".method_is_blacklisted_interface .collapse">
-<h2>is_blacklisted_interface()
-        </h2>
-<pre>is_blacklisted_interface($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted interface name set</h2>
+<pre>is_blacklisted_interface(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_interface('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of interface $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted interface $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_keyword"></a><div class="element clickable method public method_is_blacklisted_keyword" data-toggle="collapse" data-target=".method_is_blacklisted_keyword .collapse">
-<h2>is_blacklisted_keyword()
-        </h2>
-<pre>is_blacklisted_keyword($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted keyword name set</h2>
+<pre>is_blacklisted_keyword(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_keyword('echo');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of keyword $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted keyword $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_magic_const"></a><div class="element clickable method public method_is_blacklisted_magic_const" data-toggle="collapse" data-target=".method_is_blacklisted_magic_const .collapse">
-<h2>is_blacklisted_magic_const()
-        </h2>
-<pre>is_blacklisted_magic_const($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted magic constant name set</h2>
+<pre>is_blacklisted_magic_const(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_magic_const('TEST');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of magic constant $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted magic constant $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_namespace"></a><div class="element clickable method public method_is_blacklisted_namespace" data-toggle="collapse" data-target=".method_is_blacklisted_namespace .collapse">
-<h2>is_blacklisted_namespace()
-        </h2>
-<pre>is_blacklisted_namespace($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted namespace name set</h2>
+<pre>is_blacklisted_namespace(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_namespace('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of namespace $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted namespace $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_operator"></a><div class="element clickable method public method_is_blacklisted_operator" data-toggle="collapse" data-target=".method_is_blacklisted_operator .collapse">
 <h2>is_blacklisted_operator()
@@ -3064,27 +3679,67 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div></div>
 </div>
 <a id="method_is_blacklisted_superglobal"></a><div class="element clickable method public method_is_blacklisted_superglobal" data-toggle="collapse" data-target=".method_is_blacklisted_superglobal .collapse">
-<h2>is_blacklisted_superglobal()
-        </h2>
-<pre>is_blacklisted_superglobal($name, $key) </pre>
+<h2>Check if PHPSandbox instance has blacklisted superglobal or superglobal key set</h2>
+<pre>is_blacklisted_superglobal(string $name, string $key) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_superglobal('_GET', 'page');</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_superglobal('_GET');</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-<div class="subelement argument"><h4>$key</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of blacklisted superglobal $name to query</p>
+</div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code>string</code><p>String of blacklisted superglobal $key to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted superglobal key or superglobal, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_trait"></a><div class="element clickable method public method_is_blacklisted_trait" data-toggle="collapse" data-target=".method_is_blacklisted_trait .collapse">
-<h2>is_blacklisted_trait()
-        </h2>
-<pre>is_blacklisted_trait($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted trait name set</h2>
+<pre>is_blacklisted_trait(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_trait('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of trait $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted trait $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_type"></a><div class="element clickable method public method_is_blacklisted_type" data-toggle="collapse" data-target=".method_is_blacklisted_type .collapse">
 <h2>is_blacklisted_type()
@@ -3098,26 +3753,62 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div></div>
 </div>
 <a id="method_is_blacklisted_use"></a><div class="element clickable method public method_is_blacklisted_use" data-toggle="collapse" data-target=".method_is_blacklisted_use .collapse">
-<h2>is_blacklisted_use()
-        </h2>
-<pre>is_blacklisted_use($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted use (or alias) name set</h2>
+<pre>is_blacklisted_use(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>alias</th>
+<td>is_blacklisted_alias();</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_use('Test');</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of use (or alias) $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted use (or alias) $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_blacklisted_var"></a><div class="element clickable method public method_is_blacklisted_var" data-toggle="collapse" data-target=".method_is_blacklisted_var .collapse">
-<h2>is_blacklisted_var()
-        </h2>
-<pre>is_blacklisted_var($name) </pre>
+<h2>Check if PHPSandbox instance has blacklisted variable name set</h2>
+<pre>is_blacklisted_var(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_blacklisted_var('test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of variable $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has blacklisted variable $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_defined_alias"></a><div class="element clickable method public method_is_defined_alias" data-toggle="collapse" data-target=".method_is_defined_alias .collapse">
 <h2>Check if PHPSandbox instance has $name alias defined</h2>
@@ -3344,115 +4035,268 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div>
 </div>
 <a id="method_is_whitelisted"></a><div class="element clickable method public method_is_whitelisted" data-toggle="collapse" data-target=".method_is_whitelisted .collapse">
-<h2>is_whitelisted()
-        </h2>
-<pre>is_whitelisted($type, $name) </pre>
+<h2>Check if PHPSandbox instance has whitelist type and name set</h2>
+<pre>is_whitelisted(string $type, string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted('functions', 'test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$type</h4></div>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>String of whitelist $type to query</p>
+</div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of whitelist $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted $type and $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_alias"></a><div class="element clickable method public method_is_whitelisted_alias" data-toggle="collapse" data-target=".method_is_whitelisted_alias .collapse">
-<h2>is_whitelisted_alias()
-        </h2>
-<pre>is_whitelisted_alias($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted alias name set</h2>
+<pre>is_whitelisted_alias(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_alias('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of alias $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted alias $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_class"></a><div class="element clickable method public method_is_whitelisted_class" data-toggle="collapse" data-target=".method_is_whitelisted_class .collapse">
-<h2>is_whitelisted_class()
-        </h2>
-<pre>is_whitelisted_class($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted class name set</h2>
+<pre>is_whitelisted_class(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_class('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of class $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted class $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_const"></a><div class="element clickable method public method_is_whitelisted_const" data-toggle="collapse" data-target=".method_is_whitelisted_const .collapse">
-<h2>is_whitelisted_const()
-        </h2>
-<pre>is_whitelisted_const($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted constant name set</h2>
+<pre>is_whitelisted_const(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_const('TEST');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of constant $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted constant $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_func"></a><div class="element clickable method public method_is_whitelisted_func" data-toggle="collapse" data-target=".method_is_whitelisted_func .collapse">
-<h2>is_whitelisted_func()
-        </h2>
-<pre>is_whitelisted_func($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted function name set</h2>
+<pre>is_whitelisted_func(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_func('test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of function $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted function $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_global"></a><div class="element clickable method public method_is_whitelisted_global" data-toggle="collapse" data-target=".method_is_whitelisted_global .collapse">
-<h2>is_whitelisted_global()
-        </h2>
-<pre>is_whitelisted_global($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted global name set</h2>
+<pre>is_whitelisted_global(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_global('test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of global $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted global $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_interface"></a><div class="element clickable method public method_is_whitelisted_interface" data-toggle="collapse" data-target=".method_is_whitelisted_interface .collapse">
-<h2>is_whitelisted_interface()
-        </h2>
-<pre>is_whitelisted_interface($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted interface name set</h2>
+<pre>is_whitelisted_interface(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_interface('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of interface $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted interface $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_keyword"></a><div class="element clickable method public method_is_whitelisted_keyword" data-toggle="collapse" data-target=".method_is_whitelisted_keyword .collapse">
-<h2>is_whitelisted_keyword()
-        </h2>
-<pre>is_whitelisted_keyword($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted keyword name set</h2>
+<pre>is_whitelisted_keyword(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_keyword('echo');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of keyword $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted keyword $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_magic_const"></a><div class="element clickable method public method_is_whitelisted_magic_const" data-toggle="collapse" data-target=".method_is_whitelisted_magic_const .collapse">
-<h2>is_whitelisted_magic_const()
-        </h2>
-<pre>is_whitelisted_magic_const($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted magic constant name set</h2>
+<pre>is_whitelisted_magic_const(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_magic_const('__LINE__');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of magic constant $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted magic constant $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_namespace"></a><div class="element clickable method public method_is_whitelisted_namespace" data-toggle="collapse" data-target=".method_is_whitelisted_namespace .collapse">
-<h2>is_whitelisted_namespace()
-        </h2>
-<pre>is_whitelisted_namespace($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted namespace name set</h2>
+<pre>is_whitelisted_namespace(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_namespace('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of namespace $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted namespace $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_operator"></a><div class="element clickable method public method_is_whitelisted_operator" data-toggle="collapse" data-target=".method_is_whitelisted_operator .collapse">
 <h2>is_whitelisted_operator()
@@ -3477,27 +4321,67 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div></div>
 </div>
 <a id="method_is_whitelisted_superglobal"></a><div class="element clickable method public method_is_whitelisted_superglobal" data-toggle="collapse" data-target=".method_is_whitelisted_superglobal .collapse">
-<h2>is_whitelisted_superglobal()
-        </h2>
-<pre>is_whitelisted_superglobal($name, $key) </pre>
+<h2>Check if PHPSandbox instance has whitelisted superglobal or superglobal key set</h2>
+<pre>is_whitelisted_superglobal(string $name, string $key) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_superglobal('_GET', 'page');</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_superglobal('_GET');</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-<div class="subelement argument"><h4>$key</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of whitelisted superglobal $name to query</p>
+</div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code>string</code><p>String of whitelisted superglobal $key to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted superglobal key or superglobal, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_trait"></a><div class="element clickable method public method_is_whitelisted_trait" data-toggle="collapse" data-target=".method_is_whitelisted_trait .collapse">
-<h2>is_whitelisted_trait()
-        </h2>
-<pre>is_whitelisted_trait($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted trait name set</h2>
+<pre>is_whitelisted_trait(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_trait('Test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of trait $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted trait $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_type"></a><div class="element clickable method public method_is_whitelisted_type" data-toggle="collapse" data-target=".method_is_whitelisted_type .collapse">
 <h2>is_whitelisted_type()
@@ -3511,26 +4395,62 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div></div>
 </div>
 <a id="method_is_whitelisted_use"></a><div class="element clickable method public method_is_whitelisted_use" data-toggle="collapse" data-target=".method_is_whitelisted_use .collapse">
-<h2>is_whitelisted_use()
-        </h2>
-<pre>is_whitelisted_use($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted use (or alias) name set</h2>
+<pre>is_whitelisted_use(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>alias</th>
+<td>is_whitelisted_alias();</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_use('Test');</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of use (or alias) $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted use (or alias) $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_is_whitelisted_var"></a><div class="element clickable method public method_is_whitelisted_var" data-toggle="collapse" data-target=".method_is_whitelisted_var .collapse">
-<h2>is_whitelisted_var()
-        </h2>
-<pre>is_whitelisted_var($name) </pre>
+<h2>Check if PHPSandbox instance has whitelisted variable name set</h2>
+<pre>is_whitelisted_var(string $name) : bool</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
+<div class="row collapse">
+<div class="span4">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->is_whitelisted_var('test');</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of variable $name to query</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Returns true if PHPSandbox instance has whitelisted variable $name, false otherwise</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_prepare"></a><div class="element clickable method public method_prepare" data-toggle="collapse" data-target=".method_prepare .collapse">
 <h2>Prepare passed callable for execution</h2>
@@ -4303,16 +5223,50 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 </div>
 </div>
 <a id="method_whitelist"></a><div class="element clickable method public method_whitelist" data-toggle="collapse" data-target=".method_whitelist .collapse">
-<h2>whitelist()
-        </h2>
-<pre>whitelist($type, $name) </pre>
+<h2>Whitelist PHPSandbox definitions, such as functions, constants, classes, etc.</h2>
+<pre>whitelist(array | string $type, array | string | null $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>to set</p>
+
+<p>You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist(array('functions' => array('test')));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist('functions', array('test'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist('functions', 'test');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$type</h4></div>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>array</code><code>string</code><p>Associative array or string of whitelist type to set</p></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><code>null</code><p>Array or string of whitelist name to set</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_whitelist_alias"></a><div class="element clickable method public method_whitelist_alias" data-toggle="collapse" data-target=".method_whitelist_alias .collapse">
 <h2>whitelist_alias()
@@ -5182,14 +6136,14 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_blacklist"> </a><div class="element clickable property protected property_blacklist" data-toggle="collapse" data-target=".property_blacklist .collapse">
-<h2></h2>
-<pre>$blacklist </pre>
+<h2>Array of blacklisted functions, classes, etc. Any whitelisted array types override their counterpart in this array</h2>
+<pre>$blacklist : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_definitions"> </a><div class="element clickable property protected property_definitions" data-toggle="collapse" data-target=".property_definitions .collapse">
-<h2></h2>
-<pre>$definitions </pre>
+<h2>Array of defined functions, superglobals, etc. If an array type contains elements, then it overwrites its external counterpart</h2>
+<pre>$definitions : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
@@ -5200,8 +6154,8 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_whitelist"> </a><div class="element clickable property protected property_whitelist" data-toggle="collapse" data-target=".property_whitelist .collapse">
-<h2></h2>
-<pre>$whitelist </pre>
+<h2>Array of whitelisted functions, classes, etc. If an array type contains elements, then it overrides its blacklist counterpart</h2>
+<pre>$whitelist : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
@@ -5212,7 +6166,7 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-02-27T15:50:13-05:00.<br></footer></div>
+            generated on 2013-02-27T17:00:44-05:00.<br></footer></div>
 </div>
 </body>
 </html>

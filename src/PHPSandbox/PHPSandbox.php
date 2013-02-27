@@ -62,7 +62,9 @@
          * @var    string       The randomly generated name of the PHPSandbox variable passed to the generated closure
          */
         public $name = '';
-        /* DEFINED */
+        /**
+         * @var    array       Array of defined functions, superglobals, etc. If an array type contains elements, then it overwrites its external counterpart
+         */
         protected $definitions = array(
             'functions' => array(),
             'variables' => array(),
@@ -72,7 +74,9 @@
             'namespaces' => array(),
             'aliases' => array()
         );
-        /* WHITELISTED (IF WHITELISTED ARRAY IS SET IT OVERRIDES ITS BLACKLIST COUNTERPART!)  */
+        /**
+         * @var    array       Array of whitelisted functions, classes, etc. If an array type contains elements, then it overrides its blacklist counterpart
+         */
         protected $whitelist = array(
             'functions' => array(),
             'variables' => array(),
@@ -90,7 +94,9 @@
             'primitives' => array(),
             'types' => array()
         );
-        /* BLACKLISTED  */
+        /**
+         * @var    array       Array of blacklisted functions, classes, etc. Any whitelisted array types override their counterpart in this array
+         */
         protected $blacklist = array(
             'functions' => array(),
             'variables' => array(),
@@ -114,7 +120,7 @@
             'primitives' => array(),
             'types' => array()
         );
-        /* BOOLEAN FLAGS */
+        /* CONFIGURATION OPTION FLAGS */
         /**
          * @var    bool       The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
          * @default null
@@ -2009,7 +2015,21 @@
         protected function normalize_type($name){
             return strtolower($name);
         }
-
+        /** Whitelist PHPSandbox definitions, such as functions, constants, classes, etc. to set
+         *
+         * You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name
+         *
+         * @example $sandbox->whitelist(array('functions' => array('test')));
+         *
+         * @example $sandbox->whitelist('functions', array('test'));
+         *
+         * @example $sandbox->whitelist('functions', 'test');
+         *
+         * @param   array|string        $type       Associative array or string of whitelist type to set
+         * @param   array|string|null   $name       Array or string of whitelist name to set
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function whitelist($type, $name = null){
             if(is_array($type)){
                 foreach($type as $_type => $name){
@@ -2034,7 +2054,21 @@
             }
             return $this;
         }
-
+        /** Blacklist PHPSandbox definitions, such as functions, constants, classes, etc. to set
+         *
+         * You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name
+         *
+         * @example $sandbox->blacklist(array('functions' => array('test')));
+         *
+         * @example $sandbox->blacklist('functions', array('test'));
+         *
+         * @example $sandbox->blacklist('functions', 'test');
+         *
+         * @param   array|string        $type       Associative array or string of blacklist type to set
+         * @param   array|string|null   $name       Array or string of blacklist name to set
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function blacklist($type, $name = null){
             if(is_array($type)){
                 foreach($type as $_type => $name){
@@ -2059,7 +2093,21 @@
             }
             return $this;
         }
-
+        /** Remove PHPSandbox definitions, such as functions, constants, classes, etc. from whitelist
+         *
+         * You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset
+         *
+         * @example $sandbox->dewhitelist(array('functions' => array('test')));
+         *
+         * @example $sandbox->dewhitelist('functions', array('test'));
+         *
+         * @example $sandbox->dewhitelist('functions', 'test');
+         *
+         * @param   array|string        $type       Associative array or string of whitelist type to unset
+         * @param   array|string|null   $name       Array or string of whitelist name to unset
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function dewhitelist($type, $name){
             if(is_array($type)){
                 foreach($type as $_type => $name){
@@ -2078,7 +2126,21 @@
             }
             return $this;
         }
-
+        /** Remove PHPSandbox definitions, such as functions, constants, classes, etc. from blacklist
+         *
+         * You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset
+         *
+         * @example $sandbox->deblacklist(array('functions' => array('test')));
+         *
+         * @example $sandbox->deblacklist('functions', array('test'));
+         *
+         * @example $sandbox->deblacklist('functions', 'test');
+         *
+         * @param   array|string        $type       Associative array or string of blacklist type to unset
+         * @param   array|string|null   $name       Array or string of blacklist name to unset
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function deblacklist($type, $name){
             if(is_array($type)){
                 foreach($type as $_type => $name){
@@ -2097,246 +2159,606 @@
             }
             return $this;
         }
-
+        /** Query whether PHPSandbox instance has whitelist type
+         *
+         * @example $sandbox->has_whitelist('functions'); //returns number of whitelisted functions, or zero if none whitelisted
+         *
+         * @param   string        $type     The whitelist type to query
+         *
+         * @return  int           Returns the number of whitelists this instance has defined
+         */
         public function has_whitelist($type){
             return count($this->whitelist[$type]);
         }
-
+        /** Query whether PHPSandbox instance has blacklist type.
+         *
+         * @example $sandbox->has_blacklist('functions'); //returns number of blacklisted functions, or zero if none blacklisted
+         *
+         * @param   string        $type     The blacklist type to query
+         *
+         * @return  int           Returns the number of blacklists this instance has defined
+         */
         public function has_blacklist($type){
             return count($this->blacklist[$type]);
         }
-
+        /** Check if PHPSandbox instance has whitelist type and name set
+         *
+         * @example $sandbox->is_whitelisted('functions', 'test');
+         *
+         * @param   string          $type       String of whitelist $type to query
+         * @param   string          $name       String of whitelist $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted $type and $name, false otherwise
+         */
         public function is_whitelisted($type, $name){
             return isset($this->whitelist[$type][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklist type and name set
+         *
+         * @example $sandbox->is_blacklisted('functions', 'test');
+         *
+         * @param   string          $type       String of blacklist $type to query
+         * @param   string          $name       String of blacklist $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted $type and $name, false otherwise
+         */
         public function is_blacklisted($type, $name){
             return isset($this->blacklist[$type][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted functions.
+         *
+         * @example $sandbox->has_whitelist_funcs(); //returns number of whitelisted functions, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted functions this instance has defined
+         */
         public function has_whitelist_funcs(){
             return count($this->whitelist['functions']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted functions.
+         *
+         * @example $sandbox->has_blacklist_funcs(); //returns number of blacklisted functions, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted functions this instance has defined
+         */
         public function has_blacklist_funcs(){
             return count($this->blacklist['functions']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted function name set
+         *
+         * @example $sandbox->is_whitelisted_func('test');
+         *
+         * @param   string          $name       String of function $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted function $name, false otherwise
+         */
         public function is_whitelisted_func($name){
             $name = $this->normalize_func($name);
             return isset($this->whitelist['functions'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted function name set
+         *
+         * @example $sandbox->is_blacklisted_func('test');
+         *
+         * @param   string          $name       String of function $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted function $name, false otherwise
+         */
         public function is_blacklisted_func($name){
             $name = $this->normalize_func($name);
             return isset($this->blacklist['functions'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted variables.
+         *
+         * @example $sandbox->has_whitelist_vars(); //returns number of whitelisted variables, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted variables this instance has defined
+         */
         public function has_whitelist_vars(){
             return count($this->whitelist['variables']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted variables.
+         *
+         * @example $sandbox->has_blacklist_vars(); //returns number of blacklisted variables, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted variables this instance has defined
+         */
         public function has_blacklist_vars(){
             return count($this->blacklist['variables']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted variable name set
+         *
+         * @example $sandbox->is_whitelisted_var('test');
+         *
+         * @param   string          $name       String of variable $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted variable $name, false otherwise
+         */
         public function is_whitelisted_var($name){
             return isset($this->whitelist['variables'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted variable name set
+         *
+         * @example $sandbox->is_blacklisted_var('test');
+         *
+         * @param   string          $name       String of variable $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted variable $name, false otherwise
+         */
         public function is_blacklisted_var($name){
             return isset($this->blacklist['variables'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted globals.
+         *
+         * @example $sandbox->has_whitelist_globals(); //returns number of whitelisted globals, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted globals this instance has defined
+         */
         public function has_whitelist_globals(){
             return count($this->whitelist['globals']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted globals.
+         *
+         * @example $sandbox->has_blacklist_globals(); //returns number of blacklisted globals, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted globals this instance has defined
+         */
         public function has_blacklist_globals(){
             return count($this->blacklist['globals']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted global name set
+         *
+         * @example $sandbox->is_whitelisted_global('test');
+         *
+         * @param   string          $name       String of global $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted global $name, false otherwise
+         */
         public function is_whitelisted_global($name){
             return isset($this->whitelist['globals'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted global name set
+         *
+         * @example $sandbox->is_blacklisted_global('test');
+         *
+         * @param   string          $name       String of global $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted global $name, false otherwise
+         */
         public function is_blacklisted_global($name){
             return isset($this->blacklist['globals'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted superglobals, or superglobal keys
+         *
+         * @example $sandbox->has_whitelist_superglobals('_GET'); //returns number of whitelisted superglobal keys, or zero if none whitelisted
+         * @example $sandbox->has_whitelist_superglobals(); //returns number of whitelisted superglobals, or zero if none whitelisted
+         *
+         * @param   string        $name     The whitelist superglobal key to query
+         *
+         * @return  int           Returns the number of whitelisted superglobals or superglobal keys this instance has defined
+         */
         public function has_whitelist_superglobals($name = null){
             $name = $this->normalize_superglobal($name);
             return $name !== null ? (isset($this->whitelist['superglobals'][$name]) ? count($this->whitelist['superglobals'][$name]) : 0) : count($this->whitelist['superglobals']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted superglobals, or superglobal keys
+         *
+         * @example $sandbox->has_blacklist_superglobals('_GET'); //returns number of blacklisted superglobal keys, or zero if none blacklisted
+         * @example $sandbox->has_blacklist_superglobals(); //returns number of blacklisted superglobals, or zero if none blacklisted
+         *
+         * @param   string        $name     The blacklist superglobal key to query
+         *
+         * @return  int           Returns the number of blacklisted superglobals or superglobal keys this instance has defined
+         */
         public function has_blacklist_superglobals($name = null){
             $name = $this->normalize_superglobal($name);
             return $name !== null ? (isset($this->blacklist['superglobals'][$name]) ? count($this->blacklist['superglobals'][$name]) : 0) : count($this->blacklist['superglobals']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted superglobal or superglobal key set
+         *
+         * @example $sandbox->is_whitelisted_superglobal('_GET', 'page');
+         * @example $sandbox->is_whitelisted_superglobal('_GET');
+         *
+         * @param   string          $name       String of whitelisted superglobal $name to query
+         * @param   string          $key        String of whitelisted superglobal $key to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted superglobal key or superglobal, false otherwise
+         */
         public function is_whitelisted_superglobal($name, $key = null){
             $name = $this->normalize_superglobal($name);
             return $key !== null ? isset($this->whitelist['superglobals'][$name][$key]) : isset($this->whitelist['superglobals'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted superglobal or superglobal key set
+         *
+         * @example $sandbox->is_blacklisted_superglobal('_GET', 'page');
+         * @example $sandbox->is_blacklisted_superglobal('_GET');
+         *
+         * @param   string          $name       String of blacklisted superglobal $name to query
+         * @param   string          $key        String of blacklisted superglobal $key to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted superglobal key or superglobal, false otherwise
+         */
         public function is_blacklisted_superglobal($name, $key = null){
             $name = $this->normalize_superglobal($name);
             return $key !== null ? isset($this->blacklist['superglobals'][$name][$key]) : isset($this->blacklist['superglobals'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted constants.
+         *
+         * @example $sandbox->has_whitelist_consts(); //returns number of whitelisted constants, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted constants this instance has defined
+         */
         public function has_whitelist_consts(){
             return count($this->whitelist['constants']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted constants.
+         *
+         * @example $sandbox->has_blacklist_consts(); //returns number of blacklisted constants, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted constants this instance has defined
+         */
         public function has_blacklist_consts(){
             return count($this->blacklist['constants']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted constant name set
+         *
+         * @example $sandbox->is_whitelisted_const('TEST');
+         *
+         * @param   string          $name       String of constant $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted constant $name, false otherwise
+         */
         public function is_whitelisted_const($name){
             return isset($this->whitelist['constants'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted constant name set
+         *
+         * @example $sandbox->is_blacklisted_const('TEST');
+         *
+         * @param   string          $name       String of constant $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted constant $name, false otherwise
+         */
         public function is_blacklisted_const($name){
             return isset($this->blacklist['constants'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted magic constants.
+         *
+         * @example $sandbox->has_whitelist_magic_consts(); //returns number of whitelisted magic constants, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted magic constants this instance has defined
+         */
         public function has_whitelist_magic_consts(){
             return count($this->whitelist['magic_constants']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted magic constants.
+         *
+         * @example $sandbox->has_blacklist_magic_consts(); //returns number of blacklisted magic constants, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted magic constants this instance has defined
+         */
         public function has_blacklist_magic_consts(){
             return count($this->blacklist['magic_constants']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted magic constant name set
+         *
+         * @example $sandbox->is_whitelisted_magic_const('__LINE__');
+         *
+         * @param   string          $name       String of magic constant $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted magic constant $name, false otherwise
+         */
         public function is_whitelisted_magic_const($name){
             $name = $this->normalize_magic_const($name);
             return isset($this->whitelist['magic_constants'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted magic constant name set
+         *
+         * @example $sandbox->is_blacklisted_magic_const('TEST');
+         *
+         * @param   string          $name       String of magic constant $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted magic constant $name, false otherwise
+         */
         public function is_blacklisted_magic_const($name){
             $name = $this->normalize_magic_const($name);
             return isset($this->blacklist['magic_constants'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted namespaces.
+         *
+         * @example $sandbox->has_whitelist_namespaces(); //returns number of whitelisted namespaces, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted namespaces this instance has defined
+         */
         public function has_whitelist_namespaces(){
             return count($this->whitelist['namespaces']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted namespaces.
+         *
+         * @example $sandbox->has_blacklist_namespaces(); //returns number of blacklisted namespaces, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted namespaces this instance has defined
+         */
         public function has_blacklist_namespaces(){
             return count($this->blacklist['namespaces']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted namespace name set
+         *
+         * @example $sandbox->is_whitelisted_namespace('Test');
+         *
+         * @param   string          $name       String of namespace $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted namespace $name, false otherwise
+         */
         public function is_whitelisted_namespace($name){
             $name = $this->normalize_namespace($name);
             return isset($this->whitelist['namespaces'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted namespace name set
+         *
+         * @example $sandbox->is_blacklisted_namespace('Test');
+         *
+         * @param   string          $name       String of namespace $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted namespace $name, false otherwise
+         */
         public function is_blacklisted_namespace($name){
             $name = $this->normalize_namespace($name);
             return isset($this->blacklist['namespaces'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted aliases.
+         *
+         * @example $sandbox->has_whitelist_aliases(); //returns number of whitelisted aliases, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted aliases this instance has defined
+         */
         public function has_whitelist_aliases(){
             return count($this->whitelist['aliases']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted aliases.
+         *
+         * @example $sandbox->has_blacklist_aliases(); //returns number of blacklisted aliases, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted aliases this instance has defined
+         */
         public function has_blacklist_aliases(){
             return count($this->blacklist['aliases']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted alias name set
+         *
+         * @example $sandbox->is_whitelisted_alias('Test');
+         *
+         * @param   string          $name       String of alias $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted alias $name, false otherwise
+         */
         public function is_whitelisted_alias($name){
             $name = $this->normalize_alias($name);
             return isset($this->whitelist['aliases'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted alias name set
+         *
+         * @example $sandbox->is_blacklisted_alias('Test');
+         *
+         * @param   string          $name       String of alias $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted alias $name, false otherwise
+         */
         public function is_blacklisted_alias($name){
             $name = $this->normalize_alias($name);
             return isset($this->blacklist['aliases'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted uses (or aliases.)
+         *
+         * @alias   has_whitelist_aliases();
+         *
+         * @example $sandbox->has_whitelist_uses(); //returns number of whitelisted uses (or aliases) or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted uses (or aliases) this instance has defined
+         */
         public function has_whitelist_uses(){
             return $this->has_whitelist_aliases();
         }
-
+        /** Query whether PHPSandbox instance has blacklisted uses (or aliases.)
+         *
+         * @alias   has_blacklist_aliases();
+         *
+         * @example $sandbox->has_blacklist_uses(); //returns number of blacklisted uses (or aliases) or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted uses (or aliases) this instance has defined
+         */
         public function has_blacklist_uses(){
             return $this->has_blacklist_aliases();
         }
-
+        /** Check if PHPSandbox instance has whitelisted use (or alias) name set
+         *
+         * @alias   is_whitelisted_alias();
+         *
+         * @example $sandbox->is_whitelisted_use('Test');
+         *
+         * @param   string          $name       String of use (or alias) $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted use (or alias) $name, false otherwise
+         */
         public function is_whitelisted_use($name){
             return $this->is_whitelisted_alias($name);
         }
-
+        /** Check if PHPSandbox instance has blacklisted use (or alias) name set
+         *
+         * @alias   is_blacklisted_alias();
+         *
+         * @example $sandbox->is_blacklisted_use('Test');
+         *
+         * @param   string          $name       String of use (or alias) $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted use (or alias) $name, false otherwise
+         */
         public function is_blacklisted_use($name){
             return $this->is_blacklisted_alias($name);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted classes.
+         *
+         * @example $sandbox->has_whitelist_classes(); //returns number of whitelisted classes, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted classes this instance has defined
+         */
         public function has_whitelist_classes(){
             return count($this->whitelist['classes']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted classes.
+         *
+         * @example $sandbox->has_blacklist_classes(); //returns number of blacklisted classes, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted classes this instance has defined
+         */
         public function has_blacklist_classes(){
             return count($this->blacklist['classes']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted class name set
+         *
+         * @example $sandbox->is_whitelisted_class('Test');
+         *
+         * @param   string          $name       String of class $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted class $name, false otherwise
+         */
         public function is_whitelisted_class($name){
             $name = $this->normalize_class($name);
             return isset($this->whitelist['classes'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted class name set
+         *
+         * @example $sandbox->is_blacklisted_class('Test');
+         *
+         * @param   string          $name       String of class $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted class $name, false otherwise
+         */
         public function is_blacklisted_class($name){
             $name = $this->normalize_class($name);
             return isset($this->blacklist['classes'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted interfaces.
+         *
+         * @example $sandbox->has_whitelist_interfaces(); //returns number of whitelisted interfaces, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted interfaces this instance has defined
+         */
         public function has_whitelist_interfaces(){
             return count($this->whitelist['interfaces']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted interfaces.
+         *
+         * @example $sandbox->has_blacklist_interfaces(); //returns number of blacklisted interfaces, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted interfaces this instance has defined
+         */
         public function has_blacklist_interfaces(){
             return count($this->blacklist['interfaces']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted interface name set
+         *
+         * @example $sandbox->is_whitelisted_interface('Test');
+         *
+         * @param   string          $name       String of interface $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted interface $name, false otherwise
+         */
         public function is_whitelisted_interface($name){
             $name = $this->normalize_interface($name);
             return isset($this->whitelist['interfaces'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted interface name set
+         *
+         * @example $sandbox->is_blacklisted_interface('Test');
+         *
+         * @param   string          $name       String of interface $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted interface $name, false otherwise
+         */
         public function is_blacklisted_interface($name){
             $name = $this->normalize_interface($name);
             return isset($this->blacklist['interfaces'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted traits.
+         *
+         * @example $sandbox->has_whitelist_traits(); //returns number of whitelisted traits, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted traits this instance has defined
+         */
         public function has_whitelist_traits(){
             return count($this->whitelist['traits']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted traits.
+         *
+         * @example $sandbox->has_blacklist_traits(); //returns number of blacklisted traits, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted traits this instance has defined
+         */
         public function has_blacklist_traits(){
             return count($this->blacklist['traits']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted trait name set
+         *
+         * @example $sandbox->is_whitelisted_trait('Test');
+         *
+         * @param   string          $name       String of trait $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted trait $name, false otherwise
+         */
         public function is_whitelisted_trait($name){
             $name = $this->normalize_trait($name);
             return isset($this->whitelist['traits'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted trait name set
+         *
+         * @example $sandbox->is_blacklisted_trait('Test');
+         *
+         * @param   string          $name       String of trait $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted trait $name, false otherwise
+         */
         public function is_blacklisted_trait($name){
             $name = $this->normalize_trait($name);
             return isset($this->blacklist['traits'][$name]);
         }
-
+        /** Query whether PHPSandbox instance has whitelisted keywords.
+         *
+         * @example $sandbox->has_whitelist_keywords(); //returns number of whitelisted keywords, or zero if none whitelisted
+         *
+         * @return  int           Returns the number of whitelisted keywords this instance has defined
+         */
         public function has_whitelist_keywords(){
             return count($this->whitelist['keywords']);
         }
-
+        /** Query whether PHPSandbox instance has blacklisted keywords.
+         *
+         * @example $sandbox->has_blacklist_keywords(); //returns number of blacklisted keywords, or zero if none blacklisted
+         *
+         * @return  int           Returns the number of blacklisted keywords this instance has defined
+         */
         public function has_blacklist_keywords(){
             return count($this->blacklist['keywords']);
         }
-
+        /** Check if PHPSandbox instance has whitelisted keyword name set
+         *
+         * @example $sandbox->is_whitelisted_keyword('echo');
+         *
+         * @param   string          $name       String of keyword $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has whitelisted keyword $name, false otherwise
+         */
         public function is_whitelisted_keyword($name){
             $name = $this->normalize_keyword($name);
             return isset($this->whitelist['keywords'][$name]);
         }
-
+        /** Check if PHPSandbox instance has blacklisted keyword name set
+         *
+         * @example $sandbox->is_blacklisted_keyword('echo');
+         *
+         * @param   string          $name       String of keyword $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has blacklisted keyword $name, false otherwise
+         */
         public function is_blacklisted_keyword($name){
             $name = $this->normalize_keyword($name);
             return isset($this->blacklist['keywords'][$name]);
@@ -3312,13 +3734,13 @@
         }
         /** Prepare and execute callable and return output
          *
-         * This function validates your code and automatically whitelists it according to your specified configuration, then executes it. You can also pass an unlimited number of arguments to override variables configured in the function
+         * This function validates your code and automatically whitelists it according to your specified configuration, then executes it.
+         * You can also pass an unlimited number of arguments to override variables configured in the function. If the first argument is
+         * not callable and a valid generated closure exists, then all arguments are passed to the executed code
          *
          * @example $sandbox->execute(function(){ var_dump('Hello world!'); });
          *
          * @example $sandbox->execute(function($test){ var_dump($test); }, 'Hello world!'); //Hello world!
-         *
-         * @param   callable    $code       The callable to prepare for execution and execute. If this argument is not callable and a valid generated closure exists, this will be the first argument passed to the executed code
          *
          * @throws  Error       Throws exception if error occurs in parsing, validation or whitelisting or if generated closure is invalid
          *
