@@ -2034,6 +2034,9 @@
         }
 
         protected function disassemble($closure){
+            if(!class_exists('\FunctionParser\FunctionParser', true) && is_callable($closure)){
+                throw new Exception("Cannot disassemble callable code because the FunctionParser library could not be found!");
+            }
             if(!is_callable($closure)){
                 if(is_string($closure) && $closure){
                     return $closure;
@@ -2044,13 +2047,13 @@
             if($this->auto_define_vars){
                 $this->auto_define($disassembled_closure);
             }
-            return $disassembled_closure->getBody();
+            return '<?php ' . $disassembled_closure->getBody();
         }
 
         protected function auto_whitelist($code, $appended = false){
             $parser = new \PHPParser_Parser(new \PHPParser_Lexer);
             try {
-                $statements = $parser->parse('<?php ' . $code);
+                $statements = $parser->parse($code);
             } catch (\PHPParser_Error $error) {
                 throw new Exception('Error parsing ' . ($appended ? 'appended' : 'prepended') . ' sandboxed code for auto-whitelisting!');
             }
@@ -2060,7 +2063,10 @@
             $traverser->traverse($statements);
         }
 
-        protected function auto_define(\FunctionParser\FunctionParser $disassembled_closure){
+        /**
+         * @param \FunctionParser\FunctionParser    $disassembled_closure
+         */
+        protected function auto_define($disassembled_closure){
             $parameters = $disassembled_closure->getReflection()->getParameters();
             foreach($parameters as $param){
                 /**
@@ -2117,7 +2123,7 @@
             $parser = new \PHPParser_Parser(new \PHPParser_Lexer);
 
             try {
-                $this->parsed_ast = $parser->parse('<?php ' . $this->preparsed_code);
+                $this->parsed_ast = $parser->parse($this->preparsed_code);
             } catch (\PHPParser_Error $error) {
                 throw new Exception("Error parsing sandboxed code!");
             }

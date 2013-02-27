@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "nikic/PHP-Parser": "*"
+        "nikic/PHP-Parser": "dev-master",
+        "jeremeamia/FunctionParser": "dev-master"
     },
     "autoload": {
         "psr-0": { "PHPSandbox": "src/" }
