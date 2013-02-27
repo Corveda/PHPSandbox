@@ -2,19 +2,14 @@
     error_reporting(E_ALL);
     require_once('../vendor/autoload.php');
 
-    use PHPSandbox\PHPSandbox;
+    function test($string){
+        return 'Hello ' . $string;
+    }
 
-	$sandbox = PHPSandbox::create();
+    $sandbox = new PHPSandbox\PHPSandbox;
+    $sandbox->whitelist_func('test');
     $result = $sandbox->execute(function(){
-        $a = 1;
-        $b = 2;
-        $c = $a + $b;
-        return $c;
+        return test('world');
     });
 
-    print_r($result);
-
-    $sandbox = PHPSandbox::create();
-    $sandbox->execute(function(){
-        eval('evil code'); //this will generate an exception and fail
-    });
+    var_dump($result);  //Hello world
