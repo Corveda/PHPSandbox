@@ -17,8 +17,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "nikic/PHP-Parser": "*",
-        "jeremeamia/FunctionParser": "*"
+        "nikic/PHP-Parser": "*"
     },
     "autoload": {
         "psr-0": { "PHPSandbox": "src/" }
