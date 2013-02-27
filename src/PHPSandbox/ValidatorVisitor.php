@@ -61,6 +61,7 @@
                 if(!$node->name){
                     throw new Error("Sandboxed code attempted to define unnamed class!");
                 }
+                $this->sandbox->check_class($node->name);
             } else if($node instanceof \PHPParser_Node_Stmt_Interface){
                 if(!$this->sandbox->allow_interfaces){
                     throw new Error("Sandboxed code attempted to define interface!");
@@ -69,6 +70,7 @@
                 if(!$node->name){
                     throw new Error("Sandboxed code attempted to define unnamed interface!");
                 }
+                $this->sandbox->check_interface($node->name);
             } else if($node instanceof \PHPParser_Node_Stmt_Trait){
                 if(!$this->sandbox->allow_traits){
                     throw new Error("Sandboxed code attempted to define trait!");
@@ -77,6 +79,7 @@
                 if(!$node->name){
                     throw new Error("Sandboxed code attempted to define unnamed trait!");
                 }
+                $this->sandbox->check_trait($node->name);
             } else if($node instanceof \PHPParser_Node_Stmt_Global){
                 if(!$this->sandbox->allow_globals){
                     throw new Error("Sandboxed code attempted to use global keyword!");

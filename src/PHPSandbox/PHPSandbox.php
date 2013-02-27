@@ -102,9 +102,11 @@
             'interfaces' => array(),
             'traits' => array(),
             'keywords' => array(
+                'declare' => true,
                 'include' => true,
                 'eval' => true,
-                'exit' => true
+                'exit' => true,
+                'halt' => true
             ),
             'operators' => array(),
             'primitives' => array(),
