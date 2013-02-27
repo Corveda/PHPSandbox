@@ -294,6 +294,8 @@
         public $generated_closure = null;
         /** PHPSandbox class constructor
          *
+         * @example $sandbox = new PHPSandbox\PHPSandbox;
+         *
          * You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor
          *
          * @param   array   $options            Optional array of options to set for the sandbox
@@ -305,7 +307,7 @@
          * @param   array   $globals            Optional array of globals to define for the sandbox
          * @param   array   $superglobals       Optional array of superglobals to define for the sandbox
          * @param   array   $magic_constants    Optional array of magic constants to define for the sandbox
-         * @return  null
+         * @return  $this                       The returned PHPSandbox variable
          */
 		public function __construct(array $options = array(),
                                     array $functions = array(),
@@ -326,10 +328,13 @@
                 ->define_globals($globals)
                 ->define_superglobals($superglobals)
                 ->define_magic_consts($magic_constants);
+            return $this;
 		}
         /** PHPSandbox static factory method
          *
          * You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor
+         *
+         * @example $sandbox = PHPSandbox\PHPSandbox::create();
          *
          * @param   array   $options            Optional array of options to set for the sandbox
          * @param   array   $functions          Optional array of functions to define for the sandbox
@@ -358,6 +363,8 @@
          *
          * Besides the code or closure to be executed, you can also pass additional arguments that will overwrite the default values of their respective arguments defined in the code
          *
+         * @example $sandbox = new PHPSandbox\PHPSandbox; $sandbox(function(){ echo 'Hello world!'; });
+         *
          * @param   \Closure|callable|string   $code          The closure, callable or string of code to execute
          *
          * @return  mixed                      The output of the executed sandboxed code
@@ -374,6 +381,12 @@
         /** Set PHPSandbox option
          *
          * You can pass an $option name to set to $value, an array of $option names to set to $value, or an associative array of $option names and their values to set.
+         *
+         * @example $sandbox->set_option(array('allow_functions' => true));
+         *
+         * @example $sandbox->set_option(array('allow_functions', 'allow_classes'), true);
+         *
+         * @example $sandbox->set_option('allow_functions', true);
          *
          * @param   string|array    $option     String or array of strings or associative array of keys of option names to set $value to
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
@@ -478,7 +491,11 @@
         }
         /** Set PHPSandbox options by array
          *
-         * You can an array of option names to set to $value, or an associative array of option names and their values to set.
+         * You can pass an array of option names to set to $value, or an associative array of option names and their values to set.
+         *
+         * @example $sandbox->set_option(array('allow_functions' => true));
+         *
+         * @example $sandbox->set_option(array('allow_functions', 'allow_classes'), true);
          *
          * @param   array           $options    Array of strings or associative array of keys of option names to set $value to
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
@@ -494,6 +511,8 @@
         /** Get PHPSandbox option
          *
          * You pass a string $option name to get its associated value
+         *
+         * @example $sandbox->get_option('allow_functions');
          *
          * @param   string          $option     String of $option name to get
          *
@@ -604,35 +623,55 @@
         public function get_appended_code(){
             return $this->appended_code;
         }
-
+        /** Get PHPSandbox preparsed code
+         * @return  string          Returns a string of the preparsed code
+         */
         public function get_preparsed_code(){
             return $this->preparsed_code;
         }
-
+        /** Get PHPSandbox parsed AST array
+         * @return  array           Returns an array of the parsed AST code
+         */
         public function get_parsed_ast(){
             return $this->parsed_ast;
         }
-
+        /** Get PHPSandbox prepared code
+         * @return  string          Returns a string of the prepared code
+         */
         public function get_prepared_code(){
             return $this->prepared_code;
         }
-
+        /** Get PHPSandbox parsed AST array
+         * @return  array           Returns an array of the parsed AST code
+         */
         public function get_prepared_ast(){
             return $this->prepended_code;
         }
-
+        /** Get PHPSandbox generated code
+         * @return  string          Returns a string of the generated code
+         */
         public function get_generated_code(){
             return $this->prepended_code;
         }
-
+        /** Get PHPSandbox generated closure
+         * @return  \Closure        Returns the generated closure
+         */
         public function get_generated_closure(){
             return $this->generated_closure;
         }
-
+        /** Get PHPSandbox generated closure
+         * @alias   get_generated_closure()
+         * @return  \Closure        Returns the generated closure
+         */
         public function get_closure(){
             return $this->get_generated_closure();
         }
-
+        /** Get PHPSandbox redefined functions in place of get_defined_functions(). This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @param   array           $functions      Array result from get_defined_functions() is passed here
+         *
+         * @return  array           Returns the redefined functions array
+         */
         public function _get_defined_functions(array $functions = array()){
             if(count($this->whitelist['functions'])){
                 $functions = array();
@@ -660,14 +699,24 @@
             }
             return array();
         }
-
+        /** Get PHPSandbox redefined variables in place of get_defined_vars(). This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @param   array           $variables      Array result from get_defined_vars() is passed here
+         *
+         * @return  array           Returns the redefined variables array
+         */
         public function _get_defined_vars(array $variables = array()){
             if(isset($variables[$this->name])){
                 unset($variables[$this->name]); //hide PHPSandbox variable
             }
             return $variables;
         }
-
+        /** Get PHPSandbox redefined superglobal. This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @param   string          $name      Requested superglobal name (e.g. _GET, _POST, etc.)
+         *
+         * @return  array           Returns the redefined superglobal
+         */
         public function _get_superglobal($name){
             $original_name = strtoupper($name);
             $name = $this->normalize_superglobal($name);
@@ -702,7 +751,12 @@
             }
             return array();
         }
-
+        /** Get PHPSandbox redefined magic constant. This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @param   string          $name      Requested magic constant name (e.g. __FILE__, __LINE__, etc.)
+         *
+         * @return  array           Returns the redefined magic constant
+         */
         public function _get_magic_const($name){
             $name = $this->normalize_magic_const($name);
             if(isset($this->definitions['magic_constants'][$name])){
@@ -710,7 +764,12 @@
             }
             return null;
         }
-
+        /** Get PHPSandbox redefined constants in place of get_defined_constants(). This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @param   array           $constants      Array result from get_defined_constants() is passed here
+         *
+         * @return  array           Returns the redefined constants
+         */
         public function _get_defined_constants(array $constants = array()){
             if(count($this->whitelist['constants'])){
                 $constants = array();
@@ -736,7 +795,12 @@
             }
             return array();
         }
-
+        /** Get PHPSandbox redefined classes in place of get_declared_classes(). This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @param   array           $classes      Array result from get_declared_classes() is passed here
+         *
+         * @return  array           Returns the redefined classes
+         */
         public function _get_declared_classes(array $classes = array()){
             if(count($this->whitelist['classes'])){
                 $classes = array();
@@ -757,7 +821,12 @@
             }
             return array();
         }
-
+        /** Get PHPSandbox redefined interfaces in place of get_declared_interfaces(). This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @param   array           $interfaces      Array result from get_declared_interfaces() is passed here
+         *
+         * @return  array           Returns the redefined interfaces
+         */
         public function _get_declared_interfaces(array $interfaces = array()){
             if(count($this->whitelist['interfaces'])){
                 $interfaces = array();
@@ -778,7 +847,12 @@
             }
             return array();
         }
-
+        /** Get PHPSandbox redefined traits in place of get_declared_traits(). This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @param   array           $traits      Array result from get_declared_traits() is passed here
+         *
+         * @return  array           Returns the redefined traits
+         */
         public function _get_declared_traits(array $traits = array()){
             if(count($this->whitelist['traits'])){
                 $traits = array();
@@ -799,7 +873,12 @@
             }
             return array();
         }
-
+        /** Get PHPSandbox redefined function. This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @throws  Error           Will throw exception if invalid function requested
+         *
+         * @return  mixed           Returns the redefined function result
+         */
         public function call_func(){
             $arguments = func_get_args();
             $name = array_shift($arguments);
@@ -814,23 +893,32 @@
             }
             throw new Error("Sandboxed code attempted to call invalid function: $original_name");
         }
-
+        /** Define PHPSandbox definitions, such as functions, constants, classes, etc.
+         *
+         * You can pass an associative array of definitions types and an associative array of their corresponding values, or pass a string of the $type, $name and $value
+         *
+         * @example $sandbox->define(array('functions' => array('test' => function(){ echo 'test'; }));
+         *
+         * @example $sandbox->define('functions', 'test', function(){ echo 'test'; });
+         *
+         * @param   array|string        $type       Associative array or string of definition type to define
+         * @param   array|string|null   $name       Associative array or string of definition name to define
+         * @param   mixed|null          $value      Value of definition to define
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function define($type, $name = null, $value = null){
             if(is_array($type)){
                 foreach($type as $_type => $name){
                     if(is_string($_type) && $_type && is_array($name)){
-                        foreach($name as $_name => $value){
-                            if(is_string($_name) && $_name){
-                                $this->define($type, $name, $value);
-                            }
+                        foreach($name as $_name => $_value){
+                            $this->define($_type, (is_int($_name) ? $_value : $_name), (is_int($_name) ? $value : $_value));
                         }
                     }
                 }
-            } else if(is_string($type) && $type && is_array($name)){
-                foreach($name as $_name => $value){
-                    if(is_string($_name) && $_name){
-                        $this->define($type, $name, $value);
-                    }
+            } else if($type && is_array($name)){
+                foreach($name as $_name => $_value){
+                    $this->define($type, (is_int($_name) ? $_value : $_name), (is_int($_name) ? $value : $_value));
                 }
             } else if($type && $name){
                 switch($type){
@@ -854,12 +942,24 @@
             }
             return $this;
         }
-
+        /** Undefine PHPSandbox definitions, such as functions, constants, classes, etc.
+         *
+         * You can pass an associative array of definitions types and an array of key names to undefine, or pass a string of the $type and $name to undefine
+         *
+         * @example $sandbox->undefine(array('functions' => array('test'));
+         *
+         * @example $sandbox->undefine('functions', 'test');
+         *
+         * @param   array|string    $type       Associative array or string of definition type to undefine
+         * @param   array|string    $name       Associative array or string of definition name to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine($type, $name = null){
             if(is_array($type)){
                 foreach($type as $_type => $name){
                     if(is_string($_type) && $_type && is_array($name)){
-                        foreach($name as $_name => $value){
+                        foreach($name as $_name){
                             if(is_string($_name) && $_name){
                                 $this->undefine($type, $name);
                             }
@@ -867,7 +967,7 @@
                     }
                 }
             } else if(is_string($type) && $type && is_array($name)){
-                foreach($name as $_name => $value){
+                foreach($name as $_name){
                     if(is_string($_name) && $_name){
                         $this->undefine($type, $name);
                     }
@@ -894,7 +994,19 @@
             }
             return $this;
         }
-
+        /** Define PHPSandbox function
+         *
+         * You can pass an associative array of functions to define, or the function $name and $function closure or callable to define
+         *
+         * @example $sandbox->define_func(array('test' => function(){ echo 'test'; }));
+         *
+         * @example $sandbox->define_func('test', function(){ echo 'test'; });
+         *
+         * @param   array|string    $name       Associative array or string of function $name to define
+         * @param   callable        $function   Callable to define $function to
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_func($name, $function){
             if(is_array($name)){
                 return $this->define_funcs($name);
@@ -910,36 +1022,96 @@
             $this->definitions['functions'][$name] = $function;
             return $this;
         }
-
+        /** Define PHPSandbox functions by array
+         *
+         * You can pass an associative array of functions to define
+         *
+         * @example $sandbox->define_func(array('test' => function(){ echo 'test'; }));
+         *
+         * @param   array           $functions       Associative array of $functions to define
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_funcs(array $functions = array()){
             foreach($functions as $name => $function){
                 $this->define_func($name, $function);
             }
             return $this;
         }
-
+        /** Query whether PHPSandbox instance has defined functions
+         *
+         * @example $sandbox->has_defined_funcs(); //returns number of defined functions, or zero if none defined
+         *
+         * @return  int           Returns the number of functions this instance has defined
+         */
         public function has_defined_funcs(){
             return count($this->definitions['functions']);
         }
-
+        /** Check if PHPSandbox instance has $name function defined
+         *
+         * @example $sandbox->is_defined_func('test');
+         *
+         * @param   string          $name       String of function $name to query
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function is_defined_func($name){
             $name = $this->normalize_func($name);
             return isset($this->definitions['functions'][$name]);
         }
-
+        /** Undefine PHPSandbox function
+         *
+         * @example $sandbox->undefine_func(array('test', 'test2'));
+         *
+         * @example $sandbox->undefine_func('test');
+         *
+         * @param   array|string          $name       Associative array of function names or string of function name to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_func($name){
+            if(is_array($name)){
+                return $this->undefine_funcs($name);
+            }
             $name = $this->normalize_func($name);
             if(isset($this->definitions['functions'][$name])){
                 unset($this->definitions['functions'][$name]);
             }
             return $this;
         }
-
-        public function undefine_funcs(){
-            $this->definitions['functions'] = array();
+        /** Undefine PHPSandbox functions by array
+         *
+         * @example $sandbox->undefine_funcs(array('test', 'test2'));
+         *
+         * @example $sandbox->undefine_funcs(); //WILL UNDEFINE ALL FUNCTIONS!
+         *
+         * @param   array           $functions       Associative array of function names to undefine. Passing an empty array or no argument will result in undefining all functions
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function undefine_funcs($functions = array()){
+            if(count($functions)){
+                foreach($functions as $function){
+                    $this->undefine_func($function);
+                }
+            } else {
+                $this->definitions['functions'] = array();
+            }
             return $this;
         }
-
+        /** Define PHPSandbox variable
+         *
+         * You can pass an associative array of variables to define, or the variable $name and $value to define
+         *
+         * @example $sandbox->define_var(array('test' => 1));
+         *
+         * @example $sandbox->define_var('test', 1);
+         *
+         * @param   array|string    $name       Associative array or string of variable $name to define
+         * @param   mixed           $value      Value to define variable to
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_var($name, $value){
             if(is_array($name)){
                 return $this->define_vars($name);
@@ -950,31 +1122,76 @@
             $this->definitions['variables'][$name] = $value;
             return $this;
         }
-
+        /** Define PHPSandbox variables by array
+         *
+         * You can pass an associative array of variables to define
+         *
+         * @example $sandbox->define_var(array('test' => 1));
+         *
+         * @param   array           $variables  Associative array of $variables to define
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_vars(array $variables = array()){
             foreach($variables as $name => $value){
                 $this->define_var($name, $value);
             }
             return $this;
         }
-
+        /** Query whether PHPSandbox instance has defined variables
+         *
+         * @example $sandbox->has_defined_vars(); //returns number of defined variables, or zero if none defined
+         *
+         * @return  int           Returns the number of variables this instance has defined
+         */
         public function has_defined_vars(){
             return count($this->definitions['variables']);
         }
-
+        /** Check if PHPSandbox instance has $name variable defined
+         *
+         * @example $sandbox->is_defined_var('test');
+         *
+         * @param   string          $name       String of variable $name to query
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function is_defined_var($name){
             return isset($this->definitions['variables'][$name]);
         }
-
+        /** Undefine PHPSandbox variable
+         *
+         * @example $sandbox->undefine_var(array('test', 'test2'));
+         *
+         * @example $sandbox->undefine_var('test');
+         *
+         * @param   array|string          $name       Associative array of variable names or string of variable name to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_var($name){
             if(isset($this->definitions['variables'][$name])){
                 unset($this->definitions['variables'][$name]);
             }
             return $this;
         }
-
-        public function undefine_vars(){
-            $this->definitions['variables'] = array();
+        /** Undefine PHPSandbox variables by array
+         *
+         * @example $sandbox->undefine_vars(array('test', 'test2'));
+         *
+         * @example $sandbox->undefine_vars(); //WILL UNDEFINE ALL VARIABLES!
+         *
+         * @param   array           $variables       Associative array of variable names to undefine. Passing an empty array or no argument will result in undefining all variables
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function undefine_vars(array $variables = array()){
+            if(count($variables)){
+                foreach($variables as $variable){
+                    $this->undefine_var($variable);
+                }
+            } else {
+                $this->definitions['variables'] = array();
+            }
             return $this;
         }
 
@@ -2627,7 +2844,7 @@
             @eval($this->generated_code);
         }
 
-		public function execute(){
+        public function execute(){
             $arguments = func_get_args();
             if(count($arguments)){
                 $this->prepare(array_shift($arguments));
