@@ -1,5 +1,5 @@
 {
-    "hash": "429f76699f013d5fcd85ba723837e942",
+    "hash": "93286f473a4848ead701e0be02b296ea",
     "packages": [
         {
             "name": "jeremeamia/FunctionParser",
@@ -18,13 +18,14 @@
             "require": {
                 "php": ">=5.3.2"
             },
+            "time": "2012-03-19 17:15:54",
             "type": "library",
             "autoload": {
                 "psr-0": {
                     "FunctionParser": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -40,8 +41,7 @@
                 "function",
                 "parser",
                 "tokenizer"
-            ],
-            "time": "2012-03-19 17:15:54"
+            ]
         },
         {
             "name": "nikic/php-parser",
@@ -60,13 +60,14 @@
             "require": {
                 "php": ">=5.2"
             },
+            "time": "2013-02-14 20:49:08",
             "type": "library",
             "autoload": {
                 "psr-0": {
                     "PHPParser": "lib/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -79,8 +80,7 @@
             "keywords": [
                 "parser",
                 "php"
-            ],
-            "time": "2013-02-14 20:49:08"
+            ]
         }
     ],
     "packages-dev": null,
