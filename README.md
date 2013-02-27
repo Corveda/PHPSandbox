@@ -31,9 +31,21 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 ##Requirements
 
 - PHP 5.3.2+
-- PHP-Parser
-- FunctionParser (if you wish to use closures)
-- PHP should be compiled with --enable-tokenizer option (it typically is)
+- [PHP-Parser](https://github.com/nikic/PHP-Parser)
+- [FunctionParser](https://github.com/jeremeamia/FunctionParser) (if you wish to use closures)
+- PHP should be compiled with *--enable-tokenizer* option (it typically is)
+
+##Installation
+
+To install using composer, simply add the following to your composer.json file in the root of your project:
+    {
+        "minimum-stability": "dev",
+        "require": {
+            "fieryprophet/php-sandbox": "dev-master"
+        }
+    }
+
+Then run *composer install --dry-run* to check for any potential problems, and *composer install* to install.
 
 ##LICENSE
 
