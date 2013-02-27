@@ -14,11 +14,11 @@
         public function leaveNode(\PHPParser_Node $node){
             if($node instanceof \PHPParser_Node_Stmt_InlineHTML){
                 if(!$this->sandbox->allow_escaping){
-                    throw new Exception("Sandboxed code attempted to escape to HTML!");
+                    throw new Error("Sandboxed code attempted to escape to HTML!");
                 }
             } else if($node instanceof \PHPParser_Node_Expr_Cast){
                 if(!$this->sandbox->allow_casting){
-                    throw new Exception("Sandboxed code attempted to cast!");
+                    throw new Error("Sandboxed code attempted to cast!");
                 }
             } else if($node instanceof \PHPParser_Node_Expr_FuncCall){
                 if($node->name instanceof \PHPParser_Node_Name){
@@ -33,53 +33,53 @@
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), 'call_func', $args, $node->getAttributes());
                     }
                 } else if(!$this->sandbox->allow_closures){
-                    throw new Exception("Sandboxed code attempted to call a closure!");
+                    throw new Error("Sandboxed code attempted to call a closure!");
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Function){
                 if(!$this->sandbox->allow_functions){
-                    throw new Exception("Sandboxed code attempted to define function!");
+                    throw new Error("Sandboxed code attempted to define function!");
                 }
                 $this->sandbox->check_keyword('function');
                 if(!$node->name){
-                    throw new Exception("Sandboxed code attempted to define unnamed function!");
+                    throw new Error("Sandboxed code attempted to define unnamed function!");
                 }
                 if($this->sandbox->is_defined_func($node->name)){
-                    throw new Exception("Sandboxed code attempted to redefine function!");
+                    throw new Error("Sandboxed code attempted to redefine function!");
                 }
                 if($node->byRef && !$this->sandbox->allow_references){
-                    throw new Exception("Sandboxed code attempted to define function return by reference!");
+                    throw new Error("Sandboxed code attempted to define function return by reference!");
                 }
             } else if($node instanceof \PHPParser_Node_Expr_Closure){
                 if(!$this->sandbox->allow_closures){
-                    throw new Exception("Sandboxed code attempted to create a closure!");
+                    throw new Error("Sandboxed code attempted to create a closure!");
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Class){
                 if(!$this->sandbox->allow_classes){
-                    throw new Exception("Sandboxed code attempted to define class!");
+                    throw new Error("Sandboxed code attempted to define class!");
                 }
                 $this->sandbox->check_keyword('class');
                 if(!$node->name){
-                    throw new Exception("Sandboxed code attempted to define unnamed class!");
+                    throw new Error("Sandboxed code attempted to define unnamed class!");
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Interface){
                 if(!$this->sandbox->allow_interfaces){
-                    throw new Exception("Sandboxed code attempted to define interface!");
+                    throw new Error("Sandboxed code attempted to define interface!");
                 }
                 $this->sandbox->check_keyword('interface');
                 if(!$node->name){
-                    throw new Exception("Sandboxed code attempted to define unnamed interface!");
+                    throw new Error("Sandboxed code attempted to define unnamed interface!");
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Trait){
                 if(!$this->sandbox->allow_traits){
-                    throw new Exception("Sandboxed code attempted to define trait!");
+                    throw new Error("Sandboxed code attempted to define trait!");
                 }
                 $this->sandbox->check_keyword('trait');
                 if(!$node->name){
-                    throw new Exception("Sandboxed code attempted to define unnamed trait!");
+                    throw new Error("Sandboxed code attempted to define unnamed trait!");
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Global){
                 if(!$this->sandbox->allow_globals){
-                    throw new Exception("Sandboxed code attempted to use global keyword!");
+                    throw new Error("Sandboxed code attempted to use global keyword!");
                 }
                 $this->sandbox->check_keyword('global');
                 foreach($node->vars as $var){
@@ -89,12 +89,12 @@
                     if($var instanceof \PHPParser_Node_Expr_Variable){
                         $this->sandbox->check_global($var->name);
                     } else {
-                        throw new Exception("Sandboxed code attempted to pass non-variable to global keyword!");
+                        throw new Error("Sandboxed code attempted to pass non-variable to global keyword!");
                     }
                 }
             } else if($node instanceof \PHPParser_Node_Expr_Variable){
                 if(!is_string($node->name)){
-                    throw new Exception("Sandboxed code attempted dynamically-named variable call!");
+                    throw new Error("Sandboxed code attempted dynamically-named variable call!");
                 }
                 if(in_array($node->name, PHPSandbox::$superglobals)){
                     $this->sandbox->check_superglobal($node->name);
@@ -106,23 +106,23 @@
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_StaticVar){
                 if(!$this->sandbox->allow_static_variables){
-                    throw new Exception("Sandboxed code attempted to create static variable!");
+                    throw new Error("Sandboxed code attempted to create static variable!");
                 }
                 if(!is_string($node->name)){
-                    throw new Exception("Sandboxed code attempted dynamically-named static variable call!");
+                    throw new Error("Sandboxed code attempted dynamically-named static variable call!");
                 }
                 $this->sandbox->check_var($node->name);
             } else if($node instanceof \PHPParser_Node_Stmt_Const){
-                throw new Exception("Sandboxed code cannot use const keyword in the global scope!");
+                throw new Error("Sandboxed code cannot use const keyword in the global scope!");
             } else if($node instanceof \PHPParser_Node_Expr_ConstFetch){
                 if(!$node->name instanceof \PHPParser_Node_Name){
-                    throw new Exception("Sandboxed code attempted dynamically-named constant call!");
+                    throw new Error("Sandboxed code attempted dynamically-named constant call!");
                 }
                 $this->sandbox->check_const($node->name->toString());
             } else if($node instanceof \PHPParser_Node_Expr_ClassConstFetch || $node instanceof \PHPParser_Node_Expr_StaticCall || $node instanceof \PHPParser_Node_Expr_StaticPropertyFetch){
                 $class = $node->class;
                 if(!$class instanceof \PHPParser_Node_Name){
-                    throw new Exception("Sandboxed code attempted dynamically-named class call!");
+                    throw new Error("Sandboxed code attempted dynamically-named class call!");
                 }
                 /**
                  * @var \PHPParser_Node_Name    $class
@@ -130,41 +130,41 @@
                 $this->sandbox->check_class($class->toString());
             } else if($node instanceof \PHPParser_Node_Expr_New){
                 if(!$this->sandbox->allow_objects){
-                    throw new Exception("Sandboxed code attempted to create object!");
+                    throw new Error("Sandboxed code attempted to create object!");
                 }
                 $this->sandbox->check_keyword('new');
                 if(!$node->class instanceof \PHPParser_Node_Name){
-                    throw new Exception("Sandboxed code attempted dynamically-named class call!");
+                    throw new Error("Sandboxed code attempted dynamically-named class call!");
                 }
                 $this->sandbox->check_type($node->class->toString());
             } else if($node instanceof \PHPParser_Node_Expr_ErrorSuppress){
                 if(!$this->sandbox->allow_error_suppressing){
-                    throw new Exception("Sandboxed code attempted to suppress error!");
+                    throw new Error("Sandboxed code attempted to suppress error!");
                 }
             } else if($node instanceof \PHPParser_Node_Expr_AssignRef){
                 if(!$this->sandbox->allow_references){
-                    throw new Exception("Sandboxed code attempted to assign by reference!");
+                    throw new Error("Sandboxed code attempted to assign by reference!");
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_HaltCompiler){
                 if(!$this->sandbox->allow_halting){
-                    throw new Exception("Sandboxed code attempted to halt compiler!");
+                    throw new Error("Sandboxed code attempted to halt compiler!");
                 }
                 $this->sandbox->check_keyword('halt');
             } else if($node instanceof \PHPParser_Node_Stmt_Namespace){
                 if(!$this->sandbox->allow_namespaces){
-                    throw new Exception("Sandboxed code attempted to define namespace!");
+                    throw new Error("Sandboxed code attempted to define namespace!");
                 }
                 $this->sandbox->check_keyword('namespace');
                 if($node->name instanceof \PHPParser_Node_Name){
                     $this->sandbox->check_namespace($node->name->toString());
                     $this->sandbox->define_namespace($node->name->toString());
                 } else {
-                    throw new Exception("Sandboxed code attempted use invalid namespace!");
+                    throw new Error("Sandboxed code attempted use invalid namespace!");
                 }
                 return false;
             } else if($node instanceof \PHPParser_Node_Stmt_Use){
                 if(!$this->sandbox->allow_aliases){
-                    throw new Exception("Sandboxed code attempted to use namespace and/or alias!");
+                    throw new Error("Sandboxed code attempted to use namespace and/or alias!");
                 }
                 $this->sandbox->check_keyword('use');
                 foreach($node->uses as $use){
@@ -178,7 +178,7 @@
                         }
                         $this->sandbox->define_alias($use->name->toString(), $use->alias);
                     } else {
-                        throw new Exception("Sandboxed code attempted use invalid namespace or alias!");
+                        throw new Error("Sandboxed code attempted use invalid namespace or alias!");
                     }
                 }
                 return false;
@@ -192,13 +192,13 @@
                 }
                 if($this->sandbox->has_whitelist_funcs()){
                     if(!$this->sandbox->is_whitelisted_func('shell_exec')){
-                        throw new Exception("Sandboxed code attempted to use shell execution backticks when the shell_exec function is not whitelisted!");
+                        throw new Error("Sandboxed code attempted to use shell execution backticks when the shell_exec function is not whitelisted!");
                     }
                 } else if($this->sandbox->has_blacklist_funcs() && $this->sandbox->is_blacklisted_func('shell_exec')){
-                    throw new Exception("Sandboxed code attempted to use shell execution backticks when the shell_exec function is blacklisted!");
+                    throw new Error("Sandboxed code attempted to use shell execution backticks when the shell_exec function is blacklisted!");
                 }
                 if(!$this->sandbox->allow_backticks){
-                    throw new Exception("Sandboxed code attempted to use shell execution backticks!");
+                    throw new Error("Sandboxed code attempted to use shell execution backticks!");
                 }
             } else if($name = $this->is_magic_const($node)){
                 $this->sandbox->check_magic_const($name);
@@ -404,7 +404,7 @@
                 case 'Expr_Cast_Object':
                 case 'Expr_Cast_Unset':
                     if(!$this->sandbox->allow_casting){
-                        throw new Exception("Sandboxed code attempted to cast!");
+                        throw new Error("Sandboxed code attempted to cast!");
                     }
                     break;
             }

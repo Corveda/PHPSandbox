@@ -1,11 +1,25 @@
 <?php
     namespace PHPSandbox;
 
-	class PHPSandbox {
-        /** The prefix given to the obfuscated sandbox variable passed to the generated code
-         * @var string
+    /**
+     * PHPSandbox class for PHP Sandboxes.
+     *
+     * This class encapsulates the entire functionality of a PHPSandbox so that an end user
+     * only has to create a PHPSandbox instance, configure its options, and run their code
+     *
+     * @namespace PHPSandbox
+     *
+     * @author  Elijah Horton <fieryprophet@yahoo.com>
+     * @version 1.0
+     */
+    class PHPSandbox {
+        /**
+         * @var    string        The prefix given to the obfuscated sandbox variable passed to the generated code
          */
         protected static $function_prefix = '__PHPSandbox_';
+        /**
+         * @var    array           A static array of superglobal names used for redefining superglobal values
+         */
         public static $superglobals = array(
             '_GET',
             '_POST',
@@ -17,6 +31,9 @@
             '_SESSION',
             'GLOBALS'
         );
+        /**
+         * @var    array        A static array of magic constant names used for redefining magic constant values
+         */
         public static $magic_constants = array(
             '__LINE__',
             '__FILE__',
@@ -27,6 +44,9 @@
             '__METHOD__',
             '__NAMESPACE__'
         );
+        /**
+         * @var    array          A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values
+         */
         public static $defined_funcs = array(
             'get_defined_functions',
             'get_defined_vars',
@@ -35,6 +55,9 @@
             'get_declared_interfaces',
             'get_declared_traits'
         );
+        /**
+         * @var    string       The randomly generated name of the PHPSandbox variable passed to the generated closure
+         */
         public $name = '';
         /* DEFINED */
         protected $definitions = array(
@@ -88,49 +111,199 @@
             'types' => array()
         );
         /* BOOLEAN FLAGS */
-        public $error_level                 = null;     //null = use parent scope error level
-        public $auto_whitelist_trusted_code = true;     //automagically whitelist prepended and appended code?
-        public $auto_whitelist_functions    = true;     //automagically whitelist functions created in sandboxed code if $allow_functions is true?
-        public $auto_whitelist_constants    = true;     //automagically whitelist constants created in sandboxed code if $allow_constants is true?
-        public $auto_whitelist_globals      = true;     //automagically whitelist global variables created in sandboxed code if $allow_globals is true? (Used to whitelist them in the variables list)
-        public $auto_whitelist_classes      = true;     //automagically whitelist classes created in sandboxed code if $allow_classes is true?
-        public $auto_whitelist_interfaces   = true;     //automagically whitelist interfaces created in sandboxed code if $allow_interfaces is true?
-        public $auto_whitelist_traits       = true;     //automagically whitelist traits created in sandboxed code if $allow_traits is true?
-        public $auto_define_vars            = true;     //automagically define variables passed to prepended, appended and prepared code closures?
-        public $overwrite_defined_funcs     = true;     //overwrite get_defined_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?
-        public $overwrite_superglobals      = true;     //overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals?
-        public $allow_functions             = true;         //allow sandboxed code to declare functions?
-        public $allow_closures              = true;         //allow sandboxed code to create closures?
-        public $allow_variables             = true;         //allow sandboxed code to create variables?
-        public $allow_static_variables      = true;         //allow sandboxed code to create static variables?
-        public $allow_objects               = true;         //allow sandboxed code to create objects (e.g. new keyword)?
-        public $allow_constants             = true;         //allow sandboxed code to define constants?
-        public $allow_globals               = true;         //allow sandboxed code to use global keyword?
-        public $allow_namespaces            = true;         //allow sandboxed code to declare namespaces? (these utilize the define_namespace function)
-        public $allow_aliases               = true;         //allow sandboxed code to declare aliases? (these utilize the define_alias function)
-        public $allow_classes               = true;         //allow sandboxed code to declare classes?
-        public $allow_interfaces            = false;        //allow sandboxed code to declare interfaces?
-        public $allow_traits                = false;        //allow sandboxed code to declare traits?
-        public $allow_escaping              = false;        //allow sandboxed code to escape to HTML?
-        public $allow_casting               = false;        //allow sandboxed code to cast types?
-        public $allow_error_suppressing     = false;        //allow sandboxed code to suppress errors?
-        public $allow_references            = true;         //allow sandboxed code to assign references?
-        public $allow_backticks             = false;        //allow sandboxed code to use shell execution backticks? (will be disabled if shell_exec is not whitelisted or is blacklisted, will be converted to defined shell_exec if a shell_exec function is defined)
-        public $allow_halting               = false;        //allow sandboxed code to halt compiler?
+        /**
+         * @var    bool       The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
+         * @default null
+         */
+        public $error_level                 = null;
+        /**
+         * @var    bool       Should PHPSandbox automagically whitelist prepended and appended code?
+         * @default true
+         */
+        public $auto_whitelist_trusted_code = true;
+        /**
+         * @var    bool       Should PHPSandbox automagically whitelist functions created in sandboxed code if $allow_functions is true?
+         * @default true
+         */
+        public $auto_whitelist_functions    = true;
+        /**
+         * @var    bool       Should PHPSandbox automagically whitelist constants created in sandboxed code if $allow_constants is true?
+         * @default true
+         */
+        public $auto_whitelist_constants    = true;
+        /**
+         * @var    bool       Should PHPSandbox automagically whitelist global variables created in sandboxed code if $allow_globals is true? (Used to whitelist them in the variables list)
+         * @default true
+         */
+        public $auto_whitelist_globals      = true;
+        /**
+         * @var    bool       Should PHPSandbox automagically whitelist classes created in sandboxed code if $allow_classes is true?
+         * @default true
+         */
+        public $auto_whitelist_classes      = true;
+        /**
+         * @var    bool       Should PHPSandbox automagically whitelist interfaces created in sandboxed code if $allow_interfaces is true?
+         * @default true
+         */
+        public $auto_whitelist_interfaces   = true;
+        /**
+         * @var    bool       Should PHPSandbox automagically whitelist traits created in sandboxed code if $allow_traits is true?
+         * @default true
+         */
+        public $auto_whitelist_traits       = true;
+        /**
+         * @var    bool       Should PHPSandbox automagically define variables passed to prepended, appended and prepared code closures?
+         * @default true
+         */
+        public $auto_define_vars            = true;
+        /**
+         * @var    bool       Should PHPSandbox overwrite get_defined_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?
+         * @default true
+         */
+        public $overwrite_defined_funcs     = true;
+        /**
+         * @var    bool       Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.
+         * @default true
+         */
+        public $overwrite_superglobals      = true;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to declare functions?
+         * @default false
+         */
+        public $allow_functions             = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to declare closures?
+         * @default false
+         */
+        public $allow_closures              = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to create variables?
+         * @default true
+         */
+        public $allow_variables             = true;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to create static variables?
+         * @default true
+         */
+        public $allow_static_variables      = true;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to create objects of allow classes (e.g. new keyword)?
+         * @default true
+         */
+        public $allow_objects               = true;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to define constants?
+         * @default false
+         */
+        public $allow_constants             = false;         //allow sandboxed code to define constants?
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to use global keyword to access variables in the global scope?
+         * @default false
+         */
+        public $allow_globals               = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to declare namespaces (utilizing the define_namespace function?)
+         * @default false
+         */
+        public $allow_namespaces            = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to use namespaces and declare namespace aliases (utilizing the define_alias function?)
+         * @default false
+         */
+        public $allow_aliases               = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to declare classes?
+         * @default false
+         */
+        public $allow_classes               = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to declare interfaces?
+         * @default false
+         */
+        public $allow_interfaces            = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to declare traits?
+         * @default false
+         */
+        public $allow_traits                = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to escape to HTML?
+         * @default false
+         */
+        public $allow_escaping              = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to cast types? (This will still be subject to allowed classes)
+         * @default false
+         */
+        public $allow_casting               = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to suppress errors (e.g. the @ operator?)
+         * @default false
+         */
+        public $allow_error_suppressing     = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to assign references?
+         * @default true
+         */
+        public $allow_references            = true;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to use backtick execution? (e.g. $var = \`ping google.com\`; This will also be disabled if shell_exec is not whitelisted or if it is blacklisted, and will be converted to a defined shell_exec function call if one is defined)
+         * @default false
+         */
+        public $allow_backticks             = false;
+        /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to halt the PHP compiler?
+         * @default false
+         */
+        public $allow_halting               = false;
         /* TRUSTED CODE STRINGS */
+        /**
+         * @var    string     String of prepended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true
+         */
         public $prepended_code = '';
+        /**
+         * @var    string     String of appended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true
+         */
         public $appended_code = '';
         /* OUTPUT */
-        public $preparsed_code = '';                    //string of preparsed code
-        public $parsed_ast = array();                   //array of parse code
-        public $prepared_code = '';                     //string of prepared code
-        public $prepared_ast = array();                 //array of prepared code
-        public $generated_code = '';                    //string of generated code
         /**
-         * @var \Closure|null
+         * @var    string     String of preparsed code, for debugging and serialization purposes
          */
-        public $generated_closure = null;              //generated closure
-
+        public $preparsed_code = '';
+        /**
+         * @var    array      Array of parsed code broken down into AST tokens, for debugging and serialization purposes
+         */
+        public $parsed_ast = array();
+        /**
+         * @var    string     String of prepared code, for debugging and serialization purposes
+         */
+        public $prepared_code = '';
+        /**
+         * @var    array      Array of prepared code broken down into AST tokens, for debugging and serialization purposes
+         */
+        public $prepared_ast = array();
+        /**
+         * @var    string     String of generated code, for debugging and serialization purposes
+         */
+        public $generated_code = '';
+        /**
+         * @var \Closure|null   Closure generated by PHPSandbox execution, stored for future executions without the need to reparse and validate the code
+         */
+        public $generated_closure = null;
+        /** PHPSandbox class constructor
+         *
+         * You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor
+         *
+         * @param   array   $functions          Optional array of functions to define for the sandbox
+         * @param   array   $variables          Optional array of variables to define for the sandbox
+         * @param   array   $constants          Optional array of constants to define for the sandbox
+         * @param   array   $namespaces         Optional array of namespaces to define for the sandbox
+         * @param   array   $aliases            Optional array of aliases to define for the sandbox
+         * @param   array   $globals            Optional array of globals to define for the sandbox
+         * @param   array   $superglobals       Optional array of superglobals to define for the sandbox
+         * @param   array   $magic_constants    Optional array of magic constants to define for the sandbox
+         * @return  null
+         */
 		public function __construct(array $functions = array(),
                                     array $variables = array(),
                                     array $constants = array(),
@@ -149,7 +322,21 @@
                 ->define_superglobals($superglobals)
                 ->define_magic_consts($magic_constants);
 		}
-
+        /** PHPSandbox static factory method
+         *
+         * You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor
+         *
+         * @param   array   $functions          Optional array of functions to define for the sandbox
+         * @param   array   $variables          Optional array of variables to define for the sandbox
+         * @param   array   $constants          Optional array of constants to define for the sandbox
+         * @param   array   $namespaces         Optional array of namespaces to define for the sandbox
+         * @param   array   $aliases            Optional array of aliases to define for the sandbox
+         * @param   array   $globals            Optional array of globals to define for the sandbox
+         * @param   array   $superglobals       Optional array of superglobals to define for the sandbox
+         * @param   array   $magic_constants    Optional array of magic constants to define for the sandbox
+         *
+         * @return  PHPSandbox                  The returned PHPSandbox variable
+         */
         public static function create(array $functions = array(),
                                       array $variables = array(),
                                       array $constants = array(),
@@ -160,9 +347,283 @@
                                       array $magic_constants = array()){
             return new static($functions, $variables, $constants, $namespaces, $aliases, $globals, $superglobals, $magic_constants);
         }
-
-        public function __invoke(){
+        /** PHPSandbox invoke magic method
+         *
+         * Besides the code or closure to be executed, you can also pass additional arguments that will overwrite the default values of their respective arguments defined in the code
+         *
+         * @param   \Closure|callable|string   $code          The closure, callable or string of code to execute
+         *
+         * @return  mixed                      The output of the executed sandboxed code
+         */
+        public function __invoke($code){
             return call_user_func_array(array($this, 'execute'), func_get_args());
+        }
+        /** Get name of PHPSandbox variable
+         * @return  string                     The name of the PHPSandbox variable
+         */
+        public function get_name(){
+            return $this->name;
+        }
+        /** Set PHPSandbox option
+         *
+         * You can pass an $option name to set to $value, an array of $option names to set to $value, or an associative array of $option names and their values to set.
+         *
+         * @param   string|array    $option     String or array of strings or associative array of keys of option names to set $value to
+         * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function set_option($option, $value = null){
+            if(is_array($option)){
+                return $this->set_options($option, $value);
+            }
+            $option = strtolower($option); //normalize option names
+            switch($option){
+                case 'error_level':
+                    $this->error_level = is_int($value) ? $value : null;
+                    break;
+                case 'auto_whitelist_trusted_code':
+                    $this->auto_whitelist_trusted_code = $value ? true : false;
+                    break;
+                case 'auto_whitelist_functions':
+                    $this->auto_whitelist_functions = $value ? true : false;
+                    break;
+                case 'auto_whitelist_constants':
+                    $this->auto_whitelist_constants = $value ? true : false;
+                    break;
+                case 'auto_whitelist_globals':
+                    $this->auto_whitelist_globals = $value ? true : false;
+                    break;
+                case 'auto_whitelist_classes':
+                    $this->auto_whitelist_classes = $value ? true : false;
+                    break;
+                case 'auto_whitelist_interfaces':
+                    $this->auto_whitelist_interfaces = $value ? true : false;
+                    break;
+                case 'auto_whitelist_traits':
+                    $this->auto_whitelist_traits = $value ? true : false;
+                    break;
+                case 'auto_define_vars':
+                    $this->auto_define_vars = $value ? true : false;
+                    break;
+                case 'overwrite_defined_funcs':
+                    $this->overwrite_defined_funcs = $value ? true : false;
+                    break;
+                case 'overwrite_superglobals':
+                    $this->overwrite_superglobals = $value ? true : false;
+                    break;
+                case 'allow_functions':
+                    $this->allow_functions = $value ? true : false;
+                    break;
+                case 'allow_closures':
+                    $this->allow_closures = $value ? true : false;
+                    break;
+                case 'allow_variables':
+                    $this->allow_variables = $value ? true : false;
+                    break;
+                case 'allow_static_variables':
+                    $this->allow_static_variables = $value ? true : false;
+                    break;
+                case 'allow_objects':
+                    $this->allow_objects = $value ? true : false;
+                    break;
+                case 'allow_constants':
+                    $this->allow_constants = $value ? true : false;
+                    break;
+                case 'allow_globals':
+                    $this->allow_globals = $value ? true : false;
+                    break;
+                case 'allow_namespaces':
+                    $this->allow_namespaces = $value ? true : false;
+                    break;
+                case 'allow_aliases':
+                    $this->allow_aliases = $value ? true : false;
+                    break;
+                case 'allow_classes':
+                    $this->allow_classes = $value ? true : false;
+                    break;
+                case 'allow_interfaces':
+                    $this->allow_interfaces = $value ? true : false;
+                    break;
+                case 'allow_traits':
+                    $this->allow_traits = $value ? true : false;
+                    break;
+                case 'allow_escaping':
+                    $this->allow_escaping = $value ? true : false;
+                    break;
+                case 'allow_casting':
+                    $this->allow_casting = $value ? true : false;
+                    break;
+                case 'allow_error_suppressing':
+                    $this->allow_error_suppressing = $value ? true : false;
+                    break;
+                case 'allow_references':
+                    $this->allow_references = $value ? true : false;
+                    break;
+                case 'allow_backticks':
+                    $this->allow_backticks = $value ? true : false;
+                    break;
+                case 'allow_halting':
+                    $this->allow_halting = $value ? true : false;
+                    break;
+            }
+            return $this;
+        }
+        /** Set PHPSandbox options by array
+         *
+         * You can an array of option names to set to $value, or an associative array of option names and their values to set.
+         *
+         * @param   array           $options    Array of strings or associative array of keys of option names to set $value to
+         * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function set_options($options = array(), $value = null){
+            foreach($options as $name => $_value){
+                $this->set_option(is_int($name) ? $_value : $name, is_int($name) ? $value : $_value);
+            }
+            return $this;
+        }
+        /** Get PHPSandbox option
+         *
+         * You pass a string $option name to get its associated value
+         *
+         * @param   string          $option     String of $option name to get
+         *
+         * @return  boolean|int|null            Returns the value of the requested option
+         */
+        public function get_option($option){
+            $option = strtolower($option);  //normalize option names
+            switch($option){
+                case 'error_level':
+                    return $this->error_level;
+                    break;
+                case 'auto_whitelist_trusted_code':
+                    return $this->auto_whitelist_trusted_code;
+                    break;
+                case 'auto_whitelist_functions':
+                    return $this->auto_whitelist_functions;
+                    break;
+                case 'auto_whitelist_constants':
+                    return $this->auto_whitelist_constants;
+                    break;
+                case 'auto_whitelist_globals':
+                    return $this->auto_whitelist_globals;
+                    break;
+                case 'auto_whitelist_classes':
+                    return $this->auto_whitelist_classes;
+                    break;
+                case 'auto_whitelist_interfaces':
+                    return $this->auto_whitelist_interfaces;
+                    break;
+                case 'auto_whitelist_traits':
+                    return $this->auto_whitelist_traits;
+                    break;
+                case 'auto_define_vars':
+                    return $this->auto_define_vars;
+                    break;
+                case 'overwrite_defined_funcs':
+                    return $this->overwrite_defined_funcs;
+                    break;
+                case 'overwrite_superglobals':
+                    return $this->overwrite_superglobals;
+                    break;
+                case 'allow_functions':
+                    return $this->allow_functions;
+                    break;
+                case 'allow_closures':
+                    return $this->allow_closures;
+                    break;
+                case 'allow_variables':
+                    return $this->allow_variables;
+                    break;
+                case 'allow_static_variables':
+                    return $this->allow_static_variables;
+                    break;
+                case 'allow_objects':
+                    return $this->allow_objects;
+                    break;
+                case 'allow_constants':
+                    return $this->allow_constants;
+                    break;
+                case 'allow_globals':
+                    return $this->allow_globals;
+                    break;
+                case 'allow_namespaces':
+                    return $this->allow_namespaces;
+                    break;
+                case 'allow_aliases':
+                    return $this->allow_aliases;
+                    break;
+                case 'allow_classes':
+                    return $this->allow_classes;
+                    break;
+                case 'allow_interfaces':
+                    return $this->allow_interfaces;
+                    break;
+                case 'allow_traits':
+                    return $this->allow_traits;
+                    break;
+                case 'allow_escaping':
+                    return $this->allow_escaping;
+                    break;
+                case 'allow_casting':
+                    return $this->allow_casting;
+                    break;
+                case 'allow_error_suppressing':
+                    return $this->allow_error_suppressing;
+                    break;
+                case 'allow_references':
+                    return $this->allow_references;
+                    break;
+                case 'allow_backticks':
+                    return $this->allow_backticks;
+                    break;
+                case 'allow_halting':
+                    return $this->allow_halting;
+                    break;
+            }
+            return null;
+        }
+        /** Get PHPSandbox prepended code
+         * @return  string          Returns a string of the prepended code
+         */
+        public function get_prepended_code(){
+            return $this->prepended_code;
+        }
+        /** Get PHPSandbox appended code
+         * @return  string          Returns a string of the appended code
+         */
+        public function get_appended_code(){
+            return $this->appended_code;
+        }
+
+        public function get_preparsed_code(){
+            return $this->preparsed_code;
+        }
+
+        public function get_parsed_ast(){
+            return $this->parsed_ast;
+        }
+
+        public function get_prepared_code(){
+            return $this->prepared_code;
+        }
+
+        public function get_prepared_ast(){
+            return $this->prepended_code;
+        }
+
+        public function get_generated_code(){
+            return $this->prepended_code;
+        }
+
+        public function get_generated_closure(){
+            return $this->generated_closure;
+        }
+
+        public function get_closure(){
+            return $this->get_generated_closure();
         }
 
         public function _get_defined_functions(array $functions = array()){
@@ -344,7 +805,7 @@
             if(is_callable($name)){
                 return call_user_func_array($name, $arguments);
             }
-            throw new Exception("Sandboxed code attempted to call invalid function: $original_name");
+            throw new Error("Sandboxed code attempted to call invalid function: $original_name");
         }
 
         public function define($type, $name = null, $value = null){
@@ -432,12 +893,12 @@
                 return $this->define_funcs($name);
             }
             if(!$name){
-                throw new Exception("Cannot define unnamed function!");
+                throw new Error("Cannot define unnamed function!");
             }
             $original_name = $name;
             $name = $this->normalize_func($name);
             if(!is_callable($function)){
-                throw new Exception("Cannot define uncallable function : $original_name");
+                throw new Error("Cannot define uncallable function : $original_name");
             }
             $this->definitions['functions'][$name] = $function;
             return $this;
@@ -477,7 +938,7 @@
                 return $this->define_vars($name);
             }
             if(!$name){
-                throw new Exception("Cannot define unnamed variable!");
+                throw new Error("Cannot define unnamed variable!");
             }
             $this->definitions['variables'][$name] = $value;
             return $this;
@@ -515,7 +976,7 @@
                 return $this->define_globals($name);
             }
             if(!$name){
-                throw new Exception("Cannot define unnamed global!");
+                throw new Error("Cannot define unnamed global!");
             }
             $this->definitions['globals'][$name] = $value;
             return $this;
@@ -553,7 +1014,7 @@
                 return $this->define_superglobals($name);
             }
             if(!$name){
-                throw new Exception("Cannot define unnamed superglobal!");
+                throw new Error("Cannot define unnamed superglobal!");
             }
             $name = $this->normalize_superglobal($name);
             if(func_num_args() > 2){
@@ -610,7 +1071,7 @@
                 return $this->define_consts($name);
             }
             if(!$name){
-                throw new Exception("Cannot define unnamed constant!");
+                throw new Error("Cannot define unnamed constant!");
             }
             $this->definitions['constants'][$name] = $value;
             return $this;
@@ -648,7 +1109,7 @@
                 return $this->define_magic_consts($name);
             }
             if(!$name){
-                throw new Exception("Cannot define unnamed magic constant!");
+                throw new Error("Cannot define unnamed magic constant!");
             }
             $name = $this->normalize_magic_const($name);
             $this->definitions['magic_constants'][$name] = $value;
@@ -689,7 +1150,7 @@
                 return $this->define_namespaces($name);
             }
             if(!$name){
-                throw new Exception("Cannot define unnamed namespace!");
+                throw new Error("Cannot define unnamed namespace!");
             }
             $this->definitions['namespaces'][$name] = $name;
             return $this;
@@ -727,7 +1188,7 @@
                 return $this->define_aliases($name);
             }
             if(!$name){
-                throw new Exception("Cannot define unnamed namespace alias!");
+                throw new Error("Cannot define unnamed namespace alias!");
             }
             $this->definitions['aliases'][$name] = $alias;
             return $this;
@@ -1666,20 +2127,20 @@
         public function check_func($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed function!");
+                throw new Error("Sandboxed code attempted to call unnamed function!");
             }
             $name = $this->normalize_func($name);
             if(!isset($this->definitions['functions'][$name]) || !is_callable($this->definitions['functions'][$name])){
                 if(count($this->whitelist['functions'])){
                     if(!isset($this->whitelist['functions'][$name])){
-                        throw new Exception("Sandboxed code attempted to call non-whitelisted function: $original_name");
+                        throw new Error("Sandboxed code attempted to call non-whitelisted function: $original_name");
                     }
                 } else if(count($this->blacklist['functions'])){
                     if(isset($this->blacklist['functions'][$name])){
-                        throw new Exception("Sandboxed code attempted to call blacklisted function: $original_name");
+                        throw new Error("Sandboxed code attempted to call blacklisted function: $original_name");
                     }
                 } else {
-                   throw new Exception("Sandboxed code attempted to call invalid function: $original_name");
+                   throw new Error("Sandboxed code attempted to call invalid function: $original_name");
                 }
             }
         }
@@ -1687,19 +2148,19 @@
         public function check_var($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed variable!");
+                throw new Error("Sandboxed code attempted to call unnamed variable!");
             }
             if(!isset($this->definitions['variables'][$name])){
                 if(count($this->whitelist['variables'])){
                     if(!isset($this->whitelist['variables'][$name])){
-                        throw new Exception("Sandboxed code attempted to call non-whitelisted variable: $original_name");
+                        throw new Error("Sandboxed code attempted to call non-whitelisted variable: $original_name");
                     }
                 } else if(count($this->blacklist['variables'])){
                     if(isset($this->blacklist['variables'][$name])){
-                        throw new Exception("Sandboxed code attempted to call blacklisted variable: $original_name");
+                        throw new Error("Sandboxed code attempted to call blacklisted variable: $original_name");
                     }
                 } else if(!$this->allow_variables){
-                    throw new Exception("Sandboxed code attempted to call invalid variable: $original_name");
+                    throw new Error("Sandboxed code attempted to call invalid variable: $original_name");
                 }
             }
         }
@@ -1707,19 +2168,19 @@
         public function check_global($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed global!");
+                throw new Error("Sandboxed code attempted to call unnamed global!");
             }
             if(!isset($this->definitions['globals'][$name])){
                 if(count($this->whitelist['globals'])){
                     if(!isset($this->whitelist['globals'][$name])){
-                        throw new Exception("Sandboxed code attempted to call non-whitelisted global: $original_name");
+                        throw new Error("Sandboxed code attempted to call non-whitelisted global: $original_name");
                     }
                 } else if(count($this->blacklist['globals'])){
                     if(isset($this->blacklist['globals'][$name])){
-                        throw new Exception("Sandboxed code attempted to call blacklisted global: $original_name");
+                        throw new Error("Sandboxed code attempted to call blacklisted global: $original_name");
                     }
                 } else {
-                    throw new Exception("Sandboxed code attempted to call invalid global: $original_name");
+                    throw new Error("Sandboxed code attempted to call invalid global: $original_name");
                 }
             }
         }
@@ -1727,20 +2188,20 @@
         public function check_superglobal($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed superglobal!");
+                throw new Error("Sandboxed code attempted to call unnamed superglobal!");
             }
             $name = $this->normalize_superglobal($name);
             if(!isset($this->definitions['superglobals'][$name])){
                 if(count($this->whitelist['superglobals'])){
                     if(!isset($this->whitelist['superglobals'][$name])){
-                        throw new Exception("Sandboxed code attempted to call non-whitelisted superglobal: $original_name");
+                        throw new Error("Sandboxed code attempted to call non-whitelisted superglobal: $original_name");
                     }
                 } else if(count($this->blacklist['superglobals'])){
                     if(isset($this->blacklist['superglobals'][$name]) && !count($this->blacklist['superglobals'][$name])){
-                        throw new Exception("Sandboxed code attempted to call blacklisted superglobal: $original_name");
+                        throw new Error("Sandboxed code attempted to call blacklisted superglobal: $original_name");
                     }
                 } else if(!$this->overwrite_superglobals){
-                    throw new Exception("Sandboxed code attempted to call invalid superglobal: $original_name");
+                    throw new Error("Sandboxed code attempted to call invalid superglobal: $original_name");
                 }
             }
         }
@@ -1748,7 +2209,7 @@
         public function check_const($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed constant!");
+                throw new Error("Sandboxed code attempted to call unnamed constant!");
             }
             if(strtolower($name) == 'true' || strtolower($name) == 'false'){
                 $this->check_primitive('bool');
@@ -1757,14 +2218,14 @@
             if(!isset($this->definitions['constants'][$name])){
                 if(count($this->whitelist['constants'])){
                     if(!isset($this->whitelist['constants'][$name])){
-                        throw new Exception("Sandboxed code attempted to call non-whitelisted constant: $original_name");
+                        throw new Error("Sandboxed code attempted to call non-whitelisted constant: $original_name");
                     }
                 } else if(count($this->blacklist['constants'])){
                     if(isset($this->blacklist['constants'][$name])){
-                        throw new Exception("Sandboxed code attempted to call blacklisted constant: $original_name");
+                        throw new Error("Sandboxed code attempted to call blacklisted constant: $original_name");
                     }
                 } else {
-                    throw new Exception("Sandboxed code attempted to call invalid constant: $original_name");
+                    throw new Error("Sandboxed code attempted to call invalid constant: $original_name");
                 }
             }
         }
@@ -1772,23 +2233,20 @@
         public function check_magic_const($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed magic constant!");
+                throw new Error("Sandboxed code attempted to call unnamed magic constant!");
             }
             $name = $this->normalize_magic_const($name);
             if(!isset($this->definitions['magic_constants'][$name])){
                 if(count($this->whitelist['magic_constants'])){
                     if(!isset($this->whitelist['magic_constants'][$name])){
-                        $name = '__' . $name . '__';
-                        throw new Exception("Sandboxed code attempted to call non-whitelisted magic constant: $original_name");
+                        throw new Error("Sandboxed code attempted to call non-whitelisted magic constant: $original_name");
                     }
                 } else if(count($this->blacklist['magic_constants'])){
                     if(isset($this->blacklist['magic_constants'][$name])){
-                        $name = '__' . $name . '__';
-                        throw new Exception("Sandboxed code attempted to call blacklisted magic constant: $original_name");
+                        throw new Error("Sandboxed code attempted to call blacklisted magic constant: $original_name");
                     }
                 } else {
-                    $name = '__' . $name . '__';
-                    throw new Exception("Sandboxed code attempted to call invalid magic constant: $original_name");
+                    throw new Error("Sandboxed code attempted to call invalid magic constant: $original_name");
                 }
             }
         }
@@ -1796,38 +2254,38 @@
         public function check_namespace($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed namespace!");
+                throw new Error("Sandboxed code attempted to call unnamed namespace!");
             }
             $name = $this->normalize_namespace($name);
             if(count($this->whitelist['namespaces'])){
                 if(!isset($this->whitelist['namespaces'][$name])){
-                    throw new Exception("Sandboxed code attempted to call non-whitelisted namespace: $original_name");
+                    throw new Error("Sandboxed code attempted to call non-whitelisted namespace: $original_name");
                 }
             } else if(count($this->blacklist['namespaces'])){
                 if(isset($this->blacklist['namespaces'][$name])){
-                    throw new Exception("Sandboxed code attempted to call blacklisted namespace: $original_name");
+                    throw new Error("Sandboxed code attempted to call blacklisted namespace: $original_name");
                 }
             } else if(!$this->allow_namespaces){
-                throw new Exception("Sandboxed code attempted to call invalid namespace: $original_name");
+                throw new Error("Sandboxed code attempted to call invalid namespace: $original_name");
             }
         }
 
         public function check_alias($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed alias!");
+                throw new Error("Sandboxed code attempted to call unnamed alias!");
             }
             $name = $this->normalize_alias($name);
             if(count($this->whitelist['aliases'])){
                 if(!isset($this->whitelist['aliases'][$name])){
-                    throw new Exception("Sandboxed code attempted to call non-whitelisted alias: $original_name");
+                    throw new Error("Sandboxed code attempted to call non-whitelisted alias: $original_name");
                 }
             } else if(count($this->blacklist['aliases'])){
                 if(isset($this->blacklist['aliases'][$name])){
-                    throw new Exception("Sandboxed code attempted to call blacklisted alias: $original_name");
+                    throw new Error("Sandboxed code attempted to call blacklisted alias: $original_name");
                 }
             } else if(!$this->allow_aliases){
-                throw new Exception("Sandboxed code attempted to call invalid alias: $original_name");
+                throw new Error("Sandboxed code attempted to call invalid alias: $original_name");
             }
         }
 
@@ -1838,73 +2296,73 @@
         public function check_class($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed class!");
+                throw new Error("Sandboxed code attempted to call unnamed class!");
             }
             $name = $this->normalize_class($name);
             if(count($this->whitelist['classes'])){
                 if(!isset($this->whitelist['classes'][$name])){
-                    throw new Exception("Sandboxed code attempted to call non-whitelisted class: $original_name");
+                    throw new Error("Sandboxed code attempted to call non-whitelisted class: $original_name");
                 }
             } else if(count($this->blacklist['classes'])){
                 if(isset($this->blacklist['classes'][$name])){
-                    throw new Exception("Sandboxed code attempted to call blacklisted class: $original_name");
+                    throw new Error("Sandboxed code attempted to call blacklisted class: $original_name");
                 }
             } else {
-                throw new Exception("Sandboxed code attempted to call invalid class: $original_name");
+                throw new Error("Sandboxed code attempted to call invalid class: $original_name");
             }
         }
 
         public function check_interface($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed interface!");
+                throw new Error("Sandboxed code attempted to call unnamed interface!");
             }
             $name = $this->normalize_interface($name);
             if(count($this->whitelist['interfaces'])){
                 if(!isset($this->whitelist['interfaces'][$name])){
-                    throw new Exception("Sandboxed code attempted to call non-whitelisted interface: $original_name");
+                    throw new Error("Sandboxed code attempted to call non-whitelisted interface: $original_name");
                 }
             } else if(count($this->blacklist['interfaces'])){
                 if(isset($this->blacklist['interfaces'][$name])){
-                    throw new Exception("Sandboxed code attempted to call blacklisted interface: $original_name");
+                    throw new Error("Sandboxed code attempted to call blacklisted interface: $original_name");
                 }
             } else {
-                throw new Exception("Sandboxed code attempted to call invalidnterface: $original_name");
+                throw new Error("Sandboxed code attempted to call invalidnterface: $original_name");
             }
         }
 
         public function check_trait($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed trait!");
+                throw new Error("Sandboxed code attempted to call unnamed trait!");
             }
             $name = $this->normalize_trait($name);
             if(count($this->whitelist['traits'])){
                 if(!isset($this->whitelist['traits'][$name])){
-                    throw new Exception("Sandboxed code attempted to call non-whitelisted trait: $original_name");
+                    throw new Error("Sandboxed code attempted to call non-whitelisted trait: $original_name");
                 }
             } else if(count($this->blacklist['traits'])){
                 if(isset($this->blacklist['traits'][$name])){
-                    throw new Exception("Sandboxed code attempted to call blacklisted trait: $original_name");
+                    throw new Error("Sandboxed code attempted to call blacklisted trait: $original_name");
                 }
             } else {
-                throw new Exception("Sandboxed code attempted to call invalid trait: $original_name");
+                throw new Error("Sandboxed code attempted to call invalid trait: $original_name");
             }
         }
 
         public function check_keyword($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed keyword!");
+                throw new Error("Sandboxed code attempted to call unnamed keyword!");
             }
             $name = $this->normalize_keyword($name);
             if(count($this->whitelist['keywords'])){
                 if(!isset($this->whitelist['keywords'][$name])){
-                    throw new Exception("Sandboxed code attempted to call non-whitelisted keyword: $original_name");
+                    throw new Error("Sandboxed code attempted to call non-whitelisted keyword: $original_name");
                 }
             } else if(count($this->blacklist['keywords'])){
                 if(isset($this->blacklist['keywords'][$name])){
-                    throw new Exception("Sandboxed code attempted to call blacklisted keyword: $original_name");
+                    throw new Error("Sandboxed code attempted to call blacklisted keyword: $original_name");
                 }
             }
         }
@@ -1912,15 +2370,15 @@
         public function check_operator($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed operator!");
+                throw new Error("Sandboxed code attempted to call unnamed operator!");
             }
             if(count($this->whitelist['operators'])){
                 if(!isset($this->whitelist['operators'][$name])){
-                    throw new Exception("Sandboxed code attempted to call non-whitelisted operator: $original_name");
+                    throw new Error("Sandboxed code attempted to call non-whitelisted operator: $original_name");
                 }
             } else if(count($this->blacklist['operators'])){
                 if(isset($this->blacklist['operators'][$name])){
-                    throw new Exception("Sandboxed code attempted to call blacklisted operator: $original_name");
+                    throw new Error("Sandboxed code attempted to call blacklisted operator: $original_name");
                 }
             }
         }
@@ -1928,16 +2386,16 @@
         public function check_primitive($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed primitive!");
+                throw new Error("Sandboxed code attempted to call unnamed primitive!");
             }
             $name = $this->normalize_primitive($name);
             if(count($this->whitelist['primitives'])){
                 if(!isset($this->whitelist['primitives'][$name])){
-                    throw new Exception("Sandboxed code attempted to call non-whitelisted primitive: $original_name");
+                    throw new Error("Sandboxed code attempted to call non-whitelisted primitive: $original_name");
                 }
             } else if(count($this->blacklist['primitives'])){
                 if(isset($this->blacklist['primitives'][$name])){
-                    throw new Exception("Sandboxed code attempted to call blacklisted primitive: $original_name");
+                    throw new Error("Sandboxed code attempted to call blacklisted primitive: $original_name");
                 }
             }
         }
@@ -1945,19 +2403,19 @@
         public function check_type($name){
             $original_name = $name;
             if(!$name){
-                throw new Exception("Sandboxed code attempted to call unnamed type!");
+                throw new Error("Sandboxed code attempted to call unnamed type!");
             }
             $name = $this->normalize_type($name);
             if(count($this->whitelist['types'])){
                 if(!isset($this->whitelist['types'][$name])){
-                    throw new Exception("Sandboxed code attempted to call non-whitelisted type: $original_name");
+                    throw new Error("Sandboxed code attempted to call non-whitelisted type: $original_name");
                 }
             } else if(count($this->blacklist['types'])){
                 if(isset($this->blacklist['types'][$name])){
-                    throw new Exception("Sandboxed code attempted to call blacklisted type: $original_name");
+                    throw new Error("Sandboxed code attempted to call blacklisted type: $original_name");
                 }
             } else {
-                throw new Exception("Sandboxed code attempted to call invalid type: $original_name");
+                throw new Error("Sandboxed code attempted to call invalid type: $original_name");
             }
         }
 
@@ -1977,7 +2435,7 @@
                         $output[] = '$' . $name . " = null";
                     }
                 } else {
-                    throw new Exception("Sandboxed code attempted to pass non-scalar default variable value: $name");
+                    throw new Error("Sandboxed code attempted to pass non-scalar default variable value: $name");
                 }
             }
             return count($output) ? ', ' . implode(', ', $output) : '';
@@ -1999,7 +2457,7 @@
                         $output[] = '\define(' . "'" . $name . "', null);";
                     }
                 } else {
-                    throw new Exception("Sandboxed code attempted to define non-scalar constant value: $name");
+                    throw new Error("Sandboxed code attempted to define non-scalar constant value: $name");
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
@@ -2011,7 +2469,7 @@
                 if(is_string($name) && $name){
                     $output[] = 'namespace ' . $name . ';';
                 } else {
-                    throw new Exception("Sandboxed code attempted to create invalid namespace: $name");
+                    throw new Error("Sandboxed code attempted to create invalid namespace: $name");
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
@@ -2023,7 +2481,7 @@
                 if(is_string($name) && $name){
                     $output[] = 'use ' . $name . ((is_string($alias) && $alias) ? ' as ' . $alias : '') . ';';
                 } else {
-                    throw new Exception("Sandboxed code attempted to use invalid namespace alias: $name");
+                    throw new Error("Sandboxed code attempted to use invalid namespace alias: $name");
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
@@ -2035,11 +2493,11 @@
 
         protected function disassemble($closure){
             if(!class_exists('\FunctionParser\FunctionParser', true) && is_callable($closure)){
-                throw new Exception("Cannot disassemble callable code because the FunctionParser library could not be found!");
+                throw new Error("Cannot disassemble callable code because the FunctionParser library could not be found!");
             }
             if(!is_callable($closure)){
                 if(is_string($closure) && $closure){
-                    return $closure;
+                    return strpos($closure, '<?') === 0 ? $closure : '<?php ' . $closure;
                 }
                 return '';
             }
@@ -2055,7 +2513,7 @@
             try {
                 $statements = $parser->parse($code);
             } catch (\PHPParser_Error $error) {
-                throw new Exception('Error parsing ' . ($appended ? 'appended' : 'prepended') . ' sandboxed code for auto-whitelisting!');
+                throw new Error('Error parsing ' . ($appended ? 'appended' : 'prepended') . ' sandboxed code for auto-whitelisting!');
             }
             $traverser = new \PHPParser_NodeTraverser;
             $whitelister = new WhitelistVisitor($this);
@@ -2125,7 +2583,7 @@
             try {
                 $this->parsed_ast = $parser->parse($this->preparsed_code);
             } catch (\PHPParser_Error $error) {
-                throw new Exception("Error parsing sandboxed code!");
+                throw new Error("Error parsing sandboxed code!");
             }
 
             $traverser = new \PHPParser_NodeTraverser;
@@ -2175,7 +2633,7 @@
                 array_unshift($arguments, $this);
                 return call_user_func_array($this->generated_closure, $arguments);
             } else {
-                throw new Exception("Error generating sandboxed code!");
+                throw new Error("Error generating sandboxed code!");
             }
 		}
 	}

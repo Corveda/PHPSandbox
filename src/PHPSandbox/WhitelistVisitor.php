@@ -28,6 +28,10 @@
             } else if($node instanceof \PHPParser_Node_Stmt_Class && is_string($node->name)){
                 $this->sandbox->whitelist_class($node->name);
                 $this->sandbox->whitelist_type($node->name);
+            } else if($node instanceof \PHPParser_Node_Stmt_Interface && is_string($node->name)){
+                $this->sandbox->whitelist_interface($node->name);
+            } else if($node instanceof \PHPParser_Node_Stmt_Trait && is_string($node->name)){
+                $this->sandbox->whitelist_trait($node->name);
             } else if($node instanceof \PHPParser_Node_Expr_New && $node->class instanceof \PHPParser_Node_Name){
                 $this->sandbox->whitelist_type($node->class->toString());
             } else if($node instanceof \PHPParser_Node_Stmt_Global && $this->sandbox->has_whitelist_vars()){

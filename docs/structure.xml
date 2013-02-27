@@ -1,0 +1,3329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project version="2.0.0a12" title="">
+  <file path="Error.php" hash="7297796e78160bfeba5fcacc9d650da1" package="Default">
+    <class final="false" abstract="false" namespace="PHPSandbox" line="4" package="Default">
+      <extends>\Exception</extends>
+      <name>Error</name>
+      <full_name>\PHPSandbox\Error</full_name>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file Error.php</error>
+      <error line="4" code="50000">No DocBlock was found for \PHPSandbox\Error</error>
+    </parse_markers>
+  </file>
+  <file path="PHPSandbox.php" hash="d44efa167b46793fb365021b6f653ec2" package="Default">
+    <class final="false" abstract="false" namespace="PHPSandbox" line="15" package="Default">
+      <extends/>
+      <name>PHPSandbox</name>
+      <full_name>\PHPSandbox\PHPSandbox</full_name>
+      <docblock line="4">
+        <description>PHPSandbox class for PHP Sandboxes.</description>
+        <long-description>&lt;p&gt;This class encapsulates the entire functionality of a PHPSandbox so that an enduser
+only has to create a PHPSandbox instance, configure its options, and run their code&lt;/p&gt;</long-description>
+        <tag line="4" name="namespace" description="PHPSandbox"/>
+        <tag line="4" name="author" description="Elijah Horton &lt;fieryprophet@yahoo.com&gt;"/>
+        <tag line="4" name="version" description="1.0"/>
+      </docblock>
+      <property final="false" static="true" visibility="protected" line="19" namespace="PHPSandbox" package="Default">
+        <name>$function_prefix</name>
+        <default>'__PHPSandbox_'</default>
+        <docblock line="16">
+          <description></description>
+          <long-description></long-description>
+          <tag line="16" name="var" description="The prefix given to the obfuscated sandbox variable passed to the generated code" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="true" visibility="public" line="23" namespace="PHPSandbox" package="Default">
+        <name>$superglobals</name>
+        <default>array('_GET', '_POST', '_COOKIE', '_FILES', '_ENV', '_REQUEST', '_SERVER', '_SESSION', 'GLOBALS')</default>
+        <docblock line="20">
+          <description></description>
+          <long-description></long-description>
+          <tag line="20" name="var" description="A static array of superglobal names used for redefining superglobal values" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="true" visibility="public" line="37" namespace="PHPSandbox" package="Default">
+        <name>$magic_constants</name>
+        <default>array('__LINE__', '__FILE__', '__DIR__', '__FUNCTION__', '__CLASS__', '__TRAIT__', '__METHOD__', '__NAMESPACE__')</default>
+        <docblock line="34">
+          <description></description>
+          <long-description></long-description>
+          <tag line="34" name="var" description="A static array of magic constant names used for redefining magic constant values" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="true" visibility="public" line="50" namespace="PHPSandbox" package="Default">
+        <name>$defined_funcs</name>
+        <default>array('get_defined_functions', 'get_defined_vars', 'get_defined_constants', 'get_declared_classes', 'get_declared_interfaces', 'get_declared_traits')</default>
+        <docblock line="47">
+          <description></description>
+          <long-description></long-description>
+          <tag line="47" name="var" description="A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="61" namespace="PHPSandbox" package="Default">
+        <name>$name</name>
+        <default>''</default>
+        <docblock line="58">
+          <description></description>
+          <long-description></long-description>
+          <tag line="58" name="var" description="The randomly generated name of the PHPSandbox variable passed to the generated closure" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="63" namespace="PHPSandbox" package="Default">
+        <name>$definitions</name>
+        <default>array('functions' =&gt; array(), 'variables' =&gt; array(), 'globals' =&gt; array(), 'superglobals' =&gt; array(), 'constants' =&gt; array(), 'magic_constants' =&gt; array(), 'namespaces' =&gt; array(), 'aliases' =&gt; array())</default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="74" namespace="PHPSandbox" package="Default">
+        <name>$whitelist</name>
+        <default>array('functions' =&gt; array(), 'variables' =&gt; array(), 'globals' =&gt; array(), 'superglobals' =&gt; array(), 'constants' =&gt; array(), 'magic_constants' =&gt; array(), 'namespaces' =&gt; array(), 'aliases' =&gt; array(), 'classes' =&gt; array(), 'interfaces' =&gt; array(), 'traits' =&gt; array(), 'keywords' =&gt; array(), 'operators' =&gt; array(), 'primitives' =&gt; array(), 'types' =&gt; array())</default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="92" namespace="PHPSandbox" package="Default">
+        <name>$blacklist</name>
+        <default>array('functions' =&gt; array(), 'variables' =&gt; array(), 'globals' =&gt; array(), 'superglobals' =&gt; array(), 'constants' =&gt; array(), 'magic_constants' =&gt; array(), 'namespaces' =&gt; array(), 'aliases' =&gt; array(), 'classes' =&gt; array(), 'interfaces' =&gt; array(), 'traits' =&gt; array(), 'keywords' =&gt; array('include' =&gt; true, 'eval' =&gt; true, 'exit' =&gt; true), 'operators' =&gt; array(), 'primitives' =&gt; array(), 'types' =&gt; array())</default>
+      </property>
+      <property final="false" static="false" visibility="public" line="118" namespace="PHPSandbox" package="Default">
+        <name>$error_level</name>
+        <default>null</default>
+        <docblock line="114">
+          <description></description>
+          <long-description></long-description>
+          <tag line="114" name="var" description="The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="114" name="default" description="null"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="123" namespace="PHPSandbox" package="Default">
+        <name>$auto_whitelist_trusted_code</name>
+        <default>true</default>
+        <docblock line="119">
+          <description></description>
+          <long-description></long-description>
+          <tag line="119" name="var" description="Should PHPSandbox automagically whitelist prepended and appended code?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="119" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="128" namespace="PHPSandbox" package="Default">
+        <name>$auto_whitelist_functions</name>
+        <default>true</default>
+        <docblock line="124">
+          <description></description>
+          <long-description></long-description>
+          <tag line="124" name="var" description="Should PHPSandbox automagically whitelist functions created in sandboxed code if $allow_functions is true?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="124" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="133" namespace="PHPSandbox" package="Default">
+        <name>$auto_whitelist_constants</name>
+        <default>true</default>
+        <docblock line="129">
+          <description></description>
+          <long-description></long-description>
+          <tag line="129" name="var" description="Should PHPSandbox automagically whitelist constants created in sandboxed code if $allow_constants is true?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="129" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="138" namespace="PHPSandbox" package="Default">
+        <name>$auto_whitelist_globals</name>
+        <default>true</default>
+        <docblock line="134">
+          <description></description>
+          <long-description></long-description>
+          <tag line="134" name="var" description="Should PHPSandbox automagically whitelist global variables created in sandboxed code if $allow_globals is true? (Used to whitelist them in the variables list)" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="134" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="143" namespace="PHPSandbox" package="Default">
+        <name>$auto_whitelist_classes</name>
+        <default>true</default>
+        <docblock line="139">
+          <description></description>
+          <long-description></long-description>
+          <tag line="139" name="var" description="Should PHPSandbox automagically whitelist classes created in sandboxed code if $allow_classes is true?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="139" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="148" namespace="PHPSandbox" package="Default">
+        <name>$auto_whitelist_interfaces</name>
+        <default>true</default>
+        <docblock line="144">
+          <description></description>
+          <long-description></long-description>
+          <tag line="144" name="var" description="Should PHPSandbox automagically whitelist interfaces created in sandboxed code if $allow_interfaces is true?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="144" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="153" namespace="PHPSandbox" package="Default">
+        <name>$auto_whitelist_traits</name>
+        <default>true</default>
+        <docblock line="149">
+          <description></description>
+          <long-description></long-description>
+          <tag line="149" name="var" description="Should PHPSandbox automagically whitelist traits created in sandboxed code if $allow_traits is true?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="149" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="158" namespace="PHPSandbox" package="Default">
+        <name>$auto_define_vars</name>
+        <default>true</default>
+        <docblock line="154">
+          <description></description>
+          <long-description></long-description>
+          <tag line="154" name="var" description="Should PHPSandbox automagically define variables passed to prepended, appended and prepared code closures?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="154" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="163" namespace="PHPSandbox" package="Default">
+        <name>$overwrite_defined_funcs</name>
+        <default>true</default>
+        <docblock line="159">
+          <description></description>
+          <long-description></long-description>
+          <tag line="159" name="var" description="Should PHPSandbox overwrite get_defined_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="159" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="168" namespace="PHPSandbox" package="Default">
+        <name>$overwrite_superglobals</name>
+        <default>true</default>
+        <docblock line="164">
+          <description></description>
+          <long-description></long-description>
+          <tag line="164" name="var" description="Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays." type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="164" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="173" namespace="PHPSandbox" package="Default">
+        <name>$allow_functions</name>
+        <default>false</default>
+        <docblock line="169">
+          <description></description>
+          <long-description></long-description>
+          <tag line="169" name="var" description="Should PHPSandbox allow sandboxed code to declare functions?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="169" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="178" namespace="PHPSandbox" package="Default">
+        <name>$allow_closures</name>
+        <default>false</default>
+        <docblock line="174">
+          <description></description>
+          <long-description></long-description>
+          <tag line="174" name="var" description="Should PHPSandbox allow sandboxed code to declare closures?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="174" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="183" namespace="PHPSandbox" package="Default">
+        <name>$allow_variables</name>
+        <default>true</default>
+        <docblock line="179">
+          <description></description>
+          <long-description></long-description>
+          <tag line="179" name="var" description="Should PHPSandbox allow sandboxed code to create variables?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="179" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="188" namespace="PHPSandbox" package="Default">
+        <name>$allow_static_variables</name>
+        <default>true</default>
+        <docblock line="184">
+          <description></description>
+          <long-description></long-description>
+          <tag line="184" name="var" description="Should PHPSandbox allow sandboxed code to create static variables?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="184" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="193" namespace="PHPSandbox" package="Default">
+        <name>$allow_objects</name>
+        <default>true</default>
+        <docblock line="189">
+          <description></description>
+          <long-description></long-description>
+          <tag line="189" name="var" description="Should PHPSandbox allow sandboxed code to create objects of allow classes (e.g. new keyword)?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="189" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="198" namespace="PHPSandbox" package="Default">
+        <name>$allow_constants</name>
+        <default>false</default>
+        <docblock line="194">
+          <description></description>
+          <long-description></long-description>
+          <tag line="194" name="var" description="Should PHPSandbox allow sandboxed code to define constants?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="194" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="203" namespace="PHPSandbox" package="Default">
+        <name>$allow_globals</name>
+        <default>false</default>
+        <docblock line="199">
+          <description></description>
+          <long-description></long-description>
+          <tag line="199" name="var" description="Should PHPSandbox allow sandboxed code to use global keyword to access variables in the global scope?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="199" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="208" namespace="PHPSandbox" package="Default">
+        <name>$allow_namespaces</name>
+        <default>false</default>
+        <docblock line="204">
+          <description></description>
+          <long-description></long-description>
+          <tag line="204" name="var" description="Should PHPSandbox allow sandboxed code to declare namespaces (utilizing the define_namespace function?)" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="204" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="213" namespace="PHPSandbox" package="Default">
+        <name>$allow_aliases</name>
+        <default>false</default>
+        <docblock line="209">
+          <description></description>
+          <long-description></long-description>
+          <tag line="209" name="var" description="Should PHPSandbox allow sandboxed code to use namespaces and declare namespace aliases (utilizing the define_alias function?)" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="209" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="218" namespace="PHPSandbox" package="Default">
+        <name>$allow_classes</name>
+        <default>false</default>
+        <docblock line="214">
+          <description></description>
+          <long-description></long-description>
+          <tag line="214" name="var" description="Should PHPSandbox allow sandboxed code to declare classes?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="214" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="223" namespace="PHPSandbox" package="Default">
+        <name>$allow_interfaces</name>
+        <default>false</default>
+        <docblock line="219">
+          <description></description>
+          <long-description></long-description>
+          <tag line="219" name="var" description="Should PHPSandbox allow sandboxed code to declare interfaces?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="219" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="228" namespace="PHPSandbox" package="Default">
+        <name>$allow_traits</name>
+        <default>false</default>
+        <docblock line="224">
+          <description></description>
+          <long-description></long-description>
+          <tag line="224" name="var" description="Should PHPSandbox allow sandboxed code to declare traits?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="224" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="233" namespace="PHPSandbox" package="Default">
+        <name>$allow_escaping</name>
+        <default>false</default>
+        <docblock line="229">
+          <description></description>
+          <long-description></long-description>
+          <tag line="229" name="var" description="Should PHPSandbox allow sandboxed code to escape to HTML?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="229" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="238" namespace="PHPSandbox" package="Default">
+        <name>$allow_casting</name>
+        <default>false</default>
+        <docblock line="234">
+          <description></description>
+          <long-description></long-description>
+          <tag line="234" name="var" description="Should PHPSandbox allow sandboxed code to cast types? (This will still be subject to allowed classes)" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="234" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="243" namespace="PHPSandbox" package="Default">
+        <name>$allow_error_suppressing</name>
+        <default>false</default>
+        <docblock line="239">
+          <description></description>
+          <long-description></long-description>
+          <tag line="239" name="var" description="Should PHPSandbox allow sandboxed code to suppress errors (e.g. the @ operator?)" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="239" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="248" namespace="PHPSandbox" package="Default">
+        <name>$allow_references</name>
+        <default>true</default>
+        <docblock line="244">
+          <description></description>
+          <long-description></long-description>
+          <tag line="244" name="var" description="Should PHPSandbox allow sandboxed code to assign references?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="244" name="default" description="true"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="253" namespace="PHPSandbox" package="Default">
+        <name>$allow_backticks</name>
+        <default>false</default>
+        <docblock line="249">
+          <description></description>
+          <long-description></long-description>
+          <tag line="249" name="var" description="Should PHPSandbox allow sandboxed code to use backtick execution? (e.g. $var = \`ping google.com\`; This will also be disabled if shell_exec is not whitelisted or if it is blacklisted, and will be converted to a defined shell_exec function call if one is defined)" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="249" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="258" namespace="PHPSandbox" package="Default">
+        <name>$allow_halting</name>
+        <default>false</default>
+        <docblock line="254">
+          <description></description>
+          <long-description></long-description>
+          <tag line="254" name="var" description="Should PHPSandbox allow sandboxed code to halt the PHP compiler?" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="254" name="default" description="false"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="263" namespace="PHPSandbox" package="Default">
+        <name>$prepended_code</name>
+        <default>''</default>
+        <docblock line="260">
+          <description></description>
+          <long-description></long-description>
+          <tag line="260" name="var" description="String of prepended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="267" namespace="PHPSandbox" package="Default">
+        <name>$appended_code</name>
+        <default>''</default>
+        <docblock line="264">
+          <description></description>
+          <long-description></long-description>
+          <tag line="264" name="var" description="String of appended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="272" namespace="PHPSandbox" package="Default">
+        <name>$preparsed_code</name>
+        <default>''</default>
+        <docblock line="269">
+          <description></description>
+          <long-description></long-description>
+          <tag line="269" name="var" description="String of preparsed code, for debugging and serialization purposes" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="276" namespace="PHPSandbox" package="Default">
+        <name>$parsed_ast</name>
+        <default>array()</default>
+        <docblock line="273">
+          <description></description>
+          <long-description></long-description>
+          <tag line="273" name="var" description="Array of parsed code broken down into AST tokens, for debugging and serialization purposes" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="280" namespace="PHPSandbox" package="Default">
+        <name>$prepared_code</name>
+        <default>''</default>
+        <docblock line="277">
+          <description></description>
+          <long-description></long-description>
+          <tag line="277" name="var" description="String of prepared code, for debugging and serialization purposes" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="284" namespace="PHPSandbox" package="Default">
+        <name>$prepared_ast</name>
+        <default>array()</default>
+        <docblock line="281">
+          <description></description>
+          <long-description></long-description>
+          <tag line="281" name="var" description="Array of prepared code broken down into AST tokens, for debugging and serialization purposes" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="288" namespace="PHPSandbox" package="Default">
+        <name>$generated_code</name>
+        <default>''</default>
+        <docblock line="285">
+          <description></description>
+          <long-description></long-description>
+          <tag line="285" name="var" description="String of generated code, for debugging and serialization purposes" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="292" namespace="PHPSandbox" package="Default">
+        <name>$generated_closure</name>
+        <default>null</default>
+        <docblock line="289">
+          <description></description>
+          <long-description></long-description>
+          <tag line="289" name="var" description="Closure generated by PHPSandbox execution, stored for future executions without the need to reparse and validate the code" type="\Closure|null">
+            <type by_reference="false">\Closure</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="307" package="Default">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <docblock line="293">
+          <description>PHPSandbox class constructor</description>
+          <long-description>&lt;p&gt;You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor&lt;/p&gt;</long-description>
+          <tag line="293" name="param" description="Optional array of functions to define for the sandbox" type="array" variable="$functions">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="293" name="param" description="Optional array of variables to define for the sandbox" type="array" variable="$variables">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="293" name="param" description="Optional array of constants to define for the sandbox" type="array" variable="$constants">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="293" name="param" description="Optional array of namespaces to define for the sandbox" type="array" variable="$namespaces">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="293" name="param" description="Optional array of aliases to define for the sandbox" type="array" variable="$aliases">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="293" name="param" description="Optional array of globals to define for the sandbox" type="array" variable="$globals">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="293" name="param" description="Optional array of superglobals to define for the sandbox" type="array" variable="$superglobals">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="293" name="param" description="Optional array of magic constants to define for the sandbox" type="array" variable="$magic_constants">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="293" name="return" description="" type="null">
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="307">
+          <name>$functions</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="308">
+          <name>$variables</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="309">
+          <name>$constants</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="310">
+          <name>$namespaces</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="311">
+          <name>$aliases</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="312">
+          <name>$globals</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="313">
+          <name>$superglobals</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="314">
+          <name>$magic_constants</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="PHPSandbox" line="340" package="Default">
+        <name>create</name>
+        <full_name>create</full_name>
+        <docblock line="325">
+          <description>PHPSandbox static factory method</description>
+          <long-description>&lt;p&gt;You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor&lt;/p&gt;</long-description>
+          <tag line="325" name="param" description="Optional array of functions to define for the sandbox" type="array" variable="$functions">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="325" name="param" description="Optional array of variables to define for the sandbox" type="array" variable="$variables">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="325" name="param" description="Optional array of constants to define for the sandbox" type="array" variable="$constants">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="325" name="param" description="Optional array of namespaces to define for the sandbox" type="array" variable="$namespaces">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="325" name="param" description="Optional array of aliases to define for the sandbox" type="array" variable="$aliases">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="325" name="param" description="Optional array of globals to define for the sandbox" type="array" variable="$globals">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="325" name="param" description="Optional array of superglobals to define for the sandbox" type="array" variable="$superglobals">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="325" name="param" description="Optional array of magic constants to define for the sandbox" type="array" variable="$magic_constants">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="325" name="return" description="The returned PHPSandbox variable" type="\PHPSandbox\PHPSandbox">
+            <type by_reference="false">\PHPSandbox\PHPSandbox</type>
+          </tag>
+        </docblock>
+        <argument line="340">
+          <name>$functions</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="341">
+          <name>$variables</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="342">
+          <name>$constants</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="343">
+          <name>$namespaces</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="344">
+          <name>$aliases</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="345">
+          <name>$globals</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="346">
+          <name>$superglobals</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="347">
+          <name>$magic_constants</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="358" package="Default">
+        <name>__invoke</name>
+        <full_name>__invoke</full_name>
+        <docblock line="350">
+          <description>PHPSandbox invoke magic method</description>
+          <long-description>&lt;p&gt;Besides the code or closure to be executed, you can also pass additional arguments that will overwrite the default values of their respective arguments defined in the code&lt;/p&gt;</long-description>
+          <tag line="350" name="param" description="The closure, callable or string of code to execute" type="\Closure|callable|string" variable="$code">
+            <type by_reference="false">\Closure</type>
+            <type by_reference="false">callable</type>
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="350" name="return" description="The output of the executed sandboxed code" type="mixed">
+            <type by_reference="false">mixed</type>
+          </tag>
+        </docblock>
+        <argument line="358">
+          <name>$code</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="364" package="Default">
+        <name>get_name</name>
+        <full_name>get_name</full_name>
+        <docblock line="361">
+          <description>Get name of PHPSandbox variable</description>
+          <long-description></long-description>
+          <tag line="361" name="return" description="The name of the PHPSandbox variable" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="376" package="Default">
+        <name>set_option</name>
+        <full_name>set_option</full_name>
+        <docblock line="367">
+          <description>Set PHPSandbox option</description>
+          <long-description>&lt;p&gt;You can pass an $option name to set to $value, an array of $option names to set to $value, or an associative array of $option names and their values to set.&lt;/p&gt;</long-description>
+          <tag line="367" name="param" description="String or array of strings or associative array of keys of option names to set $value to" type="string|array" variable="$option">
+            <type by_reference="false">string</type>
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="367" name="param" description="Boolean, integer or null $value to set $option to (optional)" type="bool|int|null" variable="$value">
+            <type by_reference="false">bool</type>
+            <type by_reference="false">int</type>
+            <type by_reference="false">null</type>
+          </tag>
+          <tag line="367" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+            <type by_reference="false">$this</type>
+          </tag>
+        </docblock>
+        <argument line="376">
+          <name>$option</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="376">
+          <name>$value</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="481" package="Default">
+        <name>set_options</name>
+        <full_name>set_options</full_name>
+        <docblock line="472">
+          <description>Set PHPSandbox options by array</description>
+          <long-description>&lt;p&gt;You can an array of option names to set to $value, or an associative array of option names and their values to set.&lt;/p&gt;</long-description>
+          <tag line="472" name="param" description="Array of strings or associative array of keys of option names to set $value to" type="array" variable="$options">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="472" name="param" description="Boolean, integer or null $value to set $option to (optional)" type="bool|int|null" variable="$value">
+            <type by_reference="false">bool</type>
+            <type by_reference="false">int</type>
+            <type by_reference="false">null</type>
+          </tag>
+          <tag line="472" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+            <type by_reference="false">$this</type>
+          </tag>
+        </docblock>
+        <argument line="481">
+          <name>$options</name>
+          <default>array()</default>
+          <type/>
+        </argument>
+        <argument line="481">
+          <name>$value</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="495" package="Default">
+        <name>get_option</name>
+        <full_name>get_option</full_name>
+        <docblock line="487">
+          <description>Get PHPSandbox option</description>
+          <long-description>&lt;p&gt;You pass a string $option name to get its associated value&lt;/p&gt;</long-description>
+          <tag line="487" name="param" description="String of $option name to get" type="string" variable="$option">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="487" name="return" description="Returns the value of the requested option" type="boolean|int|null">
+            <type by_reference="false">boolean</type>
+            <type by_reference="false">int</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="495">
+          <name>$option</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="591" package="Default">
+        <name>get_prepended_code</name>
+        <full_name>get_prepended_code</full_name>
+        <docblock line="588">
+          <description>Get PHPSandbox prepended code</description>
+          <long-description></long-description>
+          <tag line="588" name="return" description="Returns a string of the prepended code" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="597" package="Default">
+        <name>get_appended_code</name>
+        <full_name>get_appended_code</full_name>
+        <docblock line="594">
+          <description>Get PHPSandbox appended code</description>
+          <long-description></long-description>
+          <tag line="594" name="return" description="Returns a string of the appended code" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="601" package="Default">
+        <name>get_preparsed_code</name>
+        <full_name>get_preparsed_code</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="605" package="Default">
+        <name>get_parsed_ast</name>
+        <full_name>get_parsed_ast</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="609" package="Default">
+        <name>get_prepared_code</name>
+        <full_name>get_prepared_code</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="613" package="Default">
+        <name>get_prepared_ast</name>
+        <full_name>get_prepared_ast</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="617" package="Default">
+        <name>get_generated_code</name>
+        <full_name>get_generated_code</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="621" package="Default">
+        <name>get_generated_closure</name>
+        <full_name>get_generated_closure</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="625" package="Default">
+        <name>get_closure</name>
+        <full_name>get_closure</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="629" package="Default">
+        <name>_get_defined_functions</name>
+        <full_name>_get_defined_functions</full_name>
+        <argument line="629">
+          <name>$functions</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="657" package="Default">
+        <name>_get_defined_vars</name>
+        <full_name>_get_defined_vars</full_name>
+        <argument line="657">
+          <name>$variables</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="664" package="Default">
+        <name>_get_superglobal</name>
+        <full_name>_get_superglobal</full_name>
+        <argument line="664">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="699" package="Default">
+        <name>_get_magic_const</name>
+        <full_name>_get_magic_const</full_name>
+        <argument line="699">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="707" package="Default">
+        <name>_get_defined_constants</name>
+        <full_name>_get_defined_constants</full_name>
+        <argument line="707">
+          <name>$constants</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="733" package="Default">
+        <name>_get_declared_classes</name>
+        <full_name>_get_declared_classes</full_name>
+        <argument line="733">
+          <name>$classes</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="754" package="Default">
+        <name>_get_declared_interfaces</name>
+        <full_name>_get_declared_interfaces</full_name>
+        <argument line="754">
+          <name>$interfaces</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="775" package="Default">
+        <name>_get_declared_traits</name>
+        <full_name>_get_declared_traits</full_name>
+        <argument line="775">
+          <name>$traits</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="796" package="Default">
+        <name>call_func</name>
+        <full_name>call_func</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="811" package="Default">
+        <name>define</name>
+        <full_name>define</full_name>
+        <argument line="811">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="811">
+          <name>$name</name>
+          <default>null</default>
+          <type/>
+        </argument>
+        <argument line="811">
+          <name>$value</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="851" package="Default">
+        <name>undefine</name>
+        <full_name>undefine</full_name>
+        <argument line="851">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="851">
+          <name>$name</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="891" package="Default">
+        <name>define_func</name>
+        <full_name>define_func</full_name>
+        <argument line="891">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="891">
+          <name>$function</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="907" package="Default">
+        <name>define_funcs</name>
+        <full_name>define_funcs</full_name>
+        <argument line="907">
+          <name>$functions</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="914" package="Default">
+        <name>has_defined_funcs</name>
+        <full_name>has_defined_funcs</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="918" package="Default">
+        <name>is_defined_func</name>
+        <full_name>is_defined_func</full_name>
+        <argument line="918">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="923" package="Default">
+        <name>undefine_func</name>
+        <full_name>undefine_func</full_name>
+        <argument line="923">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="931" package="Default">
+        <name>undefine_funcs</name>
+        <full_name>undefine_funcs</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="936" package="Default">
+        <name>define_var</name>
+        <full_name>define_var</full_name>
+        <argument line="936">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="936">
+          <name>$value</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="947" package="Default">
+        <name>define_vars</name>
+        <full_name>define_vars</full_name>
+        <argument line="947">
+          <name>$variables</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="954" package="Default">
+        <name>has_defined_vars</name>
+        <full_name>has_defined_vars</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="958" package="Default">
+        <name>is_defined_var</name>
+        <full_name>is_defined_var</full_name>
+        <argument line="958">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="962" package="Default">
+        <name>undefine_var</name>
+        <full_name>undefine_var</full_name>
+        <argument line="962">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="969" package="Default">
+        <name>undefine_vars</name>
+        <full_name>undefine_vars</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="974" package="Default">
+        <name>define_global</name>
+        <full_name>define_global</full_name>
+        <argument line="974">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="974">
+          <name>$value</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="985" package="Default">
+        <name>define_globals</name>
+        <full_name>define_globals</full_name>
+        <argument line="985">
+          <name>$globals</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="992" package="Default">
+        <name>has_defined_globals</name>
+        <full_name>has_defined_globals</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="996" package="Default">
+        <name>is_defined_global</name>
+        <full_name>is_defined_global</full_name>
+        <argument line="996">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1000" package="Default">
+        <name>undefine_global</name>
+        <full_name>undefine_global</full_name>
+        <argument line="1000">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1007" package="Default">
+        <name>undefine_globals</name>
+        <full_name>undefine_globals</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1012" package="Default">
+        <name>define_superglobal</name>
+        <full_name>define_superglobal</full_name>
+        <argument line="1012">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1012">
+          <name>$value</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1030" package="Default">
+        <name>define_superglobals</name>
+        <full_name>define_superglobals</full_name>
+        <argument line="1030">
+          <name>$superglobals</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1037" package="Default">
+        <name>has_defined_superglobals</name>
+        <full_name>has_defined_superglobals</full_name>
+        <argument line="1037">
+          <name>$name</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1042" package="Default">
+        <name>is_defined_superglobal</name>
+        <full_name>is_defined_superglobal</full_name>
+        <argument line="1042">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1042">
+          <name>$key</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1047" package="Default">
+        <name>undefine_superglobal</name>
+        <full_name>undefine_superglobal</full_name>
+        <argument line="1047">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1047">
+          <name>$key</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1059" package="Default">
+        <name>undefine_superglobals</name>
+        <full_name>undefine_superglobals</full_name>
+        <argument line="1059">
+          <name>$name</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1069" package="Default">
+        <name>define_const</name>
+        <full_name>define_const</full_name>
+        <argument line="1069">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1069">
+          <name>$value</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1080" package="Default">
+        <name>define_consts</name>
+        <full_name>define_consts</full_name>
+        <argument line="1080">
+          <name>$constants</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1087" package="Default">
+        <name>has_defined_consts</name>
+        <full_name>has_defined_consts</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1091" package="Default">
+        <name>is_defined_const</name>
+        <full_name>is_defined_const</full_name>
+        <argument line="1091">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1095" package="Default">
+        <name>undefine_const</name>
+        <full_name>undefine_const</full_name>
+        <argument line="1095">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1102" package="Default">
+        <name>undefine_consts</name>
+        <full_name>undefine_consts</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1107" package="Default">
+        <name>define_magic_const</name>
+        <full_name>define_magic_const</full_name>
+        <argument line="1107">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1107">
+          <name>$value</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1119" package="Default">
+        <name>define_magic_consts</name>
+        <full_name>define_magic_consts</full_name>
+        <argument line="1119">
+          <name>$magic_constants</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1126" package="Default">
+        <name>has_defined_magic_consts</name>
+        <full_name>has_defined_magic_consts</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1130" package="Default">
+        <name>is_defined_magic_const</name>
+        <full_name>is_defined_magic_const</full_name>
+        <argument line="1130">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1135" package="Default">
+        <name>undefine_magic_const</name>
+        <full_name>undefine_magic_const</full_name>
+        <argument line="1135">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1143" package="Default">
+        <name>undefine_magic_consts</name>
+        <full_name>undefine_magic_consts</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1148" package="Default">
+        <name>define_namespace</name>
+        <full_name>define_namespace</full_name>
+        <argument line="1148">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1159" package="Default">
+        <name>define_namespaces</name>
+        <full_name>define_namespaces</full_name>
+        <argument line="1159">
+          <name>$namespaces</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1166" package="Default">
+        <name>has_defined_namespaces</name>
+        <full_name>has_defined_namespaces</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1170" package="Default">
+        <name>is_defined_namespace</name>
+        <full_name>is_defined_namespace</full_name>
+        <argument line="1170">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1174" package="Default">
+        <name>undefine_namespace</name>
+        <full_name>undefine_namespace</full_name>
+        <argument line="1174">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1181" package="Default">
+        <name>undefine_namespaces</name>
+        <full_name>undefine_namespaces</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1186" package="Default">
+        <name>define_alias</name>
+        <full_name>define_alias</full_name>
+        <argument line="1186">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1186">
+          <name>$alias</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1197" package="Default">
+        <name>define_aliases</name>
+        <full_name>define_aliases</full_name>
+        <argument line="1197">
+          <name>$aliases</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1204" package="Default">
+        <name>has_defined_aliases</name>
+        <full_name>has_defined_aliases</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1208" package="Default">
+        <name>is_defined_alias</name>
+        <full_name>is_defined_alias</full_name>
+        <argument line="1208">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1212" package="Default">
+        <name>undefine_alias</name>
+        <full_name>undefine_alias</full_name>
+        <argument line="1212">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1219" package="Default">
+        <name>undefine_aliases</name>
+        <full_name>undefine_aliases</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1224" package="Default">
+        <name>define_use</name>
+        <full_name>define_use</full_name>
+        <argument line="1224">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1224">
+          <name>$alias</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1228" package="Default">
+        <name>define_uses</name>
+        <full_name>define_uses</full_name>
+        <argument line="1228">
+          <name>$uses</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1232" package="Default">
+        <name>has_defined_uses</name>
+        <full_name>has_defined_uses</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1236" package="Default">
+        <name>is_defined_use</name>
+        <full_name>is_defined_use</full_name>
+        <argument line="1236">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1240" package="Default">
+        <name>undefine_use</name>
+        <full_name>undefine_use</full_name>
+        <argument line="1240">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1244" package="Default">
+        <name>undefine_uses</name>
+        <full_name>undefine_uses</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1248" package="Default">
+        <name>normalize_func</name>
+        <full_name>normalize_func</full_name>
+        <argument line="1248">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1252" package="Default">
+        <name>normalize_superglobal</name>
+        <full_name>normalize_superglobal</full_name>
+        <argument line="1252">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1256" package="Default">
+        <name>normalize_magic_const</name>
+        <full_name>normalize_magic_const</full_name>
+        <argument line="1256">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1260" package="Default">
+        <name>normalize_namespace</name>
+        <full_name>normalize_namespace</full_name>
+        <argument line="1260">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1264" package="Default">
+        <name>normalize_alias</name>
+        <full_name>normalize_alias</full_name>
+        <argument line="1264">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1268" package="Default">
+        <name>normalize_use</name>
+        <full_name>normalize_use</full_name>
+        <argument line="1268">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1272" package="Default">
+        <name>normalize_class</name>
+        <full_name>normalize_class</full_name>
+        <argument line="1272">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1276" package="Default">
+        <name>normalize_interface</name>
+        <full_name>normalize_interface</full_name>
+        <argument line="1276">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1280" package="Default">
+        <name>normalize_trait</name>
+        <full_name>normalize_trait</full_name>
+        <argument line="1280">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1284" package="Default">
+        <name>normalize_keyword</name>
+        <full_name>normalize_keyword</full_name>
+        <argument line="1284">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1315" package="Default">
+        <name>normalize_primitive</name>
+        <full_name>normalize_primitive</full_name>
+        <argument line="1315">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="1329" package="Default">
+        <name>normalize_type</name>
+        <full_name>normalize_type</full_name>
+        <argument line="1329">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1333" package="Default">
+        <name>whitelist</name>
+        <full_name>whitelist</full_name>
+        <argument line="1333">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1333">
+          <name>$name</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1358" package="Default">
+        <name>blacklist</name>
+        <full_name>blacklist</full_name>
+        <argument line="1358">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1358">
+          <name>$name</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1383" package="Default">
+        <name>dewhitelist</name>
+        <full_name>dewhitelist</full_name>
+        <argument line="1383">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1383">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1402" package="Default">
+        <name>deblacklist</name>
+        <full_name>deblacklist</full_name>
+        <argument line="1402">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1402">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1421" package="Default">
+        <name>has_whitelist</name>
+        <full_name>has_whitelist</full_name>
+        <argument line="1421">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1425" package="Default">
+        <name>has_blacklist</name>
+        <full_name>has_blacklist</full_name>
+        <argument line="1425">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1429" package="Default">
+        <name>is_whitelisted</name>
+        <full_name>is_whitelisted</full_name>
+        <argument line="1429">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1429">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1433" package="Default">
+        <name>is_blacklisted</name>
+        <full_name>is_blacklisted</full_name>
+        <argument line="1433">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1433">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1437" package="Default">
+        <name>has_whitelist_funcs</name>
+        <full_name>has_whitelist_funcs</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1441" package="Default">
+        <name>has_blacklist_funcs</name>
+        <full_name>has_blacklist_funcs</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1445" package="Default">
+        <name>is_whitelisted_func</name>
+        <full_name>is_whitelisted_func</full_name>
+        <argument line="1445">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1450" package="Default">
+        <name>is_blacklisted_func</name>
+        <full_name>is_blacklisted_func</full_name>
+        <argument line="1450">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1455" package="Default">
+        <name>has_whitelist_vars</name>
+        <full_name>has_whitelist_vars</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1459" package="Default">
+        <name>has_blacklist_vars</name>
+        <full_name>has_blacklist_vars</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1463" package="Default">
+        <name>is_whitelisted_var</name>
+        <full_name>is_whitelisted_var</full_name>
+        <argument line="1463">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1467" package="Default">
+        <name>is_blacklisted_var</name>
+        <full_name>is_blacklisted_var</full_name>
+        <argument line="1467">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1471" package="Default">
+        <name>has_whitelist_globals</name>
+        <full_name>has_whitelist_globals</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1475" package="Default">
+        <name>has_blacklist_globals</name>
+        <full_name>has_blacklist_globals</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1479" package="Default">
+        <name>is_whitelisted_global</name>
+        <full_name>is_whitelisted_global</full_name>
+        <argument line="1479">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1483" package="Default">
+        <name>is_blacklisted_global</name>
+        <full_name>is_blacklisted_global</full_name>
+        <argument line="1483">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1487" package="Default">
+        <name>has_whitelist_superglobals</name>
+        <full_name>has_whitelist_superglobals</full_name>
+        <argument line="1487">
+          <name>$name</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1492" package="Default">
+        <name>has_blacklist_superglobals</name>
+        <full_name>has_blacklist_superglobals</full_name>
+        <argument line="1492">
+          <name>$name</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1497" package="Default">
+        <name>is_whitelisted_superglobal</name>
+        <full_name>is_whitelisted_superglobal</full_name>
+        <argument line="1497">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1497">
+          <name>$key</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1502" package="Default">
+        <name>is_blacklisted_superglobal</name>
+        <full_name>is_blacklisted_superglobal</full_name>
+        <argument line="1502">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1502">
+          <name>$key</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1507" package="Default">
+        <name>has_whitelist_consts</name>
+        <full_name>has_whitelist_consts</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1511" package="Default">
+        <name>has_blacklist_consts</name>
+        <full_name>has_blacklist_consts</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1515" package="Default">
+        <name>is_whitelisted_const</name>
+        <full_name>is_whitelisted_const</full_name>
+        <argument line="1515">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1519" package="Default">
+        <name>is_blacklisted_const</name>
+        <full_name>is_blacklisted_const</full_name>
+        <argument line="1519">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1523" package="Default">
+        <name>has_whitelist_magic_consts</name>
+        <full_name>has_whitelist_magic_consts</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1527" package="Default">
+        <name>has_blacklist_magic_consts</name>
+        <full_name>has_blacklist_magic_consts</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1531" package="Default">
+        <name>is_whitelisted_magic_const</name>
+        <full_name>is_whitelisted_magic_const</full_name>
+        <argument line="1531">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1536" package="Default">
+        <name>is_blacklisted_magic_const</name>
+        <full_name>is_blacklisted_magic_const</full_name>
+        <argument line="1536">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1541" package="Default">
+        <name>has_whitelist_namespaces</name>
+        <full_name>has_whitelist_namespaces</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1545" package="Default">
+        <name>has_blacklist_namespaces</name>
+        <full_name>has_blacklist_namespaces</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1549" package="Default">
+        <name>is_whitelisted_namespace</name>
+        <full_name>is_whitelisted_namespace</full_name>
+        <argument line="1549">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1554" package="Default">
+        <name>is_blacklisted_namespace</name>
+        <full_name>is_blacklisted_namespace</full_name>
+        <argument line="1554">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1559" package="Default">
+        <name>has_whitelist_aliases</name>
+        <full_name>has_whitelist_aliases</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1563" package="Default">
+        <name>has_blacklist_aliases</name>
+        <full_name>has_blacklist_aliases</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1567" package="Default">
+        <name>is_whitelisted_alias</name>
+        <full_name>is_whitelisted_alias</full_name>
+        <argument line="1567">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1572" package="Default">
+        <name>is_blacklisted_alias</name>
+        <full_name>is_blacklisted_alias</full_name>
+        <argument line="1572">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1577" package="Default">
+        <name>has_whitelist_uses</name>
+        <full_name>has_whitelist_uses</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1581" package="Default">
+        <name>has_blacklist_uses</name>
+        <full_name>has_blacklist_uses</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1585" package="Default">
+        <name>is_whitelisted_use</name>
+        <full_name>is_whitelisted_use</full_name>
+        <argument line="1585">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1589" package="Default">
+        <name>is_blacklisted_use</name>
+        <full_name>is_blacklisted_use</full_name>
+        <argument line="1589">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1593" package="Default">
+        <name>has_whitelist_classes</name>
+        <full_name>has_whitelist_classes</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1597" package="Default">
+        <name>has_blacklist_classes</name>
+        <full_name>has_blacklist_classes</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1601" package="Default">
+        <name>is_whitelisted_class</name>
+        <full_name>is_whitelisted_class</full_name>
+        <argument line="1601">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1606" package="Default">
+        <name>is_blacklisted_class</name>
+        <full_name>is_blacklisted_class</full_name>
+        <argument line="1606">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1611" package="Default">
+        <name>has_whitelist_interfaces</name>
+        <full_name>has_whitelist_interfaces</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1615" package="Default">
+        <name>has_blacklist_interfaces</name>
+        <full_name>has_blacklist_interfaces</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1619" package="Default">
+        <name>is_whitelisted_interface</name>
+        <full_name>is_whitelisted_interface</full_name>
+        <argument line="1619">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1624" package="Default">
+        <name>is_blacklisted_interface</name>
+        <full_name>is_blacklisted_interface</full_name>
+        <argument line="1624">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1629" package="Default">
+        <name>has_whitelist_traits</name>
+        <full_name>has_whitelist_traits</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1633" package="Default">
+        <name>has_blacklist_traits</name>
+        <full_name>has_blacklist_traits</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1637" package="Default">
+        <name>is_whitelisted_trait</name>
+        <full_name>is_whitelisted_trait</full_name>
+        <argument line="1637">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1642" package="Default">
+        <name>is_blacklisted_trait</name>
+        <full_name>is_blacklisted_trait</full_name>
+        <argument line="1642">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1647" package="Default">
+        <name>has_whitelist_keywords</name>
+        <full_name>has_whitelist_keywords</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1651" package="Default">
+        <name>has_blacklist_keywords</name>
+        <full_name>has_blacklist_keywords</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1655" package="Default">
+        <name>is_whitelisted_keyword</name>
+        <full_name>is_whitelisted_keyword</full_name>
+        <argument line="1655">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1660" package="Default">
+        <name>is_blacklisted_keyword</name>
+        <full_name>is_blacklisted_keyword</full_name>
+        <argument line="1660">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1665" package="Default">
+        <name>has_whitelist_operators</name>
+        <full_name>has_whitelist_operators</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1669" package="Default">
+        <name>has_blacklist_operators</name>
+        <full_name>has_blacklist_operators</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1673" package="Default">
+        <name>is_whitelisted_operator</name>
+        <full_name>is_whitelisted_operator</full_name>
+        <argument line="1673">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1677" package="Default">
+        <name>is_blacklisted_operator</name>
+        <full_name>is_blacklisted_operator</full_name>
+        <argument line="1677">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1681" package="Default">
+        <name>has_whitelist_primitives</name>
+        <full_name>has_whitelist_primitives</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1685" package="Default">
+        <name>has_blacklist_primitives</name>
+        <full_name>has_blacklist_primitives</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1689" package="Default">
+        <name>is_whitelisted_primitive</name>
+        <full_name>is_whitelisted_primitive</full_name>
+        <argument line="1689">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1694" package="Default">
+        <name>is_blacklisted_primitive</name>
+        <full_name>is_blacklisted_primitive</full_name>
+        <argument line="1694">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1699" package="Default">
+        <name>has_whitelist_types</name>
+        <full_name>has_whitelist_types</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1703" package="Default">
+        <name>has_blacklist_types</name>
+        <full_name>has_blacklist_types</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1707" package="Default">
+        <name>is_whitelisted_type</name>
+        <full_name>is_whitelisted_type</full_name>
+        <argument line="1707">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1712" package="Default">
+        <name>is_blacklisted_type</name>
+        <full_name>is_blacklisted_type</full_name>
+        <argument line="1712">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1717" package="Default">
+        <name>whitelist_func</name>
+        <full_name>whitelist_func</full_name>
+        <argument line="1717">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1722" package="Default">
+        <name>blacklist_func</name>
+        <full_name>blacklist_func</full_name>
+        <argument line="1722">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1727" package="Default">
+        <name>dewhitelist_func</name>
+        <full_name>dewhitelist_func</full_name>
+        <argument line="1727">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1732" package="Default">
+        <name>deblacklist_func</name>
+        <full_name>deblacklist_func</full_name>
+        <argument line="1732">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1737" package="Default">
+        <name>whitelist_var</name>
+        <full_name>whitelist_var</full_name>
+        <argument line="1737">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1741" package="Default">
+        <name>blacklist_var</name>
+        <full_name>blacklist_var</full_name>
+        <argument line="1741">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1745" package="Default">
+        <name>dewhitelist_var</name>
+        <full_name>dewhitelist_var</full_name>
+        <argument line="1745">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1749" package="Default">
+        <name>deblacklist_var</name>
+        <full_name>deblacklist_var</full_name>
+        <argument line="1749">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1753" package="Default">
+        <name>whitelist_global</name>
+        <full_name>whitelist_global</full_name>
+        <argument line="1753">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1757" package="Default">
+        <name>blacklist_global</name>
+        <full_name>blacklist_global</full_name>
+        <argument line="1757">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1761" package="Default">
+        <name>dewhitelist_global</name>
+        <full_name>dewhitelist_global</full_name>
+        <argument line="1761">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1765" package="Default">
+        <name>deblacklist_global</name>
+        <full_name>deblacklist_global</full_name>
+        <argument line="1765">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1769" package="Default">
+        <name>whitelist_superglobal</name>
+        <full_name>whitelist_superglobal</full_name>
+        <argument line="1769">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1769">
+          <name>$key</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1804" package="Default">
+        <name>blacklist_superglobal</name>
+        <full_name>blacklist_superglobal</full_name>
+        <argument line="1804">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1804">
+          <name>$key</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1839" package="Default">
+        <name>dewhitelist_superglobal</name>
+        <full_name>dewhitelist_superglobal</full_name>
+        <argument line="1839">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1839">
+          <name>$key</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1869" package="Default">
+        <name>deblacklist_superglobal</name>
+        <full_name>deblacklist_superglobal</full_name>
+        <argument line="1869">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="1869">
+          <name>$key</name>
+          <default>null</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1899" package="Default">
+        <name>whitelist_const</name>
+        <full_name>whitelist_const</full_name>
+        <argument line="1899">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1903" package="Default">
+        <name>blacklist_const</name>
+        <full_name>blacklist_const</full_name>
+        <argument line="1903">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1907" package="Default">
+        <name>dewhitelist_const</name>
+        <full_name>dewhitelist_const</full_name>
+        <argument line="1907">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1911" package="Default">
+        <name>deblacklist_const</name>
+        <full_name>deblacklist_const</full_name>
+        <argument line="1911">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1915" package="Default">
+        <name>whitelist_magic_const</name>
+        <full_name>whitelist_magic_const</full_name>
+        <argument line="1915">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1920" package="Default">
+        <name>blacklist_magic_const</name>
+        <full_name>blacklist_magic_const</full_name>
+        <argument line="1920">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1925" package="Default">
+        <name>dewhitelist_magic_const</name>
+        <full_name>dewhitelist_magic_const</full_name>
+        <argument line="1925">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1930" package="Default">
+        <name>deblacklist_magic_const</name>
+        <full_name>deblacklist_magic_const</full_name>
+        <argument line="1930">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1935" package="Default">
+        <name>whitelist_namespace</name>
+        <full_name>whitelist_namespace</full_name>
+        <argument line="1935">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1940" package="Default">
+        <name>blacklist_namespace</name>
+        <full_name>blacklist_namespace</full_name>
+        <argument line="1940">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1945" package="Default">
+        <name>dewhitelist_namespace</name>
+        <full_name>dewhitelist_namespace</full_name>
+        <argument line="1945">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1950" package="Default">
+        <name>deblacklist_namespace</name>
+        <full_name>deblacklist_namespace</full_name>
+        <argument line="1950">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1955" package="Default">
+        <name>whitelist_alias</name>
+        <full_name>whitelist_alias</full_name>
+        <argument line="1955">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1960" package="Default">
+        <name>blacklist_alias</name>
+        <full_name>blacklist_alias</full_name>
+        <argument line="1960">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1965" package="Default">
+        <name>dewhitelist_alias</name>
+        <full_name>dewhitelist_alias</full_name>
+        <argument line="1965">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1970" package="Default">
+        <name>deblacklist_alias</name>
+        <full_name>deblacklist_alias</full_name>
+        <argument line="1970">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1975" package="Default">
+        <name>whitelist_use</name>
+        <full_name>whitelist_use</full_name>
+        <argument line="1975">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1979" package="Default">
+        <name>blacklist_use</name>
+        <full_name>blacklist_use</full_name>
+        <argument line="1979">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1983" package="Default">
+        <name>dewhitelist_use</name>
+        <full_name>dewhitelist_use</full_name>
+        <argument line="1983">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1987" package="Default">
+        <name>deblacklist_use</name>
+        <full_name>deblacklist_use</full_name>
+        <argument line="1987">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1991" package="Default">
+        <name>whitelist_class</name>
+        <full_name>whitelist_class</full_name>
+        <argument line="1991">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="1996" package="Default">
+        <name>blacklist_class</name>
+        <full_name>blacklist_class</full_name>
+        <argument line="1996">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2001" package="Default">
+        <name>dewhitelist_class</name>
+        <full_name>dewhitelist_class</full_name>
+        <argument line="2001">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2006" package="Default">
+        <name>deblacklist_class</name>
+        <full_name>deblacklist_class</full_name>
+        <argument line="2006">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2011" package="Default">
+        <name>whitelist_interface</name>
+        <full_name>whitelist_interface</full_name>
+        <argument line="2011">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2016" package="Default">
+        <name>blacklist_interface</name>
+        <full_name>blacklist_interface</full_name>
+        <argument line="2016">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2021" package="Default">
+        <name>dewhitelist_interface</name>
+        <full_name>dewhitelist_interface</full_name>
+        <argument line="2021">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2026" package="Default">
+        <name>deblacklist_interface</name>
+        <full_name>deblacklist_interface</full_name>
+        <argument line="2026">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2031" package="Default">
+        <name>whitelist_trait</name>
+        <full_name>whitelist_trait</full_name>
+        <argument line="2031">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2036" package="Default">
+        <name>blacklist_trait</name>
+        <full_name>blacklist_trait</full_name>
+        <argument line="2036">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2041" package="Default">
+        <name>dewhitelist_trait</name>
+        <full_name>dewhitelist_trait</full_name>
+        <argument line="2041">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2046" package="Default">
+        <name>deblacklist_trait</name>
+        <full_name>deblacklist_trait</full_name>
+        <argument line="2046">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2051" package="Default">
+        <name>whitelist_keyword</name>
+        <full_name>whitelist_keyword</full_name>
+        <argument line="2051">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2056" package="Default">
+        <name>blacklist_keyword</name>
+        <full_name>blacklist_keyword</full_name>
+        <argument line="2056">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2061" package="Default">
+        <name>dewhitelist_keyword</name>
+        <full_name>dewhitelist_keyword</full_name>
+        <argument line="2061">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2066" package="Default">
+        <name>deblacklist_keyword</name>
+        <full_name>deblacklist_keyword</full_name>
+        <argument line="2066">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2071" package="Default">
+        <name>whitelist_operator</name>
+        <full_name>whitelist_operator</full_name>
+        <argument line="2071">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2075" package="Default">
+        <name>blacklist_operator</name>
+        <full_name>blacklist_operator</full_name>
+        <argument line="2075">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2079" package="Default">
+        <name>dewhitelist_operator</name>
+        <full_name>dewhitelist_operator</full_name>
+        <argument line="2079">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2083" package="Default">
+        <name>deblacklist_operator</name>
+        <full_name>deblacklist_operator</full_name>
+        <argument line="2083">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2087" package="Default">
+        <name>whitelist_primitive</name>
+        <full_name>whitelist_primitive</full_name>
+        <argument line="2087">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2092" package="Default">
+        <name>blacklist_primitive</name>
+        <full_name>blacklist_primitive</full_name>
+        <argument line="2092">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2097" package="Default">
+        <name>dewhitelist_primitive</name>
+        <full_name>dewhitelist_primitive</full_name>
+        <argument line="2097">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2102" package="Default">
+        <name>deblacklist_primitive</name>
+        <full_name>deblacklist_primitive</full_name>
+        <argument line="2102">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2107" package="Default">
+        <name>whitelist_type</name>
+        <full_name>whitelist_type</full_name>
+        <argument line="2107">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2112" package="Default">
+        <name>blacklist_type</name>
+        <full_name>blacklist_type</full_name>
+        <argument line="2112">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2117" package="Default">
+        <name>dewhitelist_type</name>
+        <full_name>dewhitelist_type</full_name>
+        <argument line="2117">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2122" package="Default">
+        <name>deblacklist_type</name>
+        <full_name>deblacklist_type</full_name>
+        <argument line="2122">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2127" package="Default">
+        <name>check_func</name>
+        <full_name>check_func</full_name>
+        <argument line="2127">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2148" package="Default">
+        <name>check_var</name>
+        <full_name>check_var</full_name>
+        <argument line="2148">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2168" package="Default">
+        <name>check_global</name>
+        <full_name>check_global</full_name>
+        <argument line="2168">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2188" package="Default">
+        <name>check_superglobal</name>
+        <full_name>check_superglobal</full_name>
+        <argument line="2188">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2209" package="Default">
+        <name>check_const</name>
+        <full_name>check_const</full_name>
+        <argument line="2209">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2233" package="Default">
+        <name>check_magic_const</name>
+        <full_name>check_magic_const</full_name>
+        <argument line="2233">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2254" package="Default">
+        <name>check_namespace</name>
+        <full_name>check_namespace</full_name>
+        <argument line="2254">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2273" package="Default">
+        <name>check_alias</name>
+        <full_name>check_alias</full_name>
+        <argument line="2273">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2292" package="Default">
+        <name>check_use</name>
+        <full_name>check_use</full_name>
+        <argument line="2292">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2296" package="Default">
+        <name>check_class</name>
+        <full_name>check_class</full_name>
+        <argument line="2296">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2315" package="Default">
+        <name>check_interface</name>
+        <full_name>check_interface</full_name>
+        <argument line="2315">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2334" package="Default">
+        <name>check_trait</name>
+        <full_name>check_trait</full_name>
+        <argument line="2334">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2353" package="Default">
+        <name>check_keyword</name>
+        <full_name>check_keyword</full_name>
+        <argument line="2353">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2370" package="Default">
+        <name>check_operator</name>
+        <full_name>check_operator</full_name>
+        <argument line="2370">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2386" package="Default">
+        <name>check_primitive</name>
+        <full_name>check_primitive</full_name>
+        <argument line="2386">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2403" package="Default">
+        <name>check_type</name>
+        <full_name>check_type</full_name>
+        <argument line="2403">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="2422" package="Default">
+        <name>prepare_vars</name>
+        <full_name>prepare_vars</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="2444" package="Default">
+        <name>prepare_consts</name>
+        <full_name>prepare_consts</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="2466" package="Default">
+        <name>prepare_namespaces</name>
+        <full_name>prepare_namespaces</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="2478" package="Default">
+        <name>prepare_aliases</name>
+        <full_name>prepare_aliases</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="2490" package="Default">
+        <name>prepare_uses</name>
+        <full_name>prepare_uses</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="2494" package="Default">
+        <name>disassemble</name>
+        <full_name>disassemble</full_name>
+        <argument line="2494">
+          <name>$closure</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="2511" package="Default">
+        <name>auto_whitelist</name>
+        <full_name>auto_whitelist</full_name>
+        <argument line="2511">
+          <name>$code</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="2511">
+          <name>$appended</name>
+          <default>false</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="2527" package="Default">
+        <name>auto_define</name>
+        <full_name>auto_define</full_name>
+        <docblock line="2524">
+          <description></description>
+          <long-description></long-description>
+          <tag line="2524" name="param" description="" type="\FunctionParser\FunctionParser" variable="$disassembled_closure">
+            <type by_reference="false">\FunctionParser\FunctionParser</type>
+          </tag>
+        </docblock>
+        <argument line="2527">
+          <name>$disassembled_closure</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2537" package="Default">
+        <name>prepend</name>
+        <full_name>prepend</full_name>
+        <argument line="2537">
+          <name>$code</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2549" package="Default">
+        <name>append</name>
+        <full_name>append</full_name>
+        <argument line="2549">
+          <name>$code</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2561" package="Default">
+        <name>clear</name>
+        <full_name>clear</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2566" package="Default">
+        <name>clear_prepend</name>
+        <full_name>clear_prepend</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2570" package="Default">
+        <name>clear_append</name>
+        <full_name>clear_append</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2574" package="Default">
+        <name>prepare</name>
+        <full_name>prepare</full_name>
+        <argument line="2574">
+          <name>$code</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="2623" package="Default">
+        <name>execute</name>
+        <full_name>execute</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file PHPSandbox.php</error>
+      <error line="63" code="50018">No DocBlock was found for property $definitions</error>
+      <error line="74" code="50018">No DocBlock was found for property $whitelist</error>
+      <error line="92" code="50018">No DocBlock was found for property $blacklist</error>
+      <error line="601" code="50010">No DocBlock was found for method get_preparsed_code()</error>
+      <error line="605" code="50010">No DocBlock was found for method get_parsed_ast()</error>
+      <error line="609" code="50010">No DocBlock was found for method get_prepared_code()</error>
+      <error line="613" code="50010">No DocBlock was found for method get_prepared_ast()</error>
+      <error line="617" code="50010">No DocBlock was found for method get_generated_code()</error>
+      <error line="621" code="50010">No DocBlock was found for method get_generated_closure()</error>
+      <error line="625" code="50010">No DocBlock was found for method get_closure()</error>
+      <error line="629" code="50010">No DocBlock was found for method _get_defined_functions()</error>
+      <error line="657" code="50010">No DocBlock was found for method _get_defined_vars()</error>
+      <error line="664" code="50010">No DocBlock was found for method _get_superglobal()</error>
+      <error line="699" code="50010">No DocBlock was found for method _get_magic_const()</error>
+      <error line="707" code="50010">No DocBlock was found for method _get_defined_constants()</error>
+      <error line="733" code="50010">No DocBlock was found for method _get_declared_classes()</error>
+      <error line="754" code="50010">No DocBlock was found for method _get_declared_interfaces()</error>
+      <error line="775" code="50010">No DocBlock was found for method _get_declared_traits()</error>
+      <error line="796" code="50010">No DocBlock was found for method call_func()</error>
+      <error line="811" code="50010">No DocBlock was found for method define()</error>
+      <error line="851" code="50010">No DocBlock was found for method undefine()</error>
+      <error line="891" code="50010">No DocBlock was found for method define_func()</error>
+      <error line="907" code="50010">No DocBlock was found for method define_funcs()</error>
+      <error line="914" code="50010">No DocBlock was found for method has_defined_funcs()</error>
+      <error line="918" code="50010">No DocBlock was found for method is_defined_func()</error>
+      <error line="923" code="50010">No DocBlock was found for method undefine_func()</error>
+      <error line="931" code="50010">No DocBlock was found for method undefine_funcs()</error>
+      <error line="936" code="50010">No DocBlock was found for method define_var()</error>
+      <error line="947" code="50010">No DocBlock was found for method define_vars()</error>
+      <error line="954" code="50010">No DocBlock was found for method has_defined_vars()</error>
+      <error line="958" code="50010">No DocBlock was found for method is_defined_var()</error>
+      <error line="962" code="50010">No DocBlock was found for method undefine_var()</error>
+      <error line="969" code="50010">No DocBlock was found for method undefine_vars()</error>
+      <error line="974" code="50010">No DocBlock was found for method define_global()</error>
+      <error line="985" code="50010">No DocBlock was found for method define_globals()</error>
+      <error line="992" code="50010">No DocBlock was found for method has_defined_globals()</error>
+      <error line="996" code="50010">No DocBlock was found for method is_defined_global()</error>
+      <error line="1000" code="50010">No DocBlock was found for method undefine_global()</error>
+      <error line="1007" code="50010">No DocBlock was found for method undefine_globals()</error>
+      <error line="1012" code="50010">No DocBlock was found for method define_superglobal()</error>
+      <error line="1030" code="50010">No DocBlock was found for method define_superglobals()</error>
+      <error line="1037" code="50010">No DocBlock was found for method has_defined_superglobals()</error>
+      <error line="1042" code="50010">No DocBlock was found for method is_defined_superglobal()</error>
+      <error line="1047" code="50010">No DocBlock was found for method undefine_superglobal()</error>
+      <error line="1059" code="50010">No DocBlock was found for method undefine_superglobals()</error>
+      <error line="1069" code="50010">No DocBlock was found for method define_const()</error>
+      <error line="1080" code="50010">No DocBlock was found for method define_consts()</error>
+      <error line="1087" code="50010">No DocBlock was found for method has_defined_consts()</error>
+      <error line="1091" code="50010">No DocBlock was found for method is_defined_const()</error>
+      <error line="1095" code="50010">No DocBlock was found for method undefine_const()</error>
+      <error line="1102" code="50010">No DocBlock was found for method undefine_consts()</error>
+      <error line="1107" code="50010">No DocBlock was found for method define_magic_const()</error>
+      <error line="1119" code="50010">No DocBlock was found for method define_magic_consts()</error>
+      <error line="1126" code="50010">No DocBlock was found for method has_defined_magic_consts()</error>
+      <error line="1130" code="50010">No DocBlock was found for method is_defined_magic_const()</error>
+      <error line="1135" code="50010">No DocBlock was found for method undefine_magic_const()</error>
+      <error line="1143" code="50010">No DocBlock was found for method undefine_magic_consts()</error>
+      <error line="1148" code="50010">No DocBlock was found for method define_namespace()</error>
+      <error line="1159" code="50010">No DocBlock was found for method define_namespaces()</error>
+      <error line="1166" code="50010">No DocBlock was found for method has_defined_namespaces()</error>
+      <error line="1170" code="50010">No DocBlock was found for method is_defined_namespace()</error>
+      <error line="1174" code="50010">No DocBlock was found for method undefine_namespace()</error>
+      <error line="1181" code="50010">No DocBlock was found for method undefine_namespaces()</error>
+      <error line="1186" code="50010">No DocBlock was found for method define_alias()</error>
+      <error line="1197" code="50010">No DocBlock was found for method define_aliases()</error>
+      <error line="1204" code="50010">No DocBlock was found for method has_defined_aliases()</error>
+      <error line="1208" code="50010">No DocBlock was found for method is_defined_alias()</error>
+      <error line="1212" code="50010">No DocBlock was found for method undefine_alias()</error>
+      <error line="1219" code="50010">No DocBlock was found for method undefine_aliases()</error>
+      <error line="1224" code="50010">No DocBlock was found for method define_use()</error>
+      <error line="1228" code="50010">No DocBlock was found for method define_uses()</error>
+      <error line="1232" code="50010">No DocBlock was found for method has_defined_uses()</error>
+      <error line="1236" code="50010">No DocBlock was found for method is_defined_use()</error>
+      <error line="1240" code="50010">No DocBlock was found for method undefine_use()</error>
+      <error line="1244" code="50010">No DocBlock was found for method undefine_uses()</error>
+      <error line="1248" code="50010">No DocBlock was found for method normalize_func()</error>
+      <error line="1252" code="50010">No DocBlock was found for method normalize_superglobal()</error>
+      <error line="1256" code="50010">No DocBlock was found for method normalize_magic_const()</error>
+      <error line="1260" code="50010">No DocBlock was found for method normalize_namespace()</error>
+      <error line="1264" code="50010">No DocBlock was found for method normalize_alias()</error>
+      <error line="1268" code="50010">No DocBlock was found for method normalize_use()</error>
+      <error line="1272" code="50010">No DocBlock was found for method normalize_class()</error>
+      <error line="1276" code="50010">No DocBlock was found for method normalize_interface()</error>
+      <error line="1280" code="50010">No DocBlock was found for method normalize_trait()</error>
+      <error line="1284" code="50010">No DocBlock was found for method normalize_keyword()</error>
+      <error line="1315" code="50010">No DocBlock was found for method normalize_primitive()</error>
+      <error line="1329" code="50010">No DocBlock was found for method normalize_type()</error>
+      <error line="1333" code="50010">No DocBlock was found for method whitelist()</error>
+      <error line="1358" code="50010">No DocBlock was found for method blacklist()</error>
+      <error line="1383" code="50010">No DocBlock was found for method dewhitelist()</error>
+      <error line="1402" code="50010">No DocBlock was found for method deblacklist()</error>
+      <error line="1421" code="50010">No DocBlock was found for method has_whitelist()</error>
+      <error line="1425" code="50010">No DocBlock was found for method has_blacklist()</error>
+      <error line="1429" code="50010">No DocBlock was found for method is_whitelisted()</error>
+      <error line="1433" code="50010">No DocBlock was found for method is_blacklisted()</error>
+      <error line="1437" code="50010">No DocBlock was found for method has_whitelist_funcs()</error>
+      <error line="1441" code="50010">No DocBlock was found for method has_blacklist_funcs()</error>
+      <error line="1445" code="50010">No DocBlock was found for method is_whitelisted_func()</error>
+      <error line="1450" code="50010">No DocBlock was found for method is_blacklisted_func()</error>
+      <error line="1455" code="50010">No DocBlock was found for method has_whitelist_vars()</error>
+      <error line="1459" code="50010">No DocBlock was found for method has_blacklist_vars()</error>
+      <error line="1463" code="50010">No DocBlock was found for method is_whitelisted_var()</error>
+      <error line="1467" code="50010">No DocBlock was found for method is_blacklisted_var()</error>
+      <error line="1471" code="50010">No DocBlock was found for method has_whitelist_globals()</error>
+      <error line="1475" code="50010">No DocBlock was found for method has_blacklist_globals()</error>
+      <error line="1479" code="50010">No DocBlock was found for method is_whitelisted_global()</error>
+      <error line="1483" code="50010">No DocBlock was found for method is_blacklisted_global()</error>
+      <error line="1487" code="50010">No DocBlock was found for method has_whitelist_superglobals()</error>
+      <error line="1492" code="50010">No DocBlock was found for method has_blacklist_superglobals()</error>
+      <error line="1497" code="50010">No DocBlock was found for method is_whitelisted_superglobal()</error>
+      <error line="1502" code="50010">No DocBlock was found for method is_blacklisted_superglobal()</error>
+      <error line="1507" code="50010">No DocBlock was found for method has_whitelist_consts()</error>
+      <error line="1511" code="50010">No DocBlock was found for method has_blacklist_consts()</error>
+      <error line="1515" code="50010">No DocBlock was found for method is_whitelisted_const()</error>
+      <error line="1519" code="50010">No DocBlock was found for method is_blacklisted_const()</error>
+      <error line="1523" code="50010">No DocBlock was found for method has_whitelist_magic_consts()</error>
+      <error line="1527" code="50010">No DocBlock was found for method has_blacklist_magic_consts()</error>
+      <error line="1531" code="50010">No DocBlock was found for method is_whitelisted_magic_const()</error>
+      <error line="1536" code="50010">No DocBlock was found for method is_blacklisted_magic_const()</error>
+      <error line="1541" code="50010">No DocBlock was found for method has_whitelist_namespaces()</error>
+      <error line="1545" code="50010">No DocBlock was found for method has_blacklist_namespaces()</error>
+      <error line="1549" code="50010">No DocBlock was found for method is_whitelisted_namespace()</error>
+      <error line="1554" code="50010">No DocBlock was found for method is_blacklisted_namespace()</error>
+      <error line="1559" code="50010">No DocBlock was found for method has_whitelist_aliases()</error>
+      <error line="1563" code="50010">No DocBlock was found for method has_blacklist_aliases()</error>
+      <error line="1567" code="50010">No DocBlock was found for method is_whitelisted_alias()</error>
+      <error line="1572" code="50010">No DocBlock was found for method is_blacklisted_alias()</error>
+      <error line="1577" code="50010">No DocBlock was found for method has_whitelist_uses()</error>
+      <error line="1581" code="50010">No DocBlock was found for method has_blacklist_uses()</error>
+      <error line="1585" code="50010">No DocBlock was found for method is_whitelisted_use()</error>
+      <error line="1589" code="50010">No DocBlock was found for method is_blacklisted_use()</error>
+      <error line="1593" code="50010">No DocBlock was found for method has_whitelist_classes()</error>
+      <error line="1597" code="50010">No DocBlock was found for method has_blacklist_classes()</error>
+      <error line="1601" code="50010">No DocBlock was found for method is_whitelisted_class()</error>
+      <error line="1606" code="50010">No DocBlock was found for method is_blacklisted_class()</error>
+      <error line="1611" code="50010">No DocBlock was found for method has_whitelist_interfaces()</error>
+      <error line="1615" code="50010">No DocBlock was found for method has_blacklist_interfaces()</error>
+      <error line="1619" code="50010">No DocBlock was found for method is_whitelisted_interface()</error>
+      <error line="1624" code="50010">No DocBlock was found for method is_blacklisted_interface()</error>
+      <error line="1629" code="50010">No DocBlock was found for method has_whitelist_traits()</error>
+      <error line="1633" code="50010">No DocBlock was found for method has_blacklist_traits()</error>
+      <error line="1637" code="50010">No DocBlock was found for method is_whitelisted_trait()</error>
+      <error line="1642" code="50010">No DocBlock was found for method is_blacklisted_trait()</error>
+      <error line="1647" code="50010">No DocBlock was found for method has_whitelist_keywords()</error>
+      <error line="1651" code="50010">No DocBlock was found for method has_blacklist_keywords()</error>
+      <error line="1655" code="50010">No DocBlock was found for method is_whitelisted_keyword()</error>
+      <error line="1660" code="50010">No DocBlock was found for method is_blacklisted_keyword()</error>
+      <error line="1665" code="50010">No DocBlock was found for method has_whitelist_operators()</error>
+      <error line="1669" code="50010">No DocBlock was found for method has_blacklist_operators()</error>
+      <error line="1673" code="50010">No DocBlock was found for method is_whitelisted_operator()</error>
+      <error line="1677" code="50010">No DocBlock was found for method is_blacklisted_operator()</error>
+      <error line="1681" code="50010">No DocBlock was found for method has_whitelist_primitives()</error>
+      <error line="1685" code="50010">No DocBlock was found for method has_blacklist_primitives()</error>
+      <error line="1689" code="50010">No DocBlock was found for method is_whitelisted_primitive()</error>
+      <error line="1694" code="50010">No DocBlock was found for method is_blacklisted_primitive()</error>
+      <error line="1699" code="50010">No DocBlock was found for method has_whitelist_types()</error>
+      <error line="1703" code="50010">No DocBlock was found for method has_blacklist_types()</error>
+      <error line="1707" code="50010">No DocBlock was found for method is_whitelisted_type()</error>
+      <error line="1712" code="50010">No DocBlock was found for method is_blacklisted_type()</error>
+      <error line="1717" code="50010">No DocBlock was found for method whitelist_func()</error>
+      <error line="1722" code="50010">No DocBlock was found for method blacklist_func()</error>
+      <error line="1727" code="50010">No DocBlock was found for method dewhitelist_func()</error>
+      <error line="1732" code="50010">No DocBlock was found for method deblacklist_func()</error>
+      <error line="1737" code="50010">No DocBlock was found for method whitelist_var()</error>
+      <error line="1741" code="50010">No DocBlock was found for method blacklist_var()</error>
+      <error line="1745" code="50010">No DocBlock was found for method dewhitelist_var()</error>
+      <error line="1749" code="50010">No DocBlock was found for method deblacklist_var()</error>
+      <error line="1753" code="50010">No DocBlock was found for method whitelist_global()</error>
+      <error line="1757" code="50010">No DocBlock was found for method blacklist_global()</error>
+      <error line="1761" code="50010">No DocBlock was found for method dewhitelist_global()</error>
+      <error line="1765" code="50010">No DocBlock was found for method deblacklist_global()</error>
+      <error line="1769" code="50010">No DocBlock was found for method whitelist_superglobal()</error>
+      <error line="1804" code="50010">No DocBlock was found for method blacklist_superglobal()</error>
+      <error line="1839" code="50010">No DocBlock was found for method dewhitelist_superglobal()</error>
+      <error line="1869" code="50010">No DocBlock was found for method deblacklist_superglobal()</error>
+      <error line="1899" code="50010">No DocBlock was found for method whitelist_const()</error>
+      <error line="1903" code="50010">No DocBlock was found for method blacklist_const()</error>
+      <error line="1907" code="50010">No DocBlock was found for method dewhitelist_const()</error>
+      <error line="1911" code="50010">No DocBlock was found for method deblacklist_const()</error>
+      <error line="1915" code="50010">No DocBlock was found for method whitelist_magic_const()</error>
+      <error line="1920" code="50010">No DocBlock was found for method blacklist_magic_const()</error>
+      <error line="1925" code="50010">No DocBlock was found for method dewhitelist_magic_const()</error>
+      <error line="1930" code="50010">No DocBlock was found for method deblacklist_magic_const()</error>
+      <error line="1935" code="50010">No DocBlock was found for method whitelist_namespace()</error>
+      <error line="1940" code="50010">No DocBlock was found for method blacklist_namespace()</error>
+      <error line="1945" code="50010">No DocBlock was found for method dewhitelist_namespace()</error>
+      <error line="1950" code="50010">No DocBlock was found for method deblacklist_namespace()</error>
+      <error line="1955" code="50010">No DocBlock was found for method whitelist_alias()</error>
+      <error line="1960" code="50010">No DocBlock was found for method blacklist_alias()</error>
+      <error line="1965" code="50010">No DocBlock was found for method dewhitelist_alias()</error>
+      <error line="1970" code="50010">No DocBlock was found for method deblacklist_alias()</error>
+      <error line="1975" code="50010">No DocBlock was found for method whitelist_use()</error>
+      <error line="1979" code="50010">No DocBlock was found for method blacklist_use()</error>
+      <error line="1983" code="50010">No DocBlock was found for method dewhitelist_use()</error>
+      <error line="1987" code="50010">No DocBlock was found for method deblacklist_use()</error>
+      <error line="1991" code="50010">No DocBlock was found for method whitelist_class()</error>
+      <error line="1996" code="50010">No DocBlock was found for method blacklist_class()</error>
+      <error line="2001" code="50010">No DocBlock was found for method dewhitelist_class()</error>
+      <error line="2006" code="50010">No DocBlock was found for method deblacklist_class()</error>
+      <error line="2011" code="50010">No DocBlock was found for method whitelist_interface()</error>
+      <error line="2016" code="50010">No DocBlock was found for method blacklist_interface()</error>
+      <error line="2021" code="50010">No DocBlock was found for method dewhitelist_interface()</error>
+      <error line="2026" code="50010">No DocBlock was found for method deblacklist_interface()</error>
+      <error line="2031" code="50010">No DocBlock was found for method whitelist_trait()</error>
+      <error line="2036" code="50010">No DocBlock was found for method blacklist_trait()</error>
+      <error line="2041" code="50010">No DocBlock was found for method dewhitelist_trait()</error>
+      <error line="2046" code="50010">No DocBlock was found for method deblacklist_trait()</error>
+      <error line="2051" code="50010">No DocBlock was found for method whitelist_keyword()</error>
+      <error line="2056" code="50010">No DocBlock was found for method blacklist_keyword()</error>
+      <error line="2061" code="50010">No DocBlock was found for method dewhitelist_keyword()</error>
+      <error line="2066" code="50010">No DocBlock was found for method deblacklist_keyword()</error>
+      <error line="2071" code="50010">No DocBlock was found for method whitelist_operator()</error>
+      <error line="2075" code="50010">No DocBlock was found for method blacklist_operator()</error>
+      <error line="2079" code="50010">No DocBlock was found for method dewhitelist_operator()</error>
+      <error line="2083" code="50010">No DocBlock was found for method deblacklist_operator()</error>
+      <error line="2087" code="50010">No DocBlock was found for method whitelist_primitive()</error>
+      <error line="2092" code="50010">No DocBlock was found for method blacklist_primitive()</error>
+      <error line="2097" code="50010">No DocBlock was found for method dewhitelist_primitive()</error>
+      <error line="2102" code="50010">No DocBlock was found for method deblacklist_primitive()</error>
+      <error line="2107" code="50010">No DocBlock was found for method whitelist_type()</error>
+      <error line="2112" code="50010">No DocBlock was found for method blacklist_type()</error>
+      <error line="2117" code="50010">No DocBlock was found for method dewhitelist_type()</error>
+      <error line="2122" code="50010">No DocBlock was found for method deblacklist_type()</error>
+      <error line="2127" code="50010">No DocBlock was found for method check_func()</error>
+      <error line="2148" code="50010">No DocBlock was found for method check_var()</error>
+      <error line="2168" code="50010">No DocBlock was found for method check_global()</error>
+      <error line="2188" code="50010">No DocBlock was found for method check_superglobal()</error>
+      <error line="2209" code="50010">No DocBlock was found for method check_const()</error>
+      <error line="2233" code="50010">No DocBlock was found for method check_magic_const()</error>
+      <error line="2254" code="50010">No DocBlock was found for method check_namespace()</error>
+      <error line="2273" code="50010">No DocBlock was found for method check_alias()</error>
+      <error line="2292" code="50010">No DocBlock was found for method check_use()</error>
+      <error line="2296" code="50010">No DocBlock was found for method check_class()</error>
+      <error line="2315" code="50010">No DocBlock was found for method check_interface()</error>
+      <error line="2334" code="50010">No DocBlock was found for method check_trait()</error>
+      <error line="2353" code="50010">No DocBlock was found for method check_keyword()</error>
+      <error line="2370" code="50010">No DocBlock was found for method check_operator()</error>
+      <error line="2386" code="50010">No DocBlock was found for method check_primitive()</error>
+      <error line="2403" code="50010">No DocBlock was found for method check_type()</error>
+      <error line="2422" code="50010">No DocBlock was found for method prepare_vars()</error>
+      <error line="2444" code="50010">No DocBlock was found for method prepare_consts()</error>
+      <error line="2466" code="50010">No DocBlock was found for method prepare_namespaces()</error>
+      <error line="2478" code="50010">No DocBlock was found for method prepare_aliases()</error>
+      <error line="2490" code="50010">No DocBlock was found for method prepare_uses()</error>
+      <error line="2494" code="50010">No DocBlock was found for method disassemble()</error>
+      <error line="2511" code="50010">No DocBlock was found for method auto_whitelist()</error>
+      <error line="2524" code="50012">No short description for method auto_define()</error>
+      <error line="2537" code="50010">No DocBlock was found for method prepend()</error>
+      <error line="2549" code="50010">No DocBlock was found for method append()</error>
+      <error line="2561" code="50010">No DocBlock was found for method clear()</error>
+      <error line="2566" code="50010">No DocBlock was found for method clear_prepend()</error>
+      <error line="2570" code="50010">No DocBlock was found for method clear_append()</error>
+      <error line="2574" code="50010">No DocBlock was found for method prepare()</error>
+      <error line="2623" code="50010">No DocBlock was found for method execute()</error>
+    </parse_markers>
+  </file>
+  <file path="SandboxWhitelistVisitor.php" hash="7549467ad57306acbad3f51e95a04cfa" package="Default">
+    <class final="false" abstract="false" namespace="PHPSandbox" line="4" package="Default">
+      <extends>\PHPParser_NodeVisitorAbstract</extends>
+      <name>SandboxWhitelistVisitor</name>
+      <full_name>\PHPSandbox\SandboxWhitelistVisitor</full_name>
+      <property final="false" static="false" visibility="protected" line="8" namespace="PHPSandbox" package="Default">
+        <name>$sandbox</name>
+        <default/>
+        <docblock line="5">
+          <description/>
+          <long-description/>
+          <tag line="5" name="var" description="" type="\PHPSandbox\PHPSandbox">
+            <type by_reference="false">\PHPSandbox\PHPSandbox</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="10" package="Default">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <argument line="10">
+          <name>$sandbox</name>
+          <default/>
+          <type>\PHPSandbox\PHPSandbox</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="14" package="Default">
+        <name>leaveNode</name>
+        <full_name>leaveNode</full_name>
+        <argument line="14">
+          <name>$node</name>
+          <default/>
+          <type>\PHPParser_Node</type>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file SandboxWhitelistVisitor.php</error>
+      <error line="4" code="50000">No DocBlock was found for \PHPSandbox\SandboxWhitelistVisitor</error>
+      <critical line="5" code="50019">No short description for property $sandbox</critical>
+      <error line="10" code="50010">No DocBlock was found for method __construct()</error>
+      <error line="14" code="50010">No DocBlock was found for method leaveNode()</error>
+    </parse_markers>
+  </file>
+  <file path="ValidatorVisitor.php" hash="d688901d87e2ceba169cca33c0d131f9" package="Default">
+    <class final="false" abstract="false" namespace="PHPSandbox" line="4" package="Default">
+      <extends>\PHPParser_NodeVisitorAbstract</extends>
+      <name>ValidatorVisitor</name>
+      <full_name>\PHPSandbox\ValidatorVisitor</full_name>
+      <property final="false" static="false" visibility="protected" line="8" namespace="PHPSandbox" package="Default">
+        <name>$sandbox</name>
+        <default/>
+        <docblock line="5">
+          <description/>
+          <long-description/>
+          <tag line="5" name="var" description="" type="\PHPSandbox\PHPSandbox">
+            <type by_reference="false">\PHPSandbox\PHPSandbox</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="10" package="Default">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <argument line="10">
+          <name>$sandbox</name>
+          <default/>
+          <type>\PHPSandbox\PHPSandbox</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="14" package="Default">
+        <name>leaveNode</name>
+        <full_name>leaveNode</full_name>
+        <argument line="14">
+          <name>$node</name>
+          <default/>
+          <type>\PHPParser_Node</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="217" package="Default">
+        <name>is_magic_const</name>
+        <full_name>is_magic_const</full_name>
+        <argument line="217">
+          <name>$node</name>
+          <default/>
+          <type>\PHPParser_Node</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="239" package="Default">
+        <name>is_keyword</name>
+        <full_name>is_keyword</full_name>
+        <argument line="239">
+          <name>$node</name>
+          <default/>
+          <type>\PHPParser_Node</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="299" package="Default">
+        <name>is_operator</name>
+        <full_name>is_operator</full_name>
+        <argument line="299">
+          <name>$node</name>
+          <default/>
+          <type>\PHPParser_Node</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="397" package="Default">
+        <name>is_primitive</name>
+        <full_name>is_primitive</full_name>
+        <argument line="397">
+          <name>$node</name>
+          <default/>
+          <type>\PHPParser_Node</type>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ValidatorVisitor.php</error>
+      <error line="4" code="50000">No DocBlock was found for \PHPSandbox\ValidatorVisitor</error>
+      <critical line="5" code="50019">No short description for property $sandbox</critical>
+      <error line="10" code="50010">No DocBlock was found for method __construct()</error>
+      <error line="14" code="50010">No DocBlock was found for method leaveNode()</error>
+      <error line="217" code="50010">No DocBlock was found for method is_magic_const()</error>
+      <error line="239" code="50010">No DocBlock was found for method is_keyword()</error>
+      <error line="299" code="50010">No DocBlock was found for method is_operator()</error>
+      <error line="397" code="50010">No DocBlock was found for method is_primitive()</error>
+    </parse_markers>
+  </file>
+  <file path="WhitelistVisitor.php" hash="47f752a6dd34d14c0c75283fdb485d7f" package="Default">
+    <class final="false" abstract="false" namespace="PHPSandbox" line="4" package="Default">
+      <extends>\PHPParser_NodeVisitorAbstract</extends>
+      <name>WhitelistVisitor</name>
+      <full_name>\PHPSandbox\WhitelistVisitor</full_name>
+      <property final="false" static="false" visibility="protected" line="8" namespace="PHPSandbox" package="Default">
+        <name>$sandbox</name>
+        <default/>
+        <docblock line="5">
+          <description/>
+          <long-description/>
+          <tag line="5" name="var" description="" type="\PHPSandbox\PHPSandbox">
+            <type by_reference="false">\PHPSandbox\PHPSandbox</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="10" package="Default">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <argument line="10">
+          <name>$sandbox</name>
+          <default/>
+          <type>\PHPSandbox\PHPSandbox</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="14" package="Default">
+        <name>leaveNode</name>
+        <full_name>leaveNode</full_name>
+        <argument line="14">
+          <name>$node</name>
+          <default/>
+          <type>\PHPParser_Node</type>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file WhitelistVisitor.php</error>
+      <error line="4" code="50000">No DocBlock was found for \PHPSandbox\WhitelistVisitor</error>
+      <critical line="5" code="50019">No short description for property $sandbox</critical>
+      <error line="10" code="50010">No DocBlock was found for method __construct()</error>
+      <error line="14" code="50010">No DocBlock was found for method leaveNode()</error>
+    </parse_markers>
+  </file>
+  <package name="Default" full_name="Default"/>
+  <namespace name="PHPSandbox" full_name="PHPSandbox"/>
+  <marker count="0">todo</marker>
+  <marker count="0">fixme</marker>
+  <deprecated count="0"/>
+</project>
