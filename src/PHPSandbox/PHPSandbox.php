@@ -1021,7 +1021,7 @@
          *
          * You can pass an associative array of functions to define
          *
-         * @example $sandbox->define_func(array('test' => function(){ echo 'test'; }));
+         * @example $sandbox->define_funcs(array('test' => function(){ echo 'test'; }));
          *
          * @param   array           $functions       Associative array of $functions to define
          *
@@ -1056,11 +1056,13 @@
         }
         /** Undefine PHPSandbox function
          *
+         * You can pass an array of function names to undefine, or a string of function $name to undefine
+         *
          * @example $sandbox->undefine_func(array('test', 'test2'));
          *
          * @example $sandbox->undefine_func('test');
          *
-         * @param   array|string          $name       Associative array of function names or string of function name to undefine
+         * @param   array|string          $name       Array of function names or string of function name to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1076,11 +1078,13 @@
         }
         /** Undefine PHPSandbox functions by array
          *
+         * You can pass an array of function names to undefine, or an empty array or null argument to undefine all functions
+         *
          * @example $sandbox->undefine_funcs(array('test', 'test2'));
          *
          * @example $sandbox->undefine_funcs(); //WILL UNDEFINE ALL FUNCTIONS!
          *
-         * @param   array           $functions       Associative array of function names to undefine. Passing an empty array or no argument will result in undefining all functions
+         * @param   array           $functions       Array of function names to undefine. Passing an empty array or no argument will result in undefining all functions
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1123,7 +1127,7 @@
          *
          * You can pass an associative array of variables to define
          *
-         * @example $sandbox->define_var(array('test' => 1));
+         * @example $sandbox->define_vars(array('test' => 1));
          *
          * @param   array           $variables  Associative array of $variables to define
          *
@@ -1157,11 +1161,13 @@
         }
         /** Undefine PHPSandbox variable
          *
+         * You can pass an array of variable names to undefine, or a string of variable $name to undefine
+         *
          * @example $sandbox->undefine_var(array('test', 'test2'));
          *
          * @example $sandbox->undefine_var('test');
          *
-         * @param   array|string          $name       Associative array of variable names or string of variable name to undefine
+         * @param   array|string          $name       Array of variable names or string of variable name to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1176,11 +1182,13 @@
         }
         /** Undefine PHPSandbox variables by array
          *
+         * You can pass an array of variable names to undefine, or an empty array or null argument to undefine all variables
+         *
          * @example $sandbox->undefine_vars(array('test', 'test2'));
          *
          * @example $sandbox->undefine_vars(); //WILL UNDEFINE ALL VARIABLES!
          *
-         * @param   array           $variables       Associative array of variable names to undefine. Passing an empty array or no argument will result in undefining all variables
+         * @param   array           $variables       Array of variable names to undefine. Passing an empty array or no argument will result in undefining all variables
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1232,7 +1240,7 @@
          *
          * You can pass an associative array of superglobals to define
          *
-         * @example $sandbox->define_superglobal(array('_GET' => array('page' => 1)));
+         * @example $sandbox->define_superglobals(array('_GET' => array('page' => 1)));
          *
          * @param   array           $superglobals  Associative array of $superglobals to define
          *
@@ -1275,14 +1283,16 @@
         }
         /** Undefine PHPSandbox superglobal or superglobal key
          *
+         * You can pass an associative array of superglobal names and keys to undefine, or an array of superglobal names to undefine, or an string of superglobal $name to undefine, or a superglobal $key to undefine
+         *
          * @example $sandbox->undefine_superglobal(array('_GET', '_POST'));
          *
          * @example $sandbox->undefine_superglobal('_GET');
          *
          * @example $sandbox->undefine_superglobal('_GET', 'page');
          *
-         * @param   array|string          $name       Associative array of superglobal names or string of superglobal name to undefine
-         * @param   string|null           $key        String of superglobal key to undefine
+         * @param   array|string          $name       Associative array of superglobal names and keys to undefine, or array of superglobal names to undefine, or string of superglobal $name to undefine
+         * @param   string|null           $key        String of superglobal $key to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1302,9 +1312,13 @@
         }
         /** Undefine PHPSandbox superglobals by array
          *
+         * You can pass an array of superglobal names to undefine, or an associative array of superglobals names and key to undefine, or an empty array or null to undefine all superglobals
+         *
          * @example $sandbox->undefine_superglobals(array('_GET', '_POST'));
          *
          * @example $sandbox->undefine_superglobals(array('_GET' => 'page', '_POST' => 'page'));
+         *
+         * @example $sandbox->undefine_superglobals(); //WILL UNDEFINE ALL SUPERGLOBALS!
          *
          * @param   array          $superglobals       Associative array of superglobal names and keys or array of superglobal names to undefine
          *
@@ -1321,7 +1335,21 @@
             }
             return $this;
         }
-
+        /** Define PHPSandbox constant
+         *
+         * You can pass an associative array of constants to define, or the constant $name and $value to define
+         *
+         * @example $sandbox->define_const(array('TEST' => 1));
+         *
+         * @example $sandbox->define_const('TEST', 1);
+         *
+         * @param   array|string    $name       Associative array or string of constant $name to define
+         * @param   mixed           $value      Value to define constant to
+         *
+         * @throws  Error           Throws exception if unnamed constant is defined
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_const($name, $value){
             if(is_array($name)){
                 return $this->define_consts($name);
@@ -1332,22 +1360,54 @@
             $this->definitions['constants'][$name] = $value;
             return $this;
         }
-
+        /** Define PHPSandbox constants by array
+         *
+         * You can pass an associative array of constants to define
+         *
+         * @example $sandbox->define_consts(array('test' => 1));
+         *
+         * @param   array           $constants  Associative array of $constants to define
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_consts(array $constants = array()){
             foreach($constants as $name => $value){
                 $this->define_const($name, $value);
             }
             return $this;
         }
-
+        /** Query whether PHPSandbox instance has defined constants
+         *
+         * @example $sandbox->has_defined_consts(); //returns number of defined constants, or zero if none defined
+         *
+         * @return  int           Returns the number of constants this instance has defined
+         */
         public function has_defined_consts(){
             return count($this->definitions['constants']);
         }
-
+        /** Check if PHPSandbox instance has $name constant defined
+         *
+         * @example $sandbox->is_defined_const('test');
+         *
+         * @param   string          $name       String of constant $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has defined constant, false otherwise
+         */
         public function is_defined_const($name){
             return isset($this->definitions['constants'][$name]);
         }
-
+        /** Undefine PHPSandbox constant
+         *
+         * You can pass an array of constant names to undefine, or a string of constant $name to undefine
+         *
+         * @example $sandbox->undefine_const(array('test', 'test2'));
+         *
+         * @example $sandbox->undefine_const('test');
+         *
+         * @param   array|string          $name       Array of constant names or string of constant name to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_const($name){
             if(is_array($name)){
                 return $this->undefine_consts($name);
@@ -1357,7 +1417,18 @@
             }
             return $this;
         }
-
+        /** Undefine PHPSandbox constants by array
+         *
+         * You can pass an array of constant names to undefine, or an empty array or null argument to undefine all constants
+         *
+         * @example $sandbox->undefine_consts(array('test', 'test2'));
+         *
+         * @example $sandbox->undefine_consts(); //WILL UNDEFINE ALL CONSTANTS!
+         *
+         * @param   array           $constants       Array of constant names to undefine. Passing an empty array or no argument will result in undefining all constants
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_consts(array $constants = array()){
             if(count($constants)){
                 foreach($constants as $constant){
@@ -1368,7 +1439,21 @@
             }
             return $this;
         }
-
+        /** Define PHPSandbox magic constant
+         *
+         * You can pass an associative array of magic constants to define, or the magic constant $name and $value to define
+         *
+         * @example $sandbox->define_magic_const(array('__LINE__' => 1));
+         *
+         * @example $sandbox->define_magic_const('__LINE__', 1);
+         *
+         * @param   array|string    $name       Associative array or string of magic constant $name to define
+         * @param   mixed           $value      Value to define magic constant to
+         *
+         * @throws  Error           Throws exception if unnamed magic constant is defined
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_magic_const($name, $value){
             if(is_array($name)){
                 return $this->define_magic_consts($name);
@@ -1380,23 +1465,55 @@
             $this->definitions['magic_constants'][$name] = $value;
             return $this;
         }
-
+        /** Define PHPSandbox magic constants by array
+         *
+         * You can pass an associative array of magic constants to define
+         *
+         * @example $sandbox->define_magic_consts(array('__LINE__' => 1));
+         *
+         * @param   array           $magic_constants  Associative array of $magic_constants to define
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_magic_consts(array $magic_constants = array()){
             foreach($magic_constants as $name => $value){
                 $this->define_magic_const($name, $value);
             }
             return $this;
         }
-
+        /** Query whether PHPSandbox instance has defined magic constants
+         *
+         * @example $sandbox->has_defined_magic_consts(); //returns number of defined magic constants, or zero if none defined
+         *
+         * @return  int           Returns the number of magic constants this instance has defined
+         */
         public function has_defined_magic_consts(){
             return count($this->definitions['magic_constants']);
         }
-
+        /** Check if PHPSandbox instance has $name magic constant defined
+         *
+         * @example $sandbox->is_defined_magic_const('__LINE__');
+         *
+         * @param   string          $name       String of magic constant $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has defined magic constant, false otherwise
+         */
         public function is_defined_magic_const($name){
             $name = $this->normalize_magic_const($name);
             return isset($this->definitions['magic_constants'][$name]);
         }
-
+        /** Undefine PHPSandbox magic constant
+         *
+         * You can pass an array of magic constant names to undefine, or a string of magic constant $name to undefine
+         *
+         * @example $sandbox->undefine_magic_const(array('__LINE__', '__FILE__'));
+         *
+         * @example $sandbox->undefine_magic_const('__LINE__');
+         *
+         * @param   array|string          $name       Array of magic constant names or string of magic constant name to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_magic_const($name){
             if(is_array($name)){
                 return $this->undefine_magic_consts($name);
@@ -1407,7 +1524,18 @@
             }
             return $this;
         }
-
+        /** Undefine PHPSandbox magic constants by array
+         *
+         * You can pass an array of magic constant names to undefine, or an empty array or null argument to undefine all magic constants
+         *
+         * @example $sandbox->undefine_magic_consts(array('__LINE__', '__FILE__'));
+         *
+         * @example $sandbox->undefine_magic_consts(); //WILL UNDEFINE ALL MAGIC CONSTANTS!
+         *
+         * @param   array           $magic_constants       Array of magic constant names to undefine. Passing an empty array or no argument will result in undefining all magic constants
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_magic_consts(array $magic_constants = array()){
             if(count($magic_constants)){
                 foreach($magic_constants as $magic_constant){
@@ -1418,7 +1546,20 @@
             }
             return $this;
         }
-
+        /** Define PHPSandbox namespace
+         *
+         * You can pass an array of namespaces to define, or the namespace $name and $value to define
+         *
+         * @example $sandbox->define_namespace(array('Foo', 'Bar'));
+         *
+         * @example $sandbox->define_namespace('Foo');
+         *
+         * @param   array|string    $name       Array or string of namespace $name to define
+         *
+         * @throws  Error           Throws exception if unnamed namespace is defined
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_namespace($name){
             if(is_array($name)){
                 return $this->define_namespaces($name);
@@ -1429,22 +1570,54 @@
             $this->definitions['namespaces'][$name] = $name;
             return $this;
         }
-
+        /** Define PHPSandbox namespaces by array
+         *
+         * You can pass an array of namespaces to define
+         *
+         * @example $sandbox->define_namespaces(array('Foo', 'Bar'));
+         *
+         * @param   array           $namespaces  Array of $namespaces to define
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_namespaces(array $namespaces = array()){
             foreach($namespaces as $name => $alias){
                 $this->define_namespace($name, $alias);
             }
             return $this;
         }
-
+        /** Query whether PHPSandbox instance has defined namespaces
+         *
+         * @example $sandbox->has_defined_namespaces(); //returns number of defined namespaces, or zero if none defined
+         *
+         * @return  int           Returns the number of namespaces this instance has defined
+         */
         public function has_defined_namespaces(){
             return count($this->definitions['namespaces']);
         }
-
+        /** Check if PHPSandbox instance has $name namespace defined
+         *
+         * @example $sandbox->is_defined_namespace('Foo');
+         *
+         * @param   string          $name       String of namespace $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has defined namespace, false otherwise
+         */
         public function is_defined_namespace($name){
             return isset($this->definitions['namespaces'][$name]);
         }
-
+        /** Undefine PHPSandbox namespace
+         *
+         * You can pass an array of namespace names to undefine, or a string of namespace $name to undefine
+         *
+         * @example $sandbox->undefine_namespace(array('Foo', 'Bar'));
+         *
+         * @example $sandbox->undefine_namespace('Foo');
+         *
+         * @param   array|string          $name       Array of namespace names or string of namespace name to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_namespace($name){
             if(is_array($name)){
                 return $this->undefine_namespaces($name);
@@ -1454,7 +1627,18 @@
             }
             return $this;
         }
-
+        /** Undefine PHPSandbox namespaces by array
+         *
+         * You can pass an array of namespace names to undefine, or an empty array or null argument to undefine all namespaces
+         *
+         * @example $sandbox->undefine_namespaces(array('Foo', 'Bar'));
+         *
+         * @example $sandbox->undefine_namespaces(); //WILL UNDEFINE ALL NAMESPACES!
+         *
+         * @param   array           $namespaces       Array of namespace names to undefine. Passing an empty array or no argument will result in undefining all namespaces
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_namespaces(array $namespaces = array()){
             if(count($namespaces)){
                 foreach($namespaces as $namespace){
@@ -1465,7 +1649,25 @@
             }
             return $this;
         }
-
+        /** Define PHPSandbox alias
+         *
+         * You can pass an associative array of namespaces to use and their aliases, an array of namespaces to use, or the namespace $name and $alias to use
+         *
+         * @example $sandbox->define_alias(array('Foo' => 'Bar')); //use Foo as Bar;
+         *
+         * @example $sandbox->define_alias(array('Foo', 'Bar')); //use Foo; use Bar;
+         *
+         * @example $sandbox->define_alias('Foo', 'Bar');  //use Foo as Bar;
+         *
+         * @example $sandbox->define_alias('Foo');  //use Foo;
+         *
+         * @param   array|string    $name       Associative array of namespaces and their aliases to use, or an array of namespaces to use, or string of namespace $name to use
+         * @param   string|null     $alias      String of $alias to use
+         *
+         * @throws  Error           Throws exception if unnamed namespace is used
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_alias($name, $alias = null){
             if(is_array($name)){
                 return $this->define_aliases($name);
@@ -1476,22 +1678,58 @@
             $this->definitions['aliases'][$name] = $alias;
             return $this;
         }
-
+        /** Define PHPSandbox aliases by array
+         *
+         * You can pass an associative array of namespaces to use and their aliases, or an array of namespaces to use
+         *
+         * @example $sandbox->define_aliases(array('Foo' => 'Bar')); //use Foo as Bar;
+         *
+         * @example $sandbox->define_aliases(array('Foo', 'Bar')); //use Foo; use Bar;
+         *
+         * @param   array           $aliases       Associative array of namespaces and their aliases to use, or an array of namespaces to use
+         *
+         * @throws  Error           Throws exception if unnamed namespace is used
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_aliases(array $aliases = array()){
             foreach($aliases as $name => $alias){
                 $this->define_alias($name, $alias);
             }
             return $this;
         }
-
+        /** Query whether PHPSandbox instance has defined aliases
+         *
+         * @example $sandbox->has_defined_aliases(); //returns number of defined aliases, or zero if none defined
+         *
+         * @return  int           Returns the number of aliases this instance has defined
+         */
         public function has_defined_aliases(){
             return count($this->definitions['aliases']);
         }
-
+        /** Check if PHPSandbox instance has $name alias defined
+         *
+         * @example $sandbox->is_defined_alias('Foo');
+         *
+         * @param   string          $name       String of alias $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has defined aliases, false otherwise
+         */
         public function is_defined_alias($name){
             return isset($this->definitions['aliases'][$name]);
         }
-
+        /** Undefine PHPSandbox alias
+         *
+         * You can pass an array of alias names to undefine, or a string of alias $name to undefine
+         *
+         * @example $sandbox->undefine_alias(array('Foo', 'Bar'));
+         *
+         * @example $sandbox->undefine_alias('Foo');
+         *
+         * @param   array|string          $name       Array of alias names or string of alias name to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_alias($name){
             if(is_array($name)){
                 return $this->undefine_aliases($name);
@@ -1501,7 +1739,18 @@
             }
             return $this;
         }
-
+        /** Undefine PHPSandbox aliases by array
+         *
+         * You can pass an array of alias names to undefine, or an empty array or null argument to undefine all aliases
+         *
+         * @example $sandbox->undefine_aliases(array('Foo', 'Bar'));
+         *
+         * @example $sandbox->undefine_aliases(); //WILL UNDEFINE ALL ALIASES!
+         *
+         * @param   array           $aliases       Array of alias names to undefine. Passing an empty array or no argument will result in undefining all aliases
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_aliases(array $aliases = array()){
             if(count($aliases)){
                 foreach($aliases as $alias){
@@ -1512,27 +1761,104 @@
             }
             return $this;
         }
-
+        /** Define PHPSandbox use (or alias)
+         *
+         * @alias   define_alias();
+         *
+         * You can pass an associative array of namespaces to use and their aliases, an array of namespaces to use, or the namespace $name and $alias to use
+         *
+         * @example $sandbox->define_use(array('Foo' => 'Bar')); //use Foo as Bar;
+         *
+         * @example $sandbox->define_use(array('Foo', 'Bar')); //use Foo; use Bar;
+         *
+         * @example $sandbox->define_use('Foo', 'Bar');  //use Foo as Bar;
+         *
+         * @example $sandbox->define_use('Foo');  //use Foo;
+         *
+         * @param   array|string    $name       Associative array of namespaces and their aliases to use, or an array of namespaces to use, or string of namespace $name to use
+         * @param   string|null     $alias      String of $alias to use
+         *
+         * @throws  Error           Throws exception if unnamed namespace is used
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_use($name, $alias = null){
             return $this->define_alias($name, $alias);
         }
-
+        /** Define PHPSandbox uses (or aliases) by array
+         *
+         * @alias   define_aliases();
+         *
+         * You can pass an associative array of namespaces to use and their aliases, or an array of namespaces to use
+         *
+         * @example $sandbox->define_uses(array('Foo' => 'Bar')); //use Foo as Bar;
+         *
+         * @example $sandbox->define_uses(array('Foo', 'Bar')); //use Foo; use Bar;
+         *
+         * @param   array           $uses       Associative array of namespaces and their aliases to use, or an array of namespaces to use
+         *
+         * @throws  Error           Throws exception if unnamed namespace is used
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function define_uses(array $uses = array()){
             return $this->define_aliases($uses);
         }
-
+        /** Query whether PHPSandbox instance has defined uses (or aliases)
+         *
+         * @alias   has_defined_aliases();
+         *
+         * @example $sandbox->has_defined_uses(); //returns number of defined uses (or aliases) or zero if none defined
+         *
+         * @return  int           Returns the number of uses (or aliases) this instance has defined
+         */
         public function has_defined_uses(){
             return $this->has_defined_aliases();
         }
-
+        /** Check if PHPSandbox instance has $name uses (or alias) defined
+         *
+         * @alias   is_defined_alias();
+         *
+         * @example $sandbox->is_defined_use('Foo');
+         *
+         * @param   string          $name       String of use (or alias) $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has defined uses (or aliases) and false otherwise
+         */
         public function is_defined_use($name){
             return $this->is_defined_alias($name);
         }
-
+        /** Undefine PHPSandbox use (or alias)
+         *
+         * @alias   undefine_alias();
+         *
+         * You can pass an array of use (or alias) names to undefine, or a string of use (or alias) $name to undefine
+         *
+         * @example $sandbox->undefine_use(array('Foo', 'Bar'));
+         *
+         * @example $sandbox->undefine_use('Foo');
+         *
+         * @param   array|string          $name       Array of use (or alias) names or string of use (or alias) name to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_use($name){
             return $this->undefine_alias($name);
         }
-
+        /** Undefine PHPSandbox uses (or aliases) by array
+         *
+         * @alias   undefine_aliases();
+         *
+         * You can pass an array of use (or alias) names to undefine, or an empty array or null argument to undefine all uses (or aliases)
+         *
+         * @example $sandbox->undefine_uses(array('Foo', 'Bar'));
+         *
+         * @example $sandbox->undefine_uses(); //WILL UNDEFINE ALL USES (OR ALIASES!)
+         *
+         * @param   array           $uses       Array of use (or alias) names to undefine. Passing an empty array or no argument will result in undefining all uses (or aliases)
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
         public function undefine_uses(array $uses = array()){
             return $this->undefine_aliases($uses);
         }
@@ -2861,9 +3187,21 @@
             $this->appended_code = '';
         }
 
+        /** Prepare passed callable for execution
+         *
+         * This function validates your code and automatically whitelists it according to your specified configuration
+         *
+         * @example $sandbox->prepare(function(){ var_dump('Hello world!'); });
+         *
+         * @param   callable    $code       The callable to prepare for execution
+         *
+         * @throws  Error       Throws exception if error occurs in parsing, validation or whitelisting
+         *
+         * @return  \Closure    The prepared closure (this can also be accessed via $sandbox->generated_closure)
+         */
         public function prepare($code){
             if($this->allow_constants && !$this->is_defined_func('define') && ($this->has_whitelist_funcs() || !$this->has_blacklist_funcs())){
-                $this->whitelist_func('define');
+                $this->whitelist_func('define');    //makes no sense to allow constants if you can't define them!
             }
 
             $this->preparsed_code = $this->disassemble($code);
@@ -2908,11 +3246,25 @@
                 "\r\n};";
 
             @eval($this->generated_code);
+            return $this->generated_closure;
         }
-
+        /** Prepare and execute callable and return output
+         *
+         * This function validates your code and automatically whitelists it according to your specified configuration, then executes it. You can also pass an unlimited number of arguments to override variables configured in the function
+         *
+         * @example $sandbox->execute(function(){ var_dump('Hello world!'); });
+         *
+         * @example $sandbox->execute(function($test){ var_dump($test); }, 'Hello world!'); //Hello world!
+         *
+         * @param   callable    $code       The callable to prepare for execution and execute. If this argument is not callable and a valid generated closure exists, this will be the first argument passed to the executed code
+         *
+         * @throws  Error       Throws exception if error occurs in parsing, validation or whitelisting or if generated closure is invalid
+         *
+         * @return  mixed       The output from the executed sandboxed code
+         */
         public function execute(){
             $arguments = func_get_args();
-            if(count($arguments)){
+            if(count($arguments) && is_callable($arguments[0])){
                 $this->prepare(array_shift($arguments));
             }
 
