@@ -9,7 +9,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 - Can redefine superglobals and magic constants to expose your own values to sandboxed code.
 - Can overwrite the get_defined_* and get_declared_* functions to show only allowed functions, classes, etc. to the sandboxed code.
 - Can selectively allow and disallow function creation, class declarations, constant definitions, keywords, and much more.
-- Can prepend and append trusted code to setup and tear the sandbox, and automatically whitelist the classes, functions, variables, etc. they define for the sandbox.
+- Can prepend and append trusted code to setup and tear down the sandbox, and automatically whitelist the classes, functions, variables, etc. they define for the sandbox.
 - Can retrieve the generated sandbox code for later usage.
 - Can pass arguments directly to the sandboxed code through the execute method to reveal chosen outside variables to the sandbox.
 - Can access the parsed, prepared and generated code ASTs for further analysis or for serialization.
