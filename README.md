@@ -38,6 +38,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 ##Installation
 
 To install using composer, simply add the following to your composer.json file in the root of your project:
+
     {
         "minimum-stability": "dev",
         "require": {
