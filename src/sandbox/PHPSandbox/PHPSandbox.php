@@ -2,6 +2,9 @@
     namespace PHPSandbox;
 
 	class PHPSandbox {
+        /** The prefix given to the obfuscated sandbox variable passed to the generated code
+         * @var string
+         */
         protected static $function_prefix = '__PHPSandbox_';
         public static $superglobals = array(
             '_GET',
@@ -126,7 +129,7 @@
         /**
          * @var \Closure|null
          */
-        public $generated_function = null;              //generated closure
+        public $generated_closure = null;              //generated closure
 
 		public function __construct(array $functions = array(),
                                     array $variables = array(),
@@ -2144,7 +2147,7 @@
             $this->generated_code = $this->prepare_namespaces() .
                 $this->prepare_aliases() .
                 $this->prepare_consts() .
-                '$this->generated_function = function($' . $this->name . $this->prepare_vars() . "){\r\n" .
+                '$this->generated_closure = function($' . $this->name . $this->prepare_vars() . "){\r\n" .
                 $this->prepended_code .
                 $this->prepared_code .
                 $this->appended_code .
@@ -2159,12 +2162,12 @@
                 $this->prepare(array_shift($arguments));
             }
 
-            if(is_callable($this->generated_function)){
+            if(is_callable($this->generated_closure)){
                 if($this->error_level !== null){
                     error_reporting($this->error_level);
                 }
                 array_unshift($arguments, $this);
-                return call_user_func_array($this->generated_function, $arguments);
+                return call_user_func_array($this->generated_closure, $arguments);
             } else {
                 throw new Exception("Error generating sandboxed code!");
             }
