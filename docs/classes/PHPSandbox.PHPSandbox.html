@@ -31,7 +31,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">46</span></a></li>
+                <span class="label label-info">0</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -66,8 +66,7 @@
 <li class="method public "><a href="#method__get_defined_vars" title="_get_defined_vars :: Get PHPSandbox redefined variables in place of get_defined_vars()."><span class="description">Get PHPSandbox redefined variables in place of get_defined_vars().</span><pre>_get_defined_vars()</pre></a></li>
 <li class="method public "><a href="#method__get_magic_const" title="_get_magic_const :: Get PHPSandbox redefined magic constant."><span class="description">Get PHPSandbox redefined magic constant.</span><pre>_get_magic_const()</pre></a></li>
 <li class="method public "><a href="#method__get_superglobal" title="_get_superglobal :: Get PHPSandbox redefined superglobal."><span class="description">Get PHPSandbox redefined superglobal.</span><pre>_get_superglobal()</pre></a></li>
-<li class="method public "><a href="#method_append" title="append :: "><span class="description">append()
-        </span><pre>append()</pre></a></li>
+<li class="method public "><a href="#method_append" title="append :: Append trusted code"><span class="description">Append trusted code</span><pre>append()</pre></a></li>
 <li class="method public "><a href="#method_blacklist" title="blacklist :: Blacklist PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Blacklist PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>blacklist()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_alias" title="blacklist_alias :: Blacklist alias"><span class="description">Blacklist alias</span><pre>blacklist_alias()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_class" title="blacklist_class :: Blacklist class"><span class="description">Blacklist class</span><pre>blacklist_class()</pre></a></li>
@@ -75,59 +74,36 @@
 <li class="method public "><a href="#method_blacklist_func" title="blacklist_func :: Blacklist function"><span class="description">Blacklist function</span><pre>blacklist_func()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_global" title="blacklist_global :: Blacklist global"><span class="description">Blacklist global</span><pre>blacklist_global()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_interface" title="blacklist_interface :: Blacklist interface"><span class="description">Blacklist interface</span><pre>blacklist_interface()</pre></a></li>
-<li class="method public "><a href="#method_blacklist_keyword" title="blacklist_keyword :: "><span class="description">blacklist_keyword()
-        </span><pre>blacklist_keyword()</pre></a></li>
+<li class="method public "><a href="#method_blacklist_keyword" title="blacklist_keyword :: Blacklist keyword"><span class="description">Blacklist keyword</span><pre>blacklist_keyword()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_magic_const" title="blacklist_magic_const :: Blacklist magic constant"><span class="description">Blacklist magic constant</span><pre>blacklist_magic_const()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_namespace" title="blacklist_namespace :: Blacklist namespace"><span class="description">Blacklist namespace</span><pre>blacklist_namespace()</pre></a></li>
-<li class="method public "><a href="#method_blacklist_operator" title="blacklist_operator :: "><span class="description">blacklist_operator()
-        </span><pre>blacklist_operator()</pre></a></li>
-<li class="method public "><a href="#method_blacklist_primitive" title="blacklist_primitive :: "><span class="description">blacklist_primitive()
-        </span><pre>blacklist_primitive()</pre></a></li>
+<li class="method public "><a href="#method_blacklist_operator" title="blacklist_operator :: Blacklist operator"><span class="description">Blacklist operator</span><pre>blacklist_operator()</pre></a></li>
+<li class="method public "><a href="#method_blacklist_primitive" title="blacklist_primitive :: Blacklist primitive"><span class="description">Blacklist primitive</span><pre>blacklist_primitive()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_superglobal" title="blacklist_superglobal :: Blacklist superglobal or superglobal key"><span class="description">Blacklist superglobal or superglobal key</span><pre>blacklist_superglobal()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_trait" title="blacklist_trait :: Blacklist trait"><span class="description">Blacklist trait</span><pre>blacklist_trait()</pre></a></li>
-<li class="method public "><a href="#method_blacklist_type" title="blacklist_type :: "><span class="description">blacklist_type()
-        </span><pre>blacklist_type()</pre></a></li>
+<li class="method public "><a href="#method_blacklist_type" title="blacklist_type :: Blacklist type"><span class="description">Blacklist type</span><pre>blacklist_type()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_use" title="blacklist_use :: Blacklist use (or alias)"><span class="description">Blacklist use (or alias)</span><pre>blacklist_use()</pre></a></li>
 <li class="method public "><a href="#method_blacklist_var" title="blacklist_var :: Blacklist variable"><span class="description">Blacklist variable</span><pre>blacklist_var()</pre></a></li>
 <li class="method public "><a href="#method_call_func" title="call_func :: Get PHPSandbox redefined function."><span class="description">Get PHPSandbox redefined function.</span><pre>call_func()</pre></a></li>
-<li class="method public "><a href="#method_check_alias" title="check_alias :: "><span class="description">check_alias()
-        </span><pre>check_alias()</pre></a></li>
-<li class="method public "><a href="#method_check_class" title="check_class :: "><span class="description">check_class()
-        </span><pre>check_class()</pre></a></li>
-<li class="method public "><a href="#method_check_const" title="check_const :: "><span class="description">check_const()
-        </span><pre>check_const()</pre></a></li>
-<li class="method public "><a href="#method_check_func" title="check_func :: "><span class="description">check_func()
-        </span><pre>check_func()</pre></a></li>
-<li class="method public "><a href="#method_check_global" title="check_global :: "><span class="description">check_global()
-        </span><pre>check_global()</pre></a></li>
-<li class="method public "><a href="#method_check_interface" title="check_interface :: "><span class="description">check_interface()
-        </span><pre>check_interface()</pre></a></li>
-<li class="method public "><a href="#method_check_keyword" title="check_keyword :: "><span class="description">check_keyword()
-        </span><pre>check_keyword()</pre></a></li>
-<li class="method public "><a href="#method_check_magic_const" title="check_magic_const :: "><span class="description">check_magic_const()
-        </span><pre>check_magic_const()</pre></a></li>
-<li class="method public "><a href="#method_check_namespace" title="check_namespace :: "><span class="description">check_namespace()
-        </span><pre>check_namespace()</pre></a></li>
-<li class="method public "><a href="#method_check_operator" title="check_operator :: "><span class="description">check_operator()
-        </span><pre>check_operator()</pre></a></li>
-<li class="method public "><a href="#method_check_primitive" title="check_primitive :: "><span class="description">check_primitive()
-        </span><pre>check_primitive()</pre></a></li>
-<li class="method public "><a href="#method_check_superglobal" title="check_superglobal :: "><span class="description">check_superglobal()
-        </span><pre>check_superglobal()</pre></a></li>
-<li class="method public "><a href="#method_check_trait" title="check_trait :: "><span class="description">check_trait()
-        </span><pre>check_trait()</pre></a></li>
-<li class="method public "><a href="#method_check_type" title="check_type :: "><span class="description">check_type()
-        </span><pre>check_type()</pre></a></li>
-<li class="method public "><a href="#method_check_use" title="check_use :: "><span class="description">check_use()
-        </span><pre>check_use()</pre></a></li>
-<li class="method public "><a href="#method_check_var" title="check_var :: "><span class="description">check_var()
-        </span><pre>check_var()</pre></a></li>
-<li class="method public "><a href="#method_clear" title="clear :: "><span class="description">clear()
-        </span><pre>clear()</pre></a></li>
-<li class="method public "><a href="#method_clear_append" title="clear_append :: "><span class="description">clear_append()
-        </span><pre>clear_append()</pre></a></li>
-<li class="method public "><a href="#method_clear_prepend" title="clear_prepend :: "><span class="description">clear_prepend()
-        </span><pre>clear_prepend()</pre></a></li>
+<li class="method public "><a href="#method_check_alias" title="check_alias :: Check alias name against PHPSandbox validation rules."><span class="description">Check alias name against PHPSandbox validation rules.</span><pre>check_alias()</pre></a></li>
+<li class="method public "><a href="#method_check_class" title="check_class :: Check class name against PHPSandbox validation rules."><span class="description">Check class name against PHPSandbox validation rules.</span><pre>check_class()</pre></a></li>
+<li class="method public "><a href="#method_check_const" title="check_const :: Check constant name against PHPSandbox validation rules."><span class="description">Check constant name against PHPSandbox validation rules.</span><pre>check_const()</pre></a></li>
+<li class="method public "><a href="#method_check_func" title="check_func :: Check function name against PHPSandbox validation rules."><span class="description">Check function name against PHPSandbox validation rules.</span><pre>check_func()</pre></a></li>
+<li class="method public "><a href="#method_check_global" title="check_global :: Check global name against PHPSandbox validation rules."><span class="description">Check global name against PHPSandbox validation rules.</span><pre>check_global()</pre></a></li>
+<li class="method public "><a href="#method_check_interface" title="check_interface :: Check interface name against PHPSandbox validation rules."><span class="description">Check interface name against PHPSandbox validation rules.</span><pre>check_interface()</pre></a></li>
+<li class="method public "><a href="#method_check_keyword" title="check_keyword :: Check keyword name against PHPSandbox validation rules."><span class="description">Check keyword name against PHPSandbox validation rules.</span><pre>check_keyword()</pre></a></li>
+<li class="method public "><a href="#method_check_magic_const" title="check_magic_const :: Check magic constant name against PHPSandbox validation rules."><span class="description">Check magic constant name against PHPSandbox validation rules.</span><pre>check_magic_const()</pre></a></li>
+<li class="method public "><a href="#method_check_namespace" title="check_namespace :: Check namespace name against PHPSandbox validation rules."><span class="description">Check namespace name against PHPSandbox validation rules.</span><pre>check_namespace()</pre></a></li>
+<li class="method public "><a href="#method_check_operator" title="check_operator :: Check operator name against PHPSandbox validation rules."><span class="description">Check operator name against PHPSandbox validation rules.</span><pre>check_operator()</pre></a></li>
+<li class="method public "><a href="#method_check_primitive" title="check_primitive :: Check primitive name against PHPSandbox validation rules."><span class="description">Check primitive name against PHPSandbox validation rules.</span><pre>check_primitive()</pre></a></li>
+<li class="method public "><a href="#method_check_superglobal" title="check_superglobal :: Check superglobal name against PHPSandbox validation rules."><span class="description">Check superglobal name against PHPSandbox validation rules.</span><pre>check_superglobal()</pre></a></li>
+<li class="method public "><a href="#method_check_trait" title="check_trait :: Check trait name against PHPSandbox validation rules."><span class="description">Check trait name against PHPSandbox validation rules.</span><pre>check_trait()</pre></a></li>
+<li class="method public "><a href="#method_check_type" title="check_type :: Check type name against PHPSandbox validation rules."><span class="description">Check type name against PHPSandbox validation rules.</span><pre>check_type()</pre></a></li>
+<li class="method public "><a href="#method_check_use" title="check_use :: Check use (or alias) name against PHPSandbox validation rules."><span class="description">Check use (or alias) name against PHPSandbox validation rules.</span><pre>check_use()</pre></a></li>
+<li class="method public "><a href="#method_check_var" title="check_var :: Check variable name against PHPSandbox validation rules."><span class="description">Check variable name against PHPSandbox validation rules.</span><pre>check_var()</pre></a></li>
+<li class="method public "><a href="#method_clear" title="clear :: Clear all prepended and appended trusted code"><span class="description">Clear all prepended and appended trusted code</span><pre>clear()</pre></a></li>
+<li class="method public "><a href="#method_clear_append" title="clear_append :: Clear all  appended trusted code"><span class="description">Clear all  appended trusted code</span><pre>clear_append()</pre></a></li>
+<li class="method public "><a href="#method_clear_prepend" title="clear_prepend :: Clear all prepended trusted code"><span class="description">Clear all prepended trusted code</span><pre>clear_prepend()</pre></a></li>
 <li class="method public "><a href="#method_create" title="create :: PHPSandbox static factory method"><span class="description">PHPSandbox static factory method</span><pre>create()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist" title="deblacklist :: Remove PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Remove PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>deblacklist()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_alias" title="deblacklist_alias :: Remove alias from blacklist"><span class="description">Remove alias from blacklist</span><pre>deblacklist_alias()</pre></a></li>
@@ -136,18 +112,14 @@
 <li class="method public "><a href="#method_deblacklist_func" title="deblacklist_func :: Remove function from blacklist"><span class="description">Remove function from blacklist</span><pre>deblacklist_func()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_global" title="deblacklist_global :: Remove global from blacklist"><span class="description">Remove global from blacklist</span><pre>deblacklist_global()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_interface" title="deblacklist_interface :: Remove interface from blacklist"><span class="description">Remove interface from blacklist</span><pre>deblacklist_interface()</pre></a></li>
-<li class="method public "><a href="#method_deblacklist_keyword" title="deblacklist_keyword :: "><span class="description">deblacklist_keyword()
-        </span><pre>deblacklist_keyword()</pre></a></li>
+<li class="method public "><a href="#method_deblacklist_keyword" title="deblacklist_keyword :: Remove keyword from blacklist"><span class="description">Remove keyword from blacklist</span><pre>deblacklist_keyword()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_magic_const" title="deblacklist_magic_const :: Remove magic constant from blacklist"><span class="description">Remove magic constant from blacklist</span><pre>deblacklist_magic_const()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_namespace" title="deblacklist_namespace :: Remove namespace from blacklist"><span class="description">Remove namespace from blacklist</span><pre>deblacklist_namespace()</pre></a></li>
-<li class="method public "><a href="#method_deblacklist_operator" title="deblacklist_operator :: "><span class="description">deblacklist_operator()
-        </span><pre>deblacklist_operator()</pre></a></li>
-<li class="method public "><a href="#method_deblacklist_primitive" title="deblacklist_primitive :: "><span class="description">deblacklist_primitive()
-        </span><pre>deblacklist_primitive()</pre></a></li>
+<li class="method public "><a href="#method_deblacklist_operator" title="deblacklist_operator :: Remove operator from blacklist"><span class="description">Remove operator from blacklist</span><pre>deblacklist_operator()</pre></a></li>
+<li class="method public "><a href="#method_deblacklist_primitive" title="deblacklist_primitive :: Remove primitive from blacklist"><span class="description">Remove primitive from blacklist</span><pre>deblacklist_primitive()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_superglobal" title="deblacklist_superglobal :: Remove superglobal or superglobal key from blacklist"><span class="description">Remove superglobal or superglobal key from blacklist</span><pre>deblacklist_superglobal()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_trait" title="deblacklist_trait :: Remove trait from blacklist"><span class="description">Remove trait from blacklist</span><pre>deblacklist_trait()</pre></a></li>
-<li class="method public "><a href="#method_deblacklist_type" title="deblacklist_type :: "><span class="description">deblacklist_type()
-        </span><pre>deblacklist_type()</pre></a></li>
+<li class="method public "><a href="#method_deblacklist_type" title="deblacklist_type :: Remove type from blacklist"><span class="description">Remove type from blacklist</span><pre>deblacklist_type()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_use" title="deblacklist_use :: Remove use (or alias) from blacklist"><span class="description">Remove use (or alias) from blacklist</span><pre>deblacklist_use()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_var" title="deblacklist_var :: Remove function from blacklist"><span class="description">Remove function from blacklist</span><pre>deblacklist_var()</pre></a></li>
 <li class="method public "><a href="#method_define" title="define :: Define PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Define PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>define()</pre></a></li>
@@ -174,18 +146,14 @@
 <li class="method public "><a href="#method_dewhitelist_func" title="dewhitelist_func :: Remove function from whitelist"><span class="description">Remove function from whitelist</span><pre>dewhitelist_func()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_global" title="dewhitelist_global :: Remove global from whitelist"><span class="description">Remove global from whitelist</span><pre>dewhitelist_global()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_interface" title="dewhitelist_interface :: Remove interface from whitelist"><span class="description">Remove interface from whitelist</span><pre>dewhitelist_interface()</pre></a></li>
-<li class="method public "><a href="#method_dewhitelist_keyword" title="dewhitelist_keyword :: "><span class="description">dewhitelist_keyword()
-        </span><pre>dewhitelist_keyword()</pre></a></li>
+<li class="method public "><a href="#method_dewhitelist_keyword" title="dewhitelist_keyword :: Remove keyword from whitelist"><span class="description">Remove keyword from whitelist</span><pre>dewhitelist_keyword()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_magic_const" title="dewhitelist_magic_const :: Remove magic constant from whitelist"><span class="description">Remove magic constant from whitelist</span><pre>dewhitelist_magic_const()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_namespace" title="dewhitelist_namespace :: Remove namespace from whitelist"><span class="description">Remove namespace from whitelist</span><pre>dewhitelist_namespace()</pre></a></li>
-<li class="method public "><a href="#method_dewhitelist_operator" title="dewhitelist_operator :: "><span class="description">dewhitelist_operator()
-        </span><pre>dewhitelist_operator()</pre></a></li>
-<li class="method public "><a href="#method_dewhitelist_primitive" title="dewhitelist_primitive :: "><span class="description">dewhitelist_primitive()
-        </span><pre>dewhitelist_primitive()</pre></a></li>
+<li class="method public "><a href="#method_dewhitelist_operator" title="dewhitelist_operator :: Remove operator from whitelist"><span class="description">Remove operator from whitelist</span><pre>dewhitelist_operator()</pre></a></li>
+<li class="method public "><a href="#method_dewhitelist_primitive" title="dewhitelist_primitive :: Remove primitive from whitelist"><span class="description">Remove primitive from whitelist</span><pre>dewhitelist_primitive()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_superglobal" title="dewhitelist_superglobal :: Remove superglobal or superglobal key from whitelist"><span class="description">Remove superglobal or superglobal key from whitelist</span><pre>dewhitelist_superglobal()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_trait" title="dewhitelist_trait :: Remove trait from whitelist"><span class="description">Remove trait from whitelist</span><pre>dewhitelist_trait()</pre></a></li>
-<li class="method public "><a href="#method_dewhitelist_type" title="dewhitelist_type :: "><span class="description">dewhitelist_type()
-        </span><pre>dewhitelist_type()</pre></a></li>
+<li class="method public "><a href="#method_dewhitelist_type" title="dewhitelist_type :: Remove type from whitelist"><span class="description">Remove type from whitelist</span><pre>dewhitelist_type()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_use" title="dewhitelist_use :: Remove use (or alias) from whitelist"><span class="description">Remove use (or alias) from whitelist</span><pre>dewhitelist_use()</pre></a></li>
 <li class="method public "><a href="#method_dewhitelist_var" title="dewhitelist_var :: Remove variable from whitelist"><span class="description">Remove variable from whitelist</span><pre>dewhitelist_var()</pre></a></li>
 <li class="method public "><a href="#method_execute" title="execute :: Prepare and execute callable and return output"><span class="description">Prepare and execute callable and return output</span><pre>execute()</pre></a></li>
@@ -285,8 +253,7 @@
 <li class="method public "><a href="#method_is_whitelisted_use" title="is_whitelisted_use :: Check if PHPSandbox instance has whitelisted use (or alias) name set"><span class="description">Check if PHPSandbox instance has whitelisted use (or alias) name set</span><pre>is_whitelisted_use()</pre></a></li>
 <li class="method public "><a href="#method_is_whitelisted_var" title="is_whitelisted_var :: Check if PHPSandbox instance has whitelisted variable name set"><span class="description">Check if PHPSandbox instance has whitelisted variable name set</span><pre>is_whitelisted_var()</pre></a></li>
 <li class="method public "><a href="#method_prepare" title="prepare :: Prepare passed callable for execution"><span class="description">Prepare passed callable for execution</span><pre>prepare()</pre></a></li>
-<li class="method public "><a href="#method_prepend" title="prepend :: "><span class="description">prepend()
-        </span><pre>prepend()</pre></a></li>
+<li class="method public "><a href="#method_prepend" title="prepend :: Prepend trusted code"><span class="description">Prepend trusted code</span><pre>prepend()</pre></a></li>
 <li class="method public "><a href="#method_set_option" title="set_option :: Set PHPSandbox option"><span class="description">Set PHPSandbox option</span><pre>set_option()</pre></a></li>
 <li class="method public "><a href="#method_set_options" title="set_options :: Set PHPSandbox options by array"><span class="description">Set PHPSandbox options by array</span><pre>set_options()</pre></a></li>
 <li class="method public "><a href="#method_undefine" title="undefine :: Undefine PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Undefine PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>undefine()</pre></a></li>
@@ -313,30 +280,23 @@
 <li class="method public "><a href="#method_whitelist_func" title="whitelist_func :: Whitelist function"><span class="description">Whitelist function</span><pre>whitelist_func()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_global" title="whitelist_global :: Whitelist global"><span class="description">Whitelist global</span><pre>whitelist_global()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_interface" title="whitelist_interface :: Whitelist interface"><span class="description">Whitelist interface</span><pre>whitelist_interface()</pre></a></li>
-<li class="method public "><a href="#method_whitelist_keyword" title="whitelist_keyword :: "><span class="description">whitelist_keyword()
-        </span><pre>whitelist_keyword()</pre></a></li>
+<li class="method public "><a href="#method_whitelist_keyword" title="whitelist_keyword :: Whitelist keyword"><span class="description">Whitelist keyword</span><pre>whitelist_keyword()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_magic_const" title="whitelist_magic_const :: Whitelist magic constant"><span class="description">Whitelist magic constant</span><pre>whitelist_magic_const()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_namespace" title="whitelist_namespace :: Whitelist namespace"><span class="description">Whitelist namespace</span><pre>whitelist_namespace()</pre></a></li>
-<li class="method public "><a href="#method_whitelist_operator" title="whitelist_operator :: "><span class="description">whitelist_operator()
-        </span><pre>whitelist_operator()</pre></a></li>
-<li class="method public "><a href="#method_whitelist_primitive" title="whitelist_primitive :: "><span class="description">whitelist_primitive()
-        </span><pre>whitelist_primitive()</pre></a></li>
+<li class="method public "><a href="#method_whitelist_operator" title="whitelist_operator :: Whitelist operator"><span class="description">Whitelist operator</span><pre>whitelist_operator()</pre></a></li>
+<li class="method public "><a href="#method_whitelist_primitive" title="whitelist_primitive :: Whitelist primitive"><span class="description">Whitelist primitive</span><pre>whitelist_primitive()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_superglobal" title="whitelist_superglobal :: Whitelist superglobal or superglobal key"><span class="description">Whitelist superglobal or superglobal key</span><pre>whitelist_superglobal()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_trait" title="whitelist_trait :: Whitelist trait"><span class="description">Whitelist trait</span><pre>whitelist_trait()</pre></a></li>
-<li class="method public "><a href="#method_whitelist_type" title="whitelist_type :: "><span class="description">whitelist_type()
-        </span><pre>whitelist_type()</pre></a></li>
+<li class="method public "><a href="#method_whitelist_type" title="whitelist_type :: Whitelist type"><span class="description">Whitelist type</span><pre>whitelist_type()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_use" title="whitelist_use :: Whitelist use (or alias)"><span class="description">Whitelist use (or alias)</span><pre>whitelist_use()</pre></a></li>
 <li class="method public "><a href="#method_whitelist_var" title="whitelist_var :: Whitelist variable"><span class="description">Whitelist variable</span><pre>whitelist_var()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
-<li class="method protected "><a href="#method_auto_define" title="auto_define :: "><span class="description">auto_define()
-        </span><pre>auto_define()</pre></a></li>
-<li class="method protected "><a href="#method_auto_whitelist" title="auto_whitelist :: "><span class="description">auto_whitelist()
-        </span><pre>auto_whitelist()</pre></a></li>
-<li class="method protected "><a href="#method_disassemble" title="disassemble :: "><span class="description">disassemble()
-        </span><pre>disassemble()</pre></a></li>
+<li class="method protected "><a href="#method_auto_define" title="auto_define :: Automatically define variables passed to disassembled closure"><span class="description">Automatically define variables passed to disassembled closure</span><pre>auto_define()</pre></a></li>
+<li class="method protected "><a href="#method_auto_whitelist" title="auto_whitelist :: Automatically whitelisted trusted code"><span class="description">Automatically whitelisted trusted code</span><pre>auto_whitelist()</pre></a></li>
+<li class="method protected "><a href="#method_disassemble" title="disassemble :: Disassemble callable to string"><span class="description">Disassemble callable to string</span><pre>disassemble()</pre></a></li>
 <li class="method protected "><a href="#method_normalize_alias" title="normalize_alias :: Normalize alias name."><span class="description">Normalize alias name.</span><pre>normalize_alias()</pre></a></li>
 <li class="method protected "><a href="#method_normalize_class" title="normalize_class :: Normalize class name."><span class="description">Normalize class name.</span><pre>normalize_class()</pre></a></li>
 <li class="method protected "><a href="#method_normalize_func" title="normalize_func :: Normalize function name."><span class="description">Normalize function name.</span><pre>normalize_func()</pre></a></li>
@@ -350,16 +310,11 @@
 <li class="method protected "><a href="#method_normalize_trait" title="normalize_trait :: Normalize trait name."><span class="description">Normalize trait name.</span><pre>normalize_trait()</pre></a></li>
 <li class="method protected "><a href="#method_normalize_type" title="normalize_type :: Normalize type name."><span class="description">Normalize type name.</span><pre>normalize_type()</pre></a></li>
 <li class="method protected "><a href="#method_normalize_use" title="normalize_use :: Normalize use (or alias) name."><span class="description">Normalize use (or alias) name.</span><pre>normalize_use()</pre></a></li>
-<li class="method protected "><a href="#method_prepare_aliases" title="prepare_aliases :: "><span class="description">prepare_aliases()
-        </span><pre>prepare_aliases()</pre></a></li>
-<li class="method protected "><a href="#method_prepare_consts" title="prepare_consts :: "><span class="description">prepare_consts()
-        </span><pre>prepare_consts()</pre></a></li>
-<li class="method protected "><a href="#method_prepare_namespaces" title="prepare_namespaces :: "><span class="description">prepare_namespaces()
-        </span><pre>prepare_namespaces()</pre></a></li>
-<li class="method protected "><a href="#method_prepare_uses" title="prepare_uses :: "><span class="description">prepare_uses()
-        </span><pre>prepare_uses()</pre></a></li>
-<li class="method protected "><a href="#method_prepare_vars" title="prepare_vars :: "><span class="description">prepare_vars()
-        </span><pre>prepare_vars()</pre></a></li>
+<li class="method protected "><a href="#method_prepare_aliases" title="prepare_aliases :: Prepare defined aliases for execution"><span class="description">Prepare defined aliases for execution</span><pre>prepare_aliases()</pre></a></li>
+<li class="method protected "><a href="#method_prepare_consts" title="prepare_consts :: Prepare defined constants for execution"><span class="description">Prepare defined constants for execution</span><pre>prepare_consts()</pre></a></li>
+<li class="method protected "><a href="#method_prepare_namespaces" title="prepare_namespaces :: Prepare defined namespaces for execution"><span class="description">Prepare defined namespaces for execution</span><pre>prepare_namespaces()</pre></a></li>
+<li class="method protected "><a href="#method_prepare_uses" title="prepare_uses :: Prepare defined uses (or aliases) for execution"><span class="description">Prepare defined uses (or aliases) for execution</span><pre>prepare_uses()</pre></a></li>
+<li class="method protected "><a href="#method_prepare_vars" title="prepare_vars :: Prepare defined variables for execution"><span class="description">Prepare defined variables for execution</span><pre>prepare_vars()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -656,14 +611,23 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div></div>
 </div>
 <a id="method_append"></a><div class="element clickable method public method_append" data-toggle="collapse" data-target=".method_append .collapse">
-<h2>append()
-        </h2>
-<pre>append($code) </pre>
+<h2>Append trusted code</h2>
+<pre>append(string | callable $code) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$code</h4></div>
+<div class="subelement argument">
+<h4>$code</h4>
+<code>string</code><code>callable</code><p>String or callable of trusted $code to append to generated code</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
 </div></div>
 </div>
 <a id="method_blacklist"></a><div class="element clickable method public method_blacklist" data-toggle="collapse" data-target=".method_blacklist .collapse">
@@ -929,15 +893,40 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div>
 </div>
 <a id="method_blacklist_keyword"></a><div class="element clickable method public method_blacklist_keyword" data-toggle="collapse" data-target=".method_blacklist_keyword .collapse">
-<h2>blacklist_keyword()
-        </h2>
-<pre>blacklist_keyword($name) </pre>
+<h2>Blacklist keyword</h2>
+<pre>blacklist_keyword(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of keyword names, or pass a string of the keyword name to blacklist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist_keyword(array('echo', 'eval'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist_keyword('echo');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of keyword names or string of keyword name to blacklist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_blacklist_magic_const"></a><div class="element clickable method public method_blacklist_magic_const" data-toggle="collapse" data-target=".method_blacklist_magic_const .collapse">
 <h2>Blacklist magic constant</h2>
@@ -1012,26 +1001,76 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div>
 </div>
 <a id="method_blacklist_operator"></a><div class="element clickable method public method_blacklist_operator" data-toggle="collapse" data-target=".method_blacklist_operator .collapse">
-<h2>blacklist_operator()
-        </h2>
-<pre>blacklist_operator($name) </pre>
+<h2>Blacklist operator</h2>
+<pre>blacklist_operator(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of operator names, or pass a string of the operator name to blacklist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist_operator(array('+', '-'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist_operator('+');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of operator names or string of operator name to blacklist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_blacklist_primitive"></a><div class="element clickable method public method_blacklist_primitive" data-toggle="collapse" data-target=".method_blacklist_primitive .collapse">
-<h2>blacklist_primitive()
-        </h2>
-<pre>blacklist_primitive($name) </pre>
+<h2>Blacklist primitive</h2>
+<pre>blacklist_primitive(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of primitive names, or pass a string of the primitive name to blacklist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist_primitive(array('int', 'float'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist_primitive('int');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of primitive names or string of primitive name to blacklist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_blacklist_superglobal"></a><div class="element clickable method public method_blacklist_superglobal" data-toggle="collapse" data-target=".method_blacklist_superglobal .collapse">
 <h2>Blacklist superglobal or superglobal key</h2>
@@ -1119,15 +1158,40 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div>
 </div>
 <a id="method_blacklist_type"></a><div class="element clickable method public method_blacklist_type" data-toggle="collapse" data-target=".method_blacklist_type .collapse">
-<h2>blacklist_type()
-        </h2>
-<pre>blacklist_type($name) </pre>
+<h2>Blacklist type</h2>
+<pre>blacklist_type(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of type names, or pass a string of the type name to blacklist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist_type(array('PHPSandbox', 'PHPParser'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->blacklist_type('PHPSandbox');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of type names or string of type name to blacklist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_blacklist_use"></a><div class="element clickable method public method_blacklist_use" data-toggle="collapse" data-target=".method_blacklist_use .collapse">
 <h2>Blacklist use (or alias)</h2>
@@ -1223,201 +1287,326 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div></div>
 </div>
 <a id="method_check_alias"></a><div class="element clickable method public method_check_alias" data-toggle="collapse" data-target=".method_check_alias .collapse">
-<h2>check_alias()
-        </h2>
-<pre>check_alias($name) </pre>
+<h2>Check alias name against PHPSandbox validation rules.</h2>
+<pre>check_alias(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the alias name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_class"></a><div class="element clickable method public method_check_class" data-toggle="collapse" data-target=".method_check_class .collapse">
-<h2>check_class()
-        </h2>
-<pre>check_class($name) </pre>
+<h2>Check class name against PHPSandbox validation rules.</h2>
+<pre>check_class(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the class name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_const"></a><div class="element clickable method public method_check_const" data-toggle="collapse" data-target=".method_check_const .collapse">
-<h2>check_const()
-        </h2>
-<pre>check_const($name) </pre>
+<h2>Check constant name against PHPSandbox validation rules.</h2>
+<pre>check_const(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the constant name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_func"></a><div class="element clickable method public method_check_func" data-toggle="collapse" data-target=".method_check_func .collapse">
-<h2>check_func()
-        </h2>
-<pre>check_func($name) </pre>
+<h2>Check function name against PHPSandbox validation rules.</h2>
+<pre>check_func(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the function name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_global"></a><div class="element clickable method public method_check_global" data-toggle="collapse" data-target=".method_check_global .collapse">
-<h2>check_global()
-        </h2>
-<pre>check_global($name) </pre>
+<h2>Check global name against PHPSandbox validation rules.</h2>
+<pre>check_global(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the global name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_interface"></a><div class="element clickable method public method_check_interface" data-toggle="collapse" data-target=".method_check_interface .collapse">
-<h2>check_interface()
-        </h2>
-<pre>check_interface($name) </pre>
+<h2>Check interface name against PHPSandbox validation rules.</h2>
+<pre>check_interface(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the interface name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_keyword"></a><div class="element clickable method public method_check_keyword" data-toggle="collapse" data-target=".method_check_keyword .collapse">
-<h2>check_keyword()
-        </h2>
-<pre>check_keyword($name) </pre>
+<h2>Check keyword name against PHPSandbox validation rules.</h2>
+<pre>check_keyword(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the keyword name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_magic_const"></a><div class="element clickable method public method_check_magic_const" data-toggle="collapse" data-target=".method_check_magic_const .collapse">
-<h2>check_magic_const()
-        </h2>
-<pre>check_magic_const($name) </pre>
+<h2>Check magic constant name against PHPSandbox validation rules.</h2>
+<pre>check_magic_const(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the magic constant name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_namespace"></a><div class="element clickable method public method_check_namespace" data-toggle="collapse" data-target=".method_check_namespace .collapse">
-<h2>check_namespace()
-        </h2>
-<pre>check_namespace($name) </pre>
+<h2>Check namespace name against PHPSandbox validation rules.</h2>
+<pre>check_namespace(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the namespace name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_operator"></a><div class="element clickable method public method_check_operator" data-toggle="collapse" data-target=".method_check_operator .collapse">
-<h2>check_operator()
-        </h2>
-<pre>check_operator($name) </pre>
+<h2>Check operator name against PHPSandbox validation rules.</h2>
+<pre>check_operator(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the type operator to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_primitive"></a><div class="element clickable method public method_check_primitive" data-toggle="collapse" data-target=".method_check_primitive .collapse">
-<h2>check_primitive()
-        </h2>
-<pre>check_primitive($name) </pre>
+<h2>Check primitive name against PHPSandbox validation rules.</h2>
+<pre>check_primitive(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the primitive name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_superglobal"></a><div class="element clickable method public method_check_superglobal" data-toggle="collapse" data-target=".method_check_superglobal .collapse">
-<h2>check_superglobal()
-        </h2>
-<pre>check_superglobal($name) </pre>
+<h2>Check superglobal name against PHPSandbox validation rules.</h2>
+<pre>check_superglobal(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the superglobal name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_trait"></a><div class="element clickable method public method_check_trait" data-toggle="collapse" data-target=".method_check_trait .collapse">
-<h2>check_trait()
-        </h2>
-<pre>check_trait($name) </pre>
+<h2>Check trait name against PHPSandbox validation rules.</h2>
+<pre>check_trait(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the trait name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_type"></a><div class="element clickable method public method_check_type" data-toggle="collapse" data-target=".method_check_type .collapse">
-<h2>check_type()
-        </h2>
-<pre>check_type($name) </pre>
+<h2>Check type name against PHPSandbox validation rules.</h2>
+<pre>check_type(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the type name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_use"></a><div class="element clickable method public method_check_use" data-toggle="collapse" data-target=".method_check_use .collapse">
-<h2>check_use()
-        </h2>
-<pre>check_use($name) </pre>
+<h2>Check use (or alias) name against PHPSandbox validation rules.</h2>
+<pre>check_use(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
+<table class="table table-bordered"><tr>
+<th>alias</th>
+<td>check_alias();</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the use (or alias) name to check</p>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_check_var"></a><div class="element clickable method public method_check_var" data-toggle="collapse" data-target=".method_check_var .collapse">
-<h2>check_var()
-        </h2>
-<pre>check_var($name) </pre>
+<h2>Check variable name against PHPSandbox validation rules.</h2>
+<pre>check_var(string $name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="long_description"><p>This is an internal PHPSandbox function but requires public access to work.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>String of the variable name to check</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if validation error occurs</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_clear"></a><div class="element clickable method public method_clear" data-toggle="collapse" data-target=".method_clear .collapse">
-<h2>clear()
-        </h2>
-<pre>clear() </pre>
+<h2>Clear all prepended and appended trusted code</h2>
+<pre>clear() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div></div>
 </div>
 <a id="method_clear_append"></a><div class="element clickable method public method_clear_append" data-toggle="collapse" data-target=".method_clear_append .collapse">
-<h2>clear_append()
-        </h2>
-<pre>clear_append() </pre>
+<h2>Clear all  appended trusted code</h2>
+<pre>clear_append() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div></div>
 </div>
 <a id="method_clear_prepend"></a><div class="element clickable method public method_clear_prepend" data-toggle="collapse" data-target=".method_clear_prepend .collapse">
-<h2>clear_prepend()
-        </h2>
-<pre>clear_prepend() </pre>
+<h2>Clear all prepended trusted code</h2>
+<pre>clear_prepend() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div></div>
 </div>
 <a id="method_create"></a><div class="element clickable method public method_create" data-toggle="collapse" data-target=".method_create .collapse">
 <h2>PHPSandbox static factory method</h2>
@@ -1728,15 +1917,40 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div>
 </div>
 <a id="method_deblacklist_keyword"></a><div class="element clickable method public method_deblacklist_keyword" data-toggle="collapse" data-target=".method_deblacklist_keyword .collapse">
-<h2>deblacklist_keyword()
-        </h2>
-<pre>deblacklist_keyword($name) </pre>
+<h2>Remove keyword from blacklist</h2>
+<pre>deblacklist_keyword(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of keyword names, or pass a string of the keyword name to remove from blacklist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist_keyword(array('echo', 'eval'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist_keyword('echo');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of keyword names or string of keyword name to remove from blacklist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_deblacklist_magic_const"></a><div class="element clickable method public method_deblacklist_magic_const" data-toggle="collapse" data-target=".method_deblacklist_magic_const .collapse">
 <h2>Remove magic constant from blacklist</h2>
@@ -1811,26 +2025,76 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div>
 </div>
 <a id="method_deblacklist_operator"></a><div class="element clickable method public method_deblacklist_operator" data-toggle="collapse" data-target=".method_deblacklist_operator .collapse">
-<h2>deblacklist_operator()
-        </h2>
-<pre>deblacklist_operator($name) </pre>
+<h2>Remove operator from blacklist</h2>
+<pre>deblacklist_operator(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of operator names, or pass a string of the operator name to remove from blacklist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist_operator(array('+', '-'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist_operator('+');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of operator names or string of operator name to remove from blacklist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_deblacklist_primitive"></a><div class="element clickable method public method_deblacklist_primitive" data-toggle="collapse" data-target=".method_deblacklist_primitive .collapse">
-<h2>deblacklist_primitive()
-        </h2>
-<pre>deblacklist_primitive($name) </pre>
+<h2>Remove primitive from blacklist</h2>
+<pre>deblacklist_primitive(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of primitive names, or pass a string of the primitive name to remove from blacklist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist_primitive(array('int', 'float'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist_primitive('int');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of primitive names or string of primitive name to remove from blacklist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_deblacklist_superglobal"></a><div class="element clickable method public method_deblacklist_superglobal" data-toggle="collapse" data-target=".method_deblacklist_superglobal .collapse">
 <h2>Remove superglobal or superglobal key from blacklist</h2>
@@ -1918,15 +2182,40 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div>
 </div>
 <a id="method_deblacklist_type"></a><div class="element clickable method public method_deblacklist_type" data-toggle="collapse" data-target=".method_deblacklist_type .collapse">
-<h2>deblacklist_type()
-        </h2>
-<pre>deblacklist_type($name) </pre>
+<h2>Remove type from blacklist</h2>
+<pre>deblacklist_type(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of type names, or pass a string of the type name to remove from blacklist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist_type(array('PHPSandbox', 'PHPParser'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->deblacklist_type('PHPSandbox');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of type names or string of type name to remove from blacklist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_deblacklist_use"></a><div class="element clickable method public method_deblacklist_use" data-toggle="collapse" data-target=".method_deblacklist_use .collapse">
 <h2>Remove use (or alias) from blacklist</h2>
@@ -2974,15 +3263,40 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div>
 </div>
 <a id="method_dewhitelist_keyword"></a><div class="element clickable method public method_dewhitelist_keyword" data-toggle="collapse" data-target=".method_dewhitelist_keyword .collapse">
-<h2>dewhitelist_keyword()
-        </h2>
-<pre>dewhitelist_keyword($name) </pre>
+<h2>Remove keyword from whitelist</h2>
+<pre>dewhitelist_keyword(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of keyword names, or pass a string of the keyword name to remove from whitelist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist_keyword(array('echo', 'eval'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist_keyword('echo');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of keyword names or string of keyword name to remove from whitelist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_dewhitelist_magic_const"></a><div class="element clickable method public method_dewhitelist_magic_const" data-toggle="collapse" data-target=".method_dewhitelist_magic_const .collapse">
 <h2>Remove magic constant from whitelist</h2>
@@ -3057,26 +3371,76 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div>
 </div>
 <a id="method_dewhitelist_operator"></a><div class="element clickable method public method_dewhitelist_operator" data-toggle="collapse" data-target=".method_dewhitelist_operator .collapse">
-<h2>dewhitelist_operator()
-        </h2>
-<pre>dewhitelist_operator($name) </pre>
+<h2>Remove operator from whitelist</h2>
+<pre>dewhitelist_operator(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of operator names, or pass a string of the operator name to remove from whitelist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist_operator(array('+', '-'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist_operator('+');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of operator names or string of operator name to remove from whitelist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_dewhitelist_primitive"></a><div class="element clickable method public method_dewhitelist_primitive" data-toggle="collapse" data-target=".method_dewhitelist_primitive .collapse">
-<h2>dewhitelist_primitive()
-        </h2>
-<pre>dewhitelist_primitive($name) </pre>
+<h2>Remove primitive from whitelist</h2>
+<pre>dewhitelist_primitive(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of primitive names, or pass a string of the primitive name to remove from whitelist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist_primitive(array('int', 'float'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist_primitive('int');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of primitive names or string of primitive name to remove from whitelist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_dewhitelist_superglobal"></a><div class="element clickable method public method_dewhitelist_superglobal" data-toggle="collapse" data-target=".method_dewhitelist_superglobal .collapse">
 <h2>Remove superglobal or superglobal key from whitelist</h2>
@@ -3164,15 +3528,40 @@ You can pass an associative array of namespaces to use and their aliases, or an 
 </div>
 </div>
 <a id="method_dewhitelist_type"></a><div class="element clickable method public method_dewhitelist_type" data-toggle="collapse" data-target=".method_dewhitelist_type .collapse">
-<h2>dewhitelist_type()
-        </h2>
-<pre>dewhitelist_type($name) </pre>
+<h2>Remove type from whitelist</h2>
+<pre>dewhitelist_type(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of type names, or pass a string of the type name to remove from whitelist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist_type(array('PHPSandbox', 'PHPParser'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->dewhitelist_type('PHPSandbox');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of type names or string of type name to remove from whitelist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_dewhitelist_use"></a><div class="element clickable method public method_dewhitelist_use" data-toggle="collapse" data-target=".method_dewhitelist_use .collapse">
 <h2>Remove use (or alias) from whitelist</h2>
@@ -5549,14 +5938,23 @@ not callable and a valid generated closure exists, then all arguments are passed
 </div>
 </div>
 <a id="method_prepend"></a><div class="element clickable method public method_prepend" data-toggle="collapse" data-target=".method_prepend .collapse">
-<h2>prepend()
-        </h2>
-<pre>prepend($code) </pre>
+<h2>Prepend trusted code</h2>
+<pre>prepend(string | callable $code) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$code</h4></div>
+<div class="subelement argument">
+<h4>$code</h4>
+<code>string</code><code>callable</code><p>String or callable of trusted $code to prepend to generated code</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
 </div></div>
 </div>
 <a id="method_set_option"></a><div class="element clickable method public method_set_option" data-toggle="collapse" data-target=".method_set_option .collapse">
@@ -6551,15 +6949,40 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 </div>
 </div>
 <a id="method_whitelist_keyword"></a><div class="element clickable method public method_whitelist_keyword" data-toggle="collapse" data-target=".method_whitelist_keyword .collapse">
-<h2>whitelist_keyword()
-        </h2>
-<pre>whitelist_keyword($name) </pre>
+<h2>Whitelist keyword</h2>
+<pre>whitelist_keyword(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of keyword names, or pass a string of the keyword name to whitelist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist_keyword(array('echo', 'eval'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist_keyword('echo');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of keyword names or string of keyword name to whitelist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_whitelist_magic_const"></a><div class="element clickable method public method_whitelist_magic_const" data-toggle="collapse" data-target=".method_whitelist_magic_const .collapse">
 <h2>Whitelist magic constant</h2>
@@ -6634,26 +7057,76 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 </div>
 </div>
 <a id="method_whitelist_operator"></a><div class="element clickable method public method_whitelist_operator" data-toggle="collapse" data-target=".method_whitelist_operator .collapse">
-<h2>whitelist_operator()
-        </h2>
-<pre>whitelist_operator($name) </pre>
+<h2>Whitelist operator</h2>
+<pre>whitelist_operator(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of operator names, or pass a string of the operator name to whitelist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist_operator(array('+', '-'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist_operator('+');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of operator names or string of operator name to whitelist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_whitelist_primitive"></a><div class="element clickable method public method_whitelist_primitive" data-toggle="collapse" data-target=".method_whitelist_primitive .collapse">
-<h2>whitelist_primitive()
-        </h2>
-<pre>whitelist_primitive($name) </pre>
+<h2>Whitelist primitive</h2>
+<pre>whitelist_primitive(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of primitive names, or pass a string of the primitive name to whitelist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist_primitive(array('int', 'float'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist_primitive('int');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of primitive names or string of primitive name to whitelist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_whitelist_superglobal"></a><div class="element clickable method public method_whitelist_superglobal" data-toggle="collapse" data-target=".method_whitelist_superglobal .collapse">
 <h2>Whitelist superglobal or superglobal key</h2>
@@ -6741,15 +7214,40 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 </div>
 </div>
 <a id="method_whitelist_type"></a><div class="element clickable method public method_whitelist_type" data-toggle="collapse" data-target=".method_whitelist_type .collapse">
-<h2>whitelist_type()
-        </h2>
-<pre>whitelist_type($name) </pre>
+<h2>Whitelist type</h2>
+<pre>whitelist_type(array | string $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass an array of type names, or pass a string of the type name to whitelist</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist_type(array('PHPSandbox', 'PHPParser'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->whitelist_type('PHPSandbox');</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
-</div></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>array</code><code>string</code><p>Array of type names or string of type name to whitelist</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_whitelist_use"></a><div class="element clickable method public method_whitelist_use" data-toggle="collapse" data-target=".method_whitelist_use .collapse">
 <h2>Whitelist use (or alias)</h2>
@@ -6829,8 +7327,7 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 </div>
 </div>
 <a id="method_auto_define"></a><div class="element clickable method protected method_auto_define" data-toggle="collapse" data-target=".method_auto_define .collapse">
-<h2>auto_define()
-        </h2>
+<h2>Automatically define variables passed to disassembled closure</h2>
 <pre>auto_define(\FunctionParser\FunctionParser $disassembled_closure) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -6843,26 +7340,35 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 </div></div>
 </div>
 <a id="method_auto_whitelist"></a><div class="element clickable method protected method_auto_whitelist" data-toggle="collapse" data-target=".method_auto_whitelist .collapse">
-<h2>auto_whitelist()
-        </h2>
-<pre>auto_whitelist($code, $appended) </pre>
+<h2>Automatically whitelisted trusted code</h2>
+<pre>auto_whitelist(string $code, bool $appended) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$code</h4></div>
-<div class="subelement argument"><h4>$appended</h4></div>
+<div class="subelement argument">
+<h4>$code</h4>
+<code>string</code><p>String of trusted $code to automatically whitelist</p>
+</div>
+<div class="subelement argument">
+<h4>$appended</h4>
+<code>bool</code><p>Flag if this code ir prended or appended (true = appended)</p>
+</div>
 </div></div>
 </div>
 <a id="method_disassemble"></a><div class="element clickable method protected method_disassemble" data-toggle="collapse" data-target=".method_disassemble .collapse">
-<h2>disassemble()
-        </h2>
-<pre>disassemble($closure) </pre>
+<h2>Disassemble callable to string</h2>
+<pre>disassemble(callable $closure) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$closure</h4></div>
+<div class="subelement argument">
+<h4>$closure</h4>
+<code>callable</code><p>The callable to disassemble</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Return the disassembled code string</div>
 </div></div>
 </div>
 <a id="method_normalize_alias"></a><div class="element clickable method protected method_normalize_alias" data-toggle="collapse" data-target=".method_normalize_alias .collapse">
@@ -7078,36 +7584,37 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 </div></div>
 </div>
 <a id="method_prepare_aliases"></a><div class="element clickable method protected method_prepare_aliases" data-toggle="collapse" data-target=".method_prepare_aliases .collapse">
-<h2>prepare_aliases()
-        </h2>
+<h2>Prepare defined aliases for execution</h2>
 <pre>prepare_aliases() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_prepare_consts"></a><div class="element clickable method protected method_prepare_consts" data-toggle="collapse" data-target=".method_prepare_consts .collapse">
-<h2>prepare_consts()
-        </h2>
+<h2>Prepare defined constants for execution</h2>
 <pre>prepare_consts() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_prepare_namespaces"></a><div class="element clickable method protected method_prepare_namespaces" data-toggle="collapse" data-target=".method_prepare_namespaces .collapse">
-<h2>prepare_namespaces()
-        </h2>
+<h2>Prepare defined namespaces for execution</h2>
 <pre>prepare_namespaces() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_prepare_uses"></a><div class="element clickable method protected method_prepare_uses" data-toggle="collapse" data-target=".method_prepare_uses .collapse">
-<h2>prepare_uses()
-        </h2>
+<h2>Prepare defined uses (or aliases) for execution</h2>
 <pre>prepare_uses() </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>alias</th>
+<td>prepare_aliases();</td>
+</tr></table>
+</div></div>
 </div>
 <a id="method_prepare_vars"></a><div class="element clickable method protected method_prepare_vars" data-toggle="collapse" data-target=".method_prepare_vars .collapse">
-<h2>prepare_vars()
-        </h2>
+<h2>Prepare defined variables for execution</h2>
 <pre>prepare_vars() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
@@ -7565,7 +8072,7 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-02-27T19:55:30-05:00.<br></footer></div>
+            generated on 2013-02-27T20:33:05-05:00.<br></footer></div>
 </div>
 </body>
 </html>

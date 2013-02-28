@@ -3866,87 +3866,266 @@
             $name = $this->normalize_trait($name);
             return $this->deblacklist('traits', $name);
         }
-
+        /** Whitelist keyword
+         *
+         * You can pass an array of keyword names, or pass a string of the keyword name to whitelist
+         *
+         * @example $sandbox->whitelist_keyword(array('echo', 'eval'));
+         *
+         * @example $sandbox->whitelist_keyword('echo');
+         *
+         * @param   array|string        $name       Array of keyword names or string of keyword name to whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function whitelist_keyword($name){
             $name = $this->normalize_keyword($name);
             return $this->whitelist('keywords', $name);
         }
-
+        /** Blacklist keyword
+         *
+         * You can pass an array of keyword names, or pass a string of the keyword name to blacklist
+         *
+         * @example $sandbox->blacklist_keyword(array('echo', 'eval'));
+         *
+         * @example $sandbox->blacklist_keyword('echo');
+         *
+         * @param   array|string        $name       Array of keyword names or string of keyword name to blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function blacklist_keyword($name){
             $name = $this->normalize_keyword($name);
             return $this->blacklist('keywords', $name);
         }
-
+        /** Remove keyword from whitelist
+         *
+         * You can pass an array of keyword names, or pass a string of the keyword name to remove from whitelist
+         *
+         * @example $sandbox->dewhitelist_keyword(array('echo', 'eval'));
+         *
+         * @example $sandbox->dewhitelist_keyword('echo');
+         *
+         * @param   array|string        $name       Array of keyword names or string of keyword name to remove from whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function dewhitelist_keyword($name){
             $name = $this->normalize_keyword($name);
             return $this->dewhitelist('keywords', $name);
         }
-
+        /** Remove keyword from blacklist
+         *
+         * You can pass an array of keyword names, or pass a string of the keyword name to remove from blacklist
+         *
+         * @example $sandbox->deblacklist_keyword(array('echo', 'eval'));
+         *
+         * @example $sandbox->deblacklist_keyword('echo');
+         *
+         * @param   array|string        $name       Array of keyword names or string of keyword name to remove from blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function deblacklist_keyword($name){
             $name = $this->normalize_keyword($name);
             return $this->deblacklist('keywords', $name);
         }
-
+        /** Whitelist operator
+         *
+         * You can pass an array of operator names, or pass a string of the operator name to whitelist
+         *
+         * @example $sandbox->whitelist_operator(array('+', '-'));
+         *
+         * @example $sandbox->whitelist_operator('+');
+         *
+         * @param   array|string        $name       Array of operator names or string of operator name to whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function whitelist_operator($name){
             $name = $this->normalize_operator($name);
             return $this->whitelist('operators', $name);
         }
-
+        /** Blacklist operator
+         *
+         * You can pass an array of operator names, or pass a string of the operator name to blacklist
+         *
+         * @example $sandbox->blacklist_operator(array('+', '-'));
+         *
+         * @example $sandbox->blacklist_operator('+');
+         *
+         * @param   array|string        $name       Array of operator names or string of operator name to blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function blacklist_operator($name){
             $name = $this->normalize_operator($name);
             return $this->blacklist('operators', $name);
         }
-
+        /** Remove operator from whitelist
+         *
+         * You can pass an array of operator names, or pass a string of the operator name to remove from whitelist
+         *
+         * @example $sandbox->dewhitelist_operator(array('+', '-'));
+         *
+         * @example $sandbox->dewhitelist_operator('+');
+         *
+         * @param   array|string        $name       Array of operator names or string of operator name to remove from whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function dewhitelist_operator($name){
             $name = $this->normalize_operator($name);
             return $this->dewhitelist('operators', $name);
         }
-
+        /** Remove operator from blacklist
+         *
+         * You can pass an array of operator names, or pass a string of the operator name to remove from blacklist
+         *
+         * @example $sandbox->deblacklist_operator(array('+', '-'));
+         *
+         * @example $sandbox->deblacklist_operator('+');
+         *
+         * @param   array|string        $name       Array of operator names or string of operator name to remove from blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function deblacklist_operator($name){
             $name = $this->normalize_operator($name);
             return $this->deblacklist('operators', $name);
         }
-
+        /** Whitelist primitive
+         *
+         * You can pass an array of primitive names, or pass a string of the primitive name to whitelist
+         *
+         * @example $sandbox->whitelist_primitive(array('int', 'float'));
+         *
+         * @example $sandbox->whitelist_primitive('int');
+         *
+         * @param   array|string        $name       Array of primitive names or string of primitive name to whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function whitelist_primitive($name){
             $name = $this->normalize_primitive($name);
             return $this->whitelist('primitives', $name);
         }
-
+        /** Blacklist primitive
+         *
+         * You can pass an array of primitive names, or pass a string of the primitive name to blacklist
+         *
+         * @example $sandbox->blacklist_primitive(array('int', 'float'));
+         *
+         * @example $sandbox->blacklist_primitive('int');
+         *
+         * @param   array|string        $name       Array of primitive names or string of primitive name to blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function blacklist_primitive($name){
             $name = $this->normalize_primitive($name);
             return $this->blacklist('primitives', $name);
         }
-
+        /** Remove primitive from whitelist
+         *
+         * You can pass an array of primitive names, or pass a string of the primitive name to remove from whitelist
+         *
+         * @example $sandbox->dewhitelist_primitive(array('int', 'float'));
+         *
+         * @example $sandbox->dewhitelist_primitive('int');
+         *
+         * @param   array|string        $name       Array of primitive names or string of primitive name to remove from whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function dewhitelist_primitive($name){
             $name = $this->normalize_primitive($name);
             return $this->dewhitelist('primitives', $name);
         }
-
+        /** Remove primitive from blacklist
+         *
+         * You can pass an array of primitive names, or pass a string of the primitive name to remove from blacklist
+         *
+         * @example $sandbox->deblacklist_primitive(array('int', 'float'));
+         *
+         * @example $sandbox->deblacklist_primitive('int');
+         *
+         * @param   array|string        $name       Array of primitive names or string of primitive name to remove from blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function deblacklist_primitive($name){
             $name = $this->normalize_primitive($name);
             return $this->deblacklist('primitives', $name);
         }
-
+        /** Whitelist type
+         *
+         * You can pass an array of type names, or pass a string of the type name to whitelist
+         *
+         * @example $sandbox->whitelist_type(array('PHPSandbox', 'PHPParser'));
+         *
+         * @example $sandbox->whitelist_type('PHPSandbox');
+         *
+         * @param   array|string        $name       Array of type names or string of type name to whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function whitelist_type($name){
             $name = $this->normalize_type($name);
             return $this->whitelist('types', $name);
         }
-
+        /** Blacklist type
+         *
+         * You can pass an array of type names, or pass a string of the type name to blacklist
+         *
+         * @example $sandbox->blacklist_type(array('PHPSandbox', 'PHPParser'));
+         *
+         * @example $sandbox->blacklist_type('PHPSandbox');
+         *
+         * @param   array|string        $name       Array of type names or string of type name to blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function blacklist_type($name){
             $name = $this->normalize_type($name);
             return $this->blacklist('types', $name);
         }
-
+        /** Remove type from whitelist
+         *
+         * You can pass an array of type names, or pass a string of the type name to remove from whitelist
+         *
+         * @example $sandbox->dewhitelist_type(array('PHPSandbox', 'PHPParser'));
+         *
+         * @example $sandbox->dewhitelist_type('PHPSandbox');
+         *
+         * @param   array|string        $name       Array of type names or string of type name to remove from whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function dewhitelist_type($name){
             $name = $this->normalize_type($name);
             return $this->dewhitelist('types', $name);
         }
-
+        /** Remove type from blacklist
+         *
+         * You can pass an array of type names, or pass a string of the type name to remove from blacklist
+         *
+         * @example $sandbox->deblacklist_type(array('PHPSandbox', 'PHPParser'));
+         *
+         * @example $sandbox->deblacklist_type('PHPSandbox');
+         *
+         * @param   array|string        $name       Array of type names or string of type name to remove from blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function deblacklist_type($name){
             $name = $this->normalize_type($name);
             return $this->deblacklist('types', $name);
         }
-
+        /** Check function name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the function name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_func($name){
             $original_name = $name;
             if(!$name){
@@ -3967,7 +4146,10 @@
                 }
             }
         }
-
+        /** Check variable name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the variable name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_var($name){
             $original_name = $name;
             if(!$name){
@@ -3987,7 +4169,10 @@
                 }
             }
         }
-
+        /** Check global name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the global name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_global($name){
             $original_name = $name;
             if(!$name){
@@ -4005,7 +4190,10 @@
                 throw new Error("Sandboxed code attempted to call invalid global: $original_name");
             }
         }
-
+        /** Check superglobal name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the superglobal name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_superglobal($name){
             $original_name = $name;
             if(!$name){
@@ -4026,7 +4214,10 @@
                 }
             }
         }
-
+        /** Check constant name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the constant name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_const($name){
             $original_name = $name;
             if(!$name){
@@ -4050,7 +4241,10 @@
                 }
             }
         }
-
+        /** Check magic constant name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the magic constant name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_magic_const($name){
             $original_name = $name;
             if(!$name){
@@ -4071,7 +4265,10 @@
                 }
             }
         }
-
+        /** Check namespace name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the namespace name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_namespace($name){
             $original_name = $name;
             if(!$name){
@@ -4090,7 +4287,10 @@
                 throw new Error("Sandboxed code attempted to call invalid namespace: $original_name");
             }
         }
-
+        /** Check alias name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the alias name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_alias($name){
             $original_name = $name;
             if(!$name){
@@ -4109,11 +4309,20 @@
                 throw new Error("Sandboxed code attempted to call invalid alias: $original_name");
             }
         }
-
+        /** Check use (or alias) name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         *
+         * @alias check_alias();
+         *
+         * @param   string   $name      String of the use (or alias) name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_use($name){
             $this->check_alias($name);
         }
-
+        /** Check class name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the class name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_class($name){
             $original_name = $name;
             if(!$name){
@@ -4132,7 +4341,10 @@
                 throw new Error("Sandboxed code attempted to call invalid class: $original_name");
             }
         }
-
+        /** Check interface name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the interface name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_interface($name){
             $original_name = $name;
             if(!$name){
@@ -4151,7 +4363,10 @@
                 throw new Error("Sandboxed code attempted to call invalidnterface: $original_name");
             }
         }
-
+        /** Check trait name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the trait name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_trait($name){
             $original_name = $name;
             if(!$name){
@@ -4170,7 +4385,10 @@
                 throw new Error("Sandboxed code attempted to call invalid trait: $original_name");
             }
         }
-
+        /** Check keyword name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the keyword name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_keyword($name){
             $original_name = $name;
             if(!$name){
@@ -4187,7 +4405,10 @@
                 }
             }
         }
-
+        /** Check operator name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the type operator to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_operator($name){
             $original_name = $name;
             if(!$name){
@@ -4204,7 +4425,10 @@
                 }
             }
         }
-
+        /** Check primitive name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the primitive name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_primitive($name){
             $original_name = $name;
             if(!$name){
@@ -4221,7 +4445,10 @@
                 }
             }
         }
-
+        /** Check type name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
+         * @param   string   $name      String of the type name to check
+         * @throws  Error    Throws exception if validation error occurs
+         */
         public function check_type($name){
             $original_name = $name;
             if(!$name){
@@ -4240,7 +4467,8 @@
                 throw new Error("Sandboxed code attempted to call invalid type: $original_name");
             }
         }
-
+        /** Prepare defined variables for execution
+         */
         protected function prepare_vars(){
             $output = array();
             foreach($this->definitions['variables'] as $name => $value){
@@ -4262,7 +4490,8 @@
             }
             return count($output) ? ', ' . implode(', ', $output) : '';
         }
-
+        /** Prepare defined constants for execution
+         */
         protected function prepare_consts(){
             $output = array();
             foreach($this->definitions['constants'] as $name => $value){
@@ -4284,7 +4513,8 @@
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
         }
-
+        /** Prepare defined namespaces for execution
+         */
         protected function prepare_namespaces(){
             $output = array();
             foreach($this->definitions['namespaces'] as $name){
@@ -4296,7 +4526,8 @@
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
         }
-
+        /** Prepare defined aliases for execution
+         */
         protected function prepare_aliases(){
             $output = array();
             foreach($this->definitions['aliases'] as $name => $alias){
@@ -4308,11 +4539,16 @@
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
         }
-
+        /** Prepare defined uses (or aliases) for execution
+         * @alias   prepare_aliases();
+         */
         protected function prepare_uses(){
             return $this->prepare_aliases();
         }
-
+        /** Disassemble callable to string
+         * @param   callable    $closure    The callable to disassemble
+         * @return  string      Return the disassembled code string
+         */
         protected function disassemble($closure){
             if(!class_exists('\FunctionParser\FunctionParser', true) && is_callable($closure)){
                 throw new Error("Cannot disassemble callable code because the FunctionParser library could not be found!");
@@ -4329,7 +4565,10 @@
             }
             return '<?php ' . $disassembled_closure->getBody();
         }
-
+        /** Automatically whitelisted trusted code
+         * @param   string    $code         String of trusted $code to automatically whitelist
+         * @param   bool      $appended     Flag if this code ir prended or appended (true = appended)
+         */
         protected function auto_whitelist($code, $appended = false){
             $parser = new \PHPParser_Parser(new \PHPParser_Lexer);
             try {
@@ -4342,11 +4581,10 @@
             $traverser->addVisitor($whitelister);
             $traverser->traverse($statements);
         }
-
-        /**
+        /** Automatically define variables passed to disassembled closure
          * @param \FunctionParser\FunctionParser    $disassembled_closure
          */
-        protected function auto_define($disassembled_closure){
+        protected function auto_define(\FunctionParser\FunctionParser $disassembled_closure){
             $parameters = $disassembled_closure->getReflection()->getParameters();
             foreach($parameters as $param){
                 /**
@@ -4355,7 +4593,11 @@
                 $this->define_var($param->getName(), $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null);
             }
         }
-
+        /** Prepend trusted code
+         * @param   string|callable     $code         String or callable of trusted $code to prepend to generated code
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function prepend($code){
             if(!$code){
                 return $this;
@@ -4367,7 +4609,11 @@
             $this->prepended_code .= $code . "\r\n";
             return $this;
         }
-
+        /** Append trusted code
+         * @param   string|callable     $code         String or callable of trusted $code to append to generated code
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function append($code){
             if(!$code){
                 return $this;
@@ -4379,20 +4625,28 @@
             $this->appended_code .= "\r\n" . $code . "\r\n";
             return $this;
         }
-
+        /** Clear all prepended and appended trusted code
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function clear(){
             $this->prepended_code = '';
             $this->appended_code = '';
         }
-
+        /** Clear all prepended trusted code
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function clear_prepend(){
             $this->prepended_code = '';
         }
-
+        /** Clear all  appended trusted code
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function clear_append(){
             $this->appended_code = '';
         }
-
         /** Prepare passed callable for execution
          *
          * This function validates your code and automatically whitelists it according to your specified configuration
