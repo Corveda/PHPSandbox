@@ -1,5 +1,5 @@
 <?php
-    /**
+    /** Error class declaration
      * @package PHPSandbox
      */
     namespace PHPSandbox;
