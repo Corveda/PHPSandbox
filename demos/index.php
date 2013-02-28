@@ -2,14 +2,11 @@
     error_reporting(E_ALL);
     require_once('../vendor/autoload.php');
 
-    function test($string){
-        return 'Hello ' . $string;
+    function evil(){
+        echo 'This function should not execute.';
     }
 
     $sandbox = new PHPSandbox\PHPSandbox;
-    $sandbox->whitelist_func('test');
     $result = $sandbox->execute(function(){
-        return test('world');
+        evil();     //this will throw an exception
     });
-
-    var_dump($result);  //Hello world

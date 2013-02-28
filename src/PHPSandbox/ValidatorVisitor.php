@@ -60,6 +60,12 @@
                     }
                 } else if(!$this->sandbox->allow_closures){
                     throw new Error("Sandboxed code attempted to call a closure!");
+                } else {
+                    return new \PHPParser_Node_Expr_Ternary(
+                        new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), 'check_func', array(new \PHPParser_Node_Arg($node->name)), $node->getAttributes()),
+                        $node,
+                        new \PHPParser_Node_Expr_ConstFetch(new \PHPParser_Node_Name('null'))
+                    );
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Function){
                 if(!$this->sandbox->allow_functions){

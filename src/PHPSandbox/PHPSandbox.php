@@ -887,8 +887,11 @@
             $name = array_shift($arguments);
             $original_name = $name;
             $name = $this->normalize_func($name);
-            if(isset($this->definitions['functions'][$name]) && is_callable($this->definitions['functions'][$name])){
-                $function = $this->definitions['functions'][$name];
+            if(isset($this->definitions['functions'][$name]) && is_callable($this->definitions['functions'][$name]['function'])){
+                $function = $this->definitions['functions'][$name]['function'];
+                if($this->definitions['functions'][$name]['pass_sandbox']){            //pass the PHPSandbox instance to the defined function?
+                    array_unshift($arguments, $this);  //push PHPSandbox instance into first argument so user can test against it
+                }
                 return call_user_func_array($function, $arguments);
             }
             if(is_callable($name)){
@@ -898,14 +901,15 @@
         }
         /** Define PHPSandbox definitions, such as functions, constants, classes, etc.
          *
-         * You can pass an associative array of definitions types and an associative array of their corresponding values, or pass a string of the $type, $name and $value
-         *
-         * @example $sandbox->define(array('functions' => array('test' => function(){ echo 'test'; }));
+         * You can pass a string of the $type, $name and $value, or pass an associative array of definitions types and
+         * an associative array of their corresponding values
          *
          * @example $sandbox->define('functions', 'test', function(){ echo 'test'; });
          *
-         * @param   array|string        $type       Associative array or string of definition type to define
-         * @param   array|string|null   $name       Associative array or string of definition name to define
+         * @example $sandbox->define(array('functions' => array('test' => function(){ echo 'test'; }));
+         *
+         * @param   string|array        $type       Associative array or string of definition type to define
+         * @param   string|array|null   $name       Associative array or string of definition name to define
          * @param   mixed|null          $value      Value of definition to define
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
@@ -945,14 +949,15 @@
         }
         /** Undefine PHPSandbox definitions, such as functions, constants, classes, etc.
          *
-         * You can pass an associative array of definitions types and an array of key names to undefine, or pass a string of the $type and $name to undefine
-         *
-         * @example $sandbox->undefine(array('functions' => array('test'));
+         * You can pass a string of the $type and $name to undefine, or pass an associative array of definitions types
+         * and an array of key names to undefine
          *
          * @example $sandbox->undefine('functions', 'test');
          *
-         * @param   array|string    $type       Associative array or string of definition type to undefine
-         * @param   array|string    $name       Associative array or string of definition name to undefine
+         * @example $sandbox->undefine(array('functions' => array('test'));
+         *
+         * @param   string|array    $type       Associative array or string of definition type to undefine
+         * @param   string|array    $name       Associative array or string of definition name to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -995,32 +1000,43 @@
         }
         /** Define PHPSandbox function
          *
-         * You can pass an associative array of functions to define, or the function $name and $function closure or callable to define
-         *
-         * @example $sandbox->define_func(array('test' => function(){ echo 'test'; }));
+         * You can pass the function $name and $function closure or callable to define, or an associative array of
+         * functions to define, which can have callable values or arrays of the function callable and $pass_sandbox flag
          *
          * @example $sandbox->define_func('test', function(){ echo 'test'; });
          *
-         * @param   array|string    $name       Associative array or string of function $name to define
-         * @param   callable        $function   Callable to define $function to
+         * @example $sandbox->define_func(array('test' => function(){ echo 'test'; }));
+         *
+         * @example $sandbox->define_func(array('test' => array(function(){ echo 'test'; }, true)));
+         *
+         * @param   string|array    $name           Associative array or string of function $name to define
+         * @param   callable        $function       Callable to define $function to
+         * @param   bool            $pass_sandbox   Pass PHPSandbox instance to defined function when called? Default is false
          *
          * @throws  Error           Throws exception if unnamed or uncallable $function is defined
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
-        public function define_func($name, $function){
+        public function define_func($name, $function, $pass_sandbox = false){
             if(is_array($name)){
                 return $this->define_funcs($name);
             }
             if(!$name){
                 throw new Error("Cannot define unnamed function!");
             }
+            if(is_array($function) && count($function)){    //so you can pass array of functio names and array of function and pass_sandbox flag
+                $pass_sandbox = isset($function[1]) ? $function[1] : false;
+                $function = $function[0];
+            }
             $original_name = $name;
             $name = $this->normalize_func($name);
             if(!is_callable($function)){
                 throw new Error("Cannot define uncallable function : $original_name");
             }
-            $this->definitions['functions'][$name] = $function;
+            $this->definitions['functions'][$name] = array(
+                'function' => $function,
+                'pass_sandbox' => $pass_sandbox
+            );
             return $this;
         }
         /** Define PHPSandbox functions by array
@@ -1062,13 +1078,13 @@
         }
         /** Undefine PHPSandbox function
          *
-         * You can pass an array of function names to undefine, or a string of function $name to undefine
-         *
-         * @example $sandbox->undefine_func(array('test', 'test2'));
+         * You can pass a string of function $name to undefine, or pass an array of function names to undefine
          *
          * @example $sandbox->undefine_func('test');
          *
-         * @param   array|string          $name       Array of function names or string of function name to undefine
+         * @example $sandbox->undefine_func(array('test', 'test2'));
+         *
+         * @param   string|array          $name       String of function name or array of function names to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1106,13 +1122,13 @@
         }
         /** Define PHPSandbox variable
          *
-         * You can pass an associative array of variables to define, or the variable $name and $value to define
-         *
-         * @example $sandbox->define_var(array('test' => 1));
+         * You can pass the variable $name and $value to define, or an associative array of variables to define
          *
          * @example $sandbox->define_var('test', 1);
          *
-         * @param   array|string    $name       Associative array or string of variable $name to define
+         * @example $sandbox->define_var(array('test' => 1));
+         *
+         * @param   string|array    $name       String of variable $name or associative array to define
          * @param   mixed           $value      Value to define variable to
          *
          * @throws  Error           Throws exception if unnamed variable is defined
@@ -1167,13 +1183,13 @@
         }
         /** Undefine PHPSandbox variable
          *
-         * You can pass an array of variable names to undefine, or a string of variable $name to undefine
-         *
-         * @example $sandbox->undefine_var(array('test', 'test2'));
+         * You can pass a string of variable $name to undefine, or an array of variable names to undefine
          *
          * @example $sandbox->undefine_var('test');
          *
-         * @param   array|string          $name       Array of variable names or string of variable name to undefine
+         * @example $sandbox->undefine_var(array('test', 'test2'));
+         *
+         * @param   string|array          $name       String of variable name or an array of variable names to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1210,13 +1226,13 @@
         }
         /** Define PHPSandbox superglobal
          *
-         * You can pass an associative array of superglobals to define, or the superglobal $name and $value to define
-         *
-         * @example $sandbox->define_superglobal(array('_GET' => array('page' => 1)));
+         * You can pass the superglobal $name and $value to define, or an associative array of superglobals to define
          *
          * @example $sandbox->define_superglobal('_GET',  array('page' => 1));
          *
-         * @param   array|string    $name       Associative array or string of superglobal $name to define
+         * @example $sandbox->define_superglobal(array('_GET' => array('page' => 1)));
+         *
+         * @param   string|array    $name       String of superglobal $name or associative array of superglobal names to define
          * @param   mixed           $value      Value to define superglobal to
          *
          * @throws  Error           Throws exception if unnamed superglobal is defined
@@ -1289,15 +1305,16 @@
         }
         /** Undefine PHPSandbox superglobal or superglobal key
          *
-         * You can pass an associative array of superglobal names and keys to undefine, or an array of superglobal names to undefine, or an string of superglobal $name to undefine, or a superglobal $key to undefine
-         *
-         * @example $sandbox->undefine_superglobal(array('_GET', '_POST'));
+         * You can pass a string of superglobal $name to undefine, or a superglobal $key to undefine, or an array of
+         * superglobal names to undefine, or an an associative array of superglobal names and keys to undefine
          *
          * @example $sandbox->undefine_superglobal('_GET');
          *
          * @example $sandbox->undefine_superglobal('_GET', 'page');
          *
-         * @param   array|string          $name       Associative array of superglobal names and keys to undefine, or array of superglobal names to undefine, or string of superglobal $name to undefine
+         * @example $sandbox->undefine_superglobal(array('_GET', '_POST'));
+         *
+         * @param   string|array          $name       String of superglobal $name, or array of superglobal names, or associative array of superglobal names and keys to undefine
          * @param   string|null           $key        String of superglobal $key to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
@@ -1318,7 +1335,8 @@
         }
         /** Undefine PHPSandbox superglobals by array
          *
-         * You can pass an array of superglobal names to undefine, or an associative array of superglobals names and key to undefine, or an empty array or null to undefine all superglobals
+         * You can pass an array of superglobal names to undefine, or an associative array of superglobals names and key
+         * to undefine, or an empty array or null to undefine all superglobals
          *
          * @example $sandbox->undefine_superglobals(array('_GET', '_POST'));
          *
@@ -1343,13 +1361,13 @@
         }
         /** Define PHPSandbox constant
          *
-         * You can pass an associative array of constants to define, or the constant $name and $value to define
-         *
-         * @example $sandbox->define_const(array('TEST' => 1));
+         * You can pass the constant $name and $value to define, or an associative array of constants to define
          *
          * @example $sandbox->define_const('TEST', 1);
          *
-         * @param   array|string    $name       Associative array or string of constant $name to define
+         * @example $sandbox->define_const(array('TEST' => 1));
+         *
+         * @param   string|array    $name       String of constant $name or associative array to define
          * @param   mixed           $value      Value to define constant to
          *
          * @throws  Error           Throws exception if unnamed constant is defined
@@ -1404,13 +1422,13 @@
         }
         /** Undefine PHPSandbox constant
          *
-         * You can pass an array of constant names to undefine, or a string of constant $name to undefine
-         *
-         * @example $sandbox->undefine_const(array('test', 'test2'));
+         * You can pass a string of constant $name to undefine, or an array of constant names to undefine
          *
          * @example $sandbox->undefine_const('test');
          *
-         * @param   array|string          $name       Array of constant names or string of constant name to undefine
+         * @example $sandbox->undefine_const(array('test', 'test2'));
+         *
+         * @param   string|array          $name       String of constant name or array of constant names to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1447,13 +1465,13 @@
         }
         /** Define PHPSandbox magic constant
          *
-         * You can pass an associative array of magic constants to define, or the magic constant $name and $value to define
-         *
-         * @example $sandbox->define_magic_const(array('__LINE__' => 1));
+         * You can pass the magic constant $name and $value to define, or an associative array of magic constants to define
          *
          * @example $sandbox->define_magic_const('__LINE__', 1);
          *
-         * @param   array|string    $name       Associative array or string of magic constant $name to define
+         * @example $sandbox->define_magic_const(array('__LINE__' => 1));
+         *
+         * @param   string|array    $name       String of magic constant $name or associative array to define
          * @param   mixed           $value      Value to define magic constant to
          *
          * @throws  Error           Throws exception if unnamed magic constant is defined
@@ -1510,13 +1528,13 @@
         }
         /** Undefine PHPSandbox magic constant
          *
-         * You can pass an array of magic constant names to undefine, or a string of magic constant $name to undefine
-         *
-         * @example $sandbox->undefine_magic_const(array('__LINE__', '__FILE__'));
+         * You can pass an a string of magic constant $name to undefine, or array of magic constant names to undefine
          *
          * @example $sandbox->undefine_magic_const('__LINE__');
          *
-         * @param   array|string          $name       Array of magic constant names or string of magic constant name to undefine
+         * @example $sandbox->undefine_magic_const(array('__LINE__', '__FILE__'));
+         *
+         * @param   string|array          $name       String of magic constant name, or array of magic constant names to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1554,13 +1572,13 @@
         }
         /** Define PHPSandbox namespace
          *
-         * You can pass an array of namespaces to define, or the namespace $name and $value to define
-         *
-         * @example $sandbox->define_namespace(array('Foo', 'Bar'));
+         * You can pass the namespace $name and $value to define, or an array of namespaces to define
          *
          * @example $sandbox->define_namespace('Foo');
          *
-         * @param   array|string    $name       Array or string of namespace $name to define
+         * @example $sandbox->define_namespace(array('Foo', 'Bar'));
+         *
+         * @param   string|array    $name       String of namespace $name, or an array of namespace names to define
          *
          * @throws  Error           Throws exception if unnamed namespace is defined
          *
@@ -1614,13 +1632,13 @@
         }
         /** Undefine PHPSandbox namespace
          *
-         * You can pass an array of namespace names to undefine, or a string of namespace $name to undefine
-         *
-         * @example $sandbox->undefine_namespace(array('Foo', 'Bar'));
+         * You can pass a string of namespace $name to undefine, or an array of namespace names to undefine
          *
          * @example $sandbox->undefine_namespace('Foo');
          *
-         * @param   array|string          $name       Array of namespace names or string of namespace name to undefine
+         * @example $sandbox->undefine_namespace(array('Foo', 'Bar'));
+         *
+         * @param   string|array          $name       String of namespace $name, or an array of namespace names to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1657,17 +1675,17 @@
         }
         /** Define PHPSandbox alias
          *
-         * You can pass an associative array of namespaces to use and their aliases, an array of namespaces to use, or the namespace $name and $alias to use
-         *
-         * @example $sandbox->define_alias(array('Foo' => 'Bar')); //use Foo as Bar;
-         *
-         * @example $sandbox->define_alias(array('Foo', 'Bar')); //use Foo; use Bar;
-         *
-         * @example $sandbox->define_alias('Foo', 'Bar');  //use Foo as Bar;
+         * You can pass the namespace $name and $alias to use, an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
          * @example $sandbox->define_alias('Foo');  //use Foo;
          *
-         * @param   array|string    $name       Associative array of namespaces and their aliases to use, or an array of namespaces to use, or string of namespace $name to use
+         * @example $sandbox->define_alias('Foo', 'Bar');  //use Foo as Bar;
+         *
+         * @example $sandbox->define_alias(array('Foo', 'Bar')); //use Foo; use Bar;
+         *
+         * @example $sandbox->define_alias(array('Foo' => 'Bar')); //use Foo as Bar;
+         *
+         * @param   string|array    $name       String of namespace $name to use, or  or an array of namespaces to use, or an associative array of namespaces and their aliases to use
          * @param   string|null     $alias      String of $alias to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
@@ -1686,13 +1704,13 @@
         }
         /** Define PHPSandbox aliases by array
          *
-         * You can pass an associative array of namespaces to use and their aliases, or an array of namespaces to use
-         *
-         * @example $sandbox->define_aliases(array('Foo' => 'Bar')); //use Foo as Bar;
+         * You can pass an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
          * @example $sandbox->define_aliases(array('Foo', 'Bar')); //use Foo; use Bar;
          *
-         * @param   array           $aliases       Associative array of namespaces and their aliases to use, or an array of namespaces to use
+         * @example $sandbox->define_aliases(array('Foo' => 'Bar')); //use Foo as Bar;
+         *
+         * @param   array           $aliases       Array of namespaces to use, or an associative array of namespaces and their aliases to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
@@ -1726,13 +1744,13 @@
         }
         /** Undefine PHPSandbox alias
          *
-         * You can pass an array of alias names to undefine, or a string of alias $name to undefine
-         *
-         * @example $sandbox->undefine_alias(array('Foo', 'Bar'));
+         * You can pass a string of alias $name to undefine, or an array of alias names to undefine
          *
          * @example $sandbox->undefine_alias('Foo');
          *
-         * @param   array|string          $name       Array of alias names or string of alias name to undefine
+         * @example $sandbox->undefine_alias(array('Foo', 'Bar'));
+         *
+         * @param   string|array          $name       String of alias name, or array of alias names to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -1771,17 +1789,17 @@
          *
          * @alias   define_alias();
          *
-         * You can pass an associative array of namespaces to use and their aliases, an array of namespaces to use, or the namespace $name and $alias to use
-         *
-         * @example $sandbox->define_use(array('Foo' => 'Bar')); //use Foo as Bar;
-         *
-         * @example $sandbox->define_use(array('Foo', 'Bar')); //use Foo; use Bar;
-         *
-         * @example $sandbox->define_use('Foo', 'Bar');  //use Foo as Bar;
+         * You can pass the namespace $name and $alias to use, an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
          * @example $sandbox->define_use('Foo');  //use Foo;
          *
-         * @param   array|string    $name       Associative array of namespaces and their aliases to use, or an array of namespaces to use, or string of namespace $name to use
+         * @example $sandbox->define_use('Foo', 'Bar');  //use Foo as Bar;
+         *
+         * @example $sandbox->define_use(array('Foo', 'Bar')); //use Foo; use Bar;
+         *
+         * @example $sandbox->define_use(array('Foo' => 'Bar')); //use Foo as Bar;
+         *
+         * @param   string|array    $name       String of namespace $name to use, or  or an array of namespaces to use, or an associative array of namespaces and their aliases to use
          * @param   string|null     $alias      String of $alias to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
@@ -1795,13 +1813,13 @@
          *
          * @alias   define_aliases();
          *
-         * You can pass an associative array of namespaces to use and their aliases, or an array of namespaces to use
-         *
-         * @example $sandbox->define_uses(array('Foo' => 'Bar')); //use Foo as Bar;
+         * You can pass an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
          * @example $sandbox->define_uses(array('Foo', 'Bar')); //use Foo; use Bar;
          *
-         * @param   array           $uses       Associative array of namespaces and their aliases to use, or an array of namespaces to use
+         * @example $sandbox->define_uses(array('Foo' => 'Bar')); //use Foo as Bar;
+         *
+         * @param   array           $uses       Array of namespaces to use, or an associative array of namespaces and their aliases to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
@@ -1836,15 +1854,13 @@
         }
         /** Undefine PHPSandbox use (or alias)
          *
-         * @alias   undefine_alias();
-         *
-         * You can pass an array of use (or alias) names to undefine, or a string of use (or alias) $name to undefine
-         *
-         * @example $sandbox->undefine_use(array('Foo', 'Bar'));
+         * You can pass a string of use (or alias) $name to undefine, or an array of use (or alias) names to undefine
          *
          * @example $sandbox->undefine_use('Foo');
          *
-         * @param   array|string          $name       Array of use (or alias) names or string of use (or alias) name to undefine
+         * @example $sandbox->undefine_use(array('Foo', 'Bar'));
+         *
+         * @param   string|array          $name       String of use (or alias) name, or array of use (or alias) names to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
@@ -2112,8 +2128,8 @@
          *
          * @example $sandbox->whitelist('functions', 'test');
          *
-         * @param   array|string        $type       Associative array or string of whitelist type to set
-         * @param   array|string|null   $name       Array or string of whitelist name to set
+         * @param   string|array        $type       Associative array or string of whitelist type to set
+         * @param   string|array|null   $name       Array or string of whitelist name to set
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -2151,8 +2167,8 @@
          *
          * @example $sandbox->blacklist('functions', 'test');
          *
-         * @param   array|string        $type       Associative array or string of blacklist type to set
-         * @param   array|string|null   $name       Array or string of blacklist name to set
+         * @param   string|array        $type       Associative array or string of blacklist type to set
+         * @param   string|array|null   $name       Array or string of blacklist name to set
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -2190,8 +2206,8 @@
          *
          * @example $sandbox->dewhitelist('functions', 'test');
          *
-         * @param   array|string        $type       Associative array or string of whitelist type to unset
-         * @param   array|string|null   $name       Array or string of whitelist name to unset
+         * @param   string|array        $type       Associative array or string of whitelist type to unset
+         * @param   string|array|null   $name       Array or string of whitelist name to unset
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -2223,8 +2239,8 @@
          *
          * @example $sandbox->deblacklist('functions', 'test');
          *
-         * @param   array|string        $type       Associative array or string of blacklist type to unset
-         * @param   array|string|null   $name       Array or string of blacklist name to unset
+         * @param   string|array        $type       Associative array or string of blacklist type to unset
+         * @param   string|array|null   $name       Array or string of blacklist name to unset
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -2416,8 +2432,9 @@
         }
         /** Query whether PHPSandbox instance has whitelisted superglobals, or superglobal keys
          *
-         * @example $sandbox->has_whitelist_superglobals('_GET'); //returns number of whitelisted superglobal keys, or zero if none whitelisted
          * @example $sandbox->has_whitelist_superglobals(); //returns number of whitelisted superglobals, or zero if none whitelisted
+         *
+         * @example $sandbox->has_whitelist_superglobals('_GET'); //returns number of whitelisted superglobal keys, or zero if none whitelisted
          *
          * @param   string        $name     The whitelist superglobal key to query
          *
@@ -2429,8 +2446,9 @@
         }
         /** Query whether PHPSandbox instance has blacklisted superglobals, or superglobal keys
          *
-         * @example $sandbox->has_blacklist_superglobals('_GET'); //returns number of blacklisted superglobal keys, or zero if none blacklisted
          * @example $sandbox->has_blacklist_superglobals(); //returns number of blacklisted superglobals, or zero if none blacklisted
+         *
+         * @example $sandbox->has_blacklist_superglobals('_GET'); //returns number of blacklisted superglobal keys, or zero if none blacklisted
          *
          * @param   string        $name     The blacklist superglobal key to query
          *
@@ -2442,8 +2460,9 @@
         }
         /** Check if PHPSandbox instance has whitelisted superglobal or superglobal key set
          *
-         * @example $sandbox->is_whitelisted_superglobal('_GET', 'page');
          * @example $sandbox->is_whitelisted_superglobal('_GET');
+         *
+         * @example $sandbox->is_whitelisted_superglobal('_GET', 'page');
          *
          * @param   string          $name       String of whitelisted superglobal $name to query
          * @param   string          $key        String of whitelisted superglobal $key to query
@@ -2456,8 +2475,9 @@
         }
         /** Check if PHPSandbox instance has blacklisted superglobal or superglobal key set
          *
-         * @example $sandbox->is_blacklisted_superglobal('_GET', 'page');
          * @example $sandbox->is_blacklisted_superglobal('_GET');
+         *
+         * @example $sandbox->is_blacklisted_superglobal('_GET', 'page');
          *
          * @param   string          $name       String of blacklisted superglobal $name to query
          * @param   string          $key        String of blacklisted superglobal $key to query
@@ -2540,7 +2560,7 @@
         }
         /** Check if PHPSandbox instance has blacklisted magic constant name set
          *
-         * @example $sandbox->is_blacklisted_magic_const('TEST');
+         * @example $sandbox->is_blacklisted_magic_const('__LINE__');
          *
          * @param   string          $name       String of magic constant $name to query
          *
@@ -2978,13 +2998,13 @@
         }
         /** Whitelist function
          *
-         * You can pass an array of function names, or pass a string of the function name to whitelist
-         *
-         * @example $sandbox->whitelist_func(array('var_dump', 'print_r'));
+         * You can pass a string of the function name, or pass an array of function names to whitelist
          *
          * @example $sandbox->whitelist_func('var_dump');
          *
-         * @param   array|string        $name       Array of function names or string of function name to whitelist
+         * @example $sandbox->whitelist_func(array('var_dump', 'print_r'));
+         *
+         * @param   string|array        $name       String of function name, or array of function names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -2994,13 +3014,13 @@
         }
         /** Blacklist function
          *
-         * You can pass an array of function names, or pass a string of the function name to blacklist
-         *
-         * @example $sandbox->blacklist_func(array('var_dump', 'print_r'));
+         * You can pass a string of the function name, or pass an array of function names to blacklist
          *
          * @example $sandbox->blacklist_func('var_dump');
          *
-         * @param   array|string        $name       Array of function names or string of function name to blacklist
+         * @example $sandbox->blacklist_func(array('var_dump', 'print_r'));
+         *
+         * @param   string|array        $name       String of function name, or array of function names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3010,13 +3030,13 @@
         }
         /** Remove function from whitelist
          *
-         * You can pass an array of function names, or pass a string of the function name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_func(array('var_dump', 'print_r'));
+         * You can pass a string of the function name, or pass an array of function names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_func('var_dump');
          *
-         * @param   array|string        $name       Array of function names or string of function name to remove from whitelist
+         * @example $sandbox->dewhitelist_func(array('var_dump', 'print_r'));
+         *
+         * @param   string|array        $name       String of function name or array of function names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3026,13 +3046,13 @@
         }
         /** Remove function from blacklist
          *
-         * You can pass an array of function names, or pass a string of the function name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_func(array('var_dump', 'print_r'));
+         * You can pass a string of the function name, or pass an array of function names to remove from blacklist
          *
          * @example $sandbox->deblacklist_func('var_dump');
          *
-         * @param   array|string        $name       Array of function names or string of function name to remove from blacklist
+         * @example $sandbox->deblacklist_func(array('var_dump', 'print_r'));
+         *
+         * @param   string|array        $name       String of function name or array of function names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3042,13 +3062,13 @@
         }
         /** Whitelist variable
          *
-         * You can pass an array of variable names, or pass a string of the variable name to whitelist
-         *
-         * @example $sandbox->whitelist_var(array('a', 'b'));
+         * You can pass a string of variable name, or pass an array of the variable names to whitelist
          *
          * @example $sandbox->whitelist_var('a');
          *
-         * @param   array|string        $name       Array of variable names or string of variable name to whitelist
+         * @example $sandbox->whitelist_var(array('a', 'b'));
+         *
+         * @param   string|array        $name       String of variable name or array of variable names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3057,13 +3077,13 @@
         }
         /** Blacklist variable
          *
-         * You can pass an array of variable names, or pass a string of the variable name to blacklist
-         *
-         * @example $sandbox->blacklist_var(array('a', 'b'));
+         * You can pass a string of variable name, or pass an array of the variable names to blacklist
          *
          * @example $sandbox->blacklist_var('a');
          *
-         * @param   array|string        $name       Array of variable names or string of variable name to blacklist
+         * @example $sandbox->blacklist_var(array('a', 'b'));
+         *
+         * @param   string|array       $$name       String of variable name or array of variable names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3072,13 +3092,13 @@
         }
         /** Remove variable from whitelist
          *
-         * You can pass an array of variable names, or pass a string of the variable name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_var(array('a', 'b'));
+         * You can pass a string of variable name, or pass an array of the variable names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_var('a');
          *
-         * @param   array|string        $name       Array of variable names or string of variable name to remove from whitelist
+         * @example $sandbox->dewhitelist_var(array('a', 'b'));
+         *
+         * @param   string|array        $name       String of variable name or array of variable names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3087,13 +3107,13 @@
         }
         /** Remove function from blacklist
          *
-         * You can pass an array of variable names, or pass a string of the variable name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_var(array('a', 'b'));
+         * You can pass a string of variable name, or pass an array of the variable names to remove from blacklist
          *
          * @example $sandbox->deblacklist_var('a');
          *
-         * @param   array|string        $name       Array of variable names or string of variable name to remove from blacklist
+         * @example $sandbox->deblacklist_var(array('a', 'b'));
+         *
+         * @param   string|array        $name       String of variable name or array of variable names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3102,13 +3122,13 @@
         }
         /** Whitelist global
          *
-         * You can pass an array of global names, or pass a string of the global name to whitelist
-         *
-         * @example $sandbox->whitelist_global(array('a', 'b'));
+         * You can pass a string of global name, or pass an array of the global names to whitelist
          *
          * @example $sandbox->whitelist_global('a');
          *
-         * @param   array|string        $name       Array of global names or string of global name to whitelist
+         * @example $sandbox->whitelist_global(array('a', 'b'));
+         *
+         * @param   string|array        $name       String of global name or array of global names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3117,13 +3137,13 @@
         }
         /** Blacklist global
          *
-         * You can pass an array of global names, or pass a string of the global name to blacklist
-         *
-         * @example $sandbox->blacklist_global(array('a', 'b'));
+         * You can pass a string of global name, or pass an array of the global names to blacklist
          *
          * @example $sandbox->blacklist_global('a');
          *
-         * @param   array|string        $name       Array of global names or string of global name to blacklist
+         * @example $sandbox->blacklist_global(array('a', 'b'));
+         *
+         * @param   string|array        $name       String of global name or array of global names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3132,13 +3152,13 @@
         }
         /** Remove global from whitelist
          *
-         * You can pass an array of global names, or pass a string of the global name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_global(array('a', 'b'));
+         * You can pass a string of global name, or pass an array of the global names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_global('a');
          *
-         * @param   array|string        $name       Array of global names or string of global name to remove from whitelist
+         * @example $sandbox->dewhitelist_global(array('a', 'b'));
+         *
+         * @param   string|array        $name       String of global name or array of global names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3147,13 +3167,13 @@
         }
         /** Remove global from blacklist
          *
-         * You can pass an array of global names, or pass a string of the global name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_global(array('a', 'b'));
+         * You can pass a string of global name, or pass an array of the global names to remove from blacklist
          *
          * @example $sandbox->deblacklist_global('a');
          *
-         * @param   array|string        $name       Array of global names or string of global name to remove from blacklist
+         * @example $sandbox->deblacklist_global(array('a', 'b'));
+         *
+         * @param   string|array        $name       String of global name or array of global names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3162,17 +3182,18 @@
         }
         /** Whitelist superglobal or superglobal key
          *
-         * You can pass an associative array of superglobal names and their keys, or pass an array of superglobal names, or pass a string of the superglobal name and key, or a string of the superglobal name to whitelist
-         *
-         * @example $sandbox->whitelist_superglobal(array('_GET' => 'page'));
-         *
-         * @example $sandbox->whitelist_superglobal(array('_GET', '_POST'));
-         *
-         * @example $sandbox->whitelist_superglobal('_GET', 'page');
+         * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
+         * or pass an array of superglobal names, or an associative array of superglobal names and their keys to whitelist
          *
          * @example $sandbox->whitelist_superglobal('_GET');
          *
-         * @param   array|string        $name       Associative array of superglobal names and their keys, or an array of superglobal names, or string of superglobal name to whitelist
+         * @example $sandbox->whitelist_superglobal('_GET', 'page');
+         *
+         * @example $sandbox->whitelist_superglobal(array('_GET', '_POST'));
+         *
+         * @example $sandbox->whitelist_superglobal(array('_GET' => 'page'));
+         *
+         * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to whitelist
          * @param   string              $key        String of superglobal key to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
@@ -3212,18 +3233,19 @@
             return $this;
         }
         /** Blacklist superglobal or superglobal key
-         *
-         * You can pass an associative array of superglobal names and their keys, or pass an array of superglobal names, or pass a string of the superglobal name and key, or a string of the superglobal name to blacklist
-         *
-         * @example $sandbox->blacklist_superglobal(array('_GET' => 'page'));
-         *
-         * @example $sandbox->blacklist_superglobal(array('_GET', '_POST'));
-         *
-         * @example $sandbox->blacklist_superglobal('_GET', 'page');
+         **
+         * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
+         * or pass an array of superglobal names, or an associative array of superglobal names and their keys to blacklist
          *
          * @example $sandbox->blacklist_superglobal('_GET');
          *
-         * @param   array|string        $name       Associative array of superglobal names and their keys, or an array of superglobal names, or string of superglobal name to blacklist
+         * @example $sandbox->blacklist_superglobal('_GET', 'page');
+         *
+         * @example $sandbox->blacklist_superglobal(array('_GET', '_POST'));
+         *
+         * @example $sandbox->blacklist_superglobal(array('_GET' => 'page'));
+         *
+         * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to blacklist
          * @param   string              $key        String of superglobal key to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
@@ -3263,18 +3285,19 @@
             return $this;
         }
         /** Remove superglobal or superglobal key from whitelist
-         *
-         * You can pass an associative array of superglobal names and their keys, or pass an array of superglobal names, or pass a string of the superglobal name and key, or a string of the superglobal name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_superglobal(array('_GET' => 'page'));
-         *
-         * @example $sandbox->dewhitelist_superglobal(array('_GET', '_POST'));
-         *
-         * @example $sandbox->dewhitelist_superglobal('_GET', 'page');
+         **
+         * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
+         * or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist
          *
          * @example $sandbox->dewhitelist_superglobal('_GET');
          *
-         * @param   array|string        $name       Associative array of superglobal names and their keys, or an array of superglobal names, or string of superglobal name to remove from whitelist
+         * @example $sandbox->dewhitelist_superglobal('_GET', 'page');
+         *
+         * @example $sandbox->dewhitelist_superglobal(array('_GET', '_POST'));
+         *
+         * @example $sandbox->dewhitelist_superglobal(array('_GET' => 'page'));
+         *
+         * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist
          * @param   string              $key        String of superglobal key to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
@@ -3309,18 +3332,19 @@
             return $this;
         }
         /** Remove superglobal or superglobal key from blacklist
-         *
-         * You can pass an associative array of superglobal names and their keys, or pass an array of superglobal names, or pass a string of the superglobal name and key, or a string of the superglobal name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_superglobal(array('_GET' => 'page'));
-         *
-         * @example $sandbox->deblacklist_superglobal(array('_GET', '_POST'));
-         *
-         * @example $sandbox->deblacklist_superglobal('_GET', 'page');
+         **
+         * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
+         * or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist
          *
          * @example $sandbox->deblacklist_superglobal('_GET');
          *
-         * @param   array|string        $name       Associative array of superglobal names and their keys, or an array of superglobal names, or string of superglobal name to remove from blacklist
+         * @example $sandbox->deblacklist_superglobal('_GET', 'page');
+         *
+         * @example $sandbox->deblacklist_superglobal(array('_GET', '_POST'));
+         *
+         * @example $sandbox->deblacklist_superglobal(array('_GET' => 'page'));
+         *
+         * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist
          * @param   string              $key        String of superglobal key to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
@@ -3356,13 +3380,13 @@
         }
         /** Whitelist constant
          *
-         * You can pass an array of constant names, or pass a string of the constant name to whitelist
-         *
-         * @example $sandbox->whitelist_const(array('FOO', 'BAR'));
+         * You can pass a string of constant name, or pass an array of the constant names to whitelist
          *
          * @example $sandbox->whitelist_const('FOO');
          *
-         * @param   array|string        $name       Array of constant names or string of constant name to whitelist
+         * @example $sandbox->whitelist_const(array('FOO', 'BAR'));
+         *
+         * @param   string|array        $name       String of constant name or array of constant names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3371,13 +3395,13 @@
         }
         /** Blacklist constant
          *
-         * You can pass an array of constant names, or pass a string of the constant name to blacklist
-         *
-         * @example $sandbox->blacklist_const(array('FOO', 'BAR'));
+         * You can pass a string of constant name, or pass an array of the constant names to blacklist
          *
          * @example $sandbox->blacklist_const('FOO');
          *
-         * @param   array|string        $name       Array of constant names or string of constant name to blacklist
+         * @example $sandbox->blacklist_const(array('FOO', 'BAR'));
+         *
+         * @param   string|array        $name       String of constant name or array of constant names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3386,13 +3410,13 @@
         }
         /** Remove constant from whitelist
          *
-         * You can pass an array of constant names, or pass a string of the constant name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_const(array('FOO', 'BAR'));
+         * You can pass a string of constant name, or pass an array of the constant names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_const('FOO');
          *
-         * @param   array|string        $name       Array of constant names or string of constant name to remove from whitelist
+         * @example $sandbox->dewhitelist_const(array('FOO', 'BAR'));
+         *
+         * @param   string|array        $name       String of constant name or array of constant names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3401,13 +3425,13 @@
         }
         /** Remove constant from blacklist
          *
-         * You can pass an array of constant names, or pass a string of the constant name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_const(array('FOO', 'BAR'));
+         * You can pass a string of constant name, or pass an array of the constant names to remove from blacklist
          *
          * @example $sandbox->deblacklist_const('FOO');
          *
-         * @param   array|string        $name       Array of constant names or string of constant name to remove from blacklist
+         * @example $sandbox->deblacklist_const(array('FOO', 'BAR'));
+         *
+         * @param   string|array        $name       String of constant name or array of constant names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3416,13 +3440,13 @@
         }
         /** Whitelist magic constant
          *
-         * You can pass an array of magic constant names, or pass a string of the magic constant name to whitelist
-         *
-         * @example $sandbox->whitelist_magic_const(array('__LINE__', '__FILE__'));
+         * You can pass a string of magic constant name, or pass an array of the magic constant names to whitelist
          *
          * @example $sandbox->whitelist_magic_const('__LINE__');
          *
-         * @param   array|string        $name       Array of magic constant names or string of magic constant name to whitelist
+         * @example $sandbox->whitelist_magic_const(array('__LINE__', '__FILE__'));
+         *
+         * @param   string|array        $name       String of magic constant name or array of magic constant names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3432,13 +3456,13 @@
         }
         /** Blacklist magic constant
          *
-         * You can pass an array of magic constant names, or pass a string of the magic constant name to blacklist
-         *
-         * @example $sandbox->blacklist_magic_const(array('__LINE__', '__FILE__'));
+         * You can pass a string of magic constant name, or pass an array of the magic constant names to blacklist
          *
          * @example $sandbox->blacklist_magic_const('__LINE__');
          *
-         * @param   array|string        $name       Array of magic constant names or string of magic constant name to blacklist
+         * @example $sandbox->blacklist_magic_const(array('__LINE__', '__FILE__'));
+         *
+         * @param   string|array        $name       String of magic constant name or array of magic constant names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3448,13 +3472,13 @@
         }
         /** Remove magic constant from whitelist
          *
-         * You can pass an array of magic constant names, or pass a string of the magic constant name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_magic_const(array('__LINE__', '__FILE__'));
+         * You can pass a string of magic constant name, or pass an array of the magic constant names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_magic_const('__LINE__');
          *
-         * @param   array|string        $name       Array of magic constant names or string of magic constant name to remove from whitelist
+         * @example $sandbox->dewhitelist_magic_const(array('__LINE__', '__FILE__'));
+         *
+         * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3464,13 +3488,13 @@
         }
         /** Remove magic constant from blacklist
          *
-         * You can pass an array of magic constant names, or pass a string of the magic constant name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_magic_const(array('__LINE__', '__FILE__'));
+         * You can pass a string of magic constant name, or pass an array of the magic constant names to remove from blacklist
          *
          * @example $sandbox->deblacklist_magic_const('__LINE__');
          *
-         * @param   array|string        $name       Array of magic constant names or string of magic constant name to remove from blacklist
+         * @example $sandbox->deblacklist_magic_const(array('__LINE__', '__FILE__'));
+         *
+         * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3480,13 +3504,13 @@
         }
         /** Whitelist namespace
          *
-         * You can pass an array of namespace names, or pass a string of the namespace name to whitelist
-         *
-         * @example $sandbox->whitelist_namespace(array('Foo', 'Bar'));
+         * You can pass a string of namespace name, or pass an array of the namespace names to whitelist
          *
          * @example $sandbox->whitelist_namespace('Foo');
          *
-         * @param   array|string        $name       Array of namespace names or string of namespace name to whitelist
+         * @example $sandbox->whitelist_namespace(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of namespace name or array of namespace names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3496,13 +3520,13 @@
         }
         /** Blacklist namespace
          *
-         * You can pass an array of namespace names, or pass a string of the namespace name to blacklist
-         *
-         * @example $sandbox->blacklist_namespace(array('Foo', 'Bar'));
+         * You can pass a string of namespace name, or pass an array of the namespace names to blacklist
          *
          * @example $sandbox->blacklist_namespace('Foo');
          *
-         * @param   array|string        $name       Array of namespace names or string of namespace name to blacklist
+         * @example $sandbox->blacklist_namespace(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of namespace name or array of namespace names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3512,13 +3536,13 @@
         }
         /** Remove namespace from whitelist
          *
-         * You can pass an array of namespace names, or pass a string of the namespace name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_namespace(array('Foo', 'Bar'));
+         * You can pass a string of namespace name, or pass an array of the namespace names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_namespace('Foo');
          *
-         * @param   array|string        $name       Array of namespace names or string of namespace name to remove from whitelist
+         * @example $sandbox->dewhitelist_namespace(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of namespace name or array of namespace names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3528,13 +3552,13 @@
         }
         /** Remove namespace from blacklist
          *
-         * You can pass an array of namespace names, or pass a string of the namespace name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_namespace(array('Foo', 'Bar'));
+         * You can pass a string of namespace name, or pass an array of the namespace names to remove from blacklist
          *
          * @example $sandbox->deblacklist_namespace('Foo');
          *
-         * @param   array|string        $name       Array of namespace names or string of namespace name to remove from blacklist
+         * @example $sandbox->deblacklist_namespace(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of namespace name or array of namespace names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3544,13 +3568,13 @@
         }
         /** Whitelist alias
          *
-         * You can pass an array of alias names, or pass a string of the alias name to whitelist
-         *
-         * @example $sandbox->whitelist_alias(array('Foo', 'Bar'));
+         * You can pass a string of alias name, or pass an array of the alias names to whitelist
          *
          * @example $sandbox->whitelist_alias('Foo');
          *
-         * @param   array|string        $name       Array of alias names or string of alias name to whitelist
+         * @example $sandbox->whitelist_alias(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of alias names  or array of alias names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3560,13 +3584,13 @@
         }
         /** Blacklist alias
          *
-         * You can pass an array of alias names, or pass a string of the alias name to blacklist
-         *
-         * @example $sandbox->blacklist_alias(array('Foo', 'Bar'));
+         * You can pass a string of alias name, or pass an array of the alias names to blacklist
          *
          * @example $sandbox->blacklist_alias('Foo');
          *
-         * @param   array|string        $name       Array of alias names or string of alias name to blacklist
+         * @example $sandbox->blacklist_alias(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of alias name or array of alias names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3576,13 +3600,13 @@
         }
         /** Remove alias from whitelist
          *
-         * You can pass an array of alias names, or pass a string of the alias name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_alias(array('Foo', 'Bar'));
+         * You can pass a string of alias name, or pass an array of the alias names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_alias('Foo');
          *
-         * @param   array|string        $name       Array of alias names or string of alias name to remove from whitelist
+         * @example $sandbox->dewhitelist_alias(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of alias name or array of alias names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3592,13 +3616,13 @@
         }
         /** Remove alias from blacklist
          *
-         * You can pass an array of alias names, or pass a string of the alias name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_alias(array('Foo', 'Bar'));
+         * You can pass a string of alias name, or pass an array of the alias names to remove from blacklist
          *
          * @example $sandbox->deblacklist_alias('Foo');
          *
-         * @param   array|string        $name       Array of alias names or string of alias name to remove from blacklist
+         * @example $sandbox->deblacklist_alias(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of alias name or array of alias names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3608,15 +3632,15 @@
         }
         /** Whitelist use (or alias)
          *
-         * You can pass an array of use (or alias) names, or pass a string of the use (or alias) name to whitelist
+         * You can pass a string of use (or alias) name, or pass an array of the use (or alias) names to whitelist
          *
          * @alias   whitelist_alias();
          *
-         * @example $sandbox->whitelist_use(array('Foo', 'Bar'));
-         *
          * @example $sandbox->whitelist_use('Foo');
          *
-         * @param   array|string        $name       Array of use (or alias) names or string of use (or alias) name to whitelist
+         * @example $sandbox->whitelist_use(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3625,15 +3649,15 @@
         }
         /** Blacklist use (or alias)
          *
-         * You can pass an array of use (or alias) names, or pass a string of the use (or alias) name to blacklist
+         * You can pass a string of use (or alias) name, or pass an array of the use (or alias) names to blacklist
          *
          * @alias   blacklist_alias();
          *
-         * @example $sandbox->blacklist_use(array('Foo', 'Bar'));
-         *
          * @example $sandbox->blacklist_use('Foo');
          *
-         * @param   array|string        $name       Array of use (or alias) names or string of use (or alias) name to blacklist
+         * @example $sandbox->blacklist_use(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3642,15 +3666,15 @@
         }
         /** Remove use (or alias) from whitelist
          *
-         * You can pass an array of use (or alias names, or pass a string of the use (or alias) name to remove from whitelist
+         * You can pass a string of use (or alias name, or pass an array of the use (or alias) names to remove from whitelist
          *
          * @alias   dewhitelist_alias();
          *
-         * @example $sandbox->dewhitelist_use(array('Foo', 'Bar'));
-         *
          * @example $sandbox->dewhitelist_use('Foo');
          *
-         * @param   array|string        $name       Array of use (or alias) names or string of use (or alias) name to remove from whitelist
+         * @example $sandbox->dewhitelist_use(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3659,15 +3683,15 @@
         }
         /** Remove use (or alias) from blacklist
          *
-         * You can pass an array of use (or alias names, or pass a string of the use (or alias) name to remove from blacklist
+         * You can pass a string of use (or alias name, or pass an array of the use (or alias) names to remove from blacklist
          *
          * @alias   deblacklist_alias();
          *
-         * @example $sandbox->deblacklist_use(array('Foo', 'Bar'));
-         *
          * @example $sandbox->deblacklist_use('Foo');
          *
-         * @param   array|string        $name       Array of use (or alias) names or string of use (or alias) name to remove from blacklist
+         * @example $sandbox->deblacklist_use(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3676,13 +3700,13 @@
         }
         /** Whitelist class
          *
-         * You can pass an array of class names, or pass a string of the class name to whitelist
-         *
-         * @example $sandbox->whitelist_class(array('Foo', 'Bar'));
+         * You can pass a string of class name, or pass an array of the class names to whitelist
          *
          * @example $sandbox->whitelist_class('Foo');
          *
-         * @param   array|string        $name       Array of class names or string of class name to whitelist
+         * @example $sandbox->whitelist_class(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of class name or array of class names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3692,13 +3716,13 @@
         }
         /** Blacklist class
          *
-         * You can pass an array of class names, or pass a string of the class name to blacklist
-         *
-         * @example $sandbox->blacklist_class(array('Foo', 'Bar'));
+         * You can pass a string of class name, or pass an array of the class names to blacklist
          *
          * @example $sandbox->blacklist_class('Foo');
          *
-         * @param   array|string        $name       Array of class names or string of class name to blacklist
+         * @example $sandbox->blacklist_class(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of class name or array of class names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3708,13 +3732,13 @@
         }
         /** Remove class from whitelist
          *
-         * You can pass an array of class names, or pass a string of the class name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_class(array('Foo', 'Bar'));
+         * You can pass a string of class name, or pass an array of the class names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_class('Foo');
          *
-         * @param   array|string        $name       Array of class names or string of class name to remove from whitelist
+         * @example $sandbox->dewhitelist_class(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of class name or array of class names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3724,13 +3748,13 @@
         }
         /** Remove class from blacklist
          *
-         * You can pass an array of class names, or pass a string of the class name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_class(array('Foo', 'Bar'));
+         * You can pass a string of class name, or pass an array of the class names to remove from blacklist
          *
          * @example $sandbox->deblacklist_class('Foo');
          *
-         * @param   array|string        $name       Array of class names or string of class name to remove from blacklist
+         * @example $sandbox->deblacklist_class(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of class name or array of class names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3740,13 +3764,13 @@
         }
         /** Whitelist interface
          *
-         * You can pass an array of interface names, or pass a string of the interface name to whitelist
-         *
-         * @example $sandbox->whitelist_interface(array('Foo', 'Bar'));
+         * You can pass a string of interface name, or pass an array of the interface names to whitelist
          *
          * @example $sandbox->whitelist_interface('Foo');
          *
-         * @param   array|string        $name       Array of interface names or string of interface name to whitelist
+         * @example $sandbox->whitelist_interface(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of interface name or array of interface names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3756,13 +3780,13 @@
         }
         /** Blacklist interface
          *
-         * You can pass an array of interface names, or pass a string of the interface name to blacklist
-         *
-         * @example $sandbox->blacklist_interface(array('Foo', 'Bar'));
+         * You can pass a string of interface name, or pass an array of the interface names to blacklist
          *
          * @example $sandbox->blacklist_interface('Foo');
          *
-         * @param   array|string        $name       Array of interface names or string of interface name to blacklist
+         * @example $sandbox->blacklist_interface(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of interface name or array of interface names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3772,13 +3796,13 @@
         }
         /** Remove interface from whitelist
          *
-         * You can pass an array of interface names, or pass a string of the interface name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_interface(array('Foo', 'Bar'));
+         * You can pass a string of interface name, or pass an array of the interface names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_interface('Foo');
          *
-         * @param   array|string        $name       Array of interface names or string of interface name to remove from whitelist
+         * @example $sandbox->dewhitelist_interface(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of interface name or array of interface names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3788,13 +3812,13 @@
         }
         /** Remove interface from blacklist
          *
-         * You can pass an array of interface names, or pass a string of the interface name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_interface(array('Foo', 'Bar'));
+         * You can pass a string of interface name, or pass an array of the interface names to remove from blacklist
          *
          * @example $sandbox->deblacklist_interface('Foo');
          *
-         * @param   array|string        $name       Array of interface names or string of interface name to remove from blacklist
+         * @example $sandbox->deblacklist_interface(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of interface name or array of interface names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3804,13 +3828,13 @@
         }
         /** Whitelist trait
          *
-         * You can pass an array of trait names, or pass a string of the trait name to whitelist
-         *
-         * @example $sandbox->whitelist_trait(array('Foo', 'Bar'));
+         * You can pass a string of trait name, or pass an array of the trait names to whitelist
          *
          * @example $sandbox->whitelist_trait('Foo');
          *
-         * @param   array|string        $name       Array of trait names or string of trait name to whitelist
+         * @example $sandbox->whitelist_trait(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of trait name or array of trait names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3820,13 +3844,13 @@
         }
         /** Blacklist trait
          *
-         * You can pass an array of trait names, or pass a string of the trait name to blacklist
-         *
-         * @example $sandbox->blacklist_trait(array('Foo', 'Bar'));
+         * You can pass a string of trait name, or pass an array of the trait names to blacklist
          *
          * @example $sandbox->blacklist_trait('Foo');
          *
-         * @param   array|string        $name       Array of trait names or string of trait name to blacklist
+         * @example $sandbox->blacklist_trait(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of trait name or array of trait names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3836,13 +3860,13 @@
         }
         /** Remove trait from whitelist
          *
-         * You can pass an array of trait names, or pass a string of the trait name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_trait(array('Foo', 'Bar'));
+         * You can pass a string of trait name, or pass an array of the trait names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_trait('Foo');
          *
-         * @param   array|string        $name       Array of trait names or string of trait name to remove from whitelist
+         * @example $sandbox->dewhitelist_trait(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of trait name or array of trait names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3852,13 +3876,13 @@
         }
         /** Remove trait from blacklist
          *
-         * You can pass an array of trait names, or pass a string of the trait name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_trait(array('Foo', 'Bar'));
+         * You can pass a string of trait name, or pass an array of the trait names to remove from blacklist
          *
          * @example $sandbox->deblacklist_trait('Foo');
          *
-         * @param   array|string        $name       Array of trait names or string of trait name to remove from blacklist
+         * @example $sandbox->deblacklist_trait(array('Foo', 'Bar'));
+         *
+         * @param   string|array        $name       String of trait name or array of trait names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3868,13 +3892,13 @@
         }
         /** Whitelist keyword
          *
-         * You can pass an array of keyword names, or pass a string of the keyword name to whitelist
-         *
-         * @example $sandbox->whitelist_keyword(array('echo', 'eval'));
+         * You can pass a string of keyword name, or pass an array of the keyword names to whitelist
          *
          * @example $sandbox->whitelist_keyword('echo');
          *
-         * @param   array|string        $name       Array of keyword names or string of keyword name to whitelist
+         * @example $sandbox->whitelist_keyword(array('echo', 'eval'));
+         *
+         * @param   string|array        $name       String of keyword name or array of keyword names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3884,13 +3908,13 @@
         }
         /** Blacklist keyword
          *
-         * You can pass an array of keyword names, or pass a string of the keyword name to blacklist
-         *
-         * @example $sandbox->blacklist_keyword(array('echo', 'eval'));
+         * You can pass a string of keyword name, or pass an array of the keyword names to blacklist
          *
          * @example $sandbox->blacklist_keyword('echo');
          *
-         * @param   array|string        $name       Array of keyword names or string of keyword name to blacklist
+         * @example $sandbox->blacklist_keyword(array('echo', 'eval'));
+         *
+         * @param   string|array        $name       String of keyword name or array of keyword names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3900,13 +3924,13 @@
         }
         /** Remove keyword from whitelist
          *
-         * You can pass an array of keyword names, or pass a string of the keyword name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_keyword(array('echo', 'eval'));
+         * You can pass a string of keyword name, or pass an array of the keyword names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_keyword('echo');
          *
-         * @param   array|string        $name       Array of keyword names or string of keyword name to remove from whitelist
+         * @example $sandbox->dewhitelist_keyword(array('echo', 'eval'));
+         *
+         * @param   string|array        $name       String of keyword name or array of keyword names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3916,13 +3940,13 @@
         }
         /** Remove keyword from blacklist
          *
-         * You can pass an array of keyword names, or pass a string of the keyword name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_keyword(array('echo', 'eval'));
+         * You can pass a string of keyword name, or pass an array of the keyword names to remove from blacklist
          *
          * @example $sandbox->deblacklist_keyword('echo');
          *
-         * @param   array|string        $name       Array of keyword names or string of keyword name to remove from blacklist
+         * @example $sandbox->deblacklist_keyword(array('echo', 'eval'));
+         *
+         * @param   string|array        $name       String of keyword name or array of keyword names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3932,13 +3956,13 @@
         }
         /** Whitelist operator
          *
-         * You can pass an array of operator names, or pass a string of the operator name to whitelist
-         *
-         * @example $sandbox->whitelist_operator(array('+', '-'));
+         * You can pass a string of operator name, or pass an array of the operator names to whitelist
          *
          * @example $sandbox->whitelist_operator('+');
          *
-         * @param   array|string        $name       Array of operator names or string of operator name to whitelist
+         * @example $sandbox->whitelist_operator(array('+', '-'));
+         *
+         * @param   string|array        $name       String of operator name or array of operator names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3948,13 +3972,13 @@
         }
         /** Blacklist operator
          *
-         * You can pass an array of operator names, or pass a string of the operator name to blacklist
-         *
-         * @example $sandbox->blacklist_operator(array('+', '-'));
+         * You can pass a string of operator name, or pass an array of the operator names to blacklist
          *
          * @example $sandbox->blacklist_operator('+');
          *
-         * @param   array|string        $name       Array of operator names or string of operator name to blacklist
+         * @example $sandbox->blacklist_operator(array('+', '-'));
+         *
+         * @param   string|array        $name       String of operator name or array of operator names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3964,13 +3988,13 @@
         }
         /** Remove operator from whitelist
          *
-         * You can pass an array of operator names, or pass a string of the operator name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_operator(array('+', '-'));
+         * You can pass a string of operator name, or pass an array of the operator names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_operator('+');
          *
-         * @param   array|string        $name       Array of operator names or string of operator name to remove from whitelist
+         * @example $sandbox->dewhitelist_operator(array('+', '-'));
+         *
+         * @param   string|array        $name       String of operator name or array of operator names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3980,13 +4004,13 @@
         }
         /** Remove operator from blacklist
          *
-         * You can pass an array of operator names, or pass a string of the operator name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_operator(array('+', '-'));
+         * You can pass a string of operator name, or pass an array of the operator names to remove from blacklist
          *
          * @example $sandbox->deblacklist_operator('+');
          *
-         * @param   array|string        $name       Array of operator names or string of operator name to remove from blacklist
+         * @example $sandbox->deblacklist_operator(array('+', '-'));
+         *
+         * @param   string|array        $name       String of operator name or array of operator names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -3996,13 +4020,13 @@
         }
         /** Whitelist primitive
          *
-         * You can pass an array of primitive names, or pass a string of the primitive name to whitelist
-         *
-         * @example $sandbox->whitelist_primitive(array('int', 'float'));
+         * You can pass a string of primitive name, or pass an array of the primitive names to whitelist
          *
          * @example $sandbox->whitelist_primitive('int');
          *
-         * @param   array|string        $name       Array of primitive names or string of primitive name to whitelist
+         * @example $sandbox->whitelist_primitive(array('int', 'float'));
+         *
+         * @param   string|array        $name       String of primitive name or array of primitive names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -4012,13 +4036,13 @@
         }
         /** Blacklist primitive
          *
-         * You can pass an array of primitive names, or pass a string of the primitive name to blacklist
-         *
-         * @example $sandbox->blacklist_primitive(array('int', 'float'));
+         * You can pass a string of primitive name, or pass an array of the primitive names to blacklist
          *
          * @example $sandbox->blacklist_primitive('int');
          *
-         * @param   array|string        $name       Array of primitive names or string of primitive name to blacklist
+         * @example $sandbox->blacklist_primitive(array('int', 'float'));
+         *
+         * @param   string|array        $name       String of primitive name or array of primitive names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -4028,13 +4052,13 @@
         }
         /** Remove primitive from whitelist
          *
-         * You can pass an array of primitive names, or pass a string of the primitive name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_primitive(array('int', 'float'));
+         * You can pass a string of primitive name, or pass an array of the primitive names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_primitive('int');
          *
-         * @param   array|string        $name       Array of primitive names or string of primitive name to remove from whitelist
+         * @example $sandbox->dewhitelist_primitive(array('int', 'float'));
+         *
+         * @param   string|array        $name       String of primitive name or array of primitive names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -4044,13 +4068,13 @@
         }
         /** Remove primitive from blacklist
          *
-         * You can pass an array of primitive names, or pass a string of the primitive name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_primitive(array('int', 'float'));
+         * You can pass a string of primitive name, or pass an array of the primitive names to remove from blacklist
          *
          * @example $sandbox->deblacklist_primitive('int');
          *
-         * @param   array|string        $name       Array of primitive names or string of primitive name to remove from blacklist
+         * @example $sandbox->deblacklist_primitive(array('int', 'float'));
+         *
+         * @param   string|array        $name       String of primitive name or array of primitive names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -4060,13 +4084,13 @@
         }
         /** Whitelist type
          *
-         * You can pass an array of type names, or pass a string of the type name to whitelist
-         *
-         * @example $sandbox->whitelist_type(array('PHPSandbox', 'PHPParser'));
+         * You can pass a string of type name, or pass an array of the type names to whitelist
          *
          * @example $sandbox->whitelist_type('PHPSandbox');
          *
-         * @param   array|string        $name       Array of type names or string of type name to whitelist
+         * @example $sandbox->whitelist_type(array('PHPSandbox', 'PHPParser'));
+         *
+         * @param   string|array        $name       String of type name or array of type names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -4076,13 +4100,13 @@
         }
         /** Blacklist type
          *
-         * You can pass an array of type names, or pass a string of the type name to blacklist
-         *
-         * @example $sandbox->blacklist_type(array('PHPSandbox', 'PHPParser'));
+         * You can pass a string of type name, or pass an array of the type names to blacklist
          *
          * @example $sandbox->blacklist_type('PHPSandbox');
          *
-         * @param   array|string        $name       Array of type names or string of type name to blacklist
+         * @example $sandbox->blacklist_type(array('PHPSandbox', 'PHPParser'));
+         *
+         * @param   string|array        $name       String of type name or array of type names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -4092,13 +4116,13 @@
         }
         /** Remove type from whitelist
          *
-         * You can pass an array of type names, or pass a string of the type name to remove from whitelist
-         *
-         * @example $sandbox->dewhitelist_type(array('PHPSandbox', 'PHPParser'));
+         * You can pass a string of type name, or pass an array of the type names to remove from whitelist
          *
          * @example $sandbox->dewhitelist_type('PHPSandbox');
          *
-         * @param   array|string        $name       Array of type names or string of type name to remove from whitelist
+         * @example $sandbox->dewhitelist_type(array('PHPSandbox', 'PHPParser'));
+         *
+         * @param   string|array        $name       String of type name or array of type names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -4108,13 +4132,13 @@
         }
         /** Remove type from blacklist
          *
-         * You can pass an array of type names, or pass a string of the type name to remove from blacklist
-         *
-         * @example $sandbox->deblacklist_type(array('PHPSandbox', 'PHPParser'));
+         * You can pass a string of type name, or pass an array of the type names to remove from blacklist
          *
          * @example $sandbox->deblacklist_type('PHPSandbox');
          *
-         * @param   array|string        $name       Array of type names or string of type name to remove from blacklist
+         * @example $sandbox->deblacklist_type(array('PHPSandbox', 'PHPParser'));
+         *
+         * @param   string|array        $name       String of type name or array of type names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -4125,14 +4149,16 @@
         /** Check function name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the function name to check
          * @throws  Error    Throws exception if validation error occurs
+         *
+         * @return  bool     Returns true if function is valid, this is used for testing closures
          */
         public function check_func($name){
             $original_name = $name;
-            if(!$name){
+            if(!$name || !is_string($name)){
                 throw new Error("Sandboxed code attempted to call unnamed function!");
             }
             $name = $this->normalize_func($name);
-            if(!isset($this->definitions['functions'][$name]) || !is_callable($this->definitions['functions'][$name])){
+            if(!isset($this->definitions['functions'][$name]) || !is_callable($this->definitions['functions'][$name]['function'])){
                 if(count($this->whitelist['functions'])){
                     if(!isset($this->whitelist['functions'][$name])){
                         throw new Error("Sandboxed code attempted to call non-whitelisted function: $original_name");
@@ -4145,6 +4171,7 @@
                    throw new Error("Sandboxed code attempted to call invalid function: $original_name");
                 }
             }
+            return true;
         }
         /** Check variable name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the variable name to check
@@ -4225,6 +4252,10 @@
             }
             if(strtolower($name) == 'true' || strtolower($name) == 'false'){
                 $this->check_primitive('bool');
+                return;
+            }
+            if(strtolower($name) == 'null'){
+                $this->check_primitive('null');
                 return;
             }
             if(!isset($this->definitions['constants'][$name])){
