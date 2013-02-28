@@ -1,3 +1,5 @@
+![PHPSandbox](http://www.fieryprophet.com/frontend/files/userfiles/images/phpsandbox-logo.png)
+
 ##A full-scale PHP 5.3.2+ sandbox class that utilizes [PHP-Parser](https://github.com/nikic/PHP-Parser) to prevent sandboxed code from running unsafe code.
 
 It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) to disassemble callables passed to the sandbox, so that PHP callables can also be run in sandboxes without first converting them into strings.
