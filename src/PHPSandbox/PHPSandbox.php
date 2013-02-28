@@ -1870,11 +1870,17 @@
         }
         /** Normalize function name.  This is an internal PHPSandbox function.
          *
-         * @param   string          $name       String of the function $name to normalize
+         * @param   string|array          $name       String of the function $name, or array of strings to normalize
          *
-         * @return  string          Returns the normalized function string
+         * @return  string|array          Returns the normalized function string or an array of normalized strings
          */
         protected function normalize_func($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_func($value);
+                }
+                return $name;
+            }
             return strtolower($name);
         }
         /** Normalize superglobal name.  This is an internal PHPSandbox function.
@@ -1884,6 +1890,12 @@
          * @return  string          Returns the normalized superglobal string
          */
         protected function normalize_superglobal($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_superglobal($value);
+                }
+                return $name;
+            }
             return strtoupper(ltrim($name, '_'));
         }
         /** Normalize magic constant name.  This is an internal PHPSandbox function.
@@ -1893,6 +1905,12 @@
          * @return  string          Returns the normalized magic constant string
          */
         protected function normalize_magic_const($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_magic_const($value);
+                }
+                return $name;
+            }
             return strtoupper(trim($name, '_'));
         }
         /** Normalize namespace name.  This is an internal PHPSandbox function.
@@ -1902,6 +1920,12 @@
          * @return  string          Returns the normalized namespace string
          */
         protected function normalize_namespace($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_namespace($value);
+                }
+                return $name;
+            }
             return strtolower($name);
         }
         /** Normalize alias name.  This is an internal PHPSandbox function.
@@ -1911,6 +1935,12 @@
          * @return  string          Returns the normalized alias string
          */
         protected function normalize_alias($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_alias($value);
+                }
+                return $name;
+            }
             return strtolower($name);
         }
         /** Normalize use (or alias) name.  This is an internal PHPSandbox function.
@@ -1931,6 +1961,12 @@
          * @return  string          Returns the normalized class string
          */
         protected function normalize_class($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_class($value);
+                }
+                return $name;
+            }
             return strtolower($name);
         }
         /** Normalize interface name.  This is an internal PHPSandbox function.
@@ -1940,6 +1976,12 @@
          * @return  string          Returns the normalized interface string
          */
         protected function normalize_interface($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_interface($value);
+                }
+                return $name;
+            }
             return strtolower($name);
         }
         /** Normalize trait name.  This is an internal PHPSandbox function.
@@ -1949,6 +1991,12 @@
          * @return  string          Returns the normalized trait string
          */
         protected function normalize_trait($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_trait($value);
+                }
+                return $name;
+            }
             return strtolower($name);
         }
         /** Normalize keyword name.  This is an internal PHPSandbox function.
@@ -1958,6 +2006,12 @@
          * @return  string          Returns the normalized keyword string
          */
         protected function normalize_keyword($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_keyword($value);
+                }
+                return $name;
+            }
             $name = strtolower($name);
             switch($name){
                 case 'die':
@@ -1994,6 +2048,12 @@
          * @return  string          Returns the normalized operator string
          */
         protected function normalize_operator($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_operator($value);
+                }
+                return $name;
+            }
             $name = strtolower($name);
             if(strpos($name, '++') !== false){
                 $name = (strpos($name, '++') === 0) ? '++n' : 'n++';
@@ -2013,6 +2073,12 @@
          * @return  string          Returns the normalized primitive string
          */
         protected function normalize_primitive($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_primitive($value);
+                }
+                return $name;
+            }
             $name = strtolower($name);
             if($name == 'double'){
                 $name = 'float';
@@ -2028,6 +2094,12 @@
          * @return  string          Returns the normalized type string
          */
         protected function normalize_type($name){
+            if(is_array($name)){
+                foreach($name as &$value){
+                    $value = $this->normalize_type($value);
+                }
+                return $name;
+            }
             return strtolower($name);
         }
         /** Whitelist PHPSandbox definitions, such as functions, constants, classes, etc. to set
@@ -2904,22 +2976,66 @@
             $name = $this->normalize_type($name);
             return isset($this->blacklist['types'][$name]);
         }
-
+        /** Whitelist function
+         *
+         * You can pass an associative array of function names, or pass a string of the function name to whitelist
+         *
+         * @example $sandbox->whitelist_func(array('var_dump', 'print_r'));
+         *
+         * @example $sandbox->whitelist_func('var_dump');
+         *
+         * @param   array|string        $name       Array of function names or string of function name to whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function whitelist_func($name){
             $name = $this->normalize_func($name);
             return $this->whitelist('functions', $name);
         }
-
+        /** Blacklist function
+         *
+         * You can pass an associative array of function names, or pass a string of the function name to blacklist
+         *
+         * @example $sandbox->blacklist_func(array('var_dump', 'print_r'));
+         *
+         * @example $sandbox->blacklist_func('var_dump');
+         *
+         * @param   array|string        $name       Array of function names or string of function name to blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function blacklist_func($name){
             $name = $this->normalize_func($name);
             return $this->blacklist('functions', $name);
         }
-
+        /** Remove function from whitelist
+         *
+         * You can pass an associative array of function names, or pass a string of the function name to remove from whitelist
+         *
+         * @example $sandbox->dewhitelist_func(array('var_dump', 'print_r'));
+         *
+         * @example $sandbox->dewhitelist_func('var_dump');
+         *
+         * @param   array|string        $name       Array of function names or string of function name to remove from whitelist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function dewhitelist_func($name){
             $name = $this->normalize_func($name);
             return $this->dewhitelist('functions', $name);
         }
-
+        /** Remove function from blacklist
+         *
+         * You can pass an associative array of function names, or pass a string of the function name to remove from blacklist
+         *
+         * @example $sandbox->deblacklist_func(array('var_dump', 'print_r'));
+         *
+         * @example $sandbox->deblacklist_func('var_dump');
+         *
+         * @param   array|string        $name       Array of function names or string of function name to remove from blacklist
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
         public function deblacklist_func($name){
             $name = $this->normalize_func($name);
             return $this->deblacklist('functions', $name);
