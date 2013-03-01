@@ -28,6 +28,9 @@
         }
         $data = array(
             'code' => $code,
+            'setup_code' => $setup_code,
+            'prepend_code' => $setup_code,
+            'append_code' => $append_code,
             'options' => null,
             'whitelist' => $whitelist,
             'blacklist' => $blacklist
@@ -183,7 +186,11 @@
     <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" >
-        var code = <?php echo json_encode(isset($data['code']) ? $data['code'] : ''); ?>, setup_code = '', prepend_code = '', append_code = '', current_mode = 'code';
+        var code = <?php echo json_encode(isset($data['code']) ? $data['code'] : ''); ?>,
+            setup_code = <?php echo json_encode(isset($data['setup_code']) ? $data['setup_code'] : ''); ?>,
+            prepend_code = <?php echo json_encode(isset($data['prepend_code']) ? $data['prepend_code'] : ''); ?>,
+            append_code = <?php echo json_encode(isset($data['append_code']) ? $data['append_code'] : ''); ?>,
+            current_mode = 'code';
     </script>
 </head>
 <body id="body">
