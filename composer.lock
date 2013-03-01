@@ -1,5 +1,5 @@
 {
-    "hash": "93286f473a4848ead701e0be02b296ea",
+    "hash": "19dcdb57dad5ce136148740e674cffd7",
     "packages": [
         {
             "name": "jeremeamia/FunctionParser",
@@ -18,7 +18,6 @@
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "2012-03-19 17:15:54",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -41,7 +40,8 @@
                 "function",
                 "parser",
                 "tokenizer"
-            ]
+            ],
+            "time": "2012-03-19 17:15:54"
         },
         {
             "name": "nikic/php-parser",
@@ -60,7 +60,6 @@
             "require": {
                 "php": ">=5.2"
             },
-            "time": "2013-02-14 20:49:08",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -80,7 +79,8 @@
             "keywords": [
                 "parser",
                 "php"
-            ]
+            ],
+            "time": "2013-02-14 20:49:08"
         }
     ],
     "packages-dev": null,
