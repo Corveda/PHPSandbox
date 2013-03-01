@@ -1,5 +1,5 @@
 {
-    "hash": "19dcdb57dad5ce136148740e674cffd7",
+    "hash": "31ce0ef706c5a504e0d2bb9a2dcd0df1",
     "packages": [
         {
             "name": "jeremeamia/FunctionParser",
@@ -87,9 +87,10 @@
     "aliases": [
 
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "nikic/php-parser": 20,
-        "jeremeamia/functionparser": 20
+        "jeremeamia/functionparser": 20,
+        "phpunit/phpunit": 0
     }
 }
