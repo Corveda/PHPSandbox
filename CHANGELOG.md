@@ -6,3 +6,4 @@
 - Supports configuring and testing sandboxes from local PHP server without the necessity of coding specific demos
 - Can save personal templates of sandboxed code and configurations for future reference
 - The /demos/templates folder will gradually have a full suite of demonstration files explaining the various features and configuration options available in PHPSandbox
+- Initial commit of PHPUnit tests and added PHPUnit as a "require-dev" in composer.json
