@@ -4,55 +4,51 @@
     if(isset($_POST['save'])){
         $code = stripslashes($_POST['code']);
         $options = isset($_POST['options']) ? $_POST['options'] : array();
-        $whitelist = isset($_POST['whitelist']) ? $_POST['whitelist'] : array();
-        $blacklist = isset($_POST['blacklist']) ? $_POST['blacklist'] : array();
-        $original_name = $template = stripslashes($_POST['save']);
-        $template = trim(preg_replace('/[^a-zA-Z0-9_]/', '_', substr($template, 0, strrpos($template, '.') ? strrpos($template, '.') : strlen($template))), '_');
-        if(!$template){
-            header('Content-type: text/html');
+        $whitelist = isset($_POST['whitelist']) ? $_POST['whitelist'] : null;
+        $blacklist = isset($_POST['blacklist']) ? $_POST['blacklist'] : null;
+        $template = stripslashes($_POST['save']);
+        $filename = trim(preg_replace('/[^a-zA-Z0-9_ ]/', '_', $template), '_');
+        header('Content-type: text/html');
+        if(!$filename){
             die(json_encode(array(
                 'message' => 'The template could not be saved because the requested template name was invalid. Please rename your template and try again.',
                 'success' => false
             )));
         }
-        $cnt = count(glob('templates/*.txt')) + 1;
-        $template = str_pad($cnt, 3, '0', STR_PAD_LEFT) . '_' . $template . '.txt';
-        if(file_exists('templates/' . $template)){
-            header('Content-type: text/html');
+        $cnt = count(glob('templates/*.json')) + 1;
+        $filename = str_pad($cnt, 3, '0', STR_PAD_LEFT) . ' - ' . $filename . '.json';
+        if(file_exists('templates/' . $filename)){
             die(json_encode(array(
                 'message' => 'The template could not be saved because the another template already exists with the same name. Please rename your template and try again.',
                 'success' => false
             )));
         }
-        $data = array($code);
-        if(count($blacklist)){
-            array_unshift($data, json_encode($blacklist));
-        }
-        if(count($whitelist)){
-            array_unshift($data, json_encode($whitelist));
-        }
+        $data = array(
+            'code' => $code,
+            'options' => null,
+            'whitelist' => $whitelist,
+            'blacklist' => $blacklist
+        );
         if(count($options)){
-            $options_are_unique = false;
             $sandbox = new \PHPSandbox\PHPSandbox;
             foreach($options as $name => $value){
-                if(($name == 'error_level' && $value != error_reporting()) || ($name != 'error_level' && $sandbox->get_option($name) != $value)){
-                    $options_are_unique = true;
-                    break;
+                if(($name == 'error_level' && $value != error_reporting()) || ($name != 'error_level' && $sandbox->get_option($name) != $value)){ //save unique options only
+                    $data['options'][$name] = $value;
                 }
             }
-            if($options_are_unique){
-                array_unshift($data, json_encode($options));
-            }
         }
-        if(file_put_contents('templates/' . $template, implode("\r\n===================================================================================================\r\n", $data))){
-            header('Content-type: text/html');
+        if(file_put_contents('templates/' . $filename, json_encode($data))){
             die(json_encode(array(
-                'message' => 'The template "' . $original_name . '" was saved successfully!',
-                'name' => $cnt . ' - ' . $original_name,
-                'file' => $template,
+                'message' => 'The template "' . $template . '" was saved successfully!',
+                'name' => $cnt . ' - ' . $template,
+                'file' => $filename,
                 'success' => true
             )));
         }
+        die(json_encode(array(
+            'message' => 'An error occurred that prevented your template from being saved!',
+            'success' => false
+        )));
     }
 
     if(isset($_POST['code'])){
@@ -74,54 +70,23 @@
         try {
             ob_start();
             $result = $sandbox->execute($code);
-            print_r($result, true);
-
+            if($result !== null){
+                echo (ob_get_contents() ? '<hr class="hr"/>' : '') . '<h3>The PHPSandbox returned this value:</h3>';
+                print_r($result);
+            }
             $buffer = ob_get_contents();
             ob_end_clean();
             die('<pre>' . $buffer . '</pre>');
         } catch(\PHPSandbox\Error $error){
-            exit;
+            throw $error;
         }
     }
 
     if(isset($_GET['template'])){
         $template = stripslashes($_GET['template']);
         if(file_exists($template)){
-            $data = explode("\r\n===================================================================================================\r\n", file_get_contents($template));
             header('Content-type: text/html');
-            $output = array(
-                'options' => array(),
-                'whitelist' => array(),
-                'blacklist' => array(),
-                'code' => $data[0]
-            );
-            switch(count($data)){
-                case 2:
-                    $output = array(
-                        'options' => json_decode(trim($data[0])),
-                        'whitelist' => array(),
-                        'blacklist' => array(),
-                        'code' => $data[1]
-                    );
-                    break;
-                case 3:
-                    $output = array(
-                        'options' => json_decode(trim($data[0])),
-                        'whitelist' => json_decode(trim($data[1])),
-                        'blacklist' => array(),
-                        'code' => $data[2]
-                    );
-                    break;
-                case 4:
-                    $output = array(
-                        'options' => json_decode(trim($data[0])),
-                        'whitelist' => json_decode(trim($data[1])),
-                        'blacklist' => json_decode(trim($data[2])),
-                        'code' => $data[3]
-                    );
-                    break;
-            }
-            die(json_encode($output));
+            readfile($template);
         }
         exit;
     }
@@ -215,8 +180,8 @@
     <select id="templates">
         <option disabled="disabled">Select a template. . .</option>
     <?php
-        foreach(glob("templates/*") as $index => $template){
-            echo '<option value="' . htmlentities($template) . '">' . ($index+1) . ' - ' . htmlentities(ucwords(str_replace('_', ' ', substr($template, 14, strlen($template) - 18)))) . '</option>';
+        foreach(glob("templates/*.json") as $index => $template){
+            echo '<option value="' . htmlentities($template) . '">' . ($index + 1) . ' - ' . htmlentities(substr($template, 16, strlen($template) - 21)) . '</option>';
         }
     ?>
     </select>
@@ -263,6 +228,8 @@
                 <br/>
                 <input type="text" id="whitelist" value="" title="Invalid name for whitelisted item!"/>
                 <input type="button" value="+" id="whitelist_add"/>
+                <br/>
+                <strong style="font-size: 9px;">NOTE: Whitelists override blacklists!</strong>
                 <hr class="hr"/>
                 <div id="whitelist_func" style="display: none;">
                     <strong>Functions:</strong>
@@ -333,6 +300,8 @@
                 <br/>
                 <input type="text" id="blacklist" value="" title="Invalid name for blacklisted item!"/>
                 <input type="button" value="+" id="blacklist_add"/>
+                <br/>
+                <strong style="font-size: 9px;">NOTE: Whitelists override blacklists!</strong>
                 <hr class="hr"/>
                 <div id="blacklist_func" style="display: none;">
                     <strong>Functions:</strong>
@@ -399,7 +368,10 @@
     <h2>Output</h2>
     <div id="output" class="ui-widget ui-widget-content ui-corner-all"><pre>Hello World!</pre></div>
 </div>
-<div id="editor"><?php readfile("templates/001_hello_world.txt"); ?></div>
+<div id="editor"><?php
+    $data = json_decode(file_get_contents("templates/001 - Hello World.json"), JSON_OBJECT_AS_ARRAY);
+    echo isset($data['code']) ? $data['code'] : '';
+?></div>
 <script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
@@ -450,32 +422,28 @@
         }
         return name;
     }
+    function list_keyup(el, select){
+        if(invalid(el.val(), $(select).val())){
+            el.tooltip("enable");
+            el.tooltip("open");
+        } else {
+            el.tooltip("close");
+            el.tooltip("disable");
+        }
+    }
+    function make_button(button_name, button_class, type, name){
+        return $("<input/>").attr({"value": button_name, "type": "button", "class": button_class, "data-type": type, "data-name": name});
+    }
     $(function(){
         var wl = $("#whitelist").tooltip();
         wl.tooltip("disable");
         wl.on('keyup', function(){
-           var el = $(this);
-           var type = $("#whitelist_select").val();
-           if(invalid(el.val(), type)){
-               el.tooltip("enable");
-               el.tooltip("open");
-           } else {
-               el.tooltip("close");
-               el.tooltip("disable");
-           }
+            list_keyup($(this), "#whitelist_select");
         });
         var bl = $("#blacklist").tooltip();
         bl.tooltip("disable");
         bl.on('keyup', function(){
-            var el = $(this);
-            var type = $("#blacklist_select").val();
-            if(invalid(el.val(), type)){
-                el.tooltip("enable");
-                el.tooltip("open");
-            } else {
-                el.tooltip("close");
-                el.tooltip("disable");
-            }
+            list_keyup($(this), "#blacklist_select");
         });
         $("#configuration").accordion({heightStyle: "fill"});
         $("#templates").on('change', function(){
@@ -509,7 +477,7 @@
                                 name = response.whitelist[type][i];
                                 button_name = name_button(name, type);
                                 if(!list.find('input[value="' + button_name + '"]').length){
-                                    list.append($("<input/>").attr({"value": button_name, "type": "button", "class": "whitelist", "data-type": type, "data-name": name})).show();
+                                    list.append(make_button(button_name, "whitelist", type, name)).show();
                                 }
                             }
                         }
@@ -523,7 +491,7 @@
                                 name = response.blacklist[type][i];
                                 button_name = name_button(name, type);
                                 if(!list.find('input[value="' + button_name + '"]').length){
-                                    list.append($("<input/>").attr({"value": button_name, "type": "button", "class": "blacklist", "data-type": type, "data-name": name})).show();
+                                    list.append(make_button(button_name, "blacklist", type, name)).show();
                                 }
                             }
                         }
@@ -533,41 +501,25 @@
         });
         $("#run, #save").button().on('click', function(){
             var code = editor.getValue();
-            var options = {};
-            var whitelist = {
-                "func": {},
-                "var": {},
-                "global": {},
-                "superglobal": {},
-                "const": {},
-                "magic_const": {},
-                "namespace": {},
-                "alias": {},
-                "class": {},
-                "interface": {},
-                "trait": {},
-                "keyword": {},
-                "operator": {},
-                "primitive": {},
-                "type": {}
-            };
-            var blacklist = {
-                "func": {},
-                "var": {},
-                "global": {},
-                "superglobal": {},
-                "const": {},
-                "magic_const": {},
-                "namespace": {},
-                "alias": {},
-                "class": {},
-                "interface": {},
-                "trait": {},
-                "keyword": {},
-                "operator": {},
-                "primitive": {},
-                "type": {}
-            };
+            var options = {}, list = function(){
+                return {
+                    "func": {},
+                    "var": {},
+                    "global": {},
+                    "superglobal": {},
+                    "const": {},
+                    "magic_const": {},
+                    "namespace": {},
+                    "alias": {},
+                    "class": {},
+                    "interface": {},
+                    "trait": {},
+                    "keyword": {},
+                    "operator": {},
+                    "primitive": {},
+                    "type": {}
+                };
+            }, whitelist = list(), blacklist = list();
             $("#options").find("input").each(function(){
                var name = $(this).attr('name');
                options[name] = $(this).is(":checked") ? 1 : 0;
@@ -625,7 +577,7 @@
             if(list.find('input[value="' + button_name + '"]').length){
                 return;
             }
-            list.append($("<input/>").attr({"value": button_name, "type": "button", "class": "whitelist", "data-type": type, "data-name": name})).show();
+            list.append(make_button(button_name, "whitelist", type, name)).show();
             el.val('');
         });
         $("#blacklist_add").on("click", function(){
@@ -645,7 +597,7 @@
             if(list.find('input[value="' + button_name + '"]').length){
                 return;
             }
-            list.append($("<input/>").attr({"value": button_name, "type": "button", "class": "blacklist", "data-type": type, "data-name": name})).show();
+            list.append(make_button(button_name, "blacklist", type, name)).show();
             el.val('');
         });
         $(document).on('click', 'input.whitelist, input.blacklist', function(){

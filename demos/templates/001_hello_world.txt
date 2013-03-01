@@ -1,6 +1,0 @@
-/*
-    This template demonstrates a typical piece of code that will execute
-    normally under the default PHPSandbox configuration
-*/
-
-echo 'Hello World!';

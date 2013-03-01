@@ -1,0 +1,1 @@
+{"code":"\/*\n    This template demonstrates how an eval is blocked\n    if the eval function is not allowed\n*\/\n\neval('echo \"This should not work if eval is disallowed.\"');","options":{"allow_variables":"0"},"blacklist":null,"whitelist":null}
