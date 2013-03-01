@@ -31,7 +31,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">2</span></a></li>
+                <span class="label label-info">0</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -108,7 +108,8 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_check_use" title="check_use :: Check use (or alias) name against PHPSandbox validation rules."><span class="description">Check use (or alias) name against PHPSandbox validation rules.</span><pre>check_use()</pre></a></li>
 <li class="method public "><a href="#method_check_var" title="check_var :: Check variable name against PHPSandbox validation rules."><span class="description">Check variable name against PHPSandbox validation rules.</span><pre>check_var()</pre></a></li>
 <li class="method public "><a href="#method_clear" title="clear :: Clear all prepended and appended trusted code"><span class="description">Clear all prepended and appended trusted code</span><pre>clear()</pre></a></li>
-<li class="method public "><a href="#method_clear_append" title="clear_append :: Clear all  appended trusted code"><span class="description">Clear all  appended trusted code</span><pre>clear_append()</pre></a></li>
+<li class="method public "><a href="#method_clear_append" title="clear_append :: Clear all appended trusted code"><span class="description">Clear all appended trusted code</span><pre>clear_append()</pre></a></li>
+<li class="method public "><a href="#method_clear_closure" title="clear_closure :: Clear generated closure"><span class="description">Clear generated closure</span><pre>clear_closure()</pre></a></li>
 <li class="method public "><a href="#method_clear_prepend" title="clear_prepend :: Clear all prepended trusted code"><span class="description">Clear all prepended trusted code</span><pre>clear_prepend()</pre></a></li>
 <li class="method public "><a href="#method_create" title="create :: PHPSandbox static factory method"><span class="description">PHPSandbox static factory method</span><pre>create()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist" title="deblacklist :: Remove PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Remove PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>deblacklist()</pre></a></li>
@@ -1257,7 +1258,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </div>
 <a id="method_blacklist_var"></a><div class="element clickable method public method_blacklist_var" data-toggle="collapse" data-target=".method_blacklist_var .collapse">
 <h2>Blacklist variable</h2>
-<pre>blacklist_var($name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
+<pre>blacklist_var(string | array $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
 <div class="row collapse">
 <div class="span4">
@@ -1277,7 +1278,9 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </tr>
 </table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$name</h4></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><code>array</code><p>String of variable name or array of variable names to blacklist</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
@@ -1601,8 +1604,23 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </div></div>
 </div>
 <a id="method_clear_append"></a><div class="element clickable method public method_clear_append" data-toggle="collapse" data-target=".method_clear_append .collapse">
-<h2>Clear all  appended trusted code</h2>
+<h2>Clear all appended trusted code</h2>
 <pre>clear_append() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div></div>
+</div>
+<a id="method_clear_closure"></a><div class="element clickable method public method_clear_closure" data-toggle="collapse" data-target=".method_clear_closure .collapse">
+<h2>Clear generated closure</h2>
+<pre>clear_closure() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -7393,6 +7411,11 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <h4>$appended</h4>
 <code>bool</code><p>Flag if this code ir prended or appended (true = appended)</p>
 </div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throw exception if code cannot be parsed for whitelisting</td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_disassemble"></a><div class="element clickable method protected method_disassemble" data-toggle="collapse" data-target=".method_disassemble .collapse">
@@ -7405,6 +7428,11 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="subelement argument">
 <h4>$closure</h4>
 <code>callable</code><p>The callable to disassemble</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throw exception if callable is passed and FunctionParser library is missing</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>string</code>Return the disassembled code string</div>
@@ -8111,7 +8139,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-02-28T15:19:27-05:00.<br></footer></div>
+            generated on 2013-03-01T03:29:41-05:00.<br></footer></div>
 </div>
 </body>
 </html>

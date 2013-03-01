@@ -7,6 +7,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 ##Features:
 
 - Finegrained whitelisting and blacklisting, with sensible defaults configured.
+- **Includes dynamic demonstration system that allows for local testing of custom sandbox configurations**
 - Can redefine internal PHP and other functions to make them more secure for sandbox usage.
 - Can redefine superglobals and magic constants to expose your own values to sandboxed code.
 - Can overwrite the get_defined_* and get_declared_* functions to show only allowed functions, classes, etc. to the sandboxed code.

@@ -1,0 +1,6 @@
+/*
+    This template demonstrates how an eval is blocked
+    if the eval function is not allowed
+*/
+
+eval('echo "This should not work if eval is disallowed."');

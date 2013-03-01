@@ -403,7 +403,7 @@
             $option = strtolower($option); //normalize option names
             switch($option){
                 case 'error_level':
-                    $this->error_level = is_int($value) ? $value : null;
+                    $this->error_level = is_numeric($value) ? intval($value) : null;
                     break;
                 case 'auto_whitelist_trusted_code':
                     $this->auto_whitelist_trusted_code = $value ? true : false;
@@ -3083,7 +3083,7 @@
          *
          * @example $sandbox->blacklist_var(array('a', 'b'));
          *
-         * @param   string|array       $$name       String of variable name or array of variable names to blacklist
+         * @param   string|array        $name       String of variable name or array of variable names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
@@ -4577,18 +4577,19 @@
             return $this->prepare_aliases();
         }
         /** Disassemble callable to string
+         *
          * @param   callable    $closure    The callable to disassemble
+         *
+         * @throws  Error       Throw exception if callable is passed and FunctionParser library is missing
+         *
          * @return  string      Return the disassembled code string
          */
         protected function disassemble($closure){
             if(!class_exists('\FunctionParser\FunctionParser', true) && is_callable($closure)){
                 throw new Error("Cannot disassemble callable code because the FunctionParser library could not be found!");
             }
-            if(!is_callable($closure)){
-                if(is_string($closure) && $closure){
-                    return strpos($closure, '<?') === 0 ? $closure : '<?php ' . $closure;
-                }
-                return '';
+            if(is_string($closure) && !is_callable($closure)){
+                return strpos($closure, '<?') === 0 ? $closure : '<?php ' . $closure;
             }
             $disassembled_closure = \FunctionParser\FunctionParser::fromCallable($closure);
             if($this->auto_define_vars){
@@ -4597,8 +4598,11 @@
             return '<?php ' . $disassembled_closure->getBody();
         }
         /** Automatically whitelisted trusted code
+         *
          * @param   string    $code         String of trusted $code to automatically whitelist
          * @param   bool      $appended     Flag if this code ir prended or appended (true = appended)
+         *
+         * @throws  Error     Throw exception if code cannot be parsed for whitelisting
          */
         protected function auto_whitelist($code, $appended = false){
             $parser = new \PHPParser_Parser(new \PHPParser_Lexer);
@@ -4671,12 +4675,19 @@
         public function clear_prepend(){
             $this->prepended_code = '';
         }
-        /** Clear all  appended trusted code
+        /** Clear all appended trusted code
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
         public function clear_append(){
             $this->appended_code = '';
+        }
+        /** Clear generated closure
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
+        public function clear_closure(){
+            $this->generated_closure = null;
         }
         /** Prepare passed callable for execution
          *
@@ -4755,7 +4766,7 @@
          */
         public function execute(){
             $arguments = func_get_args();
-            if(count($arguments) && is_callable($arguments[0])){
+            if(count($arguments) && !($this->generated_closure && is_callable($this->generated_closure))){
                 $this->prepare(array_shift($arguments));
             }
 

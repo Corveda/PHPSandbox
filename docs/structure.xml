@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project version="2.0.0a12" title="">
-  <file path="Error.php" hash="dd3a03cf5bd934982d5068ad36a9cb68" package="PHPSandbox">
+  <file path="Error.php" hash="b2f6998e79d3a53c621b2bc199dfe94a" package="PHPSandbox">
     <docblock line="2">
       <description>Error class declaration</description>
       <long-description/>
@@ -19,7 +19,7 @@
       </docblock>
     </class>
   </file>
-  <file path="PHPSandbox.php" hash="aec3d0246626ddd60188bc8fb63dd391" package="PHPSandbox">
+  <file path="PHPSandbox.php" hash="f8205155a296700df0979dda1e0081dc" package="PHPSandbox">
     <docblock line="2">
       <description>PHPSandbox class declaration</description>
       <long-description></long-description>
@@ -3944,7 +3944,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
           <long-description>&lt;p&gt;You can pass a string of variable name, or pass an array of the variable names to blacklist&lt;/p&gt;</long-description>
           <tag line="3078" name="example" description="$sandbox-&gt;blacklist_var('a');"/>
           <tag line="3078" name="example" description="$sandbox-&gt;blacklist_var(array('a', 'b'));"/>
-          <tag line="3078" name="param" description="String of variable name or array of variable names to blacklist" type="string|array" variable="$$name">
+          <tag line="3078" name="param" description="String of variable name or array of variable names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
@@ -5637,7 +5637,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
           <tag line="4573" name="alias" description="prepare_aliases();"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4583" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4587" package="Default">
         <name>disassemble</name>
         <full_name>disassemble</full_name>
         <docblock line="4579">
@@ -5646,177 +5646,190 @@ or pass an array of superglobal names, or an associative array of superglobal na
           <tag line="4579" name="param" description="The callable to disassemble" type="callable" variable="$closure">
             <type by_reference="false">callable</type>
           </tag>
+          <tag line="4579" name="throws" description="Throw exception if callable is passed and FunctionParser library is missing" type="\PHPSandbox\Error">
+            <type by_reference="false">\PHPSandbox\Error</type>
+          </tag>
           <tag line="4579" name="return" description="Return the disassembled code string" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="4583">
+        <argument line="4587">
           <name>$closure</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4603" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4607" package="Default">
         <name>auto_whitelist</name>
         <full_name>auto_whitelist</full_name>
-        <docblock line="4599">
+        <docblock line="4600">
           <description>Automatically whitelisted trusted code</description>
           <long-description></long-description>
-          <tag line="4599" name="param" description="String of trusted $code to automatically whitelist" type="string" variable="$code">
+          <tag line="4600" name="param" description="String of trusted $code to automatically whitelist" type="string" variable="$code">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4599" name="param" description="Flag if this code ir prended or appended (true = appended)" type="bool" variable="$appended">
+          <tag line="4600" name="param" description="Flag if this code ir prended or appended (true = appended)" type="bool" variable="$appended">
             <type by_reference="false">bool</type>
           </tag>
+          <tag line="4600" name="throws" description="Throw exception if code cannot be parsed for whitelisting" type="\PHPSandbox\Error">
+            <type by_reference="false">\PHPSandbox\Error</type>
+          </tag>
         </docblock>
-        <argument line="4603">
+        <argument line="4607">
           <name>$code</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="4603">
+        <argument line="4607">
           <name>$appended</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4618" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4622" package="Default">
         <name>auto_define</name>
         <full_name>auto_define</full_name>
-        <docblock line="4615">
+        <docblock line="4619">
           <description>Automatically define variables passed to disassembled closure</description>
           <long-description></long-description>
-          <tag line="4615" name="param" description="" type="\FunctionParser\FunctionParser" variable="$disassembled_closure">
+          <tag line="4619" name="param" description="" type="\FunctionParser\FunctionParser" variable="$disassembled_closure">
             <type by_reference="false">\FunctionParser\FunctionParser</type>
           </tag>
         </docblock>
-        <argument line="4618">
+        <argument line="4622">
           <name>$disassembled_closure</name>
           <default></default>
           <type>\FunctionParser\FunctionParser</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4632" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4636" package="Default">
         <name>prepend</name>
         <full_name>prepend</full_name>
-        <docblock line="4627">
+        <docblock line="4631">
           <description>Prepend trusted code</description>
           <long-description></long-description>
-          <tag line="4627" name="param" description="String or callable of trusted $code to prepend to generated code" type="string|callable" variable="$code">
+          <tag line="4631" name="param" description="String or callable of trusted $code to prepend to generated code" type="string|callable" variable="$code">
             <type by_reference="false">string</type>
             <type by_reference="false">callable</type>
           </tag>
-          <tag line="4627" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4631" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4632">
+        <argument line="4636">
           <name>$code</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4648" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4652" package="Default">
         <name>append</name>
         <full_name>append</full_name>
-        <docblock line="4643">
+        <docblock line="4647">
           <description>Append trusted code</description>
           <long-description></long-description>
-          <tag line="4643" name="param" description="String or callable of trusted $code to append to generated code" type="string|callable" variable="$code">
+          <tag line="4647" name="param" description="String or callable of trusted $code to append to generated code" type="string|callable" variable="$code">
             <type by_reference="false">string</type>
             <type by_reference="false">callable</type>
           </tag>
-          <tag line="4643" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4647" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4648">
+        <argument line="4652">
           <name>$code</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4663" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4667" package="Default">
         <name>clear</name>
         <full_name>clear</full_name>
-        <docblock line="4659">
+        <docblock line="4663">
           <description>Clear all prepended and appended trusted code</description>
           <long-description></long-description>
-          <tag line="4659" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4663" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4671" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4675" package="Default">
         <name>clear_prepend</name>
         <full_name>clear_prepend</full_name>
-        <docblock line="4667">
+        <docblock line="4671">
           <description>Clear all prepended trusted code</description>
           <long-description></long-description>
-          <tag line="4667" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4671" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4678" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4682" package="Default">
         <name>clear_append</name>
         <full_name>clear_append</full_name>
-        <docblock line="4674">
-          <description>Clear all  appended trusted code</description>
+        <docblock line="4678">
+          <description>Clear all appended trusted code</description>
           <long-description></long-description>
-          <tag line="4674" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4678" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4693" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4689" package="Default">
+        <name>clear_closure</name>
+        <full_name>clear_closure</full_name>
+        <docblock line="4685">
+          <description>Clear generated closure</description>
+          <long-description></long-description>
+          <tag line="4685" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+            <type by_reference="false">$this</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4704" package="Default">
         <name>prepare</name>
         <full_name>prepare</full_name>
-        <docblock line="4681">
+        <docblock line="4692">
           <description>Prepare passed callable for execution</description>
           <long-description>&lt;p&gt;This function validates your code and automatically whitelists it according to your specified configuration&lt;/p&gt;</long-description>
-          <tag line="4681" name="example" description="$sandbox-&gt;prepare(function(){ var_dump('Hello world!'); });"/>
-          <tag line="4681" name="param" description="The callable to prepare for execution" type="callable" variable="$code">
+          <tag line="4692" name="example" description="$sandbox-&gt;prepare(function(){ var_dump('Hello world!'); });"/>
+          <tag line="4692" name="param" description="The callable to prepare for execution" type="callable" variable="$code">
             <type by_reference="false">callable</type>
           </tag>
-          <tag line="4681" name="throws" description="Throws exception if error occurs in parsing, validation or whitelisting" type="\PHPSandbox\Error">
+          <tag line="4692" name="throws" description="Throws exception if error occurs in parsing, validation or whitelisting" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
-          <tag line="4681" name="return" description="The prepared closure (this can also be accessed via $sandbox-&gt;generated_closure)" type="\Closure">
+          <tag line="4692" name="return" description="The prepared closure (this can also be accessed via $sandbox-&gt;generated_closure)" type="\Closure">
             <type by_reference="false">\Closure</type>
           </tag>
         </docblock>
-        <argument line="4693">
+        <argument line="4704">
           <name>$code</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4756" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4767" package="Default">
         <name>execute</name>
         <full_name>execute</full_name>
-        <docblock line="4742">
+        <docblock line="4753">
           <description>Prepare and execute callable and return output</description>
           <long-description>&lt;p&gt;This function validates your code and automatically whitelists it according to your specified configuration, then executes it.
 You can also pass an unlimited number of arguments to override variables configured in the function. If the first argument is
 not callable and a valid generated closure exists, then all arguments are passed to the executed code&lt;/p&gt;</long-description>
-          <tag line="4742" name="example" description="$sandbox-&gt;execute(function(){ var_dump('Hello world!'); });"/>
-          <tag line="4742" name="example" description="$sandbox-&gt;execute(function($test){ var_dump($test); }, 'Hello world!'); //Hello world!"/>
-          <tag line="4742" name="throws" description="Throws exception if error occurs in parsing, validation or whitelisting or if generated closure is invalid" type="\PHPSandbox\Error">
+          <tag line="4753" name="example" description="$sandbox-&gt;execute(function(){ var_dump('Hello world!'); });"/>
+          <tag line="4753" name="example" description="$sandbox-&gt;execute(function($test){ var_dump($test); }, 'Hello world!'); //Hello world!"/>
+          <tag line="4753" name="throws" description="Throws exception if error occurs in parsing, validation or whitelisting or if generated closure is invalid" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
-          <tag line="4742" name="return" description="The output from the executed sandboxed code" type="mixed">
+          <tag line="4753" name="return" description="The output from the executed sandboxed code" type="mixed">
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
       </method>
     </class>
-    <parse_markers>
-      <error line="3078" code="50014">Name of argument $name does not match with the DocBlock's name $$name in blacklist_var()</error>
-      <notice line="3078" code="50013">Parameter $$name could not be found in blacklist_var()</notice>
-    </parse_markers>
   </file>
-  <file path="SandboxWhitelistVisitor.php" hash="9485841f708523445bc65bc0c4d67b02" package="PHPSandbox">
+  <file path="SandboxWhitelistVisitor.php" hash="e4be25456a7f32e0e4bca5c0d1fdb81f" package="PHPSandbox">
     <docblock line="2">
       <description>SandboxWhitelistVisitor class declaration</description>
       <long-description/>
@@ -5879,10 +5892,10 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
       </method>
     </class>
   </file>
-  <file path="ValidatorVisitor.php" hash="42673f025be66e0d9940c8ef07c09830" package="PHPSandbox">
+  <file path="ValidatorVisitor.php" hash="8ba36b4f541393f8b8cf07d08b6e40f1" package="PHPSandbox">
     <docblock line="2">
       <description>ValidatorVisitor class declaration</description>
-      <long-description></long-description>
+      <long-description/>
       <tag line="2" name="package" description="PHPSandbox"/>
     </docblock>
     <class final="false" abstract="false" namespace="PHPSandbox" line="18" package="Default">
@@ -5899,10 +5912,10 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
       </docblock>
       <property final="false" static="false" visibility="protected" line="22" namespace="PHPSandbox" package="Default">
         <name>$sandbox</name>
-        <default></default>
+        <default/>
         <docblock line="19">
           <description>The PHPSandbox instance to check against</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="19" name="var" description="" type="\PHPSandbox\PHPSandbox">
             <type by_reference="false">\PHPSandbox\PHPSandbox</type>
           </tag>
@@ -5920,7 +5933,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="29">
           <name>$sandbox</name>
-          <default></default>
+          <default/>
           <type>\PHPSandbox\PHPSandbox</type>
         </argument>
       </method>
@@ -5929,7 +5942,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>leaveNode</full_name>
         <docblock line="32">
           <description>Examine the current PHPParser_Node node against the PHPSandbox configuration for validating sandboxed code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="32" name="param" description="The sandboxed $node to validate" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -5944,7 +5957,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="40">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -5953,7 +5966,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_magic_const</full_name>
         <docblock line="252">
           <description>Test the current PHPParser_Node node to see if it is a magic constant, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="252" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -5964,7 +5977,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="258">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -5973,7 +5986,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_keyword</full_name>
         <docblock line="279">
           <description>Test the current PHPParser_Node node to see if it is a keyword, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="279" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -5984,7 +5997,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="285">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -5993,7 +6006,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_operator</full_name>
         <docblock line="344">
           <description>Test the current PHPParser_Node node to see if it is an operator, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="344" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6004,7 +6017,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="350">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6013,7 +6026,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_primitive</full_name>
         <docblock line="447">
           <description>Test the current PHPParser_Node node to see if it is a primitive, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="447" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6027,13 +6040,13 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="455">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
     </class>
   </file>
-  <file path="WhitelistVisitor.php" hash="543d7f8564c433374305eace95f80ca7" package="PHPSandbox">
+  <file path="WhitelistVisitor.php" hash="8115d217c034d1988a8171e4d20d4c88" package="PHPSandbox">
     <docblock line="2">
       <description>WhitelistVisitor class declaration</description>
       <long-description/>
