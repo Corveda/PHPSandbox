@@ -4,6 +4,8 @@
 
 It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) to disassemble callables passed to the sandbox, so that PHP callables can also be run in sandboxes without first converting them into strings.
 
+**Online Documentation:** [http://fieryprophet.com/phpsandbox-docs/](http://fieryprophet.com/phpsandbox-docs/)
+
 ##Features:
 
 - Finegrained whitelisting and blacklisting, with sensible defaults configured.
