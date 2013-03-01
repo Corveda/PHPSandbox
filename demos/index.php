@@ -243,7 +243,7 @@
             <h3>Whitelists</h3>
             <div>
                 <strong>Add To: </strong>
-                <select id="whitelist_type" style="margin-bottom: 3px;">
+                <select id="whitelist_select" style="margin-bottom: 3px;">
                     <option value="func">Functions</option>
                     <option value="var">Variables</option>
                     <option value="global">Globals</option>
@@ -255,6 +255,10 @@
                     <option value="class">Classes</option>
                     <option value="interface">Interfaces</option>
                     <option value="trait">Traits</option>
+                    <option value="keyword">Keywords</option>
+                    <option value="operator">Operators</option>
+                    <option value="primitive">Primitives</option>
+                    <option value="type">Types</option>
                 </select>
                 <br/>
                 <input type="text" id="whitelist" value="" title="Invalid name for whitelisted item!"/>
@@ -293,11 +297,23 @@
                 <div id="whitelist_trait" style="display: none;">
                     <strong>Traits:</strong>
                 </div>
+                <div id="whitelist_keyword" style="display: none;">
+                    <strong>Keywords:</strong>
+                </div>
+                <div id="whitelist_operator" style="display: none;">
+                    <strong>Operators:</strong>
+                </div>
+                <div id="whitelist_primitive" style="display: none;">
+                    <strong>Primitives:</strong>
+                </div>
+                <div id="whitelist_type" style="display: none;">
+                    <strong>Types:</strong>
+                </div>
             </div>
             <h3>Blacklists</h3>
             <div>
                 <strong>Add To: </strong>
-                <select id="blacklist_type" style="margin-bottom: 3px;">
+                <select id="blacklist_select" style="margin-bottom: 3px;">
                     <option value="func">Functions</option>
                     <option value="var">Variables</option>
                     <option value="global">Globals</option>
@@ -309,6 +325,10 @@
                     <option value="class">Classes</option>
                     <option value="interface">Interfaces</option>
                     <option value="trait">Traits</option>
+                    <option value="keyword">Keywords</option>
+                    <option value="operator">Operators</option>
+                    <option value="primitive">Primitives</option>
+                    <option value="type">Types</option>
                 </select>
                 <br/>
                 <input type="text" id="blacklist" value="" title="Invalid name for blacklisted item!"/>
@@ -347,6 +367,18 @@
                 <div id="blacklist_trait" style="display: none;">
                     <strong>Traits:</strong>
                 </div>
+                <div id="blacklist_keyword" style="display: none;">
+                    <strong>Keywords:</strong>
+                </div>
+                <div id="blacklist_operator" style="display: none;">
+                    <strong>Operators:</strong>
+                </div>
+                <div id="blacklist_primitive" style="display: none;">
+                    <strong>Primitives:</strong>
+                </div>
+                <div id="blacklist_type" style="display: none;">
+                    <strong>Types:</strong>
+                </div>
             </div>
         </div>
     </div>
@@ -374,10 +406,12 @@
     editor.setTheme("ace/theme/github");
     editor.getSession().setMode("ace/mode/php");
     function invalid(name, type){
-        if(type == 'namespace' || type == 'alias' || type == 'class' || type == 'interface' || type == 'trait'){
-            return ((/[^a-z0-9_\\]+/i.test(name)) || (/[^a-z_\\]+/i.test(name.substring(0, 1))));
-        } else if(type == 'func' || type == 'var' || type == 'global' || type == 'superglobal' || type == 'const' || type == 'magic_const'){
+        if(type == 'func' || type == 'var' || type == 'global' || type == 'superglobal' || type == 'const' || type == 'magic_const'){
             return ((/[^a-z0-9_]+/i.test(name)) || (/[^a-z_]+/i.test(name.substring(0, 1))));
+        } else if(type == 'namespace' || type == 'alias' || type == 'class' || type == 'interface' || type == 'trait' || type == 'trait'){
+            return ((/[^a-z0-9_\\]+/i.test(name)) || (/[^a-z_\\]+/i.test(name.substring(0, 1))));
+        } else if(type == 'keyword' || type == 'primitive'){
+            return (/[^a-z]+/i.test(name));
         }
         return false;
     }
@@ -407,6 +441,11 @@
             case 'class':
             case 'interface':
             case 'trait':
+            case 'type':
+                break;
+            case 'keyword':
+            case 'primitive':
+                name = name.toLowerCase();
                 break;
         }
         return name;
@@ -416,7 +455,7 @@
         wl.tooltip("disable");
         wl.on('keyup', function(){
            var el = $(this);
-           var type = $("#whitelist_type").val();
+           var type = $("#whitelist_select").val();
            if(invalid(el.val(), type)){
                el.tooltip("enable");
                el.tooltip("open");
@@ -429,7 +468,7 @@
         bl.tooltip("disable");
         bl.on('keyup', function(){
             var el = $(this);
-            var type = $("#blacklist_type").val();
+            var type = $("#blacklist_select").val();
             if(invalid(el.val(), type)){
                 el.tooltip("enable");
                 el.tooltip("open");
@@ -506,7 +545,11 @@
                 "alias": {},
                 "class": {},
                 "interface": {},
-                "trait": {}
+                "trait": {},
+                "keyword": {},
+                "operator": {},
+                "primitive": {},
+                "type": {}
             };
             var blacklist = {
                 "func": {},
@@ -519,7 +562,11 @@
                 "alias": {},
                 "class": {},
                 "interface": {},
-                "trait": {}
+                "trait": {},
+                "keyword": {},
+                "operator": {},
+                "primitive": {},
+                "type": {}
             };
             $("#options").find("input").each(function(){
                var name = $(this).attr('name');
@@ -538,7 +585,7 @@
                 i = 0;
                 $("#blacklist_" + x).find('input').each(function(){
                     var el = $(this), type = el.attr('data-type');
-                    whitelist[type][i] = el.attr('data-name');
+                    blacklist[type][i] = el.attr('data-name');
                     i++;
                 });
             }
@@ -564,7 +611,7 @@
         $("#whitelist_add").on("click", function(){
             var el = $("#whitelist");
             var name = el.val();
-            var type = $("#whitelist_type").val();
+            var type = $("#whitelist_select").val();
             var list = $("#whitelist_" + type);
             if(!name){
                return;
@@ -584,7 +631,7 @@
         $("#blacklist_add").on("click", function(){
             var el = $("#blacklist");
             var name = el.val();
-            var type = $("#blacklist_type").val();
+            var type = $("#blacklist_select").val();
             var list = $("#blacklist_" + type);
             if(!name){
                 return;
