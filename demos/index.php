@@ -29,7 +29,7 @@
         $data = array(
             'code' => $code,
             'setup_code' => $setup_code,
-            'prepend_code' => $setup_code,
+            'prepend_code' => $prepend_code,
             'append_code' => $append_code,
             'options' => null,
             'whitelist' => $whitelist,
@@ -68,12 +68,12 @@
         $sandbox = new \PHPSandbox\PHPSandbox($options);
         foreach($whitelist as $type => $names){
             if(method_exists($sandbox, 'whitelist_' . $type)){
-                call_user_func_array(array($sandbox, 'whitelist_' . $type), $names);
+                call_user_func_array(array($sandbox, 'whitelist_' . $type), array($names));
             }
         }
         foreach($blacklist as $type => $names){
             if(method_exists($sandbox, 'blacklist_' . $type)){
-                call_user_func_array(array($sandbox, 'blacklist_' . $type), $names);
+                call_user_func_array(array($sandbox, 'blacklist_' . $type), array($names));
             }
         }
         try {
@@ -83,9 +83,12 @@
             }
             $result = $sandbox->prepend($prepend_code)->append($append_code)->execute($code);
             if($result !== null){
-                echo (ob_get_contents() ? '<hr class="hr"/>' : '') . '<h3>The PHPSandbox returned this value:</h3>';
+                echo (ob_get_contents() ? '<hr class="hr"/>' : '') . '<h3>The sandbox returned this value:</h3>';
                 print_r($result);
             }
+            echo '<hr class="hr"/>Preparation time: ' . round($sandbox->get_prepared_time()*1000, 2) .
+                ' ms, execution time: ' . round($sandbox->get_execution_time()*1000, 2) .
+                ' ms, total time: ' . round($sandbox->get_prepared_time()*1000, 2) . ' ms';
             $buffer = ob_get_contents();
             ob_end_clean();
             die('<pre>' . $buffer . '</pre>');
@@ -469,20 +472,38 @@
     function make_button(button_name, button_class, type, name){
         return $("<input/>").attr({"value": button_name, "type": "button", "class": button_class, "data-type": type, "data-name": name});
     }
-    function sync_code(){
-        switch(current_mode){
-            case 'code':
-                code = editor.getValue();
-                break;
-            case 'setup_code':
-                setup_code = editor.getValue();
-                break;
-            case 'prepend_code':
-                prepend_code = editor.getValue();
-                break;
-            case 'append_code':
-                append_code = editor.getValue();
-                break;
+    function sync_code(from_vars){
+        if(from_vars){
+            switch(current_mode){
+                case 'code':
+                    editor.setValue(code);
+                    break;
+                case 'setup_code':
+                     editor.getValue(setup_code);
+                    break;
+                case 'prepend_code':
+                    editor.getValue(prepend_code );
+                    break;
+                case 'append_code':
+                     editor.getValue(append_code);
+                    break;
+            }
+            editor.clearSelection();
+        } else {
+            switch(current_mode){
+                case 'code':
+                    code = editor.getValue();
+                    break;
+                case 'setup_code':
+                    setup_code = editor.getValue();
+                    break;
+                case 'prepend_code':
+                    prepend_code = editor.getValue();
+                    break;
+                case 'append_code':
+                    append_code = editor.getValue();
+                    break;
+            }
         }
     }
     $(function(){
@@ -503,8 +524,11 @@
                 if(!response || typeof response.code == "undefined"){
                     return;
                 }
-                editor.setValue(response.code);
-                editor.clearSelection();
+                code = response.code ? response.code : "";
+                setup_code = response.setup_code ? response.setup_code : "";
+                prepend_code = response.prepend_code ? response.prepend_code : "";
+                append_code = response.append_code ? response.append_code : "";
+                sync_code(true);
                 var x, type, name, list, button_name, i;
                 if(response.options && response.options.length){
                     for(x in response.options){
