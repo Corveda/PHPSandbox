@@ -1,7 +1,7 @@
 {
     "name": "fieryprophet/php-sandbox",
     "description": "A PHP library that can be used to run PHP code in a sandbox environment",
-    "keywords": ["php", "sandbox"],
+    "keywords": ["php", "sandbox", "parser", "whitelist", "blacklist"],
     "type": "library",
     "license": "BSD-3-Clause",
     "authors": [
