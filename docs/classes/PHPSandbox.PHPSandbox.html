@@ -178,6 +178,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_execute" title="execute :: Prepare and execute callable and return output"><span class="description">Prepare and execute callable and return output</span><pre>execute()</pre></a></li>
 <li class="method public "><a href="#method_get_appended_code" title="get_appended_code :: Get PHPSandbox appended code"><span class="description">Get PHPSandbox appended code</span><pre>get_appended_code()</pre></a></li>
 <li class="method public "><a href="#method_get_closure" title="get_closure :: Get PHPSandbox generated closure"><span class="description">Get PHPSandbox generated closure</span><pre>get_closure()</pre></a></li>
+<li class="method public "><a href="#method_get_execution_time" title="get_execution_time :: Return the amount of time the sandbox spent executing the sandboxed code"><span class="description">Return the amount of time the sandbox spent executing the sandboxed code</span><pre>get_execution_time()</pre></a></li>
 <li class="method public "><a href="#method_get_generated_closure" title="get_generated_closure :: Get PHPSandbox generated closure"><span class="description">Get PHPSandbox generated closure</span><pre>get_generated_closure()</pre></a></li>
 <li class="method public "><a href="#method_get_generated_code" title="get_generated_code :: Get PHPSandbox generated code"><span class="description">Get PHPSandbox generated code</span><pre>get_generated_code()</pre></a></li>
 <li class="method public "><a href="#method_get_name" title="get_name :: Get name of PHPSandbox variable"><span class="description">Get name of PHPSandbox variable</span><pre>get_name()</pre></a></li>
@@ -185,8 +186,10 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_get_parsed_ast" title="get_parsed_ast :: Get PHPSandbox parsed AST array"><span class="description">Get PHPSandbox parsed AST array</span><pre>get_parsed_ast()</pre></a></li>
 <li class="method public "><a href="#method_get_prepared_ast" title="get_prepared_ast :: Get PHPSandbox parsed AST array"><span class="description">Get PHPSandbox parsed AST array</span><pre>get_prepared_ast()</pre></a></li>
 <li class="method public "><a href="#method_get_prepared_code" title="get_prepared_code :: Get PHPSandbox prepared code"><span class="description">Get PHPSandbox prepared code</span><pre>get_prepared_code()</pre></a></li>
+<li class="method public "><a href="#method_get_prepared_time" title="get_prepared_time :: Return the amount of time the sandbox spent preparing the sandboxed code"><span class="description">Return the amount of time the sandbox spent preparing the sandboxed code</span><pre>get_prepared_time()</pre></a></li>
 <li class="method public "><a href="#method_get_preparsed_code" title="get_preparsed_code :: Get PHPSandbox preparsed code"><span class="description">Get PHPSandbox preparsed code</span><pre>get_preparsed_code()</pre></a></li>
 <li class="method public "><a href="#method_get_prepended_code" title="get_prepended_code :: Get PHPSandbox prepended code"><span class="description">Get PHPSandbox prepended code</span><pre>get_prepended_code()</pre></a></li>
+<li class="method public "><a href="#method_get_time" title="get_time :: Return the amount of time the sandbox spent preparing and executing the sandboxed code"><span class="description">Return the amount of time the sandbox spent preparing and executing the sandboxed code</span><pre>get_time()</pre></a></li>
 <li class="method public "><a href="#method_has_blacklist" title="has_blacklist :: Query whether PHPSandbox instance has blacklist type."><span class="description">Query whether PHPSandbox instance has blacklist type.</span><pre>has_blacklist()</pre></a></li>
 <li class="method public "><a href="#method_has_blacklist_aliases" title="has_blacklist_aliases :: Query whether PHPSandbox instance has blacklisted aliases."><span class="description">Query whether PHPSandbox instance has blacklisted aliases.</span><pre>has_blacklist_aliases()</pre></a></li>
 <li class="method public "><a href="#method_has_blacklist_classes" title="has_blacklist_classes :: Query whether PHPSandbox instance has blacklisted classes."><span class="description">Query whether PHPSandbox instance has blacklisted classes.</span><pre>has_blacklist_classes()</pre></a></li>
@@ -368,6 +371,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="property public "><a href="#property_auto_whitelist_trusted_code" title="$auto_whitelist_trusted_code :: "><span class="description">Should PHPSandbox automagically whitelist prepended and appended code?</span><pre>$auto_whitelist_trusted_code</pre></a></li>
 <li class="property public "><a href="#property_defined_funcs" title="$defined_funcs :: "><span class="description">A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values</span><pre>$defined_funcs</pre></a></li>
 <li class="property public "><a href="#property_error_level" title="$error_level :: "><span class="description">The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.</span><pre>$error_level</pre></a></li>
+<li class="property public "><a href="#property_execution_time" title="$execution_time :: "><span class="description">Float of the number of microseconds it took to execute the sandbox</span><pre>$execution_time</pre></a></li>
 <li class="property public "><a href="#property_generated_closure" title="$generated_closure :: "><span class="description">Closure generated by PHPSandbox execution, stored for future executions without the need to reparse and validate the code</span><pre>$generated_closure</pre></a></li>
 <li class="property public "><a href="#property_generated_code" title="$generated_code :: "><span class="description">String of generated code, for debugging and serialization purposes</span><pre>$generated_code</pre></a></li>
 <li class="property public "><a href="#property_magic_constants" title="$magic_constants :: "><span class="description">A static array of magic constant names used for redefining magic constant values</span><pre>$magic_constants</pre></a></li>
@@ -375,6 +379,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="property public "><a href="#property_overwrite_defined_funcs" title="$overwrite_defined_funcs :: "><span class="description">Should PHPSandbox overwrite get_defined_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?</span><pre>$overwrite_defined_funcs</pre></a></li>
 <li class="property public "><a href="#property_overwrite_superglobals" title="$overwrite_superglobals :: "><span class="description">Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.</span><pre>$overwrite_superglobals</pre></a></li>
 <li class="property public "><a href="#property_parsed_ast" title="$parsed_ast :: "><span class="description">Array of parsed code broken down into AST tokens, for debugging and serialization purposes</span><pre>$parsed_ast</pre></a></li>
+<li class="property public "><a href="#property_prepare_time" title="$prepare_time :: "><span class="description">Float of the number of microseconds it took to prepare the sandbox</span><pre>$prepare_time</pre></a></li>
 <li class="property public "><a href="#property_prepared_ast" title="$prepared_ast :: "><span class="description">Array of prepared code broken down into AST tokens, for debugging and serialization purposes</span><pre>$prepared_ast</pre></a></li>
 <li class="property public "><a href="#property_prepared_code" title="$prepared_code :: "><span class="description">String of prepared code, for debugging and serialization purposes</span><pre>$prepared_code</pre></a></li>
 <li class="property public "><a href="#property_preparsed_code" title="$preparsed_code :: "><span class="description">String of preparsed code, for debugging and serialization purposes</span><pre>$preparsed_code</pre></a></li>
@@ -2670,7 +2675,7 @@ functions to define, which can have callable values or arrays of the function ca
 </div>
 <div class="subelement argument">
 <h4>$value</h4>
-<code>mixed</code><p>Value to define magic constant to</p></div>
+<code>mixed</code><p>Value to define magic constant to, can be callable</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
 <th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
@@ -2821,7 +2826,7 @@ functions to define, which can have callable values or arrays of the function ca
 </div>
 <div class="subelement argument">
 <h4>$value</h4>
-<code>mixed</code><p>Value to define superglobal to</p></div>
+<code>mixed</code><p>Value to define superglobal to, can be callable</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
 <th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
@@ -3758,6 +3763,38 @@ not callable and a valid generated closure exists, then all arguments are passed
 <code><a href="http://php.net/manual/en/class.closure.php">\Closure</a></code>Returns the generated closure</div>
 </div></div>
 </div>
+<a id="method_get_execution_time"></a><div class="element clickable method public method_get_execution_time" data-toggle="collapse" data-target=".method_get_execution_time .collapse">
+<h2>Return the amount of time the sandbox spent executing the sandboxed code</h2>
+<pre>get_execution_time(int | null $round) : float</pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass the number of digits you wish to round the return value</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->get_execution_time();</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->get_execution_time(3);</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$round</h4>
+<code>int</code><code>null</code><p>The number of digits to round the return value</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>float</code>The amount of time in microseconds it took to execute the sandboxed code</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
+</div>
 <a id="method_get_generated_closure"></a><div class="element clickable method public method_get_generated_closure" data-toggle="collapse" data-target=".method_get_generated_closure .collapse">
 <h2>Get PHPSandbox generated closure</h2>
 <pre>get_generated_closure() : <a href="http://php.net/manual/en/class.closure.php">\Closure</a></pre>
@@ -3850,6 +3887,38 @@ not callable and a valid generated closure exists, then all arguments are passed
 <code>string</code>Returns a string of the prepared code</div>
 </div></div>
 </div>
+<a id="method_get_prepared_time"></a><div class="element clickable method public method_get_prepared_time" data-toggle="collapse" data-target=".method_get_prepared_time .collapse">
+<h2>Return the amount of time the sandbox spent preparing the sandboxed code</h2>
+<pre>get_prepared_time(int | null $round) : float</pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass the number of digits you wish to round the return value</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->get_prepared_time();</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->get_prepared_time(3);</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$round</h4>
+<code>int</code><code>null</code><p>The number of digits to round the return value</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>float</code>The amount of time in microseconds it took to prepare the sandboxed code</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
+</div>
 <a id="method_get_preparsed_code"></a><div class="element clickable method public method_get_preparsed_code" data-toggle="collapse" data-target=".method_get_preparsed_code .collapse">
 <h2>Get PHPSandbox preparsed code</h2>
 <pre>get_preparsed_code() : string</pre>
@@ -3871,6 +3940,38 @@ not callable and a valid generated closure exists, then all arguments are passed
 <div class="subelement response">
 <code>string</code>Returns a string of the prepended code</div>
 </div></div>
+</div>
+<a id="method_get_time"></a><div class="element clickable method public method_get_time" data-toggle="collapse" data-target=".method_get_time .collapse">
+<h2>Return the amount of time the sandbox spent preparing and executing the sandboxed code</h2>
+<pre>get_time(int | null $round) : float</pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"><p>You can pass the number of digits you wish to round the return value</p></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->get_time();</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->get_time(3);</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$round</h4>
+<code>int</code><code>null</code><p>The number of digits to round the return value</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>float</code>The amount of time in microseconds it took to prepare and execute the sandboxed code</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_has_blacklist"></a><div class="element clickable method public method_has_blacklist" data-toggle="collapse" data-target=".method_has_blacklist .collapse">
 <h2>Query whether PHPSandbox instance has blacklist type.</h2>
@@ -8024,6 +8125,12 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </tr></table>
 </div></div>
 </div>
+<a id="property_execution_time"> </a><div class="element clickable property public property_execution_time" data-toggle="collapse" data-target=".property_execution_time .collapse">
+<h2>Float of the number of microseconds it took to execute the sandbox</h2>
+<pre>$execution_time : float | null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_generated_closure"> </a><div class="element clickable property public property_generated_closure" data-toggle="collapse" data-target=".property_generated_closure .collapse">
 <h2>Closure generated by PHPSandbox execution, stored for future executions without the need to reparse and validate the code</h2>
 <pre>$generated_closure : <a href="http://php.net/manual/en/class.closure.php">\Closure</a> | null</pre>
@@ -8075,6 +8182,12 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <a id="property_parsed_ast"> </a><div class="element clickable property public property_parsed_ast" data-toggle="collapse" data-target=".property_parsed_ast .collapse">
 <h2>Array of parsed code broken down into AST tokens, for debugging and serialization purposes</h2>
 <pre>$parsed_ast : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_prepare_time"> </a><div class="element clickable property public property_prepare_time" data-toggle="collapse" data-target=".property_prepare_time .collapse">
+<h2>Float of the number of microseconds it took to prepare the sandbox</h2>
+<pre>$prepare_time : float | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
@@ -8139,7 +8252,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-03-01T12:33:04-05:00.<br></footer></div>
+            generated on 2013-03-02T04:25:46-05:00.<br></footer></div>
 </div>
 </body>
 </html>
