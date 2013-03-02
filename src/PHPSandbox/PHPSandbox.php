@@ -732,7 +732,11 @@
             $original_name = strtoupper($name);
             $name = $this->normalize_superglobal($name);
             if(isset($this->definitions['superglobals'][$name])){
-                return $this->definitions['superglobals'][$name];
+                $superglobal = $this->definitions['superglobals'][$name];
+                if(is_callable($superglobal)){
+                    return call_user_func_array($superglobal, array($this));
+                }
+                return $superglobal;
             } else if(isset($this->whitelist['superglobals'][$name])){
                 if(count($this->whitelist['superglobals'][$name])){
                     if(isset($GLOBALS[$original_name])){
@@ -771,7 +775,11 @@
         public function _get_magic_const($name){
             $name = $this->normalize_magic_const($name);
             if(isset($this->definitions['magic_constants'][$name])){
-                return $this->definitions['magic_constants'][$name];
+                $magic_constant = $this->definitions['magic_constants'][$name];
+                if(is_callable($magic_constant)){
+                    return call_user_func_array($magic_constant, array($this));
+                }
+                return $magic_constant;
             }
             return null;
         }
@@ -1241,7 +1249,7 @@
          * @example $sandbox->define_superglobal(array('_GET' => array('page' => 1)));
          *
          * @param   string|array    $name       String of superglobal $name or associative array of superglobal names to define
-         * @param   mixed           $value      Value to define superglobal to
+         * @param   mixed           $value      Value to define superglobal to, can be callable
          *
          * @throws  Error           Throws exception if unnamed superglobal is defined
          *
@@ -1332,7 +1340,7 @@
                 return $this->undefine_superglobals($name);
             }
             $name = $this->normalize_superglobal($name);
-            if($key !== null){
+            if($key !== null && is_array($this->definitions['superglobals'][$name])){
                 if(isset($this->definitions['superglobals'][$name][$key])){
                     unset($this->definitions['superglobals'][$name][$key]);
                 }
@@ -1480,7 +1488,7 @@
          * @example $sandbox->define_magic_const(array('__LINE__' => 1));
          *
          * @param   string|array    $name       String of magic constant $name or associative array to define
-         * @param   mixed           $value      Value to define magic constant to
+         * @param   mixed           $value      Value to define magic constant to, can be callable
          *
          * @throws  Error           Throws exception if unnamed magic constant is defined
          *

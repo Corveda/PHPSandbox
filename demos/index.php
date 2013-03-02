@@ -9,6 +9,7 @@
         $options = isset($_POST['options']) ? $_POST['options'] : array();
         $whitelist = isset($_POST['whitelist']) ? $_POST['whitelist'] : null;
         $blacklist = isset($_POST['blacklist']) ? $_POST['blacklist'] : null;
+        $definitions = isset($_POST['definitions']) ? $_POST['definitions'] : null;
         $template = stripslashes($_POST['save']);
         $filename = trim(preg_replace('/[^a-zA-Z0-9_ ]/', '_', $template), '_');
         header('Content-type: text/html');
@@ -33,7 +34,8 @@
             'append_code' => $append_code,
             'options' => null,
             'whitelist' => $whitelist,
-            'blacklist' => $blacklist
+            'blacklist' => $blacklist,
+            'definitions' => $definitions
         );
         if(count($options)){
             $sandbox = new \PHPSandbox\PHPSandbox;
@@ -65,6 +67,7 @@
         $options = isset($_POST['options']) ? $_POST['options'] : array();
         $whitelist = isset($_POST['whitelist']) ? $_POST['whitelist'] : array();
         $blacklist = isset($_POST['blacklist']) ? $_POST['blacklist'] : array();
+        $definitions = isset($_POST['definitions']) ? $_POST['definitions'] : array();
         $sandbox = new \PHPSandbox\PHPSandbox($options);
         foreach($whitelist as $type => $names){
             if(method_exists($sandbox, 'whitelist_' . $type)){
@@ -76,6 +79,31 @@
                 call_user_func_array(array($sandbox, 'blacklist_' . $type), array($names));
             }
         }
+        foreach($definitions as $type => $names){
+            if(method_exists($sandbox, 'define_' . $type)){
+                switch($type){
+                    case 'func':
+                        foreach($names as $key => $value){
+                            $function = null;
+                            @eval('$function = ' . $value["fullcode"] .';');
+                            if(!is_callable($function)){
+                                throw new \PHPSandbox\Error("Could not define function $key! Please check your code for errors!");
+                            }
+                            $sandbox->define_func($key, $function, $value["pass"]);
+                        }
+                        break;
+                    case 'var':
+                        foreach($names as $key => $value){
+                            $sandbox->define_var($key, $value["value"]);
+                        }
+                        break;
+
+                    default:
+                        call_user_func_array(array($sandbox, 'define_' . $type), array($names));
+                        break;
+                }
+            }
+        }
         try {
             ob_start();
             if($setup_code){
@@ -84,7 +112,7 @@
             $result = $sandbox->prepend($prepend_code)->append($append_code)->execute($code);
             if($result !== null){
                 echo (ob_get_contents() ? '<hr class="hr"/>' : '') . '<h3>The sandbox returned this value:</h3>';
-                print_r($result);
+                var_dump($result);
             }
             echo '<hr class="hr"/>Preparation time: ' . round($sandbox->get_prepared_time()*1000, 2) .
                 ' ms, execution time: ' . round($sandbox->get_execution_time()*1000, 2) .
@@ -112,6 +140,9 @@
 <html lang="en">
 <head>
     <title>PHPSandbox - Demos</title>
+    <link href="http://code.jquery.com/ui/1.10.1/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet"/>
+    <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
     <style type="text/css" media="screen">
         #body {
             margin; 0;
@@ -135,7 +166,7 @@
             padding: 20px;
             border-left: 1px solid gray;
         }
-        #output-container {
+        #output_container {
             position: absolute;
             top: 360px;
             right: 303px;
@@ -176,7 +207,7 @@
             font-weight: bold;
             margin: .5em;
         }
-        input.whitelist, input.blacklist {
+        input.whitelist, input.blacklist, input.func, input.var, input.superglobal, input.const, input.magic_const, input.namespace, input.alias {
             width: 100%;
             text-align: left;
         }
@@ -184,10 +215,37 @@
             float: right;
             margin-top: 1em;
         }
+        #func_editor_dialog, #var_editor_dialog, #superglobal_editor_dialog, #const_editor_dialog,
+        #magic_const_editor_dialog, #namespace_editor_dialog, #alias_editor_dialog {
+            display: none;
+            font-size: 12px;
+        }
+        #func_editor {
+            border: 1px solid gray;
+        }
+        #func_editor_name, #func_editor_args {
+            font-family: "Courier New", serif;
+            font-size: 10px;
+        }
+        .ui-dialog-titlebar {
+            font-size: 12px;
+        }
+        .ui-dialog-content {
+            padding-left: 0.7em !important;
+        }
+        .ui-dialog-buttonset {
+            width: 100%;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .ui-dialog-buttonset .ui-button:last-child {
+            float: left;
+            margin-left: 1em;
+        }
+        .ui-dialog-buttonset .ui-button:first-child {
+            float: right;
+        }
     </style>
-    <link href="http://code.jquery.com/ui/1.10.1/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet"/>
-    <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript" charset="utf-8"></script>
-    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" >
         var code = <?php echo json_encode(isset($data['code']) ? $data['code'] : ''); ?>,
             setup_code = <?php echo json_encode(isset($data['setup_code']) ? $data['setup_code'] : ''); ?>,
@@ -268,7 +326,7 @@
                 <input type="text" id="whitelist" value="" title="Invalid name for whitelisted item!"/>
                 <input type="button" value="+" id="whitelist_add"/>
                 <br/>
-                <strong style="font-size: 9px;">NOTE: Whitelists override blacklists!</strong>
+                <strong style="font-size: 9px;">NOTE: Whitelists override blacklists.</strong>
                 <hr class="hr"/>
                 <div id="whitelist_func" style="display: none;">
                     <strong>Functions:</strong>
@@ -340,7 +398,7 @@
                 <input type="text" id="blacklist" value="" title="Invalid name for blacklisted item!"/>
                 <input type="button" value="+" id="blacklist_add"/>
                 <br/>
-                <strong style="font-size: 9px;">NOTE: Whitelists override blacklists!</strong>
+                <strong style="font-size: 9px;">NOTE: Whitelists override blacklists.</strong>
                 <hr class="hr"/>
                 <div id="blacklist_func" style="display: none;">
                     <strong>Functions:</strong>
@@ -388,6 +446,44 @@
                     <strong>Types:</strong>
                 </div>
             </div>
+            <h3>Definitions</h3>
+            <div>
+                <select id="define_select" style="margin-bottom: 3px;">
+                    <option value="func">Function</option>
+                    <option value="var">Variable</option>
+                    <option value="superglobal">Superglobal</option>
+                    <option value="const">Constant</option>
+                    <option value="magic_const">Magic Constant</option>
+                    <option value="namespace">Namespace</option>
+                    <option value="alias">Aliase (aka Use)</option>
+                    <option value="class">Classes</option>
+                </select>
+                <input type="button" value="Define" id="define_add"/>
+                <br/>
+                <strong style="font-size: 9px;">NOTE: Definitions override both whitelists and blacklists, and are inherently trusted.</strong>
+                <hr class="hr"/>
+                <div id="define_func" style="display: none;">
+                    <strong>Functions:</strong>
+                </div>
+                <div id="define_var" style="display: none;">
+                    <strong>Variables:</strong>
+                </div>
+                <div id="define_superglobal" style="display: none;">
+                    <strong>Superglobals:</strong>
+                </div>
+                <div id="define_const" style="display: none;">
+                    <strong>Constants:</strong>
+                </div>
+                <div id="define_magic_const" style="display: none;">
+                    <strong>Magic Constants:</strong>
+                </div>
+                <div id="define_namespace" style="display: none;">
+                    <strong>Namespaces:</strong>
+                </div>
+                <div id="define_alias" style="display: none;">
+                    <strong>Aliases (aka Use):</strong>
+                </div>
+            </div>
         </div>
     </div>
     <br/>
@@ -403,13 +499,140 @@
     <br/>
     <input type="button" value="Run Code In Sandbox" id="run" style="width: 100%;"/>
 </div>
-<div id="output-container">
+<div id="output_container">
     <h2>Output</h2>
     <div id="output" class="ui-widget ui-widget-content ui-corner-all"><pre>Hello World!</pre></div>
 </div>
 <div id="editor"><?php
     echo isset($data['code']) ? $data['code'] : '';
 ?></div>
+<div id="func_editor_dialog" title="Defined Function Editor">
+    <span style="float: right;">
+        <label>
+            <strong>Pass PHPSandbox instance to this function?</strong>
+        </label>
+        <input type="checkbox" id="func_editor_pass" value="1"/>
+    </span>
+    <strong>Function Name: </strong>
+    <br/>
+    <input type="text" id="func_editor_name" style="width: 100%;" value=""/>
+    <br/>
+    <br/>
+    <strong>Enter function arguments below in <em>$argument = value</em> format, e.g. <em>$foo = 'Hello', $bar = 'World'</em></strong>
+    <br/>
+    <input type="text" id="func_editor_args" style="width: 100%;" value=""/>
+    <pre id="func_editor_preview">function (){</pre>
+    <div id="func_editor" style="width: 780px; height: 300px;"></div>
+    <pre style="margin-top: 324px;">}</pre>
+</div>
+<div id="var_editor_dialog" title="Defined Variable Editor">
+    <strong>Variable Name: </strong>
+    <br/>
+    <input type="text" id="var_editor_name" style="width: 100%;" value=""/>
+    <br/>
+    <br/>
+    <strong>Variable Type: </strong>
+    <br/>
+    <select id="var_editor_scalar">
+        <option value="string">String</option>
+        <option value="bool">Boolean</option>
+        <option value="int">Integer</option>
+        <option value="float">Float</option>
+        <option value="null">Null</option>
+    </select>
+    <br/>
+    <br/>
+    <strong>Variable Value: </strong>
+    <br/>
+    <input type="text" id="var_editor_value" style="width: 100%;" value=""/>
+    <pre id="var_editor_preview"></pre>
+</div>
+<div id="superglobal_editor_dialog" title="Defined Superglobal Editor">
+    <strong>Superglobal: </strong>
+    <br/>
+    <select id="superglobal_editor_name">
+        <?php
+        foreach(\PHPSandbox\PHPSandbox::$superglobals as $superglobal){
+            ?><option name="<?=$superglobal?>"><?=$superglobal?></option><?php
+        }
+        ?>
+    </select>
+    <br/>
+    <br/>
+    <strong>Superglobal Type: </strong>
+    <br/>
+    <select id="superglobal_editor_scalar">
+        <option value="string">String</option>
+        <option value="bool">Boolean</option>
+        <option value="int">Integer</option>
+        <option value="float">Float</option>
+        <option value="null">Null</option>
+        <option value="null">Function</option>
+    </select>
+    <br/>
+    <br/>
+    <strong>Superglobal Value: </strong>
+    <br/>
+    <input type="text" id="superglobal_editor_value" style="width: 100%;" value=""/>
+    <pre id="superglobal_preview"></pre>
+</div>
+<div id="const_editor_dialog" title="Defined Constant Editor">
+    <strong>Constant Name: </strong>
+    <br/>
+    <input type="text" id="const_editor_name" style="width: 100%;" value=""/>
+    <br/>
+    <br/>
+    <strong>Constant Type: </strong>
+    <br/>
+    <select id="const_editor_scalar">
+        <option value="string">String</option>
+        <option value="bool">Boolean</option>
+        <option value="int">Integer</option>
+        <option value="float">Float</option>
+        <option value="null">Null</option>
+    </select>
+    <br/>
+    <br/>
+    <strong>Constant Value: </strong>
+    <br/>
+    <input type="text" id="const_editor_value" style="width: 100%;" value=""/>
+    <pre id="const_editor_preview"></pre>
+</div>
+<div id="magic_const_editor_dialog" title="Defined Magic Constant Editor">
+    <strong>Magic Constant: </strong>
+    <br/>
+    <select id="magic_const_editor_name">
+        <?php
+            foreach(\PHPSandbox\PHPSandbox::$magic_constants as $magic_constant){
+                ?><option name="<?=$magic_constant?>"><?=$magic_constant?></option><?php
+            }
+        ?>
+    </select>
+    <br/>
+    <br/>
+    <strong>Magic Constant Type: </strong>
+    <br/>
+    <select id="magic_const_editor_scalar">
+        <option value="string">String</option>
+        <option value="bool">Boolean</option>
+        <option value="int">Integer</option>
+        <option value="float">Float</option>
+        <option value="null">Null</option>
+        <option value="null">Function</option>
+    </select>
+    <br/>
+    <br/>
+    <strong>Magic Constant Value: </strong>
+    <br/>
+    <input type="text" id="magic_const_editor_value" style="width: 100%;" value=""/>
+    <pre id="magic_const_editor_preview"></pre>
+</div>
+<div id="namespace_editor_dialog" title="Defined Namespace Editor">
+    <div id="namespace_editor"></div>
+</div>
+<div id="alias_editor_dialog" title="Defined Alias Editor">
+    <div id="alias_editor"></div>
+</div>
 <script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     var editor = ace.edit("editor");
@@ -470,7 +693,7 @@
         }
     }
     function make_button(button_name, button_class, type, name){
-        return $("<input/>").attr({"value": button_name, "type": "button", "class": button_class, "data-type": type, "data-name": name});
+        return $("<input/>").attr({"value": button_name, "type": "button", "class": button_class}).data({"type": type, "name": name});
     }
     function sync_code(from_vars){
         if(from_vars){
@@ -479,13 +702,13 @@
                     editor.setValue(code);
                     break;
                 case 'setup_code':
-                     editor.getValue(setup_code);
+                    editor.setValue(setup_code);
                     break;
                 case 'prepend_code':
-                    editor.getValue(prepend_code );
+                    editor.setValue(prepend_code);
                     break;
                 case 'append_code':
-                     editor.getValue(append_code);
+                    editor.setValue(append_code);
                     break;
             }
             editor.clearSelection();
@@ -529,7 +752,7 @@
                 prepend_code = response.prepend_code ? response.prepend_code : "";
                 append_code = response.append_code ? response.append_code : "";
                 sync_code(true);
-                var x, type, name, list, button_name, i;
+                var x, type, name, list, button_name, i, button, data;
                 if(response.options && response.options.length){
                     for(x in response.options){
                         if(x == 'error_level'){
@@ -539,7 +762,7 @@
                         }
                     }
                 }
-                $('input.whitelist, input.blacklist').each(function(){
+                $('input.whitelist, input.blacklist, input.func, input.var, input.superglobal, input.const, input.magic_const, input.namespace, input.alias').each(function(){
                     var el = $(this);
                     el.parent().hide();
                     el.remove();
@@ -551,9 +774,7 @@
                             for(i = 0; i<response.whitelist[type].length; i++){
                                 name = response.whitelist[type][i];
                                 button_name = name_button(name, type);
-                                if(!list.find('input[value="' + button_name + '"]').length){
-                                    list.append(make_button(button_name, "whitelist", type, name)).show();
-                                }
+                                list.append(make_button(button_name, "whitelist", type, name)).show();
                             }
                         }
                     }
@@ -565,9 +786,28 @@
                             for(i = 0; i<response.blacklist[type].length; i++){
                                 name = response.blacklist[type][i];
                                 button_name = name_button(name, type);
-                                if(!list.find('input[value="' + button_name + '"]').length){
-                                    list.append(make_button(button_name, "blacklist", type, name)).show();
+                                list.append(make_button(button_name, "blacklist", type, name)).show();
+                            }
+                        }
+                    }
+                }
+                if(response.definitions){
+                    for(type in response.definitions){
+                        list = $("#define_" + type);
+                        if(response.definitions[type]){
+                            for(name in response.definitions[type]){
+                                data = response.definitions[type][name];
+                                button_name = name_button(name, type);
+                                button = make_button(button_name, type, type, name);
+                                switch(type){
+                                    case 'func':
+                                        button.data({"args": data.args, "code": data.code, "pass": data.pass, "fullcode": data.fullcode});
+                                        break;
+                                    case 'var':
+                                        button.data({"scalar": data.scalar, "value": data.value});
+                                        break;
                                 }
+                                list.append(button).show();
                             }
                         }
                     }
@@ -594,7 +834,15 @@
                     "primitive": {},
                     "type": {}
                 };
-            }, whitelist = list(), blacklist = list();
+            }, whitelist = list(), blacklist = list(), definitions = {
+                "func": {},
+                "var": {},
+                "superglobal": {},
+                "const": {},
+                "magic_const": {},
+                "namespace": {},
+                "alias": {}
+            };
             $("#options").find("input").each(function(){
                var name = $(this).attr('name');
                options[name] = $(this).is(":checked") ? 1 : 0;
@@ -603,16 +851,39 @@
             for(x in whitelist){
                 i = 0;
                 $("#whitelist_" + x).find('input').each(function(){
-                   var el = $(this), type = el.attr('data-type');
-                   whitelist[type][i] = el.attr('data-name');
+                   var el = $(this), type = el.data('type');
+                   whitelist[type][i] = el.data('name');
                    i++;
                 });
             }
             for(x in blacklist){
                 i = 0;
                 $("#blacklist_" + x).find('input').each(function(){
-                    var el = $(this), type = el.attr('data-type');
-                    blacklist[type][i] = el.attr('data-name');
+                    var el = $(this), type = el.data('type');
+                    blacklist[type][i] = el.data('name');
+                    i++;
+                });
+            }
+            for(x in definitions){
+                i = 0;
+                $("#define_" + x).find('input').each(function(){
+                    var el = $(this), type = el.data('type');
+                    switch(type){
+                        case 'func':
+                            definitions[type][el.data('name')] = {
+                                "args" : el.data('args'),
+                                "code": el.data('code'),
+                                "pass": el.data('pass') ? 1 : 0,
+                                "fullcode": el.data('fullcode')
+                            };
+                            break;
+                        case 'var':
+                            definitions[type][el.data('name')] = {
+                                "scalar": el.data('scalar'),
+                                "value": el.data('value')
+                            };
+                            break;
+                    }
                     i++;
                 });
             }
@@ -623,14 +894,14 @@
                     alert("Can't save a template without a name!");
                     return;
                 }
-                $.post("./", {"code": code, "setup_code": setup_code, "prepend_code": prepend_code, "append_code": append_code, "options": options, "whitelist" : whitelist, "blacklist": blacklist, "save": name}, function(response){
+                $.post("./", {"code": code, "setup_code": setup_code, "prepend_code": prepend_code, "append_code": append_code, "options": options, "whitelist" : whitelist, "blacklist": blacklist, "definitions": definitions, "save": name}, function(response){
                     alert(response.message);
                     if(response.success){
                         $("#templates").append('<option value="templates/' + response.file + '">' + response.name + '</option>').val('templates/' + response.file);
                     }
                 }, 'json');
             } else {
-                $.post("./", {"code": code, "setup_code": setup_code, "prepend_code": prepend_code, "append_code": append_code, "options": options, "whitelist" : whitelist, "blacklist": blacklist}, function(response){
+                $.post("./", {"code": code, "setup_code": setup_code, "prepend_code": prepend_code, "append_code": append_code, "options": options, "whitelist" : whitelist, "blacklist": blacklist, "definitions": definitions}, function(response){
                     $("#output").html(response);
                 })
             }
@@ -705,6 +976,232 @@
             editor.clearSelection();
         });
     });
+    $("#define_add").on('click', function(){
+        launch_editor($("#define_select").val());
+    });
+    $(document).on('click', "input.func, input.var, input.superglobal, input.const, input.magic_const, input.namespace, input.alias", function(){
+        launch_editor($(this).attr('class'), $(this));
+    });
+    $("#func_editor_name, #func_editor_args").on('keyup', function(){
+        if($(this).attr('id') == 'func_editor_name'){
+            $(this).val($(this).val().replace(/[^a-z0-9_\\]+/i, '_'));
+        }
+        var name = $("#func_editor_name").val(), args = $("#func_editor_args").val();
+        $("#func_editor_preview").html('function ' + name + '(' + args + '){');
+    });
+    function var_preview(name, scalar, value){
+        switch(scalar){
+            case 'int':
+                value = value.replace(/[^0-9]+/i, '') || 0;
+                break;
+            case 'float':
+                value = value.replace(/[^0-9.]+/i, '') || 0;
+                break;
+            case 'bool':
+                value = (value.toLowerCase() == 'true' || parseInt(value)) ? 'true' : 'false';
+                break;
+            case 'null':
+                value = 'null';
+                break;
+        }
+        $("#var_editor_value").val(value);
+        $("#var_editor_preview").html(name ? ('$' + name + ' = ' + (scalar == 'string' ? "'" + value + "'" : value) + ';') : '');
+    }
+    $("#var_editor_name").on('keyup', function(){
+        $(this).val($(this).val().replace(/[^a-z0-9_]+/i, '_'));
+        var_preview($("#var_editor_name").val(), $("#var_editor_scalar").val(), $("#var_editor_value").val());
+    });
+    $("#var_editor_scalar").on('change', function(){
+        var scalar = $("#var_editor_scalar").val(), v = $("#var_editor_value"), value = v.val();
+        if(scalar == 'bool'){
+            v.replaceWith('<select id="var_editor_value"><option value="true">true</option><option value="false">false</option></select>');
+        } else if(scalar == 'null'){
+            v.replaceWith('<input type="text" id="var_editor_value" style="width: 100%;" value="" disabled="disabled"/>');
+        } else {
+            v.replaceWith('<input type="text" id="var_editor_value" style="width: 100%;" value=""/>');
+        }
+        var_preview($("#var_editor_name").val(), scalar, (scalar == 'string' ? '' : value));
+    });
+    $(document).on('keyup change', "#var_editor_value", function(){
+        var_preview($("#var_editor_name").val(), $("#var_editor_scalar").val(), $("#var_editor_value").val());
+    });
+    var func_editor;
+    function launch_editor(type, el){
+        var dialog = $("#" + type + "_editor_dialog"), buttons, delete_func = function(){
+            if(el.parent().children('input').length < 2){
+                el.parent().hide();
+            }
+            el.remove();
+            $(this).dialog("close");
+        };
+
+        switch(type){
+            case 'func':
+                    buttons = {
+                        "Save": function(){
+                            var name = $("#func_editor_name").val(),
+                                args = $("#func_editor_args").val(),
+                                pass = $("#func_editor_pass").is(":checked") ? 1 : 0,
+                                code = func_editor.getValue(),
+                                button_name = name_button(name, "func"),
+                                button = make_button(button_name, "func", "func", name),
+                                list = $("#define_func");
+                                button.data({"args": args, "code": code, "pass": pass, "fullcode": 'function(' + args + '){' + code + '}'});
+                            if(el){
+                                el.replaceWith(button);
+                            } else {
+                                list.append(button).show();
+                            }
+                            $(this).dialog("close");
+                        }
+                    };
+                    if(el){
+                        buttons["Delete"] = delete_func;
+                    }
+                dialog.dialog({
+                    position: "center",
+                    height: 580,
+                    width: 800,
+                    buttons: buttons,
+                    close: function(){
+                        $("#func_editor_name, #func_editor_args").val('');
+                        $("#func_editor_pass").prop("checked", false);
+                        $("#func_editor_preview").html('function (){');
+                        $("#func_editor_dialog").hide().dialog("destroy");
+                    }}).show();
+                func_editor = ace.edit("func_editor");
+                func_editor.setTheme("ace/theme/github");
+                func_editor.getSession().setMode("ace/mode/php");
+                func_editor.setValue('');
+                func_editor.clearSelection();
+                if(el){
+                    var name = el.data('name'), args = el.data('args'), pass = el.data('pass'), code = el.data('code');
+                    $("#func_editor_name").val(name);
+                    $("#func_editor_args").val(args);
+                    $("#func_editor_pass").prop("checked", pass ? true : false);
+                    $("#func_editor_preview").html('function ' + name + '(' + args + '){');
+                    func_editor.setValue(code);
+                    func_editor.clearSelection();
+                }
+                break;
+
+            case 'var':
+                buttons = {
+                    "Save": function(){
+                        var name = $("#var_editor_name").val(),
+                                scalar = $("#var_editor_scalar").val(),
+                                value = $("#var_editor_value").val(),
+                                button_name = name_button(name, "var"),
+                                button = make_button(button_name, "var", "var", name),
+                                list = $("#define_var");
+                        switch(scalar){
+                            case 'int':
+                                value = parseInt(value) || 0;
+                                break;
+                            case 'float':
+                                value = parseFloat(value) || 0;
+                                break;
+                            case 'bool':
+                                value = (value.toLowerCase() == 'true' || parseInt(value)) ? true : false;
+                                break;
+                            case 'null':
+                                value = null;
+                                break;
+                        }
+                        button.data({"scalar": scalar, "value": value});
+                        if(el){
+                            el.replaceWith(button);
+                        } else {
+                            list.append(button).show();
+                        }
+                        $(this).dialog("close");
+                    }
+                };
+                if(el){
+                    buttons["Delete"] = delete_func;
+                }
+                dialog.dialog({
+                    position: "center",
+                    height: 300,
+                    width: 400,
+                    buttons: buttons,
+                    close: function(){
+                        $("#var_editor_name, #var_editor_value").val('');
+                        $("#var_editor_scalar").val('string');
+                        $("#var_editor_preview").html('');
+                        $("#var_editor_dialog").hide().dialog("destroy");
+                    }}).show();
+                if(el){
+                    var value = el.data('value');
+                    if(value !== null){
+                        value = value.toString();
+                    }
+                    $("#var_editor_name").val(el.data('name'));
+                    $("#var_editor_scalar").val(el.data('scalar'));
+                    $("#var_editor_value").val(value);
+                    var_preview(el.data('name'), el.data('scalar'), value);
+                }
+                break;
+
+            case 'superglobal':
+                buttons = {
+                    "Save": function(){
+                        var name = $("#superglobal_editor_name").val(),
+                                scalar = $("#superglobal_editor_scalar").val(),
+                                value = $("#superglobal_editor_value").val(),
+                                button_name = name_button(name, "var"),
+                                button = make_button(button_name, "var", "var", name),
+                                list = $("#define_var");
+                        switch(scalar){
+                            case 'int':
+                                value = parseInt(value) || 0;
+                                break;
+                            case 'float':
+                                value = parseFloat(value) || 0;
+                                break;
+                            case 'bool':
+                                value = (value.toLowerCase() == 'true' || parseInt(value)) ? true : false;
+                                break;
+                            case 'null':
+                                value = null;
+                                break;
+                        }
+                        button.data({"scalar": scalar, "value": value});
+                        if(el){
+                            el.replaceWith(button);
+                        } else {
+                            list.append(button).show();
+                        }
+                        $(this).dialog("close");
+                    }
+                };
+                if(el){
+                    buttons["Delete"] = delete_func;
+                }
+                dialog.dialog({
+                    position: "center",
+                    height: 300,
+                    width: 400,
+                    buttons: buttons,
+                    close: function(){
+                        $("#superglobal_editor_name, #superglobal_editor_value").val('');
+                        $("#superglobal_editor_scalar").val('string');
+                        $("#superglobal_editor_preview").html('');
+                        $("#superglobal_editor_dialog").hide().dialog("destroy");
+                    }}).show();
+                if(el){
+                    var value = el.data('value');
+                    if(value !== null){
+                        value = value.toString();
+                    }
+                    $("#superglobal_editor_name").val(el.data('name'));
+                    $("#superglobal_editor_scalar").val(el.data('scalar'));
+                    $("#superglobal_editor_value").val(value);
+                    superglobal_preview(el.data('name'), el.data('scalar'), value);
+                }
+                break;
+        }
+    }
 </script>
 </body>
 </html>
