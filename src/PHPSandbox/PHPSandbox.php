@@ -678,6 +678,20 @@
             }
             return $this;
         }
+        /** Reset PHPSandbox options to their default values
+         *
+         * @example $sandbox->reset_options();
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function reset_options(){
+            foreach(get_class_vars(__CLASS__) as $option => $value){
+                if($option == 'error_level' || is_bool($value)){
+                    $this->set_option($option, $value);
+                }
+            }
+            return $this;
+        }
         /** Get PHPSandbox option
          *
          * You pass a string $option name to get its associated value
@@ -2229,6 +2243,8 @@
                     return 'for';
                 case '__halt_compiler':
                     return 'halt';
+                case 'alias':   //for consistency with alias and use descriptions
+                    return 'use';
             }
             return $name;
         }

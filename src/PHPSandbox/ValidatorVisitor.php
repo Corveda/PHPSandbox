@@ -131,6 +131,9 @@
                 if(!is_string($node->name)){
                     throw new Error("Sandboxed code attempted dynamically-named variable call!");
                 }
+                if($node->name == $this->sandbox->name){
+                    throw new Error("Sandboxed code attempted to access the PHPSandbox instance!");
+                }
                 if(in_array($node->name, PHPSandbox::$superglobals)){
                     $this->sandbox->check_superglobal($node->name);
                     if($this->sandbox->overwrite_superglobals){
@@ -482,6 +485,8 @@
                 case 'Expr_Cast_Int':
                 case 'Scalar_LNumber':
                     return 'int';
+                case 'Expr_Cast_Object':
+                    return 'object';
             }
             return null;
         }

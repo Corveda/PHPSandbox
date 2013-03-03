@@ -3,8 +3,8 @@
 ##03/03/2013
 
 - Major updates to dynamic demonstrations system, not know as the PHPSandbox Toolkit. Allows for almost unlimited configuration of PHPSandbox environments
-- PHPSandbox class now supports importing JSON template configurations, serialization, and defining callables for superglobals and magic constants, and an option to catch exceptions thrown by the sandbox and store them for future reference via the get_errors() method
-- API documentation is complete, PHPUnit testing is initialized. Toolkit has its own help system
+- PHPSandbox class now supports importing JSON template configurations, serialization, and defining callables for superglobals and magic constants
+- API documentation is complete, PHPUnit testing is initialized. Toolkit has its own help system, utilizing the fully written INSTRUCTIONS.html
 
 ##03/01/2013
 

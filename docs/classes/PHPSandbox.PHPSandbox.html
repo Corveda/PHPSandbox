@@ -281,6 +281,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_is_whitelisted_var" title="is_whitelisted_var :: Check if PHPSandbox instance has whitelisted variable name set"><span class="description">Check if PHPSandbox instance has whitelisted variable name set</span><pre>is_whitelisted_var()</pre></a></li>
 <li class="method public "><a href="#method_prepare" title="prepare :: Prepare passed callable for execution"><span class="description">Prepare passed callable for execution</span><pre>prepare()</pre></a></li>
 <li class="method public "><a href="#method_prepend" title="prepend :: Prepend trusted code"><span class="description">Prepend trusted code</span><pre>prepend()</pre></a></li>
+<li class="method public "><a href="#method_reset_options" title="reset_options :: Reset PHPSandbox options to their default values"><span class="description">Reset PHPSandbox options to their default values</span><pre>reset_options()</pre></a></li>
 <li class="method public "><a href="#method_set_option" title="set_option :: Set PHPSandbox option"><span class="description">Set PHPSandbox option</span><pre>set_option()</pre></a></li>
 <li class="method public "><a href="#method_set_options" title="set_options :: Set PHPSandbox options by array"><span class="description">Set PHPSandbox options by array</span><pre>set_options()</pre></a></li>
 <li class="method public "><a href="#method_undefine" title="undefine :: Undefine PHPSandbox definitions, such as functions, constants, namespaces, etc."><span class="description">Undefine PHPSandbox definitions, such as functions, constants, namespaces, etc.</span><pre>undefine()</pre></a></li>
@@ -6290,6 +6291,33 @@ not callable and a valid generated closure exists, then all arguments are passed
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
 </div></div>
 </div>
+<a id="method_reset_options"></a><div class="element clickable method public method_reset_options" data-toggle="collapse" data-target=".method_reset_options .collapse">
+<h2>Reset PHPSandbox options to their default values</h2>
+<pre>reset_options() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->reset_options();</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
+</div>
 <a id="method_set_option"></a><div class="element clickable method public method_set_option" data-toggle="collapse" data-target=".method_set_option .collapse">
 <h2>Set PHPSandbox option</h2>
 <pre>set_option(string | array $option, bool | int | null $value) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
@@ -8478,7 +8506,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-03-03T06:14:47-05:00.<br></footer></div>
+            generated on 2013-03-03T18:24:19-05:00.<br></footer></div>
 </div>
 </body>
 </html>

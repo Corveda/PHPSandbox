@@ -40,7 +40,7 @@
                 $this->sandbox->whitelist_func($node->name->toString());
             } else if($node instanceof \PHPParser_Node_Stmt_Function && is_string($node->name) && $node->name){
                 $this->sandbox->whitelist_func($node->name);
-            } else if(($node instanceof \PHPParser_Node_Expr_Variable || $node instanceof \PHPParser_Node_Stmt_StaticVar) && is_string($node->name) && $this->sandbox->has_whitelist_vars()){
+            } else if(($node instanceof \PHPParser_Node_Expr_Variable || $node instanceof \PHPParser_Node_Stmt_StaticVar) && is_string($node->name) && $this->sandbox->has_whitelist_vars() && !$this->sandbox->allow_variables){
                 $this->sandbox->whitelist_var($node->name);
             } else if($node instanceof \PHPParser_Node_Expr_FuncCall && $node->name instanceof \PHPParser_Node_Name && $node->name->toString() == 'define' && !$this->sandbox->is_defined_func('define')){
                 $name = isset($node->args[0]) ? $node->args[0] : null;
