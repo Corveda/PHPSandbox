@@ -148,10 +148,6 @@
             'primitives' => array(),
             'types' => array()
         );
-        /**
-         * @var    array       Array of exceptions caught by PHPSandbox if $catch_errors is set to true
-         */
-        public $errors = array();
         /* CONFIGURATION OPTION FLAGS */
         /**
          * @var    bool       The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
@@ -298,11 +294,6 @@
          * @default false
          */
         public $allow_halting               = false;
-        /**
-         * @var    bool       Should PHPSandbox catch and store thrown exceptions instead of passing them on?
-         * @default false
-         */
-        public $catch_errors                = false;
         /* TRUSTED CODE STRINGS */
         /**
          * @var    string     String of prepended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true
@@ -4931,25 +4922,6 @@
         public function get_time($round = null){
             return $round ? round($this->prepare_time + $this->execution_time, $round) : ($this->prepare_time + $this->execution_time);
         }
-        /** Return an array of exceptions caught by the PHPSandbox instance if $catch_errors is set to true
-         *
-         * @example $sandbox->get_errors();
-         *
-         * @return  array           Array of caught exceptions
-         */
-        public function get_errors(){
-            return $this->errors;
-        }
-        /** Clear the array of exceptions caught by the PHPSandbox instance
-         *
-         * @example $sandbox->clear_errors();
-         *
-         * @return  $this           Returns the PHPSandbox instance for chainability
-         */
-        public function clear_errors(){
-            $this->errors = array();
-            return $this;
-        }
         /** Prepare passed callable for execution
          *
          * This function validates your code and automatically whitelists it according to your specified configuration
@@ -5008,7 +4980,6 @@
                 $this->prepared_code .
                 $this->appended_code .
                 "\r\n};";
-
             @eval($this->generated_code);
             usleep(1); //guarantee at least some time passes
             $this->prepare_time = (microtime(true) - $this->prepare_time);
@@ -5031,16 +5002,7 @@
         public function execute(){
             $arguments = func_get_args();
             if(count($arguments) && !($this->generated_closure && is_callable($this->generated_closure))){
-                if($this->catch_errors){
-                    try {
-                        $this->prepare(array_shift($arguments));
-                    } catch (Error $error){
-                        $this->errors[] = $error;
-                        return null;
-                    }
-                } else {
-                    $this->prepare(array_shift($arguments));
-                }
+                $this->prepare(array_shift($arguments));
             }
 
             if(is_callable($this->generated_closure)){
@@ -5049,24 +5011,11 @@
                 }
                 array_unshift($arguments, $this);
                 $this->execution_time = microtime(true);
-                $result = null;
-                if($this->catch_errors){
-                    try {
-                        $result = call_user_func_array($this->generated_closure, $arguments);
-                    } catch(Error $error){
-                        $this->errors[] = $error;
-                    }
-                } else {
-                    $result = call_user_func_array($this->generated_closure, $arguments);
-                }
+                $result = call_user_func_array($this->generated_closure, $arguments);
                 usleep(1); //guarantee at least some time passes
                 $this->execution_time = (microtime(true) - $this->execution_time);
                 return $result;
-            } else if($this->catch_errors){
-                $this->errors[] = new Error("Error generating sandboxed code!");
-            } else {
-                throw new Error("Error generating sandboxed code!");
             }
-            return null;
+            throw new Error("Error generating sandboxed code!");
 		}
 	}

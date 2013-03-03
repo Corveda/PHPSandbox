@@ -115,7 +115,7 @@
             'setup_code' => $setup_code,
             'prepend_code' => $prepend_code,
             'append_code' => $append_code,
-            'options' => null,
+            'options' => $options,
             'whitelist' => $whitelist,
             'blacklist' => $blacklist,
             'definitions' => $definitions

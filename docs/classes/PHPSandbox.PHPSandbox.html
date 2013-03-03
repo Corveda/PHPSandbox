@@ -112,7 +112,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_clear" title="clear :: Clear all trusted and sandboxed code"><span class="description">Clear all trusted and sandboxed code</span><pre>clear()</pre></a></li>
 <li class="method public "><a href="#method_clear_append" title="clear_append :: Clear all appended trusted code"><span class="description">Clear all appended trusted code</span><pre>clear_append()</pre></a></li>
 <li class="method public "><a href="#method_clear_closure" title="clear_closure :: Clear generated closure"><span class="description">Clear generated closure</span><pre>clear_closure()</pre></a></li>
-<li class="method public "><a href="#method_clear_errors" title="clear_errors :: Clear the array of exceptions caught by the PHPSandbox instance"><span class="description">Clear the array of exceptions caught by the PHPSandbox instance</span><pre>clear_errors()</pre></a></li>
 <li class="method public "><a href="#method_clear_prepend" title="clear_prepend :: Clear all prepended trusted code"><span class="description">Clear all prepended trusted code</span><pre>clear_prepend()</pre></a></li>
 <li class="method public "><a href="#method_clear_trusted_code" title="clear_trusted_code :: Clear all trusted code"><span class="description">Clear all trusted code</span><pre>clear_trusted_code()</pre></a></li>
 <li class="method public "><a href="#method_create" title="create :: PHPSandbox static factory method"><span class="description">PHPSandbox static factory method</span><pre>create()</pre></a></li>
@@ -182,7 +181,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_execute" title="execute :: Prepare and execute callable and return output"><span class="description">Prepare and execute callable and return output</span><pre>execute()</pre></a></li>
 <li class="method public "><a href="#method_get_appended_code" title="get_appended_code :: Get PHPSandbox appended code"><span class="description">Get PHPSandbox appended code</span><pre>get_appended_code()</pre></a></li>
 <li class="method public "><a href="#method_get_closure" title="get_closure :: Get PHPSandbox generated closure"><span class="description">Get PHPSandbox generated closure</span><pre>get_closure()</pre></a></li>
-<li class="method public "><a href="#method_get_errors" title="get_errors :: Return an array of exceptions caught by the PHPSandbox instance if $catch_errors is set to true"><span class="description">Return an array of exceptions caught by the PHPSandbox instance if $catch_errors is set to true</span><pre>get_errors()</pre></a></li>
 <li class="method public "><a href="#method_get_execution_time" title="get_execution_time :: Return the amount of time the sandbox spent executing the sandboxed code"><span class="description">Return the amount of time the sandbox spent executing the sandboxed code</span><pre>get_execution_time()</pre></a></li>
 <li class="method public "><a href="#method_get_generated_closure" title="get_generated_closure :: Get PHPSandbox generated closure"><span class="description">Get PHPSandbox generated closure</span><pre>get_generated_closure()</pre></a></li>
 <li class="method public "><a href="#method_get_generated_code" title="get_generated_code :: Get PHPSandbox generated code"><span class="description">Get PHPSandbox generated code</span><pre>get_generated_code()</pre></a></li>
@@ -376,10 +374,8 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="property public "><a href="#property_auto_whitelist_interfaces" title="$auto_whitelist_interfaces :: "><span class="description">Should PHPSandbox automagically whitelist interfaces created in sandboxed code if $allow_interfaces is true?</span><pre>$auto_whitelist_interfaces</pre></a></li>
 <li class="property public "><a href="#property_auto_whitelist_traits" title="$auto_whitelist_traits :: "><span class="description">Should PHPSandbox automagically whitelist traits created in sandboxed code if $allow_traits is true?</span><pre>$auto_whitelist_traits</pre></a></li>
 <li class="property public "><a href="#property_auto_whitelist_trusted_code" title="$auto_whitelist_trusted_code :: "><span class="description">Should PHPSandbox automagically whitelist prepended and appended code?</span><pre>$auto_whitelist_trusted_code</pre></a></li>
-<li class="property public "><a href="#property_catch_errors" title="$catch_errors :: "><span class="description">Should PHPSandbox catch and store thrown exceptions instead of passing them on?</span><pre>$catch_errors</pre></a></li>
 <li class="property public "><a href="#property_defined_funcs" title="$defined_funcs :: "><span class="description">A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values</span><pre>$defined_funcs</pre></a></li>
 <li class="property public "><a href="#property_error_level" title="$error_level :: "><span class="description">The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.</span><pre>$error_level</pre></a></li>
-<li class="property public "><a href="#property_errors" title="$errors :: "><span class="description">Array of exceptions caught by PHPSandbox if $catch_errors is set to true</span><pre>$errors</pre></a></li>
 <li class="property public "><a href="#property_execution_time" title="$execution_time :: "><span class="description">Float of the number of microseconds it took to execute the sandbox</span><pre>$execution_time</pre></a></li>
 <li class="property public "><a href="#property_generated_closure" title="$generated_closure :: "><span class="description">Closure generated by PHPSandbox execution, stored for future executions without the need to reparse and validate the code</span><pre>$generated_closure</pre></a></li>
 <li class="property public "><a href="#property_generated_code" title="$generated_code :: "><span class="description">String of generated code, for debugging and serialization purposes</span><pre>$generated_code</pre></a></li>
@@ -1704,33 +1700,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="subelement response">
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
 </div></div>
-</div>
-<a id="method_clear_errors"></a><div class="element clickable method public method_clear_errors" data-toggle="collapse" data-target=".method_clear_errors .collapse">
-<h2>Clear the array of exceptions caught by the PHPSandbox instance</h2>
-<pre>clear_errors() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
-<div class="labels"></div>
-<div class="row collapse">
-<div class="span4">
-<div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>example</th>
-<td>$sandbox->clear_errors();</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
-<h3>Returns</h3>
-<div class="subelement response">
-<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
-</div>
-<div class="span4">
-<h3>Examples</h3>
-<pre class="prettyprint linenums"></pre>
-</div>
-</div>
 </div>
 <a id="method_clear_prepend"></a><div class="element clickable method public method_clear_prepend" data-toggle="collapse" data-target=".method_clear_prepend .collapse">
 <h2>Clear all prepended trusted code</h2>
@@ -3876,27 +3845,6 @@ not callable and a valid generated closure exists, then all arguments are passed
 <div class="subelement response">
 <code><a href="http://php.net/manual/en/class.closure.php">\Closure</a></code>Returns the generated closure</div>
 </div></div>
-</div>
-<a id="method_get_errors"></a><div class="element clickable method public method_get_errors" data-toggle="collapse" data-target=".method_get_errors .collapse">
-<h2>Return an array of exceptions caught by the PHPSandbox instance if $catch_errors is set to true</h2>
-<pre>get_errors() : array</pre>
-<div class="labels"></div>
-<div class="row collapse">
-<div class="span4">
-<div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>example</th>
-<td>$sandbox->get_errors();</td>
-</tr></table>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>array</code>Array of caught exceptions</div>
-</div>
-<div class="span4">
-<h3>Examples</h3>
-<pre class="prettyprint linenums"></pre>
-</div>
-</div>
 </div>
 <a id="method_get_execution_time"></a><div class="element clickable method public method_get_execution_time" data-toggle="collapse" data-target=".method_get_execution_time .collapse">
 <h2>Return the amount of time the sandbox spent executing the sandboxed code</h2>
@@ -8334,18 +8282,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </tr></table>
 </div></div>
 </div>
-<a id="property_catch_errors"> </a><div class="element clickable property public property_catch_errors" data-toggle="collapse" data-target=".property_catch_errors .collapse">
-<h2>Should PHPSandbox catch and store thrown exceptions instead of passing them on?</h2>
-<pre>$catch_errors : bool</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>default</th>
-<td>false</td>
-</tr></table>
-</div></div>
-</div>
 <a id="property_defined_funcs"> </a><div class="element clickable property public property_defined_funcs" data-toggle="collapse" data-target=".property_defined_funcs .collapse">
 <h2>A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values</h2>
 <pre>$defined_funcs : array</pre>
@@ -8363,12 +8299,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <td>null</td>
 </tr></table>
 </div></div>
-</div>
-<a id="property_errors"> </a><div class="element clickable property public property_errors" data-toggle="collapse" data-target=".property_errors .collapse">
-<h2>Array of exceptions caught by PHPSandbox if $catch_errors is set to true</h2>
-<pre>$errors : array</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_execution_time"> </a><div class="element clickable property public property_execution_time" data-toggle="collapse" data-target=".property_execution_time .collapse">
 <h2>Float of the number of microseconds it took to execute the sandbox</h2>
@@ -8548,7 +8478,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-03-03T05:37:37-05:00.<br></footer></div>
+            generated on 2013-03-03T06:14:47-05:00.<br></footer></div>
 </div>
 </body>
 </html>
