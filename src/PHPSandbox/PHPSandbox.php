@@ -21,7 +21,35 @@
          */
         protected static $function_prefix = '__PHPSandbox_';
         /**
-         * @var    array           A static array of superglobal names used for redefining superglobal values
+         * @var    int           A bit flag for the import() method, signifies to import all data from a template
+         */
+        const IMPORT_ALL = 0;
+        /**
+         * @var    int           A bit flag for the import() method, signifies to import only options from a template
+         */
+        const IMPORT_OPTIONS = 1;
+        /**
+         * @var    int           A bit flag for the import() method, signifies to import only definitions from a template
+         */
+        const IMPORT_DEFINITIONS = 2;
+        /**
+         * @var    int           A bit flag for the import() method, signifies to import only whitelists from a template
+         */
+        const IMPORT_WHITELIST = 4;
+        /**
+         * @var    int           A bit flag for the import() method, signifies to import only blacklists from a template
+         */
+        const IMPORT_BLACKLIST = 8;
+        /**
+         * @var    int           A bit flag for the import() method, signifies to import only trusted code from a template
+         */
+        const IMPORT_TRUSTED_CODE = 16;
+        /**
+         * @var    int           A bit flag for the import() method, signifies to import only sandboxed code from a template
+         */
+        const IMPORT_CODE = 32;
+        /**
+         * @var    array         A static array of superglobal names used for redefining superglobal values
          */
         public static $superglobals = array(
             '_GET',
@@ -120,6 +148,10 @@
             'primitives' => array(),
             'types' => array()
         );
+        /**
+         * @var    array       Array of exceptions caught by PHPSandbox if $catch_errors is set to true
+         */
+        public $errors = array();
         /* CONFIGURATION OPTION FLAGS */
         /**
          * @var    bool       The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
@@ -266,6 +298,11 @@
          * @default false
          */
         public $allow_halting               = false;
+        /**
+         * @var    bool       Should PHPSandbox catch and store thrown exceptions instead of passing them on?
+         * @default false
+         */
+        public $catch_errors                = false;
         /* TRUSTED CODE STRINGS */
         /**
          * @var    string     String of prepended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true
@@ -370,7 +407,7 @@
                                       array $magic_constants = array()){
             return new static($options, $functions, $variables, $constants, $namespaces, $aliases, $superglobals, $magic_constants);
         }
-        /** PHPSandbox invoke magic method
+        /** PHPSandbox __invoke magic method
          *
          * Besides the code or closure to be executed, you can also pass additional arguments that will overwrite the default values of their respective arguments defined in the code
          *
@@ -382,6 +419,134 @@
          */
         public function __invoke($code){
             return call_user_func_array(array($this, 'execute'), func_get_args());
+        }
+        /** PHPSandbox __sleep magic method
+         *
+         * @example $sandbox = new PHPSandbox\PHPSandbox; serialize($sandbox);
+         *
+         * @return  array                      An array of property keys to be serialized
+         */
+        public function __sleep(){
+            $this->generated_closure = null;
+            return array_keys(get_object_vars($this));
+        }
+        /** PHPSandbox __wakeup magic method
+         *
+         * @example $sandbox = unserialize($sandbox_string);
+         */
+        public function __wakeup(){
+            if($this->generated_code){
+                @eval($this->generated_code);
+            }
+        }
+        /** Import JSON template into sandbox
+         *
+         * @example $sandbox->import(array('code' => 'echo "Hello World!";'));
+         * @example $sandbox->import(file_get_contents("template.json"));
+         *
+         * @param   array|string    $template          The JSON array or string template to import
+         * @param   int             $import_flag       Binary flags signifying which parts of the JSON template to import
+         *
+         * @throws  Error           Throws exception if JSON template could not be imported
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function import($template, $import_flag = 0){
+            if(is_string($template)){
+                $template = json_decode($template);
+            }
+            if(!is_array($template)){
+                throw new Error("Sandbox could not import malformed JSON template!");
+            }
+            if(isset($template['options']) && is_array($template['options']) && (!$import_flag || ($import_flag & static::IMPORT_OPTIONS))){
+                $this->set_options($template['options']);
+            }
+            if(isset($template['definitions']) && is_array($template['definitions']) && (!$import_flag || ($import_flag & static::IMPORT_DEFINITIONS))){
+                foreach($template['definitions'] as $type => $data){
+                    if(method_exists($this, 'define_' . $type)){
+                        switch($type){
+                            case 'func':
+                                foreach($data as $key => $value){
+                                    $function = null;
+                                    @eval('$function = ' . $value["fullcode"] .';');
+                                    if(!is_callable($function)){
+                                        throw new \PHPSandbox\Error("Could not import function $key! Please check your code for errors!");
+                                    }
+                                    $this->define_func($key, $function, $value["pass"]);
+                                }
+                                break;
+                            case 'superglobal':
+                                foreach($data as $key => $value){
+                                    $this->define_superglobal($key, $value["key"], $value["value"]);
+                                }
+                                break;
+                            case 'namespace':
+                                foreach($data as $key => $value){
+                                    $this->define_namespace($key);
+                                }
+                                break;
+                            case 'alias':
+                                foreach($data as $key => $value){
+                                    $this->define_alias($key, $value ? $value : null);
+                                }
+                                break;
+
+                            default:
+                                foreach($data as $key => $value){
+                                    call_user_func_array(array($this, 'define_' . $type), array($key, $value["value"]));
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+            if(isset($template['whitelist']) && is_array($template['whitelist']) && (!$import_flag || ($import_flag & static::IMPORT_WHITELIST))){
+                foreach($template['whitelist'] as $type => $data){
+                    if(method_exists($this, 'whitelist_' . $type)){
+                        call_user_func_array(array($this, 'whitelist_' . $type), array($data));
+                    }
+                }
+            }
+            if(isset($template['blacklist']) && is_array($template['blacklist']) && (!$import_flag || ($import_flag & static::IMPORT_BLACKLIST))){
+                foreach($template['blacklist'] as $type => $data){
+                    if(method_exists($this, 'blacklist_' . $type)){
+                        call_user_func_array(array($this, 'blacklist_' . $type), array($data));
+                    }
+                }
+            }
+            if(!$import_flag || ($import_flag & static::IMPORT_TRUSTED_CODE)){
+                $this->clear_trusted_code();
+                if(isset($template['prepend_code']) && $template['prepend_code']){
+                    $this->prepend($template['prepend_code']);
+                }
+                if(isset($template['append_code']) && $template['append_code']){
+                    $this->append($template['append_code']);
+                }
+            }
+            if(!$import_flag || ($import_flag & static::IMPORT_CODE)){
+                $this->clear_closure();
+                if(isset($template['code']) && $template['code']){
+                    $this->prepare($template['code']);
+                }
+            }
+            return $this;
+        }
+        /** Import JSON template into sandbox
+         *
+         * @alias   import();
+         *
+         * @example $sandbox->importJSON(array('code' => 'echo "Hello World!";'));
+         * @example $sandbox->importJSON(file_get_contents("template.json"));
+         *
+         * @param   array|string    $template          The JSON array or string template to import
+         * @param   int             $import_flag       Binary flags signifying which parts of the JSON template to import
+         *
+         * @throws  Error           Throws exception if JSON template could not be imported
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function importJSON($template, $import_flag = 0){
+            return $this->import($template, $import_flag);
         }
         /** Get name of PHPSandbox variable
          * @return  string                     The name of the PHPSandbox variable
@@ -508,12 +673,15 @@
          *
          * @example $sandbox->set_option(array('allow_functions', 'allow_classes'), true);
          *
-         * @param   array           $options    Array of strings or associative array of keys of option names to set $value to
+         * @param   array|string    $options    Array of strings or associative array of keys of option names to set $value to, or JSON array or string template to import
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
          *
          * @return  $this           Returns the PHPSandbox instance for chainability
          */
-        public function set_options($options = array(), $value = null){
+        public function set_options($options, $value = null){
+            if(is_string($options) || (is_array($options) && isset($options["options"]))){
+                return $this->import($options);
+            }
             foreach($options as $name => $_value){
                 $this->set_option(is_int($name) ? $_value : $name, is_int($name) ? $value : $_value);
             }
@@ -915,7 +1083,7 @@
             }
             throw new Error("Sandboxed code attempted to call invalid function: $original_name");
         }
-        /** Define PHPSandbox definitions, such as functions, constants, classes, etc.
+        /** Define PHPSandbox definitions, such as functions, constants, namespaces, etc.
          *
          * You can pass a string of the $type, $name and $value, or pass an associative array of definitions types and
          * an associative array of their corresponding values
@@ -963,7 +1131,7 @@
             }
             return $this;
         }
-        /** Undefine PHPSandbox definitions, such as functions, constants, classes, etc.
+        /** Undefine PHPSandbox definitions, such as functions, constants, namespaces, etc.
          *
          * You can pass a string of the $type and $name to undefine, or pass an associative array of definitions types
          * and an array of key names to undefine
@@ -1242,11 +1410,13 @@
         }
         /** Define PHPSandbox superglobal
          *
-         * You can pass the superglobal $name and $value to define, or an associative array of superglobals to define
+         * You can pass the superglobal $name and $value to define, or an associative array of superglobals to define, or a third variable to define the $key
          *
          * @example $sandbox->define_superglobal('_GET',  array('page' => 1));
          *
          * @example $sandbox->define_superglobal(array('_GET' => array('page' => 1)));
+         *
+         * @example $sandbox->define_superglobal('_GET', 'page', 1);
          *
          * @param   string|array    $name       String of superglobal $name or associative array of superglobal names to define
          * @param   mixed           $value      Value to define superglobal to, can be callable
@@ -1263,14 +1433,12 @@
                 throw new Error("Cannot define unnamed superglobal!");
             }
             $name = $this->normalize_superglobal($name);
-            if(isset($this->definitions['superglobals'][$name])){
-                if(func_num_args() > 2){
-                    $key = $value;
-                    $value = func_get_arg(2);
-                    $this->definitions['superglobals'][$name][$key] = $value;
-                } else {
-                    $this->definitions['superglobals'][$name] = $value;
-                }
+            if(func_num_args() > 2){
+                $key = $value;
+                $value = func_get_arg(2);
+                $this->definitions['superglobals'][$name][$key] = $value;
+            } else {
+                $this->definitions['superglobals'][$name] = $value;
             }
             return $this;
         }
@@ -4676,13 +4844,23 @@
             $this->appended_code .= "\r\n" . $code . "\r\n";
             return $this;
         }
-        /** Clear all prepended and appended trusted code
+        /** Clear all trusted and sandboxed code
          *
          * @return  $this               Returns the PHPSandbox instance for chainability
          */
         public function clear(){
             $this->prepended_code = '';
+            $this->generated_closure = null;
             $this->appended_code = '';
+        }
+        /** Clear all trusted code
+         *
+         * @return  $this               Returns the PHPSandbox instance for chainability
+         */
+        public function clear_trusted_code(){
+            $this->prepended_code = '';
+            $this->appended_code = '';
+            return $this;
         }
         /** Clear all prepended trusted code
          *
@@ -4690,6 +4868,7 @@
          */
         public function clear_prepend(){
             $this->prepended_code = '';
+            return $this;
         }
         /** Clear all appended trusted code
          *
@@ -4697,6 +4876,7 @@
          */
         public function clear_append(){
             $this->appended_code = '';
+            return $this;
         }
         /** Clear generated closure
          *
@@ -4704,6 +4884,7 @@
          */
         public function clear_closure(){
             $this->generated_closure = null;
+            return $this;
         }
         /** Return the amount of time the sandbox spent preparing the sandboxed code
          *
@@ -4749,6 +4930,25 @@
          */
         public function get_time($round = null){
             return $round ? round($this->prepare_time + $this->execution_time, $round) : ($this->prepare_time + $this->execution_time);
+        }
+        /** Return an array of exceptions caught by the PHPSandbox instance if $catch_errors is set to true
+         *
+         * @example $sandbox->get_errors();
+         *
+         * @return  array           Array of caught exceptions
+         */
+        public function get_errors(){
+            return $this->errors;
+        }
+        /** Clear the array of exceptions caught by the PHPSandbox instance
+         *
+         * @example $sandbox->clear_errors();
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function clear_errors(){
+            $this->errors = array();
+            return $this;
         }
         /** Prepare passed callable for execution
          *
@@ -4831,7 +5031,16 @@
         public function execute(){
             $arguments = func_get_args();
             if(count($arguments) && !($this->generated_closure && is_callable($this->generated_closure))){
-                $this->prepare(array_shift($arguments));
+                if($this->catch_errors){
+                    try {
+                        $this->prepare(array_shift($arguments));
+                    } catch (Error $error){
+                        $this->errors[] = $error;
+                        return null;
+                    }
+                } else {
+                    $this->prepare(array_shift($arguments));
+                }
             }
 
             if(is_callable($this->generated_closure)){
@@ -4840,12 +5049,24 @@
                 }
                 array_unshift($arguments, $this);
                 $this->execution_time = microtime(true);
-                $result = call_user_func_array($this->generated_closure, $arguments);
+                $result = null;
+                if($this->catch_errors){
+                    try {
+                        $result = call_user_func_array($this->generated_closure, $arguments);
+                    } catch(Error $error){
+                        $this->errors[] = $error;
+                    }
+                } else {
+                    $result = call_user_func_array($this->generated_closure, $arguments);
+                }
                 usleep(1); //guarantee at least some time passes
                 $this->execution_time = (microtime(true) - $this->execution_time);
                 return $result;
+            } else if($this->catch_errors){
+                $this->errors[] = new Error("Error generating sandboxed code!");
             } else {
                 throw new Error("Error generating sandboxed code!");
             }
+            return null;
 		}
 	}

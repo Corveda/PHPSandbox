@@ -57,7 +57,9 @@
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
 <li class="method public "><a href="#method___construct" title="__construct :: PHPSandbox class constructor"><span class="description">PHPSandbox class constructor</span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method___invoke" title="__invoke :: PHPSandbox invoke magic method"><span class="description">PHPSandbox invoke magic method</span><pre>__invoke()</pre></a></li>
+<li class="method public "><a href="#method___invoke" title="__invoke :: PHPSandbox __invoke magic method"><span class="description">PHPSandbox __invoke magic method</span><pre>__invoke()</pre></a></li>
+<li class="method public "><a href="#method___sleep" title="__sleep :: PHPSandbox __sleep magic method"><span class="description">PHPSandbox __sleep magic method</span><pre>__sleep()</pre></a></li>
+<li class="method public "><a href="#method___wakeup" title="__wakeup :: PHPSandbox __wakeup magic method"><span class="description">PHPSandbox __wakeup magic method</span><pre>__wakeup()</pre></a></li>
 <li class="method public "><a href="#method__get_declared_classes" title="_get_declared_classes :: Get PHPSandbox redefined classes in place of get_declared_classes()."><span class="description">Get PHPSandbox redefined classes in place of get_declared_classes().</span><pre>_get_declared_classes()</pre></a></li>
 <li class="method public "><a href="#method__get_declared_interfaces" title="_get_declared_interfaces :: Get PHPSandbox redefined interfaces in place of get_declared_interfaces()."><span class="description">Get PHPSandbox redefined interfaces in place of get_declared_interfaces().</span><pre>_get_declared_interfaces()</pre></a></li>
 <li class="method public "><a href="#method__get_declared_traits" title="_get_declared_traits :: Get PHPSandbox redefined traits in place of get_declared_traits()."><span class="description">Get PHPSandbox redefined traits in place of get_declared_traits().</span><pre>_get_declared_traits()</pre></a></li>
@@ -107,10 +109,12 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_check_type" title="check_type :: Check type name against PHPSandbox validation rules."><span class="description">Check type name against PHPSandbox validation rules.</span><pre>check_type()</pre></a></li>
 <li class="method public "><a href="#method_check_use" title="check_use :: Check use (or alias) name against PHPSandbox validation rules."><span class="description">Check use (or alias) name against PHPSandbox validation rules.</span><pre>check_use()</pre></a></li>
 <li class="method public "><a href="#method_check_var" title="check_var :: Check variable name against PHPSandbox validation rules."><span class="description">Check variable name against PHPSandbox validation rules.</span><pre>check_var()</pre></a></li>
-<li class="method public "><a href="#method_clear" title="clear :: Clear all prepended and appended trusted code"><span class="description">Clear all prepended and appended trusted code</span><pre>clear()</pre></a></li>
+<li class="method public "><a href="#method_clear" title="clear :: Clear all trusted and sandboxed code"><span class="description">Clear all trusted and sandboxed code</span><pre>clear()</pre></a></li>
 <li class="method public "><a href="#method_clear_append" title="clear_append :: Clear all appended trusted code"><span class="description">Clear all appended trusted code</span><pre>clear_append()</pre></a></li>
 <li class="method public "><a href="#method_clear_closure" title="clear_closure :: Clear generated closure"><span class="description">Clear generated closure</span><pre>clear_closure()</pre></a></li>
+<li class="method public "><a href="#method_clear_errors" title="clear_errors :: Clear the array of exceptions caught by the PHPSandbox instance"><span class="description">Clear the array of exceptions caught by the PHPSandbox instance</span><pre>clear_errors()</pre></a></li>
 <li class="method public "><a href="#method_clear_prepend" title="clear_prepend :: Clear all prepended trusted code"><span class="description">Clear all prepended trusted code</span><pre>clear_prepend()</pre></a></li>
+<li class="method public "><a href="#method_clear_trusted_code" title="clear_trusted_code :: Clear all trusted code"><span class="description">Clear all trusted code</span><pre>clear_trusted_code()</pre></a></li>
 <li class="method public "><a href="#method_create" title="create :: PHPSandbox static factory method"><span class="description">PHPSandbox static factory method</span><pre>create()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist" title="deblacklist :: Remove PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Remove PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>deblacklist()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_alias" title="deblacklist_alias :: Remove alias from blacklist"><span class="description">Remove alias from blacklist</span><pre>deblacklist_alias()</pre></a></li>
@@ -135,7 +139,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_deblacklist_type" title="deblacklist_type :: Remove type from blacklist"><span class="description">Remove type from blacklist</span><pre>deblacklist_type()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_use" title="deblacklist_use :: Remove use (or alias) from blacklist"><span class="description">Remove use (or alias) from blacklist</span><pre>deblacklist_use()</pre></a></li>
 <li class="method public "><a href="#method_deblacklist_var" title="deblacklist_var :: Remove function from blacklist"><span class="description">Remove function from blacklist</span><pre>deblacklist_var()</pre></a></li>
-<li class="method public "><a href="#method_define" title="define :: Define PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Define PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>define()</pre></a></li>
+<li class="method public "><a href="#method_define" title="define :: Define PHPSandbox definitions, such as functions, constants, namespaces, etc."><span class="description">Define PHPSandbox definitions, such as functions, constants, namespaces, etc.</span><pre>define()</pre></a></li>
 <li class="method public "><a href="#method_define_alias" title="define_alias :: Define PHPSandbox alias"><span class="description">Define PHPSandbox alias</span><pre>define_alias()</pre></a></li>
 <li class="method public "><a href="#method_define_aliases" title="define_aliases :: Define PHPSandbox aliases by array"><span class="description">Define PHPSandbox aliases by array</span><pre>define_aliases()</pre></a></li>
 <li class="method public "><a href="#method_define_const" title="define_const :: Define PHPSandbox constant"><span class="description">Define PHPSandbox constant</span><pre>define_const()</pre></a></li>
@@ -178,6 +182,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_execute" title="execute :: Prepare and execute callable and return output"><span class="description">Prepare and execute callable and return output</span><pre>execute()</pre></a></li>
 <li class="method public "><a href="#method_get_appended_code" title="get_appended_code :: Get PHPSandbox appended code"><span class="description">Get PHPSandbox appended code</span><pre>get_appended_code()</pre></a></li>
 <li class="method public "><a href="#method_get_closure" title="get_closure :: Get PHPSandbox generated closure"><span class="description">Get PHPSandbox generated closure</span><pre>get_closure()</pre></a></li>
+<li class="method public "><a href="#method_get_errors" title="get_errors :: Return an array of exceptions caught by the PHPSandbox instance if $catch_errors is set to true"><span class="description">Return an array of exceptions caught by the PHPSandbox instance if $catch_errors is set to true</span><pre>get_errors()</pre></a></li>
 <li class="method public "><a href="#method_get_execution_time" title="get_execution_time :: Return the amount of time the sandbox spent executing the sandboxed code"><span class="description">Return the amount of time the sandbox spent executing the sandboxed code</span><pre>get_execution_time()</pre></a></li>
 <li class="method public "><a href="#method_get_generated_closure" title="get_generated_closure :: Get PHPSandbox generated closure"><span class="description">Get PHPSandbox generated closure</span><pre>get_generated_closure()</pre></a></li>
 <li class="method public "><a href="#method_get_generated_code" title="get_generated_code :: Get PHPSandbox generated code"><span class="description">Get PHPSandbox generated code</span><pre>get_generated_code()</pre></a></li>
@@ -232,6 +237,8 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_has_whitelist_types" title="has_whitelist_types :: Query whether PHPSandbox instance has whitelisted types."><span class="description">Query whether PHPSandbox instance has whitelisted types.</span><pre>has_whitelist_types()</pre></a></li>
 <li class="method public "><a href="#method_has_whitelist_uses" title="has_whitelist_uses :: Query whether PHPSandbox instance has whitelisted uses (or aliases.)"><span class="description">Query whether PHPSandbox instance has whitelisted uses (or aliases.)</span><pre>has_whitelist_uses()</pre></a></li>
 <li class="method public "><a href="#method_has_whitelist_vars" title="has_whitelist_vars :: Query whether PHPSandbox instance has whitelisted variables."><span class="description">Query whether PHPSandbox instance has whitelisted variables.</span><pre>has_whitelist_vars()</pre></a></li>
+<li class="method public "><a href="#method_import" title="import :: Import JSON template into sandbox"><span class="description">Import JSON template into sandbox</span><pre>import()</pre></a></li>
+<li class="method public "><a href="#method_importJSON" title="importJSON :: Import JSON template into sandbox"><span class="description">Import JSON template into sandbox</span><pre>importJSON()</pre></a></li>
 <li class="method public "><a href="#method_is_blacklisted" title="is_blacklisted :: Check if PHPSandbox instance has blacklist type and name set"><span class="description">Check if PHPSandbox instance has blacklist type and name set</span><pre>is_blacklisted()</pre></a></li>
 <li class="method public "><a href="#method_is_blacklisted_alias" title="is_blacklisted_alias :: Check if PHPSandbox instance has blacklisted alias name set"><span class="description">Check if PHPSandbox instance has blacklisted alias name set</span><pre>is_blacklisted_alias()</pre></a></li>
 <li class="method public "><a href="#method_is_blacklisted_class" title="is_blacklisted_class :: Check if PHPSandbox instance has blacklisted class name set"><span class="description">Check if PHPSandbox instance has blacklisted class name set</span><pre>is_blacklisted_class()</pre></a></li>
@@ -278,7 +285,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="method public "><a href="#method_prepend" title="prepend :: Prepend trusted code"><span class="description">Prepend trusted code</span><pre>prepend()</pre></a></li>
 <li class="method public "><a href="#method_set_option" title="set_option :: Set PHPSandbox option"><span class="description">Set PHPSandbox option</span><pre>set_option()</pre></a></li>
 <li class="method public "><a href="#method_set_options" title="set_options :: Set PHPSandbox options by array"><span class="description">Set PHPSandbox options by array</span><pre>set_options()</pre></a></li>
-<li class="method public "><a href="#method_undefine" title="undefine :: Undefine PHPSandbox definitions, such as functions, constants, classes, etc."><span class="description">Undefine PHPSandbox definitions, such as functions, constants, classes, etc.</span><pre>undefine()</pre></a></li>
+<li class="method public "><a href="#method_undefine" title="undefine :: Undefine PHPSandbox definitions, such as functions, constants, namespaces, etc."><span class="description">Undefine PHPSandbox definitions, such as functions, constants, namespaces, etc.</span><pre>undefine()</pre></a></li>
 <li class="method public "><a href="#method_undefine_alias" title="undefine_alias :: Undefine PHPSandbox alias"><span class="description">Undefine PHPSandbox alias</span><pre>undefine_alias()</pre></a></li>
 <li class="method public "><a href="#method_undefine_aliases" title="undefine_aliases :: Undefine PHPSandbox aliases by array"><span class="description">Undefine PHPSandbox aliases by array</span><pre>undefine_aliases()</pre></a></li>
 <li class="method public "><a href="#method_undefine_const" title="undefine_const :: Undefine PHPSandbox constant"><span class="description">Undefine PHPSandbox constant</span><pre>undefine_const()</pre></a></li>
@@ -369,8 +376,10 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="property public "><a href="#property_auto_whitelist_interfaces" title="$auto_whitelist_interfaces :: "><span class="description">Should PHPSandbox automagically whitelist interfaces created in sandboxed code if $allow_interfaces is true?</span><pre>$auto_whitelist_interfaces</pre></a></li>
 <li class="property public "><a href="#property_auto_whitelist_traits" title="$auto_whitelist_traits :: "><span class="description">Should PHPSandbox automagically whitelist traits created in sandboxed code if $allow_traits is true?</span><pre>$auto_whitelist_traits</pre></a></li>
 <li class="property public "><a href="#property_auto_whitelist_trusted_code" title="$auto_whitelist_trusted_code :: "><span class="description">Should PHPSandbox automagically whitelist prepended and appended code?</span><pre>$auto_whitelist_trusted_code</pre></a></li>
+<li class="property public "><a href="#property_catch_errors" title="$catch_errors :: "><span class="description">Should PHPSandbox catch and store thrown exceptions instead of passing them on?</span><pre>$catch_errors</pre></a></li>
 <li class="property public "><a href="#property_defined_funcs" title="$defined_funcs :: "><span class="description">A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values</span><pre>$defined_funcs</pre></a></li>
 <li class="property public "><a href="#property_error_level" title="$error_level :: "><span class="description">The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.</span><pre>$error_level</pre></a></li>
+<li class="property public "><a href="#property_errors" title="$errors :: "><span class="description">Array of exceptions caught by PHPSandbox if $catch_errors is set to true</span><pre>$errors</pre></a></li>
 <li class="property public "><a href="#property_execution_time" title="$execution_time :: "><span class="description">Float of the number of microseconds it took to execute the sandbox</span><pre>$execution_time</pre></a></li>
 <li class="property public "><a href="#property_generated_closure" title="$generated_closure :: "><span class="description">Closure generated by PHPSandbox execution, stored for future executions without the need to reparse and validate the code</span><pre>$generated_closure</pre></a></li>
 <li class="property public "><a href="#property_generated_code" title="$generated_code :: "><span class="description">String of generated code, for debugging and serialization purposes</span><pre>$generated_code</pre></a></li>
@@ -393,6 +402,25 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="property protected "><a href="#property_definitions" title="$definitions :: "><span class="description">Array of defined functions, superglobals, etc. If an array type contains elements, then it overwrites its external counterpart</span><pre>$definitions</pre></a></li>
 <li class="property protected "><a href="#property_function_prefix" title="$function_prefix :: "><span class="description">The prefix given to the obfuscated sandbox variable passed to the generated code</span><pre>$function_prefix</pre></a></li>
 <li class="property protected "><a href="#property_whitelist" title="$whitelist :: "><span class="description">Array of whitelisted functions, classes, etc. If an array type contains elements, then it overrides its blacklist counterpart</span><pre>$whitelist</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants
+                    <ul>
+<li class="constant  "><a href="#constant_IMPORT_ALL" title="IMPORT_ALL :: "><span class="description">&lt;p&gt;A bit flag for the import() method, signifies to import all data from a template&lt;/p&gt;
+</span><pre>IMPORT_ALL</pre></a></li>
+<li class="constant  "><a href="#constant_IMPORT_BLACKLIST" title="IMPORT_BLACKLIST :: "><span class="description">&lt;p&gt;A bit flag for the import() method, signifies to import only blacklists from a template&lt;/p&gt;
+</span><pre>IMPORT_BLACKLIST</pre></a></li>
+<li class="constant  "><a href="#constant_IMPORT_CODE" title="IMPORT_CODE :: "><span class="description">&lt;p&gt;A bit flag for the import() method, signifies to import only sandboxed code from a template&lt;/p&gt;
+</span><pre>IMPORT_CODE</pre></a></li>
+<li class="constant  "><a href="#constant_IMPORT_DEFINITIONS" title="IMPORT_DEFINITIONS :: "><span class="description">&lt;p&gt;A bit flag for the import() method, signifies to import only definitions from a template&lt;/p&gt;
+</span><pre>IMPORT_DEFINITIONS</pre></a></li>
+<li class="constant  "><a href="#constant_IMPORT_OPTIONS" title="IMPORT_OPTIONS :: "><span class="description">&lt;p&gt;A bit flag for the import() method, signifies to import only options from a template&lt;/p&gt;
+</span><pre>IMPORT_OPTIONS</pre></a></li>
+<li class="constant  "><a href="#constant_IMPORT_TRUSTED_CODE" title="IMPORT_TRUSTED_CODE :: "><span class="description">&lt;p&gt;A bit flag for the import() method, signifies to import only trusted code from a template&lt;/p&gt;
+</span><pre>IMPORT_TRUSTED_CODE</pre></a></li>
+<li class="constant  "><a href="#constant_IMPORT_WHITELIST" title="IMPORT_WHITELIST :: "><span class="description">&lt;p&gt;A bit flag for the import() method, signifies to import only whitelists from a template&lt;/p&gt;
+</span><pre>IMPORT_WHITELIST</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -482,7 +510,7 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 </div>
 </div>
 <a id="method___invoke"></a><div class="element clickable method public method___invoke" data-toggle="collapse" data-target=".method___invoke .collapse">
-<h2>PHPSandbox invoke magic method</h2>
+<h2>PHPSandbox __invoke magic method</h2>
 <pre>__invoke(<a href="http://php.net/manual/en/class.closure.php">\Closure</a> | callable | string $code) : mixed</pre>
 <div class="labels"></div>
 <div class="row collapse">
@@ -499,6 +527,45 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <h3>Returns</h3>
 <div class="subelement response">
 <code>mixed</code>The output of the executed sandboxed code</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
+</div>
+<a id="method___sleep"></a><div class="element clickable method public method___sleep" data-toggle="collapse" data-target=".method___sleep .collapse">
+<h2>PHPSandbox __sleep magic method</h2>
+<pre>__sleep() : array</pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox = new PHPSandbox\PHPSandbox; serialize($sandbox);</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>An array of property keys to be serialized</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
+</div>
+<a id="method___wakeup"></a><div class="element clickable method public method___wakeup" data-toggle="collapse" data-target=".method___wakeup .collapse">
+<h2>PHPSandbox __wakeup magic method</h2>
+<pre>__wakeup() </pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox = unserialize($sandbox_string);</td>
+</tr></table>
 </div>
 <div class="span4">
 <h3>Examples</h3>
@@ -1594,7 +1661,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </div></div>
 </div>
 <a id="method_clear"></a><div class="element clickable method public method_clear" data-toggle="collapse" data-target=".method_clear .collapse">
-<h2>Clear all prepended and appended trusted code</h2>
+<h2>Clear all trusted and sandboxed code</h2>
 <pre>clear() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -1638,9 +1705,51 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
 </div></div>
 </div>
+<a id="method_clear_errors"></a><div class="element clickable method public method_clear_errors" data-toggle="collapse" data-target=".method_clear_errors .collapse">
+<h2>Clear the array of exceptions caught by the PHPSandbox instance</h2>
+<pre>clear_errors() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->clear_errors();</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
+</div>
 <a id="method_clear_prepend"></a><div class="element clickable method public method_clear_prepend" data-toggle="collapse" data-target=".method_clear_prepend .collapse">
 <h2>Clear all prepended trusted code</h2>
 <pre>clear_prepend() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div></div>
+</div>
+<a id="method_clear_trusted_code"></a><div class="element clickable method public method_clear_trusted_code" data-toggle="collapse" data-target=".method_clear_trusted_code .collapse">
+<h2>Clear all trusted code</h2>
+<pre>clear_trusted_code() : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -2343,7 +2452,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </div>
 </div>
 <a id="method_define"></a><div class="element clickable method public method_define" data-toggle="collapse" data-target=".method_define .collapse">
-<h2>Define PHPSandbox definitions, such as functions, constants, classes, etc.</h2>
+<h2>Define PHPSandbox definitions, such as functions, constants, namespaces, etc.</h2>
 <pre>define(string | array $type, string | array | null $name, mixed | null $value) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
 <div class="row collapse">
@@ -2804,7 +2913,7 @@ functions to define, which can have callable values or arrays of the function ca
 <div class="labels"></div>
 <div class="row collapse">
 <div class="span4">
-<div class="long_description"><p>You can pass the superglobal $name and $value to define, or an associative array of superglobals to define</p></div>
+<div class="long_description"><p>You can pass the superglobal $name and $value to define, or an associative array of superglobals to define, or a third variable to define the $key</p></div>
 <table class="table table-bordered">
 <tr>
 <th>example</th>
@@ -2813,6 +2922,10 @@ functions to define, which can have callable values or arrays of the function ca
 <tr>
 <th>example</th>
 <td>$sandbox->define_superglobal(array('_GET' => array('page' => 1)));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->define_superglobal('_GET', 'page', 1);</td>
 </tr>
 <tr>
 <th>fluent</th>
@@ -2838,6 +2951,7 @@ functions to define, which can have callable values or arrays of the function ca
 </div>
 <div class="span4">
 <h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
 <pre class="prettyprint linenums"></pre>
 <pre class="prettyprint linenums"></pre>
 </div>
@@ -3762,6 +3876,27 @@ not callable and a valid generated closure exists, then all arguments are passed
 <div class="subelement response">
 <code><a href="http://php.net/manual/en/class.closure.php">\Closure</a></code>Returns the generated closure</div>
 </div></div>
+</div>
+<a id="method_get_errors"></a><div class="element clickable method public method_get_errors" data-toggle="collapse" data-target=".method_get_errors .collapse">
+<h2>Return an array of exceptions caught by the PHPSandbox instance if $catch_errors is set to true</h2>
+<pre>get_errors() : array</pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>example</th>
+<td>$sandbox->get_errors();</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Array of caught exceptions</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
 </div>
 <a id="method_get_execution_time"></a><div class="element clickable method public method_get_execution_time" data-toggle="collapse" data-target=".method_get_execution_time .collapse">
 <h2>Return the amount of time the sandbox spent executing the sandboxed code</h2>
@@ -4911,6 +5046,98 @@ not callable and a valid generated closure exists, then all arguments are passed
 </div>
 <div class="span4">
 <h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
+</div>
+<a id="method_import"></a><div class="element clickable method public method_import" data-toggle="collapse" data-target=".method_import .collapse">
+<h2>Import JSON template into sandbox</h2>
+<pre>import(array | string $template, int $import_flag) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$sandbox->import(array('code' => 'echo "Hello World!";'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->import(file_get_contents("template.json"));</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$template</h4>
+<code>array</code><code>string</code><p>The JSON array or string template to import</p></div>
+<div class="subelement argument">
+<h4>$import_flag</h4>
+<code>int</code><p>Binary flags signifying which parts of the JSON template to import</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if JSON template could not be imported</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
+</div>
+<a id="method_importJSON"></a><div class="element clickable method public method_importJSON" data-toggle="collapse" data-target=".method_importJSON .collapse">
+<h2>Import JSON template into sandbox</h2>
+<pre>importJSON(array | string $template, int $import_flag) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>alias</th>
+<td>import();</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->importJSON(array('code' => 'echo "Hello World!";'));</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$sandbox->importJSON(file_get_contents("template.json"));</td>
+</tr>
+<tr>
+<th>fluent</th>
+<td>This method is part of a fluent interface and will return the same instance</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$template</h4>
+<code>array</code><code>string</code><p>The JSON array or string template to import</p></div>
+<div class="subelement argument">
+<h4>$import_flag</h4>
+<code>int</code><p>Binary flags signifying which parts of the JSON template to import</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a></code></th>
+<td>Throws exception if JSON template could not be imported</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
 <pre class="prettyprint linenums"></pre>
 </div>
 </div>
@@ -6163,7 +6390,7 @@ not callable and a valid generated closure exists, then all arguments are passed
 </div>
 <a id="method_set_options"></a><div class="element clickable method public method_set_options" data-toggle="collapse" data-target=".method_set_options .collapse">
 <h2>Set PHPSandbox options by array</h2>
-<pre>set_options(array $options, bool | int | null $value) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
+<pre>set_options(array | string $options, bool | int | null $value) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
 <div class="row collapse">
 <div class="span4">
@@ -6185,7 +6412,7 @@ not callable and a valid generated closure exists, then all arguments are passed
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$options</h4>
-<code>array</code><p>Array of strings or associative array of keys of option names to set $value to</p>
+<code>array</code><code>string</code><p>Array of strings or associative array of keys of option names to set $value to, or JSON array or string template to import</p>
 </div>
 <div class="subelement argument">
 <h4>$value</h4>
@@ -6203,7 +6430,7 @@ not callable and a valid generated closure exists, then all arguments are passed
 </div>
 </div>
 <a id="method_undefine"></a><div class="element clickable method public method_undefine" data-toggle="collapse" data-target=".method_undefine .collapse">
-<h2>Undefine PHPSandbox definitions, such as functions, constants, classes, etc.</h2>
+<h2>Undefine PHPSandbox definitions, such as functions, constants, namespaces, etc.</h2>
 <pre>undefine(string | array $type, string | array $name) : <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></pre>
 <div class="labels"></div>
 <div class="row collapse">
@@ -8107,6 +8334,18 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </tr></table>
 </div></div>
 </div>
+<a id="property_catch_errors"> </a><div class="element clickable property public property_catch_errors" data-toggle="collapse" data-target=".property_catch_errors .collapse">
+<h2>Should PHPSandbox catch and store thrown exceptions instead of passing them on?</h2>
+<pre>$catch_errors : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>default</th>
+<td>false</td>
+</tr></table>
+</div></div>
+</div>
 <a id="property_defined_funcs"> </a><div class="element clickable property public property_defined_funcs" data-toggle="collapse" data-target=".property_defined_funcs .collapse">
 <h2>A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values</h2>
 <pre>$defined_funcs : array</pre>
@@ -8124,6 +8363,12 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <td>null</td>
 </tr></table>
 </div></div>
+</div>
+<a id="property_errors"> </a><div class="element clickable property public property_errors" data-toggle="collapse" data-target=".property_errors .collapse">
+<h2>Array of exceptions caught by PHPSandbox if $catch_errors is set to true</h2>
+<pre>$errors : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_execution_time"> </a><div class="element clickable property public property_execution_time" data-toggle="collapse" data-target=".property_execution_time .collapse">
 <h2>Float of the number of microseconds it took to execute the sandbox</h2>
@@ -8245,6 +8490,57 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_IMPORT_ALL"> </a><div class="element clickable constant  constant_IMPORT_ALL" data-toggle="collapse" data-target=".constant_IMPORT_ALL .collapse">
+<h2>&lt;p&gt;A bit flag for the import() method, signifies to import all data from a template&lt;/p&gt;
+</h2>
+<pre>IMPORT_ALL : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_IMPORT_BLACKLIST"> </a><div class="element clickable constant  constant_IMPORT_BLACKLIST" data-toggle="collapse" data-target=".constant_IMPORT_BLACKLIST .collapse">
+<h2>&lt;p&gt;A bit flag for the import() method, signifies to import only blacklists from a template&lt;/p&gt;
+</h2>
+<pre>IMPORT_BLACKLIST : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_IMPORT_CODE"> </a><div class="element clickable constant  constant_IMPORT_CODE" data-toggle="collapse" data-target=".constant_IMPORT_CODE .collapse">
+<h2>&lt;p&gt;A bit flag for the import() method, signifies to import only sandboxed code from a template&lt;/p&gt;
+</h2>
+<pre>IMPORT_CODE : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_IMPORT_DEFINITIONS"> </a><div class="element clickable constant  constant_IMPORT_DEFINITIONS" data-toggle="collapse" data-target=".constant_IMPORT_DEFINITIONS .collapse">
+<h2>&lt;p&gt;A bit flag for the import() method, signifies to import only definitions from a template&lt;/p&gt;
+</h2>
+<pre>IMPORT_DEFINITIONS : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_IMPORT_OPTIONS"> </a><div class="element clickable constant  constant_IMPORT_OPTIONS" data-toggle="collapse" data-target=".constant_IMPORT_OPTIONS .collapse">
+<h2>&lt;p&gt;A bit flag for the import() method, signifies to import only options from a template&lt;/p&gt;
+</h2>
+<pre>IMPORT_OPTIONS : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_IMPORT_TRUSTED_CODE"> </a><div class="element clickable constant  constant_IMPORT_TRUSTED_CODE" data-toggle="collapse" data-target=".constant_IMPORT_TRUSTED_CODE .collapse">
+<h2>&lt;p&gt;A bit flag for the import() method, signifies to import only trusted code from a template&lt;/p&gt;
+</h2>
+<pre>IMPORT_TRUSTED_CODE : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_IMPORT_WHITELIST"> </a><div class="element clickable constant  constant_IMPORT_WHITELIST" data-toggle="collapse" data-target=".constant_IMPORT_WHITELIST .collapse">
+<h2>&lt;p&gt;A bit flag for the import() method, signifies to import only whitelists from a template&lt;/p&gt;
+</h2>
+<pre>IMPORT_WHITELIST : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 </div>
 </div>
 </div>
@@ -8252,7 +8548,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-03-02T04:25:46-05:00.<br></footer></div>
+            generated on 2013-03-03T05:37:37-05:00.<br></footer></div>
 </div>
 </body>
 </html>

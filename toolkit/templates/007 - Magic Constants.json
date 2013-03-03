@@ -1,0 +1,1 @@
+{"code":"\/*\n    This template demonstrates a typical piece of code that will execute\n    normally under the default PHPSandbox configuration\n*\/\n\nvar_dump(__LINE__);","setup_code":"","prepend_code":"","append_code":"","options":null,"whitelist":{"func":["var_dump"]},"blacklist":null,"definitions":{"magic_const":{"__LINE__":{"scalar":"string","value":"test"}}}}
