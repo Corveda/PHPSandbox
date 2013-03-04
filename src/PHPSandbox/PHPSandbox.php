@@ -5108,25 +5108,27 @@
         }
         /** Check class name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the class name to check
+         * @param   bool     $extends   Flag whether this is an extended class
          * @throws  Error    Throws exception if validation error occurs
          */
-        public function check_class($name){
+        public function check_class($name, $extends = false){
             $original_name = $name;
+            $action = $extends ? 'extend' : 'call';
             if(!$name){
-                throw new Error("Sandboxed code attempted to call unnamed class!");
+                throw new Error("Sandboxed code attempted to $action unnamed class!");
             }
             $name = $this->normalize_class($name);
             if(!isset($this->definitions['classes'][$name])){
                 if(count($this->whitelist['classes'])){
                     if(!isset($this->whitelist['classes'][$name])){
-                        throw new Error("Sandboxed code attempted to call non-whitelisted class: $original_name");
+                        throw new Error("Sandboxed code attempted to $action non-whitelisted class: $original_name");
                     }
                 } else if(count($this->blacklist['classes'])){
                     if(isset($this->blacklist['classes'][$name])){
-                        throw new Error("Sandboxed code attempted to call blacklisted class: $original_name");
+                        throw new Error("Sandboxed code attempted to $action blacklisted class: $original_name");
                     }
                 } else {
-                    throw new Error("Sandboxed code attempted to call invalid class: $original_name");
+                    throw new Error("Sandboxed code attempted to $action invalid class: $original_name");
                 }
             }
         }

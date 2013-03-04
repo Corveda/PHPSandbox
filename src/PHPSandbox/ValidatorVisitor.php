@@ -105,6 +105,22 @@
                     throw new Error("Sandboxed code attempted to define unnamed class!");
                 }
                 $this->sandbox->check_class($node->name);
+                if($node->extends instanceof \PHPParser_Node_Name){
+                    $this->sandbox->check_keyword('extends');
+                    if(!$node->extends->toString()){
+                        throw new Error("Sandboxed code attempted to extend unnamed class!");
+                    }
+                    $this->sandbox->check_class($node->extends->toString(), true);
+                }
+                if(is_array($node->implements)){
+                    $this->sandbox->check_keyword('implements');
+                    foreach($node->implements as $implement){
+                        if(!$implement->toString()){
+                            throw new Error("Sandboxed code attempted to implement unnamed interface!");
+                        }
+                        $this->sandbox->check_interface($implement->toString());
+                    }
+                }
             } else if($node instanceof \PHPParser_Node_Stmt_Interface){
                 if(!$this->sandbox->allow_interfaces){
                     throw new Error("Sandboxed code attempted to define interface!");
@@ -123,6 +139,16 @@
                     throw new Error("Sandboxed code attempted to define unnamed trait!");
                 }
                 $this->sandbox->check_trait($node->name);
+            } else if($node instanceof \PHPParser_Node_Stmt_TraitUse){
+                $this->sandbox->check_keyword('use');
+                if(is_array($node->traits)){
+                    foreach($node->traits as $trait){
+                        if(!$trait->toString()){
+                            throw new Error("Sandboxed code attempted to use unnamed trait!");
+                        }
+                        $this->sandbox->check_trait($trait->toString());
+                    }
+                }
             } else if($node instanceof \PHPParser_Node_Stmt_Global){
                 if(!$this->sandbox->allow_globals){
                     throw new Error("Sandboxed code attempted to use global keyword!");
