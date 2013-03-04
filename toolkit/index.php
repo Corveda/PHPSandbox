@@ -120,6 +120,7 @@
             'blacklist' => $blacklist,
             'definitions' => $definitions
         ));
+        var_dump($sandbox);
         try {
             ob_start();
             if($setup_code){
@@ -696,7 +697,7 @@
     <pre id="alias_editor_preview"></pre>
 </div>
 <div id="help_dialog" title="PHPSandbox Toolkit Help">
-    <iframe src="../INSTRUCTIONS.html" frameborder="0" height="600" width="100%"></iframe>
+    <iframe src="../MANUAL.html" frameborder="0" height="600" width="100%"></iframe>
 </div>
 <iframe src="./?load=true" id="load" name="load"></iframe>
 <iframe src="./?download=true" id="download" name="download"></iframe>

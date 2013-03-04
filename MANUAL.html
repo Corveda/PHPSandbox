@@ -63,13 +63,6 @@
             <p> If you have a PSR-0 compliant autoloader, simply put the PHPSandbox folder under /src in your library folder
                 and it will handle loading all PHPSandbox files for you. Otherwise, you must include all PHPSandbox files and
                 its dependencies yourself.</p>
-            <h3>Creating A PHPSandbox Instance</h3>
-            <p>If you have downloaded PHPSandbox through composer, then the only thing you need to do to include all required
-                PHPSandbox classes is: </p>
-            <pre>require_once('vendor/autoload.php');</pre>
-            <p> If you have a PSR-0 compliant autoloader, simply put the PHPSandbox folder under /src in your library folder
-                and it will handle loading all PHPSandbox files for you. Otherwise, you must include all PHPSandbox files and
-                its dependencies yourself.</p>
             <h3>Instantiating A PHPSandbox Instance</h3>
             <p>You have two methods of instantiating a PHPSandbox instance: the new keyword, or the static method PHPSandbox::create();</p>
             <strong>New Keyword</strong>
@@ -193,6 +186,13 @@
                     <em>get_defined_vars</em>, <em>get_defined_constants</em>, <em>get_declared_classes</em>,
                     <em>get_declared_interfaces</em>, and <em>get_declared_traits</em> functions so they report only
                     values available to the sandboxed scope.
+                    <hr/>
+                </li>
+                <li>
+                    <strong>Overwrite Func_Get_Args </strong> &mdash; Default Value: <em>true</em>
+                    <br/>
+                    If this flag is set the sandbox will overwrite PHP's internal <em>func_get_args</em>, <em>func_get_arg</em>,
+                    and <em>func_num_args</em> so they report only arguments available to the sandboxed scope.
                     <hr/>
                 </li>
                 <li>
@@ -396,6 +396,9 @@
             <p>Definitions are configured in the PHPSandbox class through the <em class="method">define()</em>,
                 <em class="method">define_func()</em>, <em class="method">define_var()</em>, etc. instance methods. They
                 are fully trusted, and override any respective whitelist or blacklist.</p>
+            <ul>
+                <li><strong></strong></li>
+            </ul>
             <p><strong>Click the "Using PHPSandbox Toolkit" tab to continue.</strong></p>
         </div>
         <h3>4 - Using PHPSandbox Toolkit</h3>
@@ -452,7 +455,7 @@
             <p>In the toolbar on the right side of the screen is a set of tabs that allow you to define all four areas of
                 configuration for your sandbox.</p>
             <h3>Options</h3>
-            <p>This tab shows a list of checkboxs correlating with the configuration options available in the PHPSandbox class.
+            <p>This tab shows a list of checkboxes correlating with the configuration options available in the PHPSandbox class.
              When a checkbox is checked its corresponding flag will be enabled, when unchecked its corresponding flag will be disabled.</p>
             <h3>Whitelists &amp; Blacklists</h3>
             <p>This tab shows a dropdown menu of the type and a text input of the name of the item to add.
@@ -484,16 +487,6 @@
             <p>This tab shows a dropdown menu of the definition type. Click the "Define" button next to the dropdown
                 menu to open the selected definition editor.</p>
             <p><strong>NOTE: </strong> Definitions are fully trusted, and override their whitelist and blacklist counterparts!</p>
-            <h4>Definition Types</h4>
-            <ul>
-                <li><strong>Function:</strong> Defined functions</li>
-                <li><strong>Variables:</strong> The names of the variables (without the $ prefix) to whitelist or blackist.</li>
-                <li><strong>Superglobals:</strong> The names of the superglobals (without the $ prefix) to whitelist or blackist.</li>
-                <li><strong>Constants:</strong> The names of the constants to whitelist or blackist.</li>
-                <li><strong>Magic Constants:</strong> The names of the magic constants to whitelist or blackist.</li>
-                <li><strong>Namespaces:</strong> The names of the namespaces to whitelist or blackist.</li>
-                <li><strong>Aliases (aka Use):</strong> The names of the namespace aliases (aka uses) to whitelist or blackist.</li>
-            </ul>
             <h4>Definition Editors</h4>
             <p>Each of the definition editors open in their own window, and will show you a preview of what their
                 result will be in your sandboxed code.</p>

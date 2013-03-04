@@ -87,6 +87,14 @@
             'get_declared_traits'
         );
         /**
+         * @var    array          A static array of func_get_args, func_get_arg, and func_num_args used for redefining those functions
+         */
+        public static $arg_funcs = array(
+            'func_get_args',
+            'func_get_arg',
+            'func_num_args'
+        );
+        /**
          * @var    string       The randomly generated name of the PHPSandbox variable passed to the generated closure
          */
         public $name = '';
@@ -199,6 +207,11 @@
          * @default true
          */
         public $overwrite_defined_funcs     = true;
+        /**
+         * @var    bool       Should PHPSandbox overwrite func_get_args, func_get_arg and func_num_args?
+         * @default true
+         */
+        public $overwrite_func_get_args     = true;
         /**
          * @var    bool       Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.
          * @default true
@@ -596,6 +609,9 @@
                 case 'overwrite_defined_funcs':
                     $this->overwrite_defined_funcs = $value ? true : false;
                     break;
+                case 'overwrite_func_get_args':
+                    $this->overwrite_func_get_args = $value ? true : false;
+                    break;
                 case 'overwrite_superglobals':
                     $this->overwrite_superglobals = $value ? true : false;
                     break;
@@ -734,6 +750,9 @@
                     break;
                 case 'overwrite_defined_funcs':
                     return $this->overwrite_defined_funcs;
+                    break;
+                case 'overwrite_func_get_args':
+                    return $this->overwrite_func_get_args;
                     break;
                 case 'overwrite_superglobals':
                     return $this->overwrite_superglobals;
@@ -1064,6 +1083,49 @@
                 return $traits;
             }
             return array();
+        }
+        /** Get PHPSandbox redefined function arguments array
+         *
+         * @param   array           $arguments      Array result from func_get_args() is passed here
+         *
+         * @return  array           Returns the redefined arguments array
+         */
+        public function _func_get_args(array $arguments = array()){
+            foreach($arguments as $index => $value){
+                if($value instanceof self){
+                    unset($arguments[$index]); //hide PHPSandbox variable
+                }
+            }
+            return $arguments;
+        }
+        /** Get PHPSandbox redefined function argument
+         *
+         * @param   array           $arguments      Array result from func_get_args() is passed here
+         *
+         * @param   int             $index          Requested func_get_arg index is passed here
+         *
+         * @return  array           Returns the redefined argument
+         */
+        public function _func_get_arg(array $arguments = array(), $index = 0){
+            if($arguments[$index] instanceof self){
+                $index++;   //get next argument instead
+            }
+            return isset($arguments[$index]) && !($arguments[$index] instanceof self) ? $arguments[$index] : null;
+        }
+        /** Get PHPSandbox redefined number of function arguments
+         *
+         * @param   array           $arguments      Array result from func_get_args() is passed here
+         *
+         * @return  int             Returns the redefined number of function arguments
+         */
+        public function _func_num_args(array $arguments = array()){
+            $count = count($arguments);
+            foreach($arguments as $argument){
+                if($argument instanceof self){
+                    $count--;
+                }
+            }
+            return $count > 0 ? $count : 0;
         }
         /** Get PHPSandbox redefined function. This is an internal PHPSandbox function but requires public access to work.
          *
@@ -4344,6 +4406,9 @@
          * @return  bool     Returns true if function is valid, this is used for testing closures
          */
         public function check_func($name){
+            if(is_callable($name) && $this->allow_closures){
+                return true;
+            }
             $original_name = $name;
             if(!$name || !is_string($name)){
                 throw new Error("Sandboxed code attempted to call unnamed function!");

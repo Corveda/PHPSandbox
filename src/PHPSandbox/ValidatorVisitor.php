@@ -53,6 +53,16 @@
                     if($this->sandbox->overwrite_defined_funcs && in_array($name, PHPSandbox::$defined_funcs)){
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array($name))))), $node->getAttributes());
                     }
+                    if($this->sandbox->overwrite_func_get_args && in_array($name, PHPSandbox::$arg_funcs)){
+                        if($name == 'func_get_arg'){
+                            $index = new \PHPParser_Node_Arg(new \PHPParser_Node_Scalar_LNumber(0));
+                            if(isset($node->args[0]) && $node->args[0] instanceof \PHPParser_Node_Arg){
+                                $index = $node->args[0];
+                            }
+                            return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array('func_get_args')))), $index), $node->getAttributes());
+                        }
+                        return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array('func_get_args'))))), $node->getAttributes());
+                    }
                     if($this->sandbox->is_defined_func($name)){
                         $args = $node->args;
                         array_unshift($args, new \PHPParser_Node_Arg(new \PHPParser_Node_Scalar_String($name)));
@@ -85,6 +95,7 @@
                 if(!$this->sandbox->allow_closures){
                     throw new Error("Sandboxed code attempted to create a closure!");
                 }
+                $node->uses[] = new \PHPParser_Node_Expr_ClosureUse($this->sandbox->name);
             } else if($node instanceof \PHPParser_Node_Stmt_Class){
                 if(!$this->sandbox->allow_classes){
                     throw new Error("Sandboxed code attempted to define class!");
