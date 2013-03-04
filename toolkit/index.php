@@ -120,7 +120,6 @@
             'blacklist' => $blacklist,
             'definitions' => $definitions
         ));
-        var_dump($sandbox);
         try {
             ob_start();
             if($setup_code){

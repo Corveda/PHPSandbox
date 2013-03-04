@@ -60,6 +60,9 @@
 <li class="method public "><a href="#method___invoke" title="__invoke :: PHPSandbox __invoke magic method"><span class="description">PHPSandbox __invoke magic method</span><pre>__invoke()</pre></a></li>
 <li class="method public "><a href="#method___sleep" title="__sleep :: PHPSandbox __sleep magic method"><span class="description">PHPSandbox __sleep magic method</span><pre>__sleep()</pre></a></li>
 <li class="method public "><a href="#method___wakeup" title="__wakeup :: PHPSandbox __wakeup magic method"><span class="description">PHPSandbox __wakeup magic method</span><pre>__wakeup()</pre></a></li>
+<li class="method public "><a href="#method__func_get_arg" title="_func_get_arg :: Get PHPSandbox redefined function argument"><span class="description">Get PHPSandbox redefined function argument</span><pre>_func_get_arg()</pre></a></li>
+<li class="method public "><a href="#method__func_get_args" title="_func_get_args :: Get PHPSandbox redefined function arguments array"><span class="description">Get PHPSandbox redefined function arguments array</span><pre>_func_get_args()</pre></a></li>
+<li class="method public "><a href="#method__func_num_args" title="_func_num_args :: Get PHPSandbox redefined number of function arguments"><span class="description">Get PHPSandbox redefined number of function arguments</span><pre>_func_num_args()</pre></a></li>
 <li class="method public "><a href="#method__get_declared_classes" title="_get_declared_classes :: Get PHPSandbox redefined classes in place of get_declared_classes()."><span class="description">Get PHPSandbox redefined classes in place of get_declared_classes().</span><pre>_get_declared_classes()</pre></a></li>
 <li class="method public "><a href="#method__get_declared_interfaces" title="_get_declared_interfaces :: Get PHPSandbox redefined interfaces in place of get_declared_interfaces()."><span class="description">Get PHPSandbox redefined interfaces in place of get_declared_interfaces().</span><pre>_get_declared_interfaces()</pre></a></li>
 <li class="method public "><a href="#method__get_declared_traits" title="_get_declared_traits :: Get PHPSandbox redefined traits in place of get_declared_traits()."><span class="description">Get PHPSandbox redefined traits in place of get_declared_traits().</span><pre>_get_declared_traits()</pre></a></li>
@@ -367,6 +370,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="property public "><a href="#property_allow_traits" title="$allow_traits :: "><span class="description">Should PHPSandbox allow sandboxed code to declare traits?</span><pre>$allow_traits</pre></a></li>
 <li class="property public "><a href="#property_allow_variables" title="$allow_variables :: "><span class="description">Should PHPSandbox allow sandboxed code to create variables?</span><pre>$allow_variables</pre></a></li>
 <li class="property public "><a href="#property_appended_code" title="$appended_code :: "><span class="description">String of appended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true</span><pre>$appended_code</pre></a></li>
+<li class="property public "><a href="#property_arg_funcs" title="$arg_funcs :: "><span class="description">A static array of func_get_args, func_get_arg, and func_num_args used for redefining those functions</span><pre>$arg_funcs</pre></a></li>
 <li class="property public "><a href="#property_auto_define_vars" title="$auto_define_vars :: "><span class="description">Should PHPSandbox automagically define variables passed to prepended, appended and prepared code closures?</span><pre>$auto_define_vars</pre></a></li>
 <li class="property public "><a href="#property_auto_whitelist_classes" title="$auto_whitelist_classes :: "><span class="description">Should PHPSandbox automagically whitelist classes created in sandboxed code if $allow_classes is true?</span><pre>$auto_whitelist_classes</pre></a></li>
 <li class="property public "><a href="#property_auto_whitelist_constants" title="$auto_whitelist_constants :: "><span class="description">Should PHPSandbox automagically whitelist constants created in sandboxed code if $allow_constants is true?</span><pre>$auto_whitelist_constants</pre></a></li>
@@ -383,6 +387,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="property public "><a href="#property_magic_constants" title="$magic_constants :: "><span class="description">A static array of magic constant names used for redefining magic constant values</span><pre>$magic_constants</pre></a></li>
 <li class="property public "><a href="#property_name" title="$name :: "><span class="description">The randomly generated name of the PHPSandbox variable passed to the generated closure</span><pre>$name</pre></a></li>
 <li class="property public "><a href="#property_overwrite_defined_funcs" title="$overwrite_defined_funcs :: "><span class="description">Should PHPSandbox overwrite get_defined_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?</span><pre>$overwrite_defined_funcs</pre></a></li>
+<li class="property public "><a href="#property_overwrite_func_get_args" title="$overwrite_func_get_args :: "><span class="description">Should PHPSandbox overwrite func_get_args, func_get_arg and func_num_args?</span><pre>$overwrite_func_get_args</pre></a></li>
 <li class="property public "><a href="#property_overwrite_superglobals" title="$overwrite_superglobals :: "><span class="description">Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.</span><pre>$overwrite_superglobals</pre></a></li>
 <li class="property public "><a href="#property_parsed_ast" title="$parsed_ast :: "><span class="description">Array of parsed code broken down into AST tokens, for debugging and serialization purposes</span><pre>$parsed_ast</pre></a></li>
 <li class="property public "><a href="#property_prepare_time" title="$prepare_time :: "><span class="description">Float of the number of microseconds it took to prepare the sandbox</span><pre>$prepare_time</pre></a></li>
@@ -569,6 +574,57 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <pre class="prettyprint linenums"></pre>
 </div>
 </div>
+</div>
+<a id="method__func_get_arg"></a><div class="element clickable method public method__func_get_arg" data-toggle="collapse" data-target=".method__func_get_arg .collapse">
+<h2>Get PHPSandbox redefined function argument</h2>
+<pre>_func_get_arg(array $arguments, int $index) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$arguments</h4>
+<code>array</code><p>Array result from func_get_args() is passed here</p>
+</div>
+<div class="subelement argument">
+<h4>$index</h4>
+<code>int</code><p>Requested func_get_arg index is passed here</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Returns the redefined argument</div>
+</div></div>
+</div>
+<a id="method__func_get_args"></a><div class="element clickable method public method__func_get_args" data-toggle="collapse" data-target=".method__func_get_args .collapse">
+<h2>Get PHPSandbox redefined function arguments array</h2>
+<pre>_func_get_args(array $arguments) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$arguments</h4>
+<code>array</code><p>Array result from func_get_args() is passed here</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Returns the redefined arguments array</div>
+</div></div>
+</div>
+<a id="method__func_num_args"></a><div class="element clickable method public method__func_num_args" data-toggle="collapse" data-target=".method__func_num_args .collapse">
+<h2>Get PHPSandbox redefined number of function arguments</h2>
+<pre>_func_num_args(array $arguments) : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$arguments</h4>
+<code>array</code><p>Array result from func_get_args() is passed here</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>Returns the redefined number of function arguments</div>
+</div></div>
 </div>
 <a id="method__get_declared_classes"></a><div class="element clickable method public method__get_declared_classes" data-toggle="collapse" data-target=".method__get_declared_classes .collapse">
 <h2>Get PHPSandbox redefined classes in place of get_declared_classes().</h2>
@@ -8214,6 +8270,12 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
+<a id="property_arg_funcs"> </a><div class="element clickable property public property_arg_funcs" data-toggle="collapse" data-target=".property_arg_funcs .collapse">
+<h2>A static array of func_get_args, func_get_arg, and func_num_args used for redefining those functions</h2>
+<pre>$arg_funcs : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_auto_define_vars"> </a><div class="element clickable property public property_auto_define_vars" data-toggle="collapse" data-target=".property_auto_define_vars .collapse">
 <h2>Should PHPSandbox automagically define variables passed to prepended, appended and prepared code closures?</h2>
 <pre>$auto_define_vars : bool</pre>
@@ -8370,6 +8432,18 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </tr></table>
 </div></div>
 </div>
+<a id="property_overwrite_func_get_args"> </a><div class="element clickable property public property_overwrite_func_get_args" data-toggle="collapse" data-target=".property_overwrite_func_get_args .collapse">
+<h2>Should PHPSandbox overwrite func_get_args, func_get_arg and func_num_args?</h2>
+<pre>$overwrite_func_get_args : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>default</th>
+<td>true</td>
+</tr></table>
+</div></div>
+</div>
 <a id="property_overwrite_superglobals"> </a><div class="element clickable property public property_overwrite_superglobals" data-toggle="collapse" data-target=".property_overwrite_superglobals .collapse">
 <h2>Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.</h2>
 <pre>$overwrite_superglobals : bool</pre>
@@ -8506,7 +8580,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-03-03T18:24:19-05:00.<br></footer></div>
+            generated on 2013-03-03T21:03:54-05:00.<br></footer></div>
 </div>
 </body>
 </html>
