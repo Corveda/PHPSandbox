@@ -108,7 +108,10 @@
             'constants' => array(),
             'magic_constants' => array(),
             'namespaces' => array(),
-            'aliases' => array()
+            'aliases' => array(),
+            'classes' => array(),
+            'interfaces' => array(),
+            'traits' => array()
         );
         /**
          * @var    array       Array of whitelisted functions, classes, etc. If an array type contains elements, then it overrides its blacklist counterpart
@@ -363,6 +366,9 @@
          * @param   array   $aliases            Optional array of aliases to define for the sandbox
          * @param   array   $superglobals       Optional array of superglobals to define for the sandbox
          * @param   array   $magic_constants    Optional array of magic constants to define for the sandbox
+         * @param   array   $classes            Optional array of classes to define for the sandbox
+         * @param   array   $interfaces         Optional array of interfaces to define for the sandbox
+         * @param   array   $traits             Optional array of traits to define for the sandbox
          * @return  $this                       The returned PHPSandbox variable
          */
 		public function __construct(array $options = array(),
@@ -372,7 +378,10 @@
                                     array $namespaces = array(),
                                     array $aliases = array(),
                                     array $superglobals = array(),
-                                    array $magic_constants = array()){
+                                    array $magic_constants = array(),
+                                    array $classes = array(),
+                                    array $interfaces = array(),
+                                    array $traits = array()){
             $this->name = static::$function_prefix . md5(uniqid());
             $this->set_options($options)
                 ->define_funcs($functions)
@@ -381,7 +390,10 @@
                 ->define_namespaces($namespaces)
                 ->define_aliases($aliases)
                 ->define_superglobals($superglobals)
-                ->define_magic_consts($magic_constants);
+                ->define_magic_consts($magic_constants)
+                ->define_classes($classes)
+                ->define_interfaces($interfaces)
+                ->define_traits($traits);
             return $this;
 		}
         /** PHPSandbox static factory method
@@ -398,6 +410,9 @@
          * @param   array   $aliases            Optional array of aliases to define for the sandbox
          * @param   array   $superglobals       Optional array of superglobals to define for the sandbox
          * @param   array   $magic_constants    Optional array of magic constants to define for the sandbox
+         * @param   array   $classes            Optional array of classes to define for the sandbox
+         * @param   array   $interfaces         Optional array of interfaces to define for the sandbox
+         * @param   array   $traits             Optional array of traits to define for the sandbox
          *
          * @return  PHPSandbox                  The returned PHPSandbox variable
          */
@@ -408,8 +423,11 @@
                                       array $namespaces = array(),
                                       array $aliases = array(),
                                       array $superglobals = array(),
-                                      array $magic_constants = array()){
-            return new static($options, $functions, $variables, $constants, $namespaces, $aliases, $superglobals, $magic_constants);
+                                      array $magic_constants = array(),
+                                      array $classes = array(),
+                                      array $interfaces = array(),
+                                      array $traits = array()){
+            return new static($options, $functions, $variables, $constants, $namespaces, $aliases, $superglobals, $magic_constants, $classes, $interfaces, $traits);
         }
         /** PHPSandbox __invoke magic method
          *
@@ -492,6 +510,21 @@
                             case 'alias':
                                 foreach($data as $key => $value){
                                     $this->define_alias($key, $value ? $value : null);
+                                }
+                                break;
+                            case 'class':
+                                foreach($data as $key => $value){
+                                    $this->define_class($key, $value);
+                                }
+                                break;
+                            case 'interface':
+                                foreach($data as $key => $value){
+                                    $this->define_interface($key, $value);
+                                }
+                                break;
+                            case 'trait':
+                                foreach($data as $key => $value){
+                                    $this->define_trait($key, $value);
                                 }
                                 break;
 
@@ -1017,20 +1050,39 @@
                 $classes = array();
                 foreach($this->whitelist['classes'] as $name => $value){
                     if(class_exists($name)){
-                        $classes[] = $name;
+                        $classes[strtolower($name)] = $name;
                     }
                 }
-                return $classes;
+                foreach($this->definitions['classes'] as $name => $value){
+                    if(class_exists($value)){
+                        $classes[strtolower($name)] = $value;
+                    }
+                }
+                return array_values($classes);
             } else if(count($this->blacklist['classes'])){
-                foreach($classes as $index => $name){
-                    if(isset($this->blacklist['classes'][$name])){
-                        unset($classes[$index]);
+                $valid_classes = array();
+                foreach($classes as $class){
+                    $valid_classes[$this->normalize_class($class)] = $class;
+                }
+                foreach($this->definitions['classes'] as $name => $value){
+                    if(class_exists($value)){
+                        $valid_classes[$this->normalize_class($name)] = $value;
                     }
                 }
-                reset($classes);
-                return $classes;
+                foreach($valid_classes as $index => $name){
+                    if(isset($this->blacklist['classes'][$this->normalize_class($name)])){
+                        unset($valid_classes[$index]);
+                    }
+                }
+                return array_values($classes);
             }
-            return array();
+            $classes = array();
+            foreach($this->definitions['classes'] as $value){
+                if(class_exists($value)){
+                    $classes[strtolower($value)] = $value;
+                }
+            }
+            return array_values($classes);
         }
         /** Get PHPSandbox redefined interfaces in place of get_declared_interfaces(). This is an internal PHPSandbox function but requires public access to work.
          *
@@ -1043,20 +1095,39 @@
                 $interfaces = array();
                 foreach($this->whitelist['interfaces'] as $name => $value){
                     if(interface_exists($name)){
-                        $interfaces[] = $name;
+                        $interfaces[strtolower($name)] = $name;
                     }
                 }
-                return $interfaces;
+                foreach($this->definitions['interfaces'] as $name => $value){
+                    if(interface_exists($value)){
+                        $interfaces[strtolower($name)] = $value;
+                    }
+                }
+                return array_values($interfaces);
             } else if(count($this->blacklist['interfaces'])){
-                foreach($interfaces as $index => $name){
-                    if(isset($this->blacklist['interfaces'][$name])){
-                        unset($interfaces[$index]);
+                $valid_interfaces = array();
+                foreach($interfaces as $interface){
+                    $valid_interfaces[$this->normalize_interface($interface)] = $interface;
+                }
+                foreach($this->definitions['interfaces'] as $name => $value){
+                    if(interface_exists($value)){
+                        $valid_interfaces[$this->normalize_interface($name)] = $value;
                     }
                 }
-                reset($interfaces);
-                return $interfaces;
+                foreach($valid_interfaces as $index => $name){
+                    if(isset($this->blacklist['interfaces'][$this->normalize_interface($name)])){
+                        unset($valid_interfaces[$index]);
+                    }
+                }
+                return array_values($interfaces);
             }
-            return array();
+            $interfaces = array();
+            foreach($this->definitions['interfaces'] as $value){
+                if(interface_exists($value)){
+                    $interfaces[strtolower($value)] = $value;
+                }
+            }
+            return array_values($interfaces);
         }
         /** Get PHPSandbox redefined traits in place of get_declared_traits(). This is an internal PHPSandbox function but requires public access to work.
          *
@@ -1069,20 +1140,39 @@
                 $traits = array();
                 foreach($this->whitelist['traits'] as $name => $value){
                     if(trait_exists($name)){
-                        $traits[] = $name;
+                        $traits[strtolower($name)] = $name;
                     }
                 }
-                return $traits;
+                foreach($this->definitions['traits'] as $name => $value){
+                    if(trait_exists($value)){
+                        $traits[strtolower($name)] = $value;
+                    }
+                }
+                return array_values($traits);
             } else if(count($this->blacklist['traits'])){
-                foreach($traits as $index => $name){
-                    if(isset($this->blacklist['traits'][$name])){
-                        unset($traits[$index]);
+                $valid_traits = array();
+                foreach($traits as $trait){
+                    $valid_traits[$this->normalize_trait($trait)] = $trait;
+                }
+                foreach($this->definitions['traits'] as $name => $value){
+                    if(trait_exists($value)){
+                        $valid_traits[$this->normalize_trait($name)] = $value;
                     }
                 }
-                reset($traits);
-                return $traits;
+                foreach($valid_traits as $index => $name){
+                    if(isset($this->blacklist['traits'][$this->normalize_trait($name)])){
+                        unset($valid_traits[$index]);
+                    }
+                }
+                return array_values($traits);
             }
-            return array();
+            $traits = array();
+            foreach($this->definitions['traits'] as $value){
+                if(trait_exists($value)){
+                    $traits[strtolower($value)] = $value;
+                }
+            }
+            return array_values($traits);
         }
         /** Get PHPSandbox redefined function arguments array
          *
@@ -1194,6 +1284,12 @@
                         return $this->define_namespace($name);
                     case 'aliases':
                         return $this->define_alias($name, $value);
+                    case 'classes':
+                        return $this->define_class($name, $value);
+                    case 'interfaces':
+                        return $this->define_interface($name, $value);
+                    case 'traits':
+                        return $this->define_trait($name, $value);
                 }
             }
             return $this;
@@ -1245,6 +1341,12 @@
                         return $this->undefine_namespace($name);
                     case 'aliases':
                         return $this->undefine_alias($name);
+                    case 'classes':
+                        return $this->undefine_class($name);
+                    case 'interfaces':
+                        return $this->undefine_interface($name);
+                    case 'traits':
+                        return $this->undefine_trait($name);
                 }
             }
             return $this;
@@ -1842,6 +1944,7 @@
             if(!$name){
                 throw new Error("Cannot define unnamed namespace!");
             }
+            $name = $this->normalize_namespace($name);
             $this->definitions['namespaces'][$name] = $name;
             return $this;
         }
@@ -1879,6 +1982,7 @@
          * @return  bool            Returns true if PHPSandbox instance has defined namespace, false otherwise
          */
         public function is_defined_namespace($name){
+            $name = $this->normalize_namespace($name);
             return isset($this->definitions['namespaces'][$name]);
         }
         /** Undefine PHPSandbox namespace
@@ -1897,6 +2001,7 @@
             if(is_array($name)){
                 return $this->undefine_namespaces($name);
             }
+            $name = $this->normalize_namespace($name);
             if(isset($this->definitions['namespaces'][$name])){
                 unset($this->definitions['namespaces'][$name]);
             }
@@ -1950,6 +2055,7 @@
             if(!$name){
                 throw new Error("Cannot define unnamed namespace alias!");
             }
+            $name = $this->normalize_alias($name);
             $this->definitions['aliases'][$name] = $alias;
             return $this;
         }
@@ -1991,6 +2097,7 @@
          * @return  bool            Returns true if PHPSandbox instance has defined aliases, false otherwise
          */
         public function is_defined_alias($name){
+            $name = $this->normalize_alias($name);
             return isset($this->definitions['aliases'][$name]);
         }
         /** Undefine PHPSandbox alias
@@ -2009,6 +2116,7 @@
             if(is_array($name)){
                 return $this->undefine_aliases($name);
             }
+            $name = $this->normalize_alias($name);
             if(isset($this->definitions['aliases'][$name])){
                 unset($this->definitions['aliases'][$name]);
             }
@@ -2134,6 +2242,378 @@
          */
         public function undefine_uses(array $uses = array()){
             return $this->undefine_aliases($uses);
+        }
+        /** Define PHPSandbox class
+         *
+         * You can pass the class $name and $value to define, or an associative array of classes to define
+         *
+         * @example $sandbox->define_class('Test', 'Test2');
+         *
+         * @example $sandbox->define_class(array('Test' => 'Test2'));
+         *
+         * @param   string|array    $name       String of class $name or associative array to define
+         * @param   mixed           $value      Value to define class to
+         *
+         * @throws  Error           Throws exception if unnamed class is defined
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function define_class($name, $value){
+            if(is_array($name)){
+                return $this->define_classes($name);
+            }
+            if(!$name){
+                throw new Error("Cannot define unnamed class!");
+            }
+            $name = $this->normalize_class($name);
+            $this->definitions['classes'][$name] = $value;
+            return $this;
+        }
+        /** Define PHPSandbox classes by array
+         *
+         * You can pass an associative array of classes to define
+         *
+         * @example $sandbox->define_classes(array('Test' => 'Test2'));
+         *
+         * @param   array           $classes  Associative array of $classes to define
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function define_classes(array $classes = array()){
+            foreach($classes as $name => $value){
+                $this->define_class($name, $value);
+            }
+            return $this;
+        }
+        /** Query whether PHPSandbox instance has defined classes
+         *
+         * @example $sandbox->has_defined_classes(); //returns number of defined classes, or zero if none defined
+         *
+         * @return  int           Returns the number of classes this instance has defined
+         */
+        public function has_defined_classes(){
+            return count($this->definitions['classes']);
+        }
+        /** Check if PHPSandbox instance has $name class defined
+         *
+         * @example $sandbox->is_defined_class('Test');
+         *
+         * @param   string          $name       String of class $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has defined class, false otherwise
+         */
+        public function is_defined_class($name){
+            $name = $this->normalize_class($name);
+            return isset($this->definitions['classes'][$name]);
+        }
+        /** Get defined class of $name
+         *
+         * @example $sandbox->get_defined_class('Test');
+         *
+         * @param   string          $name       String of class $name to get
+         *
+         * @throws  Error           Throws an exception if an invalid class name is requested
+         *
+         * @return  string          Returns string of defined class value
+         */
+        public function get_defined_class($name){
+            $name = $this->normalize_class($name);
+            if(!isset($this->definitions['classes'][$name])){
+                throw new Error("Could not get undefined class: $name");
+            }
+            return $this->definitions['classes'][$name];
+        }
+        /** Undefine PHPSandbox class
+         *
+         * You can pass a string of class $name to undefine, or an array of class names to undefine
+         *
+         * @example $sandbox->undefine_class('Test');
+         *
+         * @example $sandbox->undefine_class(array('Test', 'Test2'));
+         *
+         * @param   string|array          $name       String of class name or an array of class names to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function undefine_class($name){
+            if(is_array($name)){
+                return $this->undefine_classes($name);
+            }
+            $name = $this->normalize_class($name);
+            if(isset($this->definitions['classes'][$name])){
+                unset($this->definitions['classes'][$name]);
+            }
+            return $this;
+        }
+        /** Undefine PHPSandbox classes by array
+         *
+         * You can pass an array of class names to undefine, or an empty array or null argument to undefine all classes
+         *
+         * @example $sandbox->undefine_classes(array('Test', 'Test2'));
+         *
+         * @example $sandbox->undefine_classes(); //WILL UNDEFINE ALL CLASSES!
+         *
+         * @param   array           $classes       Array of class names to undefine. Passing an empty array or no argument will result in undefining all classes
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function undefine_classes(array $classes = array()){
+            if(count($classes)){
+                foreach($classes as $class){
+                    $this->undefine_class($class);
+                }
+            } else {
+                $this->definitions['classes'] = array();
+            }
+            return $this;
+        }
+        /** Define PHPSandbox interface
+         *
+         * You can pass the interface $name and $value to define, or an associative array of interfaces to define
+         *
+         * @example $sandbox->define_interface('Test', 'Test2');
+         *
+         * @example $sandbox->define_interface(array('Test' => 'Test2'));
+         *
+         * @param   string|array    $name       String of interface $name or associative array to define
+         * @param   mixed           $value      Value to define interface to
+         *
+         * @throws  Error           Throws exception if unnamed interface is defined
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function define_interface($name, $value){
+            if(is_array($name)){
+                return $this->define_interfaces($name);
+            }
+            if(!$name){
+                throw new Error("Cannot define unnamed interface!");
+            }
+            $name = $this->normalize_interface($name);
+            $this->definitions['interfaces'][$name] = $value;
+            return $this;
+        }
+        /** Define PHPSandbox interfaces by array
+         *
+         * You can pass an associative array of interfaces to define
+         *
+         * @example $sandbox->define_interfaces(array('Test' => 'Test2'));
+         *
+         * @param   array           $interfaces  Associative array of $interfaces to define
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function define_interfaces(array $interfaces = array()){
+            foreach($interfaces as $name => $value){
+                $this->define_interface($name, $value);
+            }
+            return $this;
+        }
+        /** Query whether PHPSandbox instance has defined interfaces
+         *
+         * @example $sandbox->has_defined_interfaces(); //returns number of defined interfaces, or zero if none defined
+         *
+         * @return  int           Returns the number of interfaces this instance has defined
+         */
+        public function has_defined_interfaces(){
+            return count($this->definitions['interfaces']);
+        }
+        /** Check if PHPSandbox instance has $name interface defined
+         *
+         * @example $sandbox->is_defined_interface('Test');
+         *
+         * @param   string          $name       String of interface $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has defined interface, false otherwise
+         */
+        public function is_defined_interface($name){
+            $name = $this->normalize_interface($name);
+            return isset($this->definitions['interfaces'][$name]);
+        }
+        /** Get defined interface of $name
+         *
+         * @example $sandbox->get_defined_interface('Test');
+         *
+         * @param   string          $name       String of interface $name to get
+         *
+         * @throws  Error           Throws an exception if an invalid interface name is requested
+         *
+         * @return  string          Returns string of defined interface value
+         */
+        public function get_defined_interface($name){
+            $name = $this->normalize_interface($name);
+            if(!isset($this->definitions['interfaces'][$name])){
+                throw new Error("Could not get undefined interface: $name");
+            }
+            return $this->definitions['interfaces'][$name];
+        }
+        /** Undefine PHPSandbox interface
+         *
+         * You can pass a string of interface $name to undefine, or an array of interface names to undefine
+         *
+         * @example $sandbox->undefine_interface('Test');
+         *
+         * @example $sandbox->undefine_interface(array('Test', 'Test2'));
+         *
+         * @param   string|array          $name       String of interface name or an array of interface names to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function undefine_interface($name){
+            if(is_array($name)){
+                return $this->undefine_interfaces($name);
+            }
+            $name = $this->normalize_interface($name);
+            if(isset($this->definitions['interfaces'][$name])){
+                unset($this->definitions['interfaces'][$name]);
+            }
+            return $this;
+        }
+        /** Undefine PHPSandbox interfaces by array
+         *
+         * You can pass an array of interface names to undefine, or an empty array or null argument to undefine all interfaces
+         *
+         * @example $sandbox->undefine_interfaces(array('Test', 'Test2'));
+         *
+         * @example $sandbox->undefine_interfaces(); //WILL UNDEFINE ALL INTERFACES!
+         *
+         * @param   array           $interfaces       Array of interface names to undefine. Passing an empty array or no argument will result in undefining all interfaces
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function undefine_interfaces(array $interfaces = array()){
+            if(count($interfaces)){
+                foreach($interfaces as $interface){
+                    $this->undefine_interface($interface);
+                }
+            } else {
+                $this->definitions['interfaces'] = array();
+            }
+            return $this;
+        }
+        /** Define PHPSandbox trait
+         *
+         * You can pass the trait $name and $value to define, or an associative array of traits to define
+         *
+         * @example $sandbox->define_trait('Test', 'Test2');
+         *
+         * @example $sandbox->define_trait(array('Test' => 'Test2'));
+         *
+         * @param   string|array    $name       String of trait $name or associative array to define
+         * @param   mixed           $value      Value to define trait to
+         *
+         * @throws  Error           Throws exception if unnamed trait is defined
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function define_trait($name, $value){
+            if(is_array($name)){
+                return $this->define_traits($name);
+            }
+            if(!$name){
+                throw new Error("Cannot define unnamed trait!");
+            }
+            $name = $this->normalize_trait($name);
+            $this->definitions['traits'][$name] = $value;
+            return $this;
+        }
+        /** Define PHPSandbox traits by array
+         *
+         * You can pass an associative array of traits to define
+         *
+         * @example $sandbox->define_traits(array('Test' => 'Test2'));
+         *
+         * @param   array           $traits  Associative array of $traits to define
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function define_traits(array $traits = array()){
+            foreach($traits as $name => $value){
+                $this->define_trait($name, $value);
+            }
+            return $this;
+        }
+        /** Query whether PHPSandbox instance has defined traits
+         *
+         * @example $sandbox->has_defined_traits(); //returns number of defined traits, or zero if none defined
+         *
+         * @return  int           Returns the number of traits this instance has defined
+         */
+        public function has_defined_traits(){
+            return count($this->definitions['traits']);
+        }
+        /** Check if PHPSandbox instance has $name trait defined
+         *
+         * @example $sandbox->is_defined_trait('Test');
+         *
+         * @param   string          $name       String of trait $name to query
+         *
+         * @return  bool            Returns true if PHPSandbox instance has defined trait, false otherwise
+         */
+        public function is_defined_trait($name){
+            $name = $this->normalize_trait($name);
+            return isset($this->definitions['traits'][$name]);
+        }
+        /** Get defined trait of $name
+         *
+         * @example $sandbox->get_defined_trait('Test');
+         *
+         * @param   string          $name       String of trait $name to get
+         *
+         * @throws  Error           Throws an exception if an invalid trait name is requested
+         *
+         * @return  string          Returns string of defined trait value
+         */
+        public function get_defined_trait($name){
+            $name = $this->normalize_trait($name);
+            if(!isset($this->definitions['traits'][$name])){
+                throw new Error("Could not get undefined trait: $name");
+            }
+            return $this->definitions['traits'][$name];
+        }
+        /** Undefine PHPSandbox trait
+         *
+         * You can pass a string of trait $name to undefine, or an array of trait names to undefine
+         *
+         * @example $sandbox->undefine_trait('Test');
+         *
+         * @example $sandbox->undefine_trait(array('Test', 'Test2'));
+         *
+         * @param   string|array          $name       String of trait name or an array of trait names to undefine
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function undefine_trait($name){
+            if(is_array($name)){
+                return $this->undefine_traits($name);
+            }
+            $name = $this->normalize_trait($name);
+            if(isset($this->definitions['traits'][$name])){
+                unset($this->definitions['traits'][$name]);
+            }
+            return $this;
+        }
+        /** Undefine PHPSandbox traits by array
+         *
+         * You can pass an array of trait names to undefine, or an empty array or null argument to undefine all traits
+         *
+         * @example $sandbox->undefine_traits(array('Test', 'Test2'));
+         *
+         * @example $sandbox->undefine_traits(); //WILL UNDEFINE ALL TRAITS!
+         *
+         * @param   array           $traits       Array of trait names to undefine. Passing an empty array or no argument will result in undefining all traits
+         *
+         * @return  $this           Returns the PHPSandbox instance for chainability
+         */
+        public function undefine_traits(array $traits = array()){
+            if(count($traits)){
+                foreach($traits as $trait){
+                    $this->undefine_trait($trait);
+                }
+            } else {
+                $this->definitions['traits'] = array();
+            }
+            return $this;
         }
         /** Normalize function name.  This is an internal PHPSandbox function.
          *
@@ -4636,16 +5116,18 @@
                 throw new Error("Sandboxed code attempted to call unnamed class!");
             }
             $name = $this->normalize_class($name);
-            if(count($this->whitelist['classes'])){
-                if(!isset($this->whitelist['classes'][$name])){
-                    throw new Error("Sandboxed code attempted to call non-whitelisted class: $original_name");
+            if(!isset($this->definitions['classes'][$name])){
+                if(count($this->whitelist['classes'])){
+                    if(!isset($this->whitelist['classes'][$name])){
+                        throw new Error("Sandboxed code attempted to call non-whitelisted class: $original_name");
+                    }
+                } else if(count($this->blacklist['classes'])){
+                    if(isset($this->blacklist['classes'][$name])){
+                        throw new Error("Sandboxed code attempted to call blacklisted class: $original_name");
+                    }
+                } else {
+                    throw new Error("Sandboxed code attempted to call invalid class: $original_name");
                 }
-            } else if(count($this->blacklist['classes'])){
-                if(isset($this->blacklist['classes'][$name])){
-                    throw new Error("Sandboxed code attempted to call blacklisted class: $original_name");
-                }
-            } else {
-                throw new Error("Sandboxed code attempted to call invalid class: $original_name");
             }
         }
         /** Check interface name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
@@ -4658,16 +5140,18 @@
                 throw new Error("Sandboxed code attempted to call unnamed interface!");
             }
             $name = $this->normalize_interface($name);
-            if(count($this->whitelist['interfaces'])){
-                if(!isset($this->whitelist['interfaces'][$name])){
-                    throw new Error("Sandboxed code attempted to call non-whitelisted interface: $original_name");
+            if(!isset($this->definitions['interfaces'][$name])){
+                if(count($this->whitelist['interfaces'])){
+                    if(!isset($this->whitelist['interfaces'][$name])){
+                        throw new Error("Sandboxed code attempted to call non-whitelisted interface: $original_name");
+                    }
+                } else if(count($this->blacklist['interfaces'])){
+                    if(isset($this->blacklist['interfaces'][$name])){
+                        throw new Error("Sandboxed code attempted to call blacklisted interface: $original_name");
+                    }
+                } else {
+                    throw new Error("Sandboxed code attempted to call invalidnterface: $original_name");
                 }
-            } else if(count($this->blacklist['interfaces'])){
-                if(isset($this->blacklist['interfaces'][$name])){
-                    throw new Error("Sandboxed code attempted to call blacklisted interface: $original_name");
-                }
-            } else {
-                throw new Error("Sandboxed code attempted to call invalidnterface: $original_name");
             }
         }
         /** Check trait name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
@@ -4680,16 +5164,18 @@
                 throw new Error("Sandboxed code attempted to call unnamed trait!");
             }
             $name = $this->normalize_trait($name);
-            if(count($this->whitelist['traits'])){
-                if(!isset($this->whitelist['traits'][$name])){
-                    throw new Error("Sandboxed code attempted to call non-whitelisted trait: $original_name");
+            if(!isset($this->definitions['traits'][$name])){
+                if(count($this->whitelist['traits'])){
+                    if(!isset($this->whitelist['traits'][$name])){
+                        throw new Error("Sandboxed code attempted to call non-whitelisted trait: $original_name");
+                    }
+                } else if(count($this->blacklist['traits'])){
+                    if(isset($this->blacklist['traits'][$name])){
+                        throw new Error("Sandboxed code attempted to call blacklisted trait: $original_name");
+                    }
+                } else {
+                    throw new Error("Sandboxed code attempted to call invalid trait: $original_name");
                 }
-            } else if(count($this->blacklist['traits'])){
-                if(isset($this->blacklist['traits'][$name])){
-                    throw new Error("Sandboxed code attempted to call blacklisted trait: $original_name");
-                }
-            } else {
-                throw new Error("Sandboxed code attempted to call invalid trait: $original_name");
             }
         }
         /** Check keyword name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
@@ -4762,16 +5248,18 @@
                 throw new Error("Sandboxed code attempted to call unnamed type!");
             }
             $name = $this->normalize_type($name);
-            if(count($this->whitelist['types'])){
-                if(!isset($this->whitelist['types'][$name])){
-                    throw new Error("Sandboxed code attempted to call non-whitelisted type: $original_name");
+            if(!isset($this->definitions['classes'][$name])){
+                if(count($this->whitelist['types'])){
+                    if(!isset($this->whitelist['types'][$name])){
+                        throw new Error("Sandboxed code attempted to call non-whitelisted type: $original_name");
+                    }
+                } else if(count($this->blacklist['types'])){
+                    if(isset($this->blacklist['types'][$name])){
+                        throw new Error("Sandboxed code attempted to call blacklisted type: $original_name");
+                    }
+                } else {
+                    throw new Error("Sandboxed code attempted to call invalid type: $original_name");
                 }
-            } else if(count($this->blacklist['types'])){
-                if(isset($this->blacklist['types'][$name])){
-                    throw new Error("Sandboxed code attempted to call blacklisted type: $original_name");
-                }
-            } else {
-                throw new Error("Sandboxed code attempted to call invalid type: $original_name");
             }
         }
         /** Prepare defined variables for execution

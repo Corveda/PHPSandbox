@@ -79,6 +79,9 @@
                 <li><strong>$aliases</strong> &mdash; This is equivalent to using the <em class="method">define_aliases()</em> method.</li>
                 <li><strong>$superglobals</strong> &mdash; This is equivalent to using the <em class="method">define_superglobals()</em> method.</li>
                 <li><strong>$magic_constants</strong> &mdash; This is equivalent to using the <em class="method">define_magic_consts()</em> method.</li>
+                <li><strong>$classes</strong> &mdash; This is equivalent to using the <em class="method">define_classes()</em> method.</li>
+                <li><strong>$interfaces</strong> &mdash; This is equivalent to using the <em class="method">define_interfaces()</em> method.</li>
+                <li><strong>$traits</strong> &mdash; This is equivalent to using the <em class="method">define_traits()</em> method.</li>
             </ul>
             <strong>Examples:</strong>
             <pre>$sandbox = new \PHPSandbox\PHPSandbox($options,
@@ -88,7 +91,10 @@
                                      $namespaces,
                                      $aliases,
                                      $superglobals,
-                                     $magic_constants);</pre>
+                                     $magic_constants,
+                                     $classes,
+                                     $interfaces,
+                                     $traits);</pre>
             <pre>$sandbox = \PHPSandbox\PHPSandbox::create($options,
                                           $functions,
                                           $variables,
@@ -96,7 +102,10 @@
                                           $namespaces,
                                           $aliases,
                                           $superglobals,
-                                          $magic_constants);</pre>
+                                          $magic_constants,
+                                          $classes,
+                                          $interfaces,
+                                          $traits);</pre>
             <p><strong>Click the "Configuring PHPSandbox" tab below to continue.</strong></p>
         </div>
         <h3>3 - Configuring PHPSandbox</h3>
@@ -504,6 +513,18 @@
                 <li><strong>Alias (aka Use) Editor:</strong>
                     <p>In this editor you will be able to specify the name of your defined namespace to use, and
                         the alias to use. If alias is left blank the namespace will not use an alias.</p>
+                </li>
+                <li><strong>Class Editor:</strong>
+                    <p>In this editor you will be able to specify the name of the class to redefine, and
+                        the class to redefine it to use.</p>
+                </li>
+                <li><strong>Interface Editor:</strong>
+                    <p>In this editor you will be able to specify the name of the interface to redefine, and
+                        the interface to redefine it to use.</p>
+                </li>
+                <li><strong>Trait Editor:</strong>
+                    <p>In this editor you will be able to specify the name of the trait to redefine, and
+                        the trait to redefine it to use.</p>
                 </li>
             </ul>
             <p><strong>Click the "Using PHPSandbox Templates" tab below to continue.</strong></p>

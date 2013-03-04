@@ -111,7 +111,6 @@
         $blacklist = isset($_POST['blacklist']) ? $_POST['blacklist'] : null;
         $definitions = isset($_POST['definitions']) ? $_POST['definitions'] : null;
         $sandbox = \PHPSandbox\PHPSandbox::create()->import(array(
-            'code' => $code,
             'setup_code' => $setup_code,
             'prepend_code' => $prepend_code,
             'append_code' => $append_code,
@@ -125,7 +124,7 @@
             if($setup_code){
                 @eval($setup_code);
             }
-            $result = $sandbox->execute();
+            $result = $sandbox->execute($code);
             if($result !== null){
                 echo (ob_get_contents() ? '<hr class="hr"/>' : '') . '<h3>The sandbox returned this value:</h3>';
                 var_dump($result);
@@ -236,7 +235,7 @@
             font-weight: bold;
             margin: .5em;
         }
-        input.whitelist, input.blacklist, input.func, input.var, input.superglobal, input.const, input.magic_const, input.namespace, input.alias {
+        input.whitelist, input.blacklist, input.func, input.var, input.superglobal, input.const, input.magic_const, input.namespace, input.alias, input.class, input.interface, input.trait {
             width: 100%;
             text-align: left;
         }
@@ -245,7 +244,8 @@
             margin-top: 1em;
         }
         #func_editor_dialog, #var_editor_dialog, #superglobal_editor_dialog, #const_editor_dialog,
-        #magic_const_editor_dialog, #namespace_editor_dialog, #alias_editor_dialog, #help_dialog {
+        #magic_const_editor_dialog, #namespace_editor_dialog, #alias_editor_dialog, #class_editor_dialog,
+        #interface_editor_dialog, #trait_editor_dialog, #help_dialog {
             display: none;
             font-size: 12px;
         }
@@ -504,6 +504,9 @@
                     <option value="magic_const">Magic Constant</option>
                     <option value="namespace">Namespace</option>
                     <option value="alias">Alias (aka Use)</option>
+                    <option value="class">Class</option>
+                    <option value="interface">Interface</option>
+                    <option value="trait">Trait</option>
                 </select>
                 <input type="button" value="Define" id="define_add"/>
                 <br/>
@@ -529,6 +532,15 @@
                 </div>
                 <div id="define_alias" style="display: none;">
                     <strong>Aliases (aka Use):</strong>
+                </div>
+                <div id="define_class" style="display: none;">
+                    <strong>Classes:</strong>
+                </div>
+                <div id="define_interface" style="display: none;">
+                    <strong>Interfaces:</strong>
+                </div>
+                <div id="define_trait" style="display: none;">
+                    <strong>Traits:</strong>
                 </div>
             </div>
         </div>
@@ -695,6 +707,39 @@
     <input type="text" id="alias_editor_value" style="width: 100%;" value=""/>
     <pre id="alias_editor_preview"></pre>
 </div>
+<div id="class_editor_dialog" title="Defined Class Editor">
+    <strong>Redefine Class: </strong>
+    <br/>
+    <input type="text" id="class_editor_name" style="width: 100%;" value=""/>
+    <br/>
+    <br/>
+    <strong>To: </strong>
+    <br/>
+    <input type="text" id="class_editor_value" style="width: 100%;" value=""/>
+    <pre id="class_editor_preview"></pre>
+</div>
+<div id="interface_editor_dialog" title="Defined Interface Editor">
+    <strong>Redefine Interface: </strong>
+    <br/>
+    <input type="text" id="interface_editor_name" style="width: 100%;" value=""/>
+    <br/>
+    <br/>
+    <strong>To: </strong>
+    <br/>
+    <input type="text" id="interface_editor_value" style="width: 100%;" value=""/>
+    <pre id="interface_editor_preview"></pre>
+</div>
+<div id="trait_editor_dialog" title="Defined Trait Editor">
+    <strong>Redefine Trait: </strong>
+    <br/>
+    <input type="text" id="trait_editor_name" style="width: 100%;" value=""/>
+    <br/>
+    <br/>
+    <strong>To: </strong>
+    <br/>
+    <input type="text" id="trait_editor_value" style="width: 100%;" value=""/>
+    <pre id="trait_editor_preview"></pre>
+</div>
 <div id="help_dialog" title="PHPSandbox Toolkit Help">
     <iframe src="../MANUAL.html" frameborder="0" height="600" width="100%"></iframe>
 </div>
@@ -745,10 +790,12 @@
                 name = key ? (name + ' as ' + key) : name;
                 break;
             case 'namespace':
+            case 'type':
+                break;
             case 'class':
             case 'interface':
             case 'trait':
-            case 'type':
+                name = key ? (name + ' => ' + key) : name;
                 break;
             case 'keyword':
             case 'primitive':
@@ -826,7 +873,7 @@
                 }
             }
         }
-        $('input.whitelist, input.blacklist, input.func, input.var, input.superglobal, input.const, input.magic_const, input.namespace, input.alias').each(function(){
+        $('input.whitelist, input.blacklist, input.func, input.var, input.superglobal, input.const, input.magic_const, input.namespace, input.alias, input.class, input.interface, input.trait').each(function(){
             var el = $(this);
             el.parent().hide();
             el.remove();
@@ -884,6 +931,9 @@
                                 button = make_button(button_name, type, type, name);
                                 break;
                             case 'alias':
+                            case 'class':
+                            case 'interface':
+                            case 'trait':
                                 button_name = name_button(name, type, data);
                                 button = make_button(button_name, type, type, name);
                                 button.data({"value": data});
@@ -940,7 +990,10 @@
                 "const": {},
                 "magic_const": {},
                 "namespace": {},
-                "alias": {}
+                "alias": {},
+                "class": {},
+                "interface": {},
+                "trait": {}
             };
             $("#options").find("input").each(function(){
                var name = $(this).attr('name');
@@ -995,6 +1048,9 @@
                             definitions[type][el.data('name')] = el.data('name');
                             break;
                         case 'alias':
+                        case 'class':
+                        case 'interface':
+                        case 'trait':
                             definitions[type][el.data('name')] = el.data('value');
                             break;
                     }
@@ -1100,7 +1156,7 @@
     $("#define_add").on('click', function(){
         launch_editor($("#define_select").val());
     });
-    $(document).on('click', "input.func, input.var, input.superglobal, input.const, input.magic_const, input.namespace, input.alias", function(){
+    $(document).on('click', "input.func, input.var, input.superglobal, input.const, input.magic_const, input.namespace, input.alias, input.class, input.interface, input.trait", function(){
         launch_editor($(this).attr('class'), $(this));
     });
     $("#func_editor_name, #func_editor_args").on('keyup', function(){
@@ -1262,6 +1318,27 @@
     $("#alias_editor_name, #alias_editor_value").on('keyup', function(){
         $(this).val($(this).val().replace(/[^a-z0-9_\\]+/i, '_'));
         alias_preview($("#alias_editor_name").val(), $("#alias_editor_value").val());
+    });
+    function class_preview(name, value){
+        $("#class_editor_preview").html(name ? ('new ' + name + (value ? ' => new ' + value : '')) : '');
+    }
+    $("#class_editor_name, #class_editor_value").on('keyup', function(){
+        $(this).val($(this).val().replace(/[^a-z0-9_\\]+/i, '_'));
+        class_preview($("#class_editor_name").val(), $("#class_editor_value").val());
+    });
+    function interface_preview(name, value){
+        $("#interface_editor_preview").html(name ? ('new ' + name + (value ? ' => new ' + value : '')) : '');
+    }
+    $("#interface_editor_name, #interface_editor_value").on('keyup', function(){
+        $(this).val($(this).val().replace(/[^a-z0-9_\\]+/i, '_'));
+        interface_preview($("#interface_editor_name").val(), $("#interface_editor_value").val());
+    });
+    function trait_preview(name, value){
+        $("#trait_editor_preview").html(name ? ('new ' + name + (value ? ' => new ' + value : '')) : '');
+    }
+    $("#trait_editor_name, #trait_editor_value").on('keyup', function(){
+        $(this).val($(this).val().replace(/[^a-z0-9_\\]+/i, '_'));
+        trait_preview($("#trait_editor_name").val(), $("#trait_editor_value").val());
     });
     var func_editor;
     function launch_editor(type, el){
@@ -1630,6 +1707,129 @@
                     $("#alias_editor_name").val(el.data('name'));
                     $("#alias_editor_value").val(value);
                     alias_preview(el.data('name'), value);
+                }
+                break;
+
+            case 'class':
+                buttons = {
+                    "Save": function(){
+                        var name = $("#class_editor_name").val(),
+                                value = $("#class_editor_value").val(),
+                                button_name = name_button(name, "class", value),
+                                button = make_button(button_name, "class", "class", name),
+                                list = $("#define_class");
+                        button.data({"value": value});
+                        if(el){
+                            el.replaceWith(button);
+                        } else {
+                            list.append(button).show();
+                        }
+                        $(this).dialog("close");
+                    }
+                };
+                if(el){
+                    buttons["Delete"] = delete_func;
+                }
+                dialog.dialog({
+                    position: "center",
+                    height: 300,
+                    width: 400,
+                    buttons: buttons,
+                    close: function(){
+                        $("#class_editor_name, #class_editor_value").val('');
+                        $("#class_editor_preview").html('');
+                        $("#class_editor_dialog").hide().dialog("destroy");
+                    }}).show();
+                if(el){
+                    var value = el.data('value');
+                    if(value !== null){
+                        value = value.toString();
+                    }
+                    $("#class_editor_name").val(el.data('name'));
+                    $("#class_editor_value").val(value);
+                    class_preview(el.data('name'), value);
+                }
+                break;
+
+            case 'interface':
+                buttons = {
+                    "Save": function(){
+                        var name = $("#interface_editor_name").val(),
+                                value = $("#interface_editor_value").val(),
+                                button_name = name_button(name, "interface", value),
+                                button = make_button(button_name, "interface", "interface", name),
+                                list = $("#define_interface");
+                        button.data({"value": value});
+                        if(el){
+                            el.replaceWith(button);
+                        } else {
+                            list.append(button).show();
+                        }
+                        $(this).dialog("close");
+                    }
+                };
+                if(el){
+                    buttons["Delete"] = delete_func;
+                }
+                dialog.dialog({
+                    position: "center",
+                    height: 300,
+                    width: 400,
+                    buttons: buttons,
+                    close: function(){
+                        $("#interface_editor_name, #interface_editor_value").val('');
+                        $("#interface_editor_preview").html('');
+                        $("#interface_editor_dialog").hide().dialog("destroy");
+                    }}).show();
+                if(el){
+                    var value = el.data('value');
+                    if(value !== null){
+                        value = value.toString();
+                    }
+                    $("#interface_editor_name").val(el.data('name'));
+                    $("#interface_editor_value").val(value);
+                    interface_preview(el.data('name'), value);
+                }
+                break;
+
+            case 'trait':
+                buttons = {
+                    "Save": function(){
+                        var name = $("#trait_editor_name").val(),
+                                value = $("#trait_editor_value").val(),
+                                button_name = name_button(name, "trait", value),
+                                button = make_button(button_name, "trait", "trait", name),
+                                list = $("#define_trait");
+                        button.data({"value": value});
+                        if(el){
+                            el.replaceWith(button);
+                        } else {
+                            list.append(button).show();
+                        }
+                        $(this).dialog("close");
+                    }
+                };
+                if(el){
+                    buttons["Delete"] = delete_func;
+                }
+                dialog.dialog({
+                    position: "center",
+                    height: 300,
+                    width: 400,
+                    buttons: buttons,
+                    close: function(){
+                        $("#trait_editor_name, #trait_editor_value").val('');
+                        $("#trait_editor_preview").html('');
+                        $("#trait_editor_dialog").hide().dialog("destroy");
+                    }}).show();
+                if(el){
+                    var value = el.data('value');
+                    if(value !== null){
+                        value = value.toString();
+                    }
+                    $("#trait_editor_name").val(el.data('name'));
+                    $("#trait_editor_value").val(value);
+                    trait_preview(el.data('name'), value);
                 }
                 break;
         }

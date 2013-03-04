@@ -173,10 +173,14 @@
                 if(!$class instanceof \PHPParser_Node_Name){
                     throw new Error("Sandboxed code attempted dynamically-named class call!");
                 }
+                if($this->sandbox->is_defined_class($class)){
+                    $node->class = new \PHPParser_Node_Name($this->sandbox->get_defined_class($class));
+                }
                 /**
                  * @var \PHPParser_Node_Name    $class
                  */
                 $this->sandbox->check_class($class->toString());
+                return $node;
             } else if($node instanceof \PHPParser_Node_Expr_New){
                 if(!$this->sandbox->allow_objects){
                     throw new Error("Sandboxed code attempted to create object!");
@@ -185,7 +189,12 @@
                 if(!$node->class instanceof \PHPParser_Node_Name){
                     throw new Error("Sandboxed code attempted dynamically-named class call!");
                 }
-                $this->sandbox->check_type($node->class->toString());
+                $class = $node->class->toString();
+                if($this->sandbox->is_defined_class($class)){
+                    $node->class = new \PHPParser_Node_Name($this->sandbox->get_defined_class($class));
+                }
+                $this->sandbox->check_type($class);
+                return $node;
             } else if($node instanceof \PHPParser_Node_Expr_ErrorSuppress){
                 if(!$this->sandbox->allow_error_suppressing){
                     throw new Error("Sandboxed code attempted to suppress error!");
