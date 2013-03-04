@@ -1,1 +1,1 @@
-{"code":"\/*\n    This template demonstrates how whitelisting a function and a superglobal\n    will expose them to your sandboxed code for use\n*\/\n\nprint_r($_POST);","options":null,"whitelist":{"func":["print_r"],"superglobal":["_POST"]},"blacklist":null}
+{"code":"\/*\n    This template demonstrates how whitelisting a function and a superglobal\n    will expose them to your sandboxed code for use\n*\/\n\nprint_r($_POST);","options":null,"whitelist":{"func":["print_r"],"superglobal":["POST"]},"blacklist":null}

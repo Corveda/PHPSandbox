@@ -612,7 +612,7 @@
     <select id="superglobal_editor_name">
         <?php
         foreach(\PHPSandbox\PHPSandbox::$superglobals as $superglobal){
-            ?><option value="<?=$superglobal?>">$<?=$superglobal?></option><?php
+            ?><option value="<?=ltrim($superglobal, '_');?>">$<?=$superglobal?></option><?php
         }
         ?>
     </select>
