@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PHPSandbox Instructions</title>
+    <title>PHPSandbox Manual</title>
     <link href="http://code.jquery.com/ui/1.10.1/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet"/>
     <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js" type="text/javascript" charset="utf-8"></script><style type="text/css" media="screen">
@@ -186,6 +186,11 @@
                     <em>get_defined_vars</em>, <em>get_defined_constants</em>, <em>get_declared_classes</em>,
                     <em>get_declared_interfaces</em>, and <em>get_declared_traits</em> functions so they report only
                     values available to the sandboxed scope.
+                    <br/>
+                    <strong>NOTE: </strong> If you define your own functions for <em>get_defined_functions</em>,
+                    <em>get_defined_vars</em>, <em>get_defined_constants</em>, <em>get_declared_classes</em>,
+                    <em>get_declared_interfaces</em>, or <em>get_declared_traits</em>, the PHPSandbox instance will call
+                    them instead.
                     <hr/>
                 </li>
                 <li>
@@ -193,6 +198,9 @@
                     <br/>
                     If this flag is set the sandbox will overwrite PHP's internal <em>func_get_args</em>, <em>func_get_arg</em>,
                     and <em>func_num_args</em> so they report only arguments available to the sandboxed scope.
+                    <br/>
+                    <strong>NOTE: </strong> If you define your own functions for <em>func_get_args</em>, <em>func_get_arg</em>,
+                    or <em>func_num_args</em> the PHPSandbox instance will call them instead.
                     <hr/>
                 </li>
                 <li>
@@ -353,52 +361,23 @@
             and a whitelist hasn't been defined.</p>
             <h4>Whitelist &amp; Blacklist Precedence</h4>
             <p>Whitelists override their blacklist counterpart, therefore if a whitelist of functions has been defined
-            and also a blacklist of functions, the blacklist will have no effect. Futhermore, definitions override both
+            and also a blacklist of functions, the blacklist will have no effect. Furthermore, definitions override both
             whitelists and blacklists, so that a defined function will always be allowed even if that function is not
             defined in a function whitelist or is in a function blacklist.</p>
             <p>Whitelists are configured in the PHPSandbox class through the <em class="method">whitelist()</em>,
-                <em class="method">whitelist_func()</em>, , <em class="method">whitelist_var()</em>, etc. instance methods.</p>
-            <strong>Examples:</strong>
-            <pre>$sandbox->whitelist_func('var_dump');          //whitelist var_dump() function</pre>
-            <pre>$sandbox->whitelist_var('test');               //whitelist $test variable</pre>
-            <pre>$sandbox->whitelist_global('global');          //whitelist $global global</pre>
-            <pre>$sandbox->whitelist_superglobal('_GET');       //whitelist $_GET superglobal</pre>
-            <pre>$sandbox->whitelist_const('TEST');             //whitelist TEST constant</pre>
-            <pre>$sandbox->whitelist_magic_const('__LINE__');   //whitelist __LINE__ magic constant</pre>
-            <pre>$sandbox->whitelist_namespace('Test');         //whitelist Test namespace</pre>
-            <pre>$sandbox->whitelist_alias('Test');             //whitelist Test namespace for alias</pre>
-            <pre>$sandbox->whitelist_class('Test');             //whitelist Test class</pre>
-            <pre>$sandbox->whitelist_interface('Test');         //whitelist Test interface</pre>
-            <pre>$sandbox->whitelist_trait('Test');             //whitelist Test trait</pre>
-            <pre>$sandbox->whitelist_keyword('echo');           //whitelist echo keyword</pre>
-            <pre>$sandbox->whitelist_operator('+');             //whitelist + operator</pre>
-            <pre>$sandbox->whitelist_primitive('string');       //whitelist string primitives</pre>
-            <pre>$sandbox->whitelist_type('Test');              //whitelist objects of class Test</pre>
+                <em class="method">whitelist_func()</em>, <em class="method">whitelist_var()</em>, etc. instance methods.</p>
+            <p>Detailed explanations of the whitelist instance methods can be found in the
+                <a href="docs/classes/PHPSandbox.PHPSandbox.html#method_whitelist_func" target="_blank">API documentation.</a></p>
             <p>Blacklists are configured in the PHPSandbox class through the <em class="method">blacklist()</em>,
-                <em class="method">blacklist_func()</em>, , <em class="method">blacklist_var()</em>, etc. instance methods.</p>
-            <strong>Examples:</strong>
-            <pre>$sandbox->blacklist_func('var_dump');          //blacklist var_dump() function</pre>
-            <pre>$sandbox->blacklist_var('test');               //blacklist $test variable</pre>
-            <pre>$sandbox->blacklist_global('global');          //blacklist $global global</pre>
-            <pre>$sandbox->blacklist_superglobal('_GET');       //blacklist $_GET superglobal</pre>
-            <pre>$sandbox->blacklist_const('TEST');             //blacklist TEST constant</pre>
-            <pre>$sandbox->blacklist_magic_const('__LINE__');   //blacklist __LINE__ magic constant</pre>
-            <pre>$sandbox->blacklist_namespace('Test');         //blacklist Test namespace</pre>
-            <pre>$sandbox->blacklist_alias('Test');             //blacklist Test namespace for alias</pre>
-            <pre>$sandbox->blacklist_class('Test');             //blacklist Test class</pre>
-            <pre>$sandbox->blacklist_interface('Test');         //blacklist Test interface</pre>
-            <pre>$sandbox->blacklist_trait('Test');             //blacklist Test trait</pre>
-            <pre>$sandbox->blacklist_keyword('echo');           //blacklist echo keyword</pre>
-            <pre>$sandbox->blacklist_operator('+');             //blacklist + operator</pre>
-            <pre>$sandbox->blacklist_primitive('string');       //blacklist string primitives</pre>
-            <pre>$sandbox->blacklist_type('Test');              //blacklist objects of class Test</pre>
+                <em class="method">blacklist_func()</em>, <em class="method">blacklist_var()</em>, etc. instance methods.</p>
+            <p>Detailed explanations of the blacklist instance methods can be found in the
+                <a href="docs/classes/PHPSandbox.PHPSandbox.html#method_blacklist_func" target="_blank">API documentation.</a></p>
             <h3>Definitions</h3>
             <p>Definitions are configured in the PHPSandbox class through the <em class="method">define()</em>,
                 <em class="method">define_func()</em>, <em class="method">define_var()</em>, etc. instance methods. They
                 are fully trusted, and override any respective whitelist or blacklist.</p>
-            <ul>
-                <li><strong></strong></li>
-            </ul>
+            <p>Detailed explanations of the definition instance methods can be found in the
+                <a href="docs/classes/PHPSandbox.PHPSandbox.html#method_define_func" target="_blank">API documentation.</a></p>
             <p><strong>Click the "Using PHPSandbox Toolkit" tab to continue.</strong></p>
         </div>
         <h3>4 - Using PHPSandbox Toolkit</h3>
@@ -554,7 +533,7 @@
             <strong>Example:</strong>
             <pre>$sandbox->import(file_get_contents('template.json'));</pre>
             <h4>Import Options</h4>
-            <p>These class constants are provided to simplfy setting the bitmask option to pass to the <em class="method">import()</em> method.</p>
+            <p>These class constants are provided to simplify setting the bitmask option to pass to the <em class="method">import()</em> method.</p>
             <ul>
                 <li><strong>PHPSandbox::IMPORT_ALL</strong> &mdash; Import everything from the template. This is the default setting.</li>
                 <li><strong>PHPSandbox::IMPORT_OPTIONS</strong> &mdash; Import the template options.</li>
@@ -567,14 +546,9 @@
             <strong>Example:</strong>
             <pre>$sandbox->import(file_get_contents('template.json'),
                  PHPSandbox\PHPSandbox::IMPORT_OPTIONS);</pre>
-            <p><strong>Click the "Advanced PHPSandbox Usage" tab below to continue.</strong></p>
-        </div>
-        <h3>7 - Advanced PHPSandbox Usage</h3>
-        <div>
-            <em>This is a work in progress. . .</em>
             <p><strong>Click the "PHPSandbox License" tab below to continue.</strong></p>
         </div>
-        <h3>8 - PHPSandbox License</h3>
+        <h3>7 - PHPSandbox License</h3>
         <div>
             <pre>Copyright (c) 2013 by Elijah Horton (fieryprophet [at] yahoo.com)
 

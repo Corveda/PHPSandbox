@@ -50,6 +50,11 @@
                 if($node->name instanceof \PHPParser_Node_Name){
                     $name = $node->name->toString();
                     $this->sandbox->check_func($name);
+                    if($this->sandbox->is_defined_func($name)){
+                        $args = $node->args;
+                        array_unshift($args, new \PHPParser_Node_Arg(new \PHPParser_Node_Scalar_String($name)));
+                        return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), 'call_func', $args, $node->getAttributes());
+                    }
                     if($this->sandbox->overwrite_defined_funcs && in_array($name, PHPSandbox::$defined_funcs)){
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array($name))))), $node->getAttributes());
                     }
@@ -62,11 +67,6 @@
                             return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array('func_get_args')))), $index), $node->getAttributes());
                         }
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array('func_get_args'))))), $node->getAttributes());
-                    }
-                    if($this->sandbox->is_defined_func($name)){
-                        $args = $node->args;
-                        array_unshift($args, new \PHPParser_Node_Arg(new \PHPParser_Node_Scalar_String($name)));
-                        return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), 'call_func', $args, $node->getAttributes());
                     }
                 } else if(!$this->sandbox->allow_closures){
                     throw new Error("Sandboxed code attempted to call a closure!");

@@ -709,12 +709,14 @@
     editor.setTheme("ace/theme/github");
     editor.getSession().setMode("ace/mode/php");
     function invalid(name, type){
-        if(type == 'var' || type == 'global' || type == 'superglobal' || type == 'const' || type == 'magic_const'){
+        if(type == 'var' || type == 'global' || type == 'const'){
             return ((/[^a-z0-9_]+/i.test(name)) || (/[^a-z_]+/i.test(name.substring(0, 1))));
-        } else if(type == 'func' || type == 'namespace' || type == 'alias' || type == 'class' || type == 'interface' || type == 'trait' || type == 'trait'){
+        } else if(type == 'func' || type == 'namespace' || type == 'alias' || type == 'class' || type == 'interface' || type == 'trait' || type == 'type'){
             return ((/[^a-z0-9_\\]+/i.test(name)) || (/[^a-z_\\]+/i.test(name.substring(0, 1))));
         } else if(type == 'keyword' || type == 'primitive'){
-            return (/[^a-z]+/i.test(name));
+            return (/[^a-z]+/.test(name));
+        } else if(type == 'superglobal' || type == 'magic_const'){
+            return ((/[^A-Z0-9_]+/.test(name)) || (/[^A-Z_]+/.test(name.substring(0, 1))));
         }
         return false;
     }
@@ -731,7 +733,7 @@
                 break;
             case 'superglobal':
                 name = name.toUpperCase().replace('_', '');
-                name = (name == 'GLOBALS' ? '$' + name : '$_' + name) + "['" + key + "']";
+                name = (name == 'GLOBALS' ? '$' + name : '$_' + name) + (key ? "['" + key + "']" : "");
                 break;
             case 'const':
                 name = name.toUpperCase();

@@ -19,7 +19,7 @@
       </docblock>
     </class>
   </file>
-  <file path="PHPSandbox.php" hash="c86523790ee9f7cf725ed3e02b5bdfc6" package="PHPSandbox">
+  <file path="PHPSandbox.php" hash="faeb0417cd00e0df4b9ffca76ab2317b" package="PHPSandbox">
     <docblock line="2">
       <description>PHPSandbox class declaration</description>
       <long-description></long-description>
@@ -4421,1429 +4421,1410 @@ or pass an array of superglobal names, or an associative array of superglobal na
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3506" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3512" package="Default">
         <name>blacklist_superglobal</name>
         <full_name>blacklist_superglobal</full_name>
-        <docblock line="3488">
+        <docblock line="3494">
           <description>Blacklist superglobal or superglobal key
 *
 You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
 or pass an array of superglobal names, or an associative array of superglobal names and their keys to blacklist</description>
           <long-description></long-description>
-          <tag line="3488" name="example" description="$sandbox-&gt;blacklist_superglobal('_GET');"/>
-          <tag line="3488" name="example" description="$sandbox-&gt;blacklist_superglobal('_GET', 'page');"/>
-          <tag line="3488" name="example" description="$sandbox-&gt;blacklist_superglobal(array('_GET', '_POST'));"/>
-          <tag line="3488" name="example" description="$sandbox-&gt;blacklist_superglobal(array('_GET' =&gt; 'page'));"/>
-          <tag line="3488" name="param" description="String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to blacklist" type="string|array" variable="$name">
+          <tag line="3494" name="example" description="$sandbox-&gt;blacklist_superglobal('_GET');"/>
+          <tag line="3494" name="example" description="$sandbox-&gt;blacklist_superglobal('_GET', 'page');"/>
+          <tag line="3494" name="example" description="$sandbox-&gt;blacklist_superglobal(array('_GET', '_POST'));"/>
+          <tag line="3494" name="example" description="$sandbox-&gt;blacklist_superglobal(array('_GET' =&gt; 'page'));"/>
+          <tag line="3494" name="param" description="String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3488" name="param" description="String of superglobal key to blacklist" type="string" variable="$key">
+          <tag line="3494" name="param" description="String of superglobal key to blacklist" type="string" variable="$key">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="3488" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3494" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3506">
+        <argument line="3512">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="3506">
+        <argument line="3512">
           <name>$key</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3558" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3570" package="Default">
         <name>dewhitelist_superglobal</name>
         <full_name>dewhitelist_superglobal</full_name>
-        <docblock line="3540">
+        <docblock line="3552">
           <description>Remove superglobal or superglobal key from whitelist
 *
 You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
 or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist</description>
           <long-description></long-description>
-          <tag line="3540" name="example" description="$sandbox-&gt;dewhitelist_superglobal('_GET');"/>
-          <tag line="3540" name="example" description="$sandbox-&gt;dewhitelist_superglobal('_GET', 'page');"/>
-          <tag line="3540" name="example" description="$sandbox-&gt;dewhitelist_superglobal(array('_GET', '_POST'));"/>
-          <tag line="3540" name="example" description="$sandbox-&gt;dewhitelist_superglobal(array('_GET' =&gt; 'page'));"/>
-          <tag line="3540" name="param" description="String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist" type="string|array" variable="$name">
+          <tag line="3552" name="example" description="$sandbox-&gt;dewhitelist_superglobal('_GET');"/>
+          <tag line="3552" name="example" description="$sandbox-&gt;dewhitelist_superglobal('_GET', 'page');"/>
+          <tag line="3552" name="example" description="$sandbox-&gt;dewhitelist_superglobal(array('_GET', '_POST'));"/>
+          <tag line="3552" name="example" description="$sandbox-&gt;dewhitelist_superglobal(array('_GET' =&gt; 'page'));"/>
+          <tag line="3552" name="param" description="String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3540" name="param" description="String of superglobal key to remove from whitelist" type="string" variable="$key">
+          <tag line="3552" name="param" description="String of superglobal key to remove from whitelist" type="string" variable="$key">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="3540" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3552" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3558">
+        <argument line="3570">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="3558">
+        <argument line="3570">
           <name>$key</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3605" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3621" package="Default">
         <name>deblacklist_superglobal</name>
         <full_name>deblacklist_superglobal</full_name>
-        <docblock line="3587">
+        <docblock line="3603">
           <description>Remove superglobal or superglobal key from blacklist
 *
 You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
 or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist</description>
           <long-description></long-description>
-          <tag line="3587" name="example" description="$sandbox-&gt;deblacklist_superglobal('_GET');"/>
-          <tag line="3587" name="example" description="$sandbox-&gt;deblacklist_superglobal('_GET', 'page');"/>
-          <tag line="3587" name="example" description="$sandbox-&gt;deblacklist_superglobal(array('_GET', '_POST'));"/>
-          <tag line="3587" name="example" description="$sandbox-&gt;deblacklist_superglobal(array('_GET' =&gt; 'page'));"/>
-          <tag line="3587" name="param" description="String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist" type="string|array" variable="$name">
+          <tag line="3603" name="example" description="$sandbox-&gt;deblacklist_superglobal('_GET');"/>
+          <tag line="3603" name="example" description="$sandbox-&gt;deblacklist_superglobal('_GET', 'page');"/>
+          <tag line="3603" name="example" description="$sandbox-&gt;deblacklist_superglobal(array('_GET', '_POST'));"/>
+          <tag line="3603" name="example" description="$sandbox-&gt;deblacklist_superglobal(array('_GET' =&gt; 'page'));"/>
+          <tag line="3603" name="param" description="String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3587" name="param" description="String of superglobal key to remove from blacklist" type="string" variable="$key">
+          <tag line="3603" name="param" description="String of superglobal key to remove from blacklist" type="string" variable="$key">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="3587" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3603" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3605">
+        <argument line="3621">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="3605">
+        <argument line="3621">
           <name>$key</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3646" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3666" package="Default">
         <name>whitelist_const</name>
         <full_name>whitelist_const</full_name>
-        <docblock line="3634">
+        <docblock line="3654">
           <description>Whitelist constant</description>
           <long-description>&lt;p&gt;You can pass a string of constant name, or pass an array of the constant names to whitelist&lt;/p&gt;</long-description>
-          <tag line="3634" name="example" description="$sandbox-&gt;whitelist_const('FOO');"/>
-          <tag line="3634" name="example" description="$sandbox-&gt;whitelist_const(array('FOO', 'BAR'));"/>
-          <tag line="3634" name="param" description="String of constant name or array of constant names to whitelist" type="string|array" variable="$name">
+          <tag line="3654" name="example" description="$sandbox-&gt;whitelist_const('FOO');"/>
+          <tag line="3654" name="example" description="$sandbox-&gt;whitelist_const(array('FOO', 'BAR'));"/>
+          <tag line="3654" name="param" description="String of constant name or array of constant names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3634" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3654" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3646">
+        <argument line="3666">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3661" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3681" package="Default">
         <name>blacklist_const</name>
         <full_name>blacklist_const</full_name>
-        <docblock line="3649">
+        <docblock line="3669">
           <description>Blacklist constant</description>
           <long-description>&lt;p&gt;You can pass a string of constant name, or pass an array of the constant names to blacklist&lt;/p&gt;</long-description>
-          <tag line="3649" name="example" description="$sandbox-&gt;blacklist_const('FOO');"/>
-          <tag line="3649" name="example" description="$sandbox-&gt;blacklist_const(array('FOO', 'BAR'));"/>
-          <tag line="3649" name="param" description="String of constant name or array of constant names to blacklist" type="string|array" variable="$name">
+          <tag line="3669" name="example" description="$sandbox-&gt;blacklist_const('FOO');"/>
+          <tag line="3669" name="example" description="$sandbox-&gt;blacklist_const(array('FOO', 'BAR'));"/>
+          <tag line="3669" name="param" description="String of constant name or array of constant names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3649" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3669" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3661">
+        <argument line="3681">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3676" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3696" package="Default">
         <name>dewhitelist_const</name>
         <full_name>dewhitelist_const</full_name>
-        <docblock line="3664">
+        <docblock line="3684">
           <description>Remove constant from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of constant name, or pass an array of the constant names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="3664" name="example" description="$sandbox-&gt;dewhitelist_const('FOO');"/>
-          <tag line="3664" name="example" description="$sandbox-&gt;dewhitelist_const(array('FOO', 'BAR'));"/>
-          <tag line="3664" name="param" description="String of constant name or array of constant names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="3684" name="example" description="$sandbox-&gt;dewhitelist_const('FOO');"/>
+          <tag line="3684" name="example" description="$sandbox-&gt;dewhitelist_const(array('FOO', 'BAR'));"/>
+          <tag line="3684" name="param" description="String of constant name or array of constant names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3664" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3684" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3676">
+        <argument line="3696">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3691" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3711" package="Default">
         <name>deblacklist_const</name>
         <full_name>deblacklist_const</full_name>
-        <docblock line="3679">
+        <docblock line="3699">
           <description>Remove constant from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of constant name, or pass an array of the constant names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="3679" name="example" description="$sandbox-&gt;deblacklist_const('FOO');"/>
-          <tag line="3679" name="example" description="$sandbox-&gt;deblacklist_const(array('FOO', 'BAR'));"/>
-          <tag line="3679" name="param" description="String of constant name or array of constant names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="3699" name="example" description="$sandbox-&gt;deblacklist_const('FOO');"/>
+          <tag line="3699" name="example" description="$sandbox-&gt;deblacklist_const(array('FOO', 'BAR'));"/>
+          <tag line="3699" name="param" description="String of constant name or array of constant names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3679" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3699" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3691">
+        <argument line="3711">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3706" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3726" package="Default">
         <name>whitelist_magic_const</name>
         <full_name>whitelist_magic_const</full_name>
-        <docblock line="3694">
+        <docblock line="3714">
           <description>Whitelist magic constant</description>
           <long-description>&lt;p&gt;You can pass a string of magic constant name, or pass an array of the magic constant names to whitelist&lt;/p&gt;</long-description>
-          <tag line="3694" name="example" description="$sandbox-&gt;whitelist_magic_const('__LINE__');"/>
-          <tag line="3694" name="example" description="$sandbox-&gt;whitelist_magic_const(array('__LINE__', '__FILE__'));"/>
-          <tag line="3694" name="param" description="String of magic constant name or array of magic constant names to whitelist" type="string|array" variable="$name">
+          <tag line="3714" name="example" description="$sandbox-&gt;whitelist_magic_const('__LINE__');"/>
+          <tag line="3714" name="example" description="$sandbox-&gt;whitelist_magic_const(array('__LINE__', '__FILE__'));"/>
+          <tag line="3714" name="param" description="String of magic constant name or array of magic constant names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3694" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3714" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3706">
+        <argument line="3726">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3722" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3742" package="Default">
         <name>blacklist_magic_const</name>
         <full_name>blacklist_magic_const</full_name>
-        <docblock line="3710">
+        <docblock line="3730">
           <description>Blacklist magic constant</description>
           <long-description>&lt;p&gt;You can pass a string of magic constant name, or pass an array of the magic constant names to blacklist&lt;/p&gt;</long-description>
-          <tag line="3710" name="example" description="$sandbox-&gt;blacklist_magic_const('__LINE__');"/>
-          <tag line="3710" name="example" description="$sandbox-&gt;blacklist_magic_const(array('__LINE__', '__FILE__'));"/>
-          <tag line="3710" name="param" description="String of magic constant name or array of magic constant names to blacklist" type="string|array" variable="$name">
+          <tag line="3730" name="example" description="$sandbox-&gt;blacklist_magic_const('__LINE__');"/>
+          <tag line="3730" name="example" description="$sandbox-&gt;blacklist_magic_const(array('__LINE__', '__FILE__'));"/>
+          <tag line="3730" name="param" description="String of magic constant name or array of magic constant names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3710" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3730" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3722">
+        <argument line="3742">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3738" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3758" package="Default">
         <name>dewhitelist_magic_const</name>
         <full_name>dewhitelist_magic_const</full_name>
-        <docblock line="3726">
+        <docblock line="3746">
           <description>Remove magic constant from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of magic constant name, or pass an array of the magic constant names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="3726" name="example" description="$sandbox-&gt;dewhitelist_magic_const('__LINE__');"/>
-          <tag line="3726" name="example" description="$sandbox-&gt;dewhitelist_magic_const(array('__LINE__', '__FILE__'));"/>
-          <tag line="3726" name="param" description="String of magic constant name or array of magic constant names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="3746" name="example" description="$sandbox-&gt;dewhitelist_magic_const('__LINE__');"/>
+          <tag line="3746" name="example" description="$sandbox-&gt;dewhitelist_magic_const(array('__LINE__', '__FILE__'));"/>
+          <tag line="3746" name="param" description="String of magic constant name or array of magic constant names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3726" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3746" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3738">
+        <argument line="3758">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3754" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3774" package="Default">
         <name>deblacklist_magic_const</name>
         <full_name>deblacklist_magic_const</full_name>
-        <docblock line="3742">
+        <docblock line="3762">
           <description>Remove magic constant from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of magic constant name, or pass an array of the magic constant names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="3742" name="example" description="$sandbox-&gt;deblacklist_magic_const('__LINE__');"/>
-          <tag line="3742" name="example" description="$sandbox-&gt;deblacklist_magic_const(array('__LINE__', '__FILE__'));"/>
-          <tag line="3742" name="param" description="String of magic constant name or array of magic constant names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="3762" name="example" description="$sandbox-&gt;deblacklist_magic_const('__LINE__');"/>
+          <tag line="3762" name="example" description="$sandbox-&gt;deblacklist_magic_const(array('__LINE__', '__FILE__'));"/>
+          <tag line="3762" name="param" description="String of magic constant name or array of magic constant names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3742" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3762" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3754">
+        <argument line="3774">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3770" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3790" package="Default">
         <name>whitelist_namespace</name>
         <full_name>whitelist_namespace</full_name>
-        <docblock line="3758">
+        <docblock line="3778">
           <description>Whitelist namespace</description>
           <long-description>&lt;p&gt;You can pass a string of namespace name, or pass an array of the namespace names to whitelist&lt;/p&gt;</long-description>
-          <tag line="3758" name="example" description="$sandbox-&gt;whitelist_namespace('Foo');"/>
-          <tag line="3758" name="example" description="$sandbox-&gt;whitelist_namespace(array('Foo', 'Bar'));"/>
-          <tag line="3758" name="param" description="String of namespace name or array of namespace names to whitelist" type="string|array" variable="$name">
+          <tag line="3778" name="example" description="$sandbox-&gt;whitelist_namespace('Foo');"/>
+          <tag line="3778" name="example" description="$sandbox-&gt;whitelist_namespace(array('Foo', 'Bar'));"/>
+          <tag line="3778" name="param" description="String of namespace name or array of namespace names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3758" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3778" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3770">
+        <argument line="3790">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3786" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3806" package="Default">
         <name>blacklist_namespace</name>
         <full_name>blacklist_namespace</full_name>
-        <docblock line="3774">
+        <docblock line="3794">
           <description>Blacklist namespace</description>
           <long-description>&lt;p&gt;You can pass a string of namespace name, or pass an array of the namespace names to blacklist&lt;/p&gt;</long-description>
-          <tag line="3774" name="example" description="$sandbox-&gt;blacklist_namespace('Foo');"/>
-          <tag line="3774" name="example" description="$sandbox-&gt;blacklist_namespace(array('Foo', 'Bar'));"/>
-          <tag line="3774" name="param" description="String of namespace name or array of namespace names to blacklist" type="string|array" variable="$name">
+          <tag line="3794" name="example" description="$sandbox-&gt;blacklist_namespace('Foo');"/>
+          <tag line="3794" name="example" description="$sandbox-&gt;blacklist_namespace(array('Foo', 'Bar'));"/>
+          <tag line="3794" name="param" description="String of namespace name or array of namespace names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3774" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3794" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3786">
+        <argument line="3806">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3802" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3822" package="Default">
         <name>dewhitelist_namespace</name>
         <full_name>dewhitelist_namespace</full_name>
-        <docblock line="3790">
+        <docblock line="3810">
           <description>Remove namespace from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of namespace name, or pass an array of the namespace names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="3790" name="example" description="$sandbox-&gt;dewhitelist_namespace('Foo');"/>
-          <tag line="3790" name="example" description="$sandbox-&gt;dewhitelist_namespace(array('Foo', 'Bar'));"/>
-          <tag line="3790" name="param" description="String of namespace name or array of namespace names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="3810" name="example" description="$sandbox-&gt;dewhitelist_namespace('Foo');"/>
+          <tag line="3810" name="example" description="$sandbox-&gt;dewhitelist_namespace(array('Foo', 'Bar'));"/>
+          <tag line="3810" name="param" description="String of namespace name or array of namespace names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3790" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3810" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3802">
+        <argument line="3822">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3818" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3838" package="Default">
         <name>deblacklist_namespace</name>
         <full_name>deblacklist_namespace</full_name>
-        <docblock line="3806">
+        <docblock line="3826">
           <description>Remove namespace from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of namespace name, or pass an array of the namespace names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="3806" name="example" description="$sandbox-&gt;deblacklist_namespace('Foo');"/>
-          <tag line="3806" name="example" description="$sandbox-&gt;deblacklist_namespace(array('Foo', 'Bar'));"/>
-          <tag line="3806" name="param" description="String of namespace name or array of namespace names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="3826" name="example" description="$sandbox-&gt;deblacklist_namespace('Foo');"/>
+          <tag line="3826" name="example" description="$sandbox-&gt;deblacklist_namespace(array('Foo', 'Bar'));"/>
+          <tag line="3826" name="param" description="String of namespace name or array of namespace names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3806" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3826" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3818">
+        <argument line="3838">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3834" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3854" package="Default">
         <name>whitelist_alias</name>
         <full_name>whitelist_alias</full_name>
-        <docblock line="3822">
+        <docblock line="3842">
           <description>Whitelist alias</description>
           <long-description>&lt;p&gt;You can pass a string of alias name, or pass an array of the alias names to whitelist&lt;/p&gt;</long-description>
-          <tag line="3822" name="example" description="$sandbox-&gt;whitelist_alias('Foo');"/>
-          <tag line="3822" name="example" description="$sandbox-&gt;whitelist_alias(array('Foo', 'Bar'));"/>
-          <tag line="3822" name="param" description="String of alias names  or array of alias names to whitelist" type="string|array" variable="$name">
+          <tag line="3842" name="example" description="$sandbox-&gt;whitelist_alias('Foo');"/>
+          <tag line="3842" name="example" description="$sandbox-&gt;whitelist_alias(array('Foo', 'Bar'));"/>
+          <tag line="3842" name="param" description="String of alias names  or array of alias names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3822" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3842" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3834">
+        <argument line="3854">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3850" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3870" package="Default">
         <name>blacklist_alias</name>
         <full_name>blacklist_alias</full_name>
-        <docblock line="3838">
+        <docblock line="3858">
           <description>Blacklist alias</description>
           <long-description>&lt;p&gt;You can pass a string of alias name, or pass an array of the alias names to blacklist&lt;/p&gt;</long-description>
-          <tag line="3838" name="example" description="$sandbox-&gt;blacklist_alias('Foo');"/>
-          <tag line="3838" name="example" description="$sandbox-&gt;blacklist_alias(array('Foo', 'Bar'));"/>
-          <tag line="3838" name="param" description="String of alias name or array of alias names to blacklist" type="string|array" variable="$name">
+          <tag line="3858" name="example" description="$sandbox-&gt;blacklist_alias('Foo');"/>
+          <tag line="3858" name="example" description="$sandbox-&gt;blacklist_alias(array('Foo', 'Bar'));"/>
+          <tag line="3858" name="param" description="String of alias name or array of alias names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3838" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3858" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3850">
+        <argument line="3870">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3866" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3886" package="Default">
         <name>dewhitelist_alias</name>
         <full_name>dewhitelist_alias</full_name>
-        <docblock line="3854">
+        <docblock line="3874">
           <description>Remove alias from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of alias name, or pass an array of the alias names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="3854" name="example" description="$sandbox-&gt;dewhitelist_alias('Foo');"/>
-          <tag line="3854" name="example" description="$sandbox-&gt;dewhitelist_alias(array('Foo', 'Bar'));"/>
-          <tag line="3854" name="param" description="String of alias name or array of alias names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="3874" name="example" description="$sandbox-&gt;dewhitelist_alias('Foo');"/>
+          <tag line="3874" name="example" description="$sandbox-&gt;dewhitelist_alias(array('Foo', 'Bar'));"/>
+          <tag line="3874" name="param" description="String of alias name or array of alias names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3854" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3874" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3866">
+        <argument line="3886">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3882" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3902" package="Default">
         <name>deblacklist_alias</name>
         <full_name>deblacklist_alias</full_name>
-        <docblock line="3870">
+        <docblock line="3890">
           <description>Remove alias from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of alias name, or pass an array of the alias names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="3870" name="example" description="$sandbox-&gt;deblacklist_alias('Foo');"/>
-          <tag line="3870" name="example" description="$sandbox-&gt;deblacklist_alias(array('Foo', 'Bar'));"/>
-          <tag line="3870" name="param" description="String of alias name or array of alias names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="3890" name="example" description="$sandbox-&gt;deblacklist_alias('Foo');"/>
+          <tag line="3890" name="example" description="$sandbox-&gt;deblacklist_alias(array('Foo', 'Bar'));"/>
+          <tag line="3890" name="param" description="String of alias name or array of alias names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3870" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3890" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3882">
+        <argument line="3902">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3900" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3920" package="Default">
         <name>whitelist_use</name>
         <full_name>whitelist_use</full_name>
-        <docblock line="3886">
+        <docblock line="3906">
           <description>Whitelist use (or alias)</description>
           <long-description>&lt;p&gt;You can pass a string of use (or alias) name, or pass an array of the use (or alias) names to whitelist&lt;/p&gt;</long-description>
-          <tag line="3886" name="alias" description="whitelist_alias();"/>
-          <tag line="3886" name="example" description="$sandbox-&gt;whitelist_use('Foo');"/>
-          <tag line="3886" name="example" description="$sandbox-&gt;whitelist_use(array('Foo', 'Bar'));"/>
-          <tag line="3886" name="param" description="String of use (or alias) name or array of use (or alias) names to whitelist" type="string|array" variable="$name">
+          <tag line="3906" name="alias" description="whitelist_alias();"/>
+          <tag line="3906" name="example" description="$sandbox-&gt;whitelist_use('Foo');"/>
+          <tag line="3906" name="example" description="$sandbox-&gt;whitelist_use(array('Foo', 'Bar'));"/>
+          <tag line="3906" name="param" description="String of use (or alias) name or array of use (or alias) names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3886" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3906" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3900">
+        <argument line="3920">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3917" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3937" package="Default">
         <name>blacklist_use</name>
         <full_name>blacklist_use</full_name>
-        <docblock line="3903">
+        <docblock line="3923">
           <description>Blacklist use (or alias)</description>
           <long-description>&lt;p&gt;You can pass a string of use (or alias) name, or pass an array of the use (or alias) names to blacklist&lt;/p&gt;</long-description>
-          <tag line="3903" name="alias" description="blacklist_alias();"/>
-          <tag line="3903" name="example" description="$sandbox-&gt;blacklist_use('Foo');"/>
-          <tag line="3903" name="example" description="$sandbox-&gt;blacklist_use(array('Foo', 'Bar'));"/>
-          <tag line="3903" name="param" description="String of use (or alias) name or array of use (or alias) names to blacklist" type="string|array" variable="$name">
+          <tag line="3923" name="alias" description="blacklist_alias();"/>
+          <tag line="3923" name="example" description="$sandbox-&gt;blacklist_use('Foo');"/>
+          <tag line="3923" name="example" description="$sandbox-&gt;blacklist_use(array('Foo', 'Bar'));"/>
+          <tag line="3923" name="param" description="String of use (or alias) name or array of use (or alias) names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3903" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3923" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3917">
+        <argument line="3937">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3934" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3954" package="Default">
         <name>dewhitelist_use</name>
         <full_name>dewhitelist_use</full_name>
-        <docblock line="3920">
+        <docblock line="3940">
           <description>Remove use (or alias) from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of use (or alias name, or pass an array of the use (or alias) names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="3920" name="alias" description="dewhitelist_alias();"/>
-          <tag line="3920" name="example" description="$sandbox-&gt;dewhitelist_use('Foo');"/>
-          <tag line="3920" name="example" description="$sandbox-&gt;dewhitelist_use(array('Foo', 'Bar'));"/>
-          <tag line="3920" name="param" description="String of use (or alias) name or array of use (or alias) names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="3940" name="alias" description="dewhitelist_alias();"/>
+          <tag line="3940" name="example" description="$sandbox-&gt;dewhitelist_use('Foo');"/>
+          <tag line="3940" name="example" description="$sandbox-&gt;dewhitelist_use(array('Foo', 'Bar'));"/>
+          <tag line="3940" name="param" description="String of use (or alias) name or array of use (or alias) names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3920" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3940" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3934">
+        <argument line="3954">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3951" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3971" package="Default">
         <name>deblacklist_use</name>
         <full_name>deblacklist_use</full_name>
-        <docblock line="3937">
+        <docblock line="3957">
           <description>Remove use (or alias) from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of use (or alias name, or pass an array of the use (or alias) names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="3937" name="alias" description="deblacklist_alias();"/>
-          <tag line="3937" name="example" description="$sandbox-&gt;deblacklist_use('Foo');"/>
-          <tag line="3937" name="example" description="$sandbox-&gt;deblacklist_use(array('Foo', 'Bar'));"/>
-          <tag line="3937" name="param" description="String of use (or alias) name or array of use (or alias) names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="3957" name="alias" description="deblacklist_alias();"/>
+          <tag line="3957" name="example" description="$sandbox-&gt;deblacklist_use('Foo');"/>
+          <tag line="3957" name="example" description="$sandbox-&gt;deblacklist_use(array('Foo', 'Bar'));"/>
+          <tag line="3957" name="param" description="String of use (or alias) name or array of use (or alias) names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3937" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3957" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3951">
+        <argument line="3971">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3966" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3986" package="Default">
         <name>whitelist_class</name>
         <full_name>whitelist_class</full_name>
-        <docblock line="3954">
+        <docblock line="3974">
           <description>Whitelist class</description>
           <long-description>&lt;p&gt;You can pass a string of class name, or pass an array of the class names to whitelist&lt;/p&gt;</long-description>
-          <tag line="3954" name="example" description="$sandbox-&gt;whitelist_class('Foo');"/>
-          <tag line="3954" name="example" description="$sandbox-&gt;whitelist_class(array('Foo', 'Bar'));"/>
-          <tag line="3954" name="param" description="String of class name or array of class names to whitelist" type="string|array" variable="$name">
+          <tag line="3974" name="example" description="$sandbox-&gt;whitelist_class('Foo');"/>
+          <tag line="3974" name="example" description="$sandbox-&gt;whitelist_class(array('Foo', 'Bar'));"/>
+          <tag line="3974" name="param" description="String of class name or array of class names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3954" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3974" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3966">
+        <argument line="3986">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3982" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4002" package="Default">
         <name>blacklist_class</name>
         <full_name>blacklist_class</full_name>
-        <docblock line="3970">
+        <docblock line="3990">
           <description>Blacklist class</description>
           <long-description>&lt;p&gt;You can pass a string of class name, or pass an array of the class names to blacklist&lt;/p&gt;</long-description>
-          <tag line="3970" name="example" description="$sandbox-&gt;blacklist_class('Foo');"/>
-          <tag line="3970" name="example" description="$sandbox-&gt;blacklist_class(array('Foo', 'Bar'));"/>
-          <tag line="3970" name="param" description="String of class name or array of class names to blacklist" type="string|array" variable="$name">
+          <tag line="3990" name="example" description="$sandbox-&gt;blacklist_class('Foo');"/>
+          <tag line="3990" name="example" description="$sandbox-&gt;blacklist_class(array('Foo', 'Bar'));"/>
+          <tag line="3990" name="param" description="String of class name or array of class names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3970" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="3990" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3982">
+        <argument line="4002">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="3998" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4018" package="Default">
         <name>dewhitelist_class</name>
         <full_name>dewhitelist_class</full_name>
-        <docblock line="3986">
+        <docblock line="4006">
           <description>Remove class from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of class name, or pass an array of the class names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="3986" name="example" description="$sandbox-&gt;dewhitelist_class('Foo');"/>
-          <tag line="3986" name="example" description="$sandbox-&gt;dewhitelist_class(array('Foo', 'Bar'));"/>
-          <tag line="3986" name="param" description="String of class name or array of class names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="4006" name="example" description="$sandbox-&gt;dewhitelist_class('Foo');"/>
+          <tag line="4006" name="example" description="$sandbox-&gt;dewhitelist_class(array('Foo', 'Bar'));"/>
+          <tag line="4006" name="param" description="String of class name or array of class names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="3986" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4006" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="3998">
+        <argument line="4018">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4014" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4034" package="Default">
         <name>deblacklist_class</name>
         <full_name>deblacklist_class</full_name>
-        <docblock line="4002">
+        <docblock line="4022">
           <description>Remove class from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of class name, or pass an array of the class names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="4002" name="example" description="$sandbox-&gt;deblacklist_class('Foo');"/>
-          <tag line="4002" name="example" description="$sandbox-&gt;deblacklist_class(array('Foo', 'Bar'));"/>
-          <tag line="4002" name="param" description="String of class name or array of class names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="4022" name="example" description="$sandbox-&gt;deblacklist_class('Foo');"/>
+          <tag line="4022" name="example" description="$sandbox-&gt;deblacklist_class(array('Foo', 'Bar'));"/>
+          <tag line="4022" name="param" description="String of class name or array of class names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4002" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4022" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4014">
+        <argument line="4034">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4030" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4050" package="Default">
         <name>whitelist_interface</name>
         <full_name>whitelist_interface</full_name>
-        <docblock line="4018">
+        <docblock line="4038">
           <description>Whitelist interface</description>
           <long-description>&lt;p&gt;You can pass a string of interface name, or pass an array of the interface names to whitelist&lt;/p&gt;</long-description>
-          <tag line="4018" name="example" description="$sandbox-&gt;whitelist_interface('Foo');"/>
-          <tag line="4018" name="example" description="$sandbox-&gt;whitelist_interface(array('Foo', 'Bar'));"/>
-          <tag line="4018" name="param" description="String of interface name or array of interface names to whitelist" type="string|array" variable="$name">
+          <tag line="4038" name="example" description="$sandbox-&gt;whitelist_interface('Foo');"/>
+          <tag line="4038" name="example" description="$sandbox-&gt;whitelist_interface(array('Foo', 'Bar'));"/>
+          <tag line="4038" name="param" description="String of interface name or array of interface names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4018" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4038" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4030">
+        <argument line="4050">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4046" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4066" package="Default">
         <name>blacklist_interface</name>
         <full_name>blacklist_interface</full_name>
-        <docblock line="4034">
+        <docblock line="4054">
           <description>Blacklist interface</description>
           <long-description>&lt;p&gt;You can pass a string of interface name, or pass an array of the interface names to blacklist&lt;/p&gt;</long-description>
-          <tag line="4034" name="example" description="$sandbox-&gt;blacklist_interface('Foo');"/>
-          <tag line="4034" name="example" description="$sandbox-&gt;blacklist_interface(array('Foo', 'Bar'));"/>
-          <tag line="4034" name="param" description="String of interface name or array of interface names to blacklist" type="string|array" variable="$name">
+          <tag line="4054" name="example" description="$sandbox-&gt;blacklist_interface('Foo');"/>
+          <tag line="4054" name="example" description="$sandbox-&gt;blacklist_interface(array('Foo', 'Bar'));"/>
+          <tag line="4054" name="param" description="String of interface name or array of interface names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4034" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4054" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4046">
+        <argument line="4066">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4062" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4082" package="Default">
         <name>dewhitelist_interface</name>
         <full_name>dewhitelist_interface</full_name>
-        <docblock line="4050">
+        <docblock line="4070">
           <description>Remove interface from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of interface name, or pass an array of the interface names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="4050" name="example" description="$sandbox-&gt;dewhitelist_interface('Foo');"/>
-          <tag line="4050" name="example" description="$sandbox-&gt;dewhitelist_interface(array('Foo', 'Bar'));"/>
-          <tag line="4050" name="param" description="String of interface name or array of interface names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="4070" name="example" description="$sandbox-&gt;dewhitelist_interface('Foo');"/>
+          <tag line="4070" name="example" description="$sandbox-&gt;dewhitelist_interface(array('Foo', 'Bar'));"/>
+          <tag line="4070" name="param" description="String of interface name or array of interface names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4050" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4070" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4062">
+        <argument line="4082">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4078" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4098" package="Default">
         <name>deblacklist_interface</name>
         <full_name>deblacklist_interface</full_name>
-        <docblock line="4066">
+        <docblock line="4086">
           <description>Remove interface from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of interface name, or pass an array of the interface names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="4066" name="example" description="$sandbox-&gt;deblacklist_interface('Foo');"/>
-          <tag line="4066" name="example" description="$sandbox-&gt;deblacklist_interface(array('Foo', 'Bar'));"/>
-          <tag line="4066" name="param" description="String of interface name or array of interface names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="4086" name="example" description="$sandbox-&gt;deblacklist_interface('Foo');"/>
+          <tag line="4086" name="example" description="$sandbox-&gt;deblacklist_interface(array('Foo', 'Bar'));"/>
+          <tag line="4086" name="param" description="String of interface name or array of interface names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4066" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4086" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4078">
+        <argument line="4098">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4094" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4114" package="Default">
         <name>whitelist_trait</name>
         <full_name>whitelist_trait</full_name>
-        <docblock line="4082">
+        <docblock line="4102">
           <description>Whitelist trait</description>
           <long-description>&lt;p&gt;You can pass a string of trait name, or pass an array of the trait names to whitelist&lt;/p&gt;</long-description>
-          <tag line="4082" name="example" description="$sandbox-&gt;whitelist_trait('Foo');"/>
-          <tag line="4082" name="example" description="$sandbox-&gt;whitelist_trait(array('Foo', 'Bar'));"/>
-          <tag line="4082" name="param" description="String of trait name or array of trait names to whitelist" type="string|array" variable="$name">
+          <tag line="4102" name="example" description="$sandbox-&gt;whitelist_trait('Foo');"/>
+          <tag line="4102" name="example" description="$sandbox-&gt;whitelist_trait(array('Foo', 'Bar'));"/>
+          <tag line="4102" name="param" description="String of trait name or array of trait names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4082" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4102" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4094">
+        <argument line="4114">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4110" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4130" package="Default">
         <name>blacklist_trait</name>
         <full_name>blacklist_trait</full_name>
-        <docblock line="4098">
+        <docblock line="4118">
           <description>Blacklist trait</description>
           <long-description>&lt;p&gt;You can pass a string of trait name, or pass an array of the trait names to blacklist&lt;/p&gt;</long-description>
-          <tag line="4098" name="example" description="$sandbox-&gt;blacklist_trait('Foo');"/>
-          <tag line="4098" name="example" description="$sandbox-&gt;blacklist_trait(array('Foo', 'Bar'));"/>
-          <tag line="4098" name="param" description="String of trait name or array of trait names to blacklist" type="string|array" variable="$name">
+          <tag line="4118" name="example" description="$sandbox-&gt;blacklist_trait('Foo');"/>
+          <tag line="4118" name="example" description="$sandbox-&gt;blacklist_trait(array('Foo', 'Bar'));"/>
+          <tag line="4118" name="param" description="String of trait name or array of trait names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4098" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4118" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4110">
+        <argument line="4130">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4126" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4146" package="Default">
         <name>dewhitelist_trait</name>
         <full_name>dewhitelist_trait</full_name>
-        <docblock line="4114">
+        <docblock line="4134">
           <description>Remove trait from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of trait name, or pass an array of the trait names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="4114" name="example" description="$sandbox-&gt;dewhitelist_trait('Foo');"/>
-          <tag line="4114" name="example" description="$sandbox-&gt;dewhitelist_trait(array('Foo', 'Bar'));"/>
-          <tag line="4114" name="param" description="String of trait name or array of trait names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="4134" name="example" description="$sandbox-&gt;dewhitelist_trait('Foo');"/>
+          <tag line="4134" name="example" description="$sandbox-&gt;dewhitelist_trait(array('Foo', 'Bar'));"/>
+          <tag line="4134" name="param" description="String of trait name or array of trait names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4114" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4134" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4126">
+        <argument line="4146">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4142" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4162" package="Default">
         <name>deblacklist_trait</name>
         <full_name>deblacklist_trait</full_name>
-        <docblock line="4130">
+        <docblock line="4150">
           <description>Remove trait from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of trait name, or pass an array of the trait names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="4130" name="example" description="$sandbox-&gt;deblacklist_trait('Foo');"/>
-          <tag line="4130" name="example" description="$sandbox-&gt;deblacklist_trait(array('Foo', 'Bar'));"/>
-          <tag line="4130" name="param" description="String of trait name or array of trait names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="4150" name="example" description="$sandbox-&gt;deblacklist_trait('Foo');"/>
+          <tag line="4150" name="example" description="$sandbox-&gt;deblacklist_trait(array('Foo', 'Bar'));"/>
+          <tag line="4150" name="param" description="String of trait name or array of trait names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4130" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4150" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4142">
+        <argument line="4162">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4158" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4178" package="Default">
         <name>whitelist_keyword</name>
         <full_name>whitelist_keyword</full_name>
-        <docblock line="4146">
+        <docblock line="4166">
           <description>Whitelist keyword</description>
           <long-description>&lt;p&gt;You can pass a string of keyword name, or pass an array of the keyword names to whitelist&lt;/p&gt;</long-description>
-          <tag line="4146" name="example" description="$sandbox-&gt;whitelist_keyword('echo');"/>
-          <tag line="4146" name="example" description="$sandbox-&gt;whitelist_keyword(array('echo', 'eval'));"/>
-          <tag line="4146" name="param" description="String of keyword name or array of keyword names to whitelist" type="string|array" variable="$name">
+          <tag line="4166" name="example" description="$sandbox-&gt;whitelist_keyword('echo');"/>
+          <tag line="4166" name="example" description="$sandbox-&gt;whitelist_keyword(array('echo', 'eval'));"/>
+          <tag line="4166" name="param" description="String of keyword name or array of keyword names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4146" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4166" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4158">
+        <argument line="4178">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4174" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4194" package="Default">
         <name>blacklist_keyword</name>
         <full_name>blacklist_keyword</full_name>
-        <docblock line="4162">
+        <docblock line="4182">
           <description>Blacklist keyword</description>
           <long-description>&lt;p&gt;You can pass a string of keyword name, or pass an array of the keyword names to blacklist&lt;/p&gt;</long-description>
-          <tag line="4162" name="example" description="$sandbox-&gt;blacklist_keyword('echo');"/>
-          <tag line="4162" name="example" description="$sandbox-&gt;blacklist_keyword(array('echo', 'eval'));"/>
-          <tag line="4162" name="param" description="String of keyword name or array of keyword names to blacklist" type="string|array" variable="$name">
+          <tag line="4182" name="example" description="$sandbox-&gt;blacklist_keyword('echo');"/>
+          <tag line="4182" name="example" description="$sandbox-&gt;blacklist_keyword(array('echo', 'eval'));"/>
+          <tag line="4182" name="param" description="String of keyword name or array of keyword names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4162" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4182" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4174">
+        <argument line="4194">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4190" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4210" package="Default">
         <name>dewhitelist_keyword</name>
         <full_name>dewhitelist_keyword</full_name>
-        <docblock line="4178">
+        <docblock line="4198">
           <description>Remove keyword from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of keyword name, or pass an array of the keyword names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="4178" name="example" description="$sandbox-&gt;dewhitelist_keyword('echo');"/>
-          <tag line="4178" name="example" description="$sandbox-&gt;dewhitelist_keyword(array('echo', 'eval'));"/>
-          <tag line="4178" name="param" description="String of keyword name or array of keyword names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="4198" name="example" description="$sandbox-&gt;dewhitelist_keyword('echo');"/>
+          <tag line="4198" name="example" description="$sandbox-&gt;dewhitelist_keyword(array('echo', 'eval'));"/>
+          <tag line="4198" name="param" description="String of keyword name or array of keyword names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4178" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4198" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4190">
+        <argument line="4210">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4206" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4226" package="Default">
         <name>deblacklist_keyword</name>
         <full_name>deblacklist_keyword</full_name>
-        <docblock line="4194">
+        <docblock line="4214">
           <description>Remove keyword from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of keyword name, or pass an array of the keyword names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="4194" name="example" description="$sandbox-&gt;deblacklist_keyword('echo');"/>
-          <tag line="4194" name="example" description="$sandbox-&gt;deblacklist_keyword(array('echo', 'eval'));"/>
-          <tag line="4194" name="param" description="String of keyword name or array of keyword names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="4214" name="example" description="$sandbox-&gt;deblacklist_keyword('echo');"/>
+          <tag line="4214" name="example" description="$sandbox-&gt;deblacklist_keyword(array('echo', 'eval'));"/>
+          <tag line="4214" name="param" description="String of keyword name or array of keyword names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4194" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4214" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4206">
+        <argument line="4226">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4222" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4242" package="Default">
         <name>whitelist_operator</name>
         <full_name>whitelist_operator</full_name>
-        <docblock line="4210">
+        <docblock line="4230">
           <description>Whitelist operator</description>
           <long-description>&lt;p&gt;You can pass a string of operator name, or pass an array of the operator names to whitelist&lt;/p&gt;</long-description>
-          <tag line="4210" name="example" description="$sandbox-&gt;whitelist_operator('+');"/>
-          <tag line="4210" name="example" description="$sandbox-&gt;whitelist_operator(array('+', '-'));"/>
-          <tag line="4210" name="param" description="String of operator name or array of operator names to whitelist" type="string|array" variable="$name">
+          <tag line="4230" name="example" description="$sandbox-&gt;whitelist_operator('+');"/>
+          <tag line="4230" name="example" description="$sandbox-&gt;whitelist_operator(array('+', '-'));"/>
+          <tag line="4230" name="param" description="String of operator name or array of operator names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4210" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4230" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4222">
+        <argument line="4242">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4238" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4258" package="Default">
         <name>blacklist_operator</name>
         <full_name>blacklist_operator</full_name>
-        <docblock line="4226">
+        <docblock line="4246">
           <description>Blacklist operator</description>
           <long-description>&lt;p&gt;You can pass a string of operator name, or pass an array of the operator names to blacklist&lt;/p&gt;</long-description>
-          <tag line="4226" name="example" description="$sandbox-&gt;blacklist_operator('+');"/>
-          <tag line="4226" name="example" description="$sandbox-&gt;blacklist_operator(array('+', '-'));"/>
-          <tag line="4226" name="param" description="String of operator name or array of operator names to blacklist" type="string|array" variable="$name">
+          <tag line="4246" name="example" description="$sandbox-&gt;blacklist_operator('+');"/>
+          <tag line="4246" name="example" description="$sandbox-&gt;blacklist_operator(array('+', '-'));"/>
+          <tag line="4246" name="param" description="String of operator name or array of operator names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4226" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4246" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4238">
+        <argument line="4258">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4254" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4274" package="Default">
         <name>dewhitelist_operator</name>
         <full_name>dewhitelist_operator</full_name>
-        <docblock line="4242">
+        <docblock line="4262">
           <description>Remove operator from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of operator name, or pass an array of the operator names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="4242" name="example" description="$sandbox-&gt;dewhitelist_operator('+');"/>
-          <tag line="4242" name="example" description="$sandbox-&gt;dewhitelist_operator(array('+', '-'));"/>
-          <tag line="4242" name="param" description="String of operator name or array of operator names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="4262" name="example" description="$sandbox-&gt;dewhitelist_operator('+');"/>
+          <tag line="4262" name="example" description="$sandbox-&gt;dewhitelist_operator(array('+', '-'));"/>
+          <tag line="4262" name="param" description="String of operator name or array of operator names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4242" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4262" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4254">
+        <argument line="4274">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4270" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4290" package="Default">
         <name>deblacklist_operator</name>
         <full_name>deblacklist_operator</full_name>
-        <docblock line="4258">
+        <docblock line="4278">
           <description>Remove operator from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of operator name, or pass an array of the operator names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="4258" name="example" description="$sandbox-&gt;deblacklist_operator('+');"/>
-          <tag line="4258" name="example" description="$sandbox-&gt;deblacklist_operator(array('+', '-'));"/>
-          <tag line="4258" name="param" description="String of operator name or array of operator names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="4278" name="example" description="$sandbox-&gt;deblacklist_operator('+');"/>
+          <tag line="4278" name="example" description="$sandbox-&gt;deblacklist_operator(array('+', '-'));"/>
+          <tag line="4278" name="param" description="String of operator name or array of operator names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4258" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4278" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4270">
+        <argument line="4290">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4286" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4306" package="Default">
         <name>whitelist_primitive</name>
         <full_name>whitelist_primitive</full_name>
-        <docblock line="4274">
+        <docblock line="4294">
           <description>Whitelist primitive</description>
           <long-description>&lt;p&gt;You can pass a string of primitive name, or pass an array of the primitive names to whitelist&lt;/p&gt;</long-description>
-          <tag line="4274" name="example" description="$sandbox-&gt;whitelist_primitive('int');"/>
-          <tag line="4274" name="example" description="$sandbox-&gt;whitelist_primitive(array('int', 'float'));"/>
-          <tag line="4274" name="param" description="String of primitive name or array of primitive names to whitelist" type="string|array" variable="$name">
+          <tag line="4294" name="example" description="$sandbox-&gt;whitelist_primitive('int');"/>
+          <tag line="4294" name="example" description="$sandbox-&gt;whitelist_primitive(array('int', 'float'));"/>
+          <tag line="4294" name="param" description="String of primitive name or array of primitive names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4274" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4294" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4286">
+        <argument line="4306">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4302" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4322" package="Default">
         <name>blacklist_primitive</name>
         <full_name>blacklist_primitive</full_name>
-        <docblock line="4290">
+        <docblock line="4310">
           <description>Blacklist primitive</description>
           <long-description>&lt;p&gt;You can pass a string of primitive name, or pass an array of the primitive names to blacklist&lt;/p&gt;</long-description>
-          <tag line="4290" name="example" description="$sandbox-&gt;blacklist_primitive('int');"/>
-          <tag line="4290" name="example" description="$sandbox-&gt;blacklist_primitive(array('int', 'float'));"/>
-          <tag line="4290" name="param" description="String of primitive name or array of primitive names to blacklist" type="string|array" variable="$name">
+          <tag line="4310" name="example" description="$sandbox-&gt;blacklist_primitive('int');"/>
+          <tag line="4310" name="example" description="$sandbox-&gt;blacklist_primitive(array('int', 'float'));"/>
+          <tag line="4310" name="param" description="String of primitive name or array of primitive names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4290" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4310" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4302">
+        <argument line="4322">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4318" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4338" package="Default">
         <name>dewhitelist_primitive</name>
         <full_name>dewhitelist_primitive</full_name>
-        <docblock line="4306">
+        <docblock line="4326">
           <description>Remove primitive from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of primitive name, or pass an array of the primitive names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="4306" name="example" description="$sandbox-&gt;dewhitelist_primitive('int');"/>
-          <tag line="4306" name="example" description="$sandbox-&gt;dewhitelist_primitive(array('int', 'float'));"/>
-          <tag line="4306" name="param" description="String of primitive name or array of primitive names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="4326" name="example" description="$sandbox-&gt;dewhitelist_primitive('int');"/>
+          <tag line="4326" name="example" description="$sandbox-&gt;dewhitelist_primitive(array('int', 'float'));"/>
+          <tag line="4326" name="param" description="String of primitive name or array of primitive names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4306" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4326" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4318">
+        <argument line="4338">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4334" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4354" package="Default">
         <name>deblacklist_primitive</name>
         <full_name>deblacklist_primitive</full_name>
-        <docblock line="4322">
+        <docblock line="4342">
           <description>Remove primitive from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of primitive name, or pass an array of the primitive names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="4322" name="example" description="$sandbox-&gt;deblacklist_primitive('int');"/>
-          <tag line="4322" name="example" description="$sandbox-&gt;deblacklist_primitive(array('int', 'float'));"/>
-          <tag line="4322" name="param" description="String of primitive name or array of primitive names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="4342" name="example" description="$sandbox-&gt;deblacklist_primitive('int');"/>
+          <tag line="4342" name="example" description="$sandbox-&gt;deblacklist_primitive(array('int', 'float'));"/>
+          <tag line="4342" name="param" description="String of primitive name or array of primitive names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4322" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4342" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4334">
+        <argument line="4354">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4350" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4370" package="Default">
         <name>whitelist_type</name>
         <full_name>whitelist_type</full_name>
-        <docblock line="4338">
+        <docblock line="4358">
           <description>Whitelist type</description>
           <long-description>&lt;p&gt;You can pass a string of type name, or pass an array of the type names to whitelist&lt;/p&gt;</long-description>
-          <tag line="4338" name="example" description="$sandbox-&gt;whitelist_type('PHPSandbox');"/>
-          <tag line="4338" name="example" description="$sandbox-&gt;whitelist_type(array('PHPSandbox', 'PHPParser'));"/>
-          <tag line="4338" name="param" description="String of type name or array of type names to whitelist" type="string|array" variable="$name">
+          <tag line="4358" name="example" description="$sandbox-&gt;whitelist_type('PHPSandbox');"/>
+          <tag line="4358" name="example" description="$sandbox-&gt;whitelist_type(array('PHPSandbox', 'PHPParser'));"/>
+          <tag line="4358" name="param" description="String of type name or array of type names to whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4338" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4358" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4350">
+        <argument line="4370">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4366" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4386" package="Default">
         <name>blacklist_type</name>
         <full_name>blacklist_type</full_name>
-        <docblock line="4354">
+        <docblock line="4374">
           <description>Blacklist type</description>
           <long-description>&lt;p&gt;You can pass a string of type name, or pass an array of the type names to blacklist&lt;/p&gt;</long-description>
-          <tag line="4354" name="example" description="$sandbox-&gt;blacklist_type('PHPSandbox');"/>
-          <tag line="4354" name="example" description="$sandbox-&gt;blacklist_type(array('PHPSandbox', 'PHPParser'));"/>
-          <tag line="4354" name="param" description="String of type name or array of type names to blacklist" type="string|array" variable="$name">
+          <tag line="4374" name="example" description="$sandbox-&gt;blacklist_type('PHPSandbox');"/>
+          <tag line="4374" name="example" description="$sandbox-&gt;blacklist_type(array('PHPSandbox', 'PHPParser'));"/>
+          <tag line="4374" name="param" description="String of type name or array of type names to blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4354" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4374" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4366">
+        <argument line="4386">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4382" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4402" package="Default">
         <name>dewhitelist_type</name>
         <full_name>dewhitelist_type</full_name>
-        <docblock line="4370">
+        <docblock line="4390">
           <description>Remove type from whitelist</description>
           <long-description>&lt;p&gt;You can pass a string of type name, or pass an array of the type names to remove from whitelist&lt;/p&gt;</long-description>
-          <tag line="4370" name="example" description="$sandbox-&gt;dewhitelist_type('PHPSandbox');"/>
-          <tag line="4370" name="example" description="$sandbox-&gt;dewhitelist_type(array('PHPSandbox', 'PHPParser'));"/>
-          <tag line="4370" name="param" description="String of type name or array of type names to remove from whitelist" type="string|array" variable="$name">
+          <tag line="4390" name="example" description="$sandbox-&gt;dewhitelist_type('PHPSandbox');"/>
+          <tag line="4390" name="example" description="$sandbox-&gt;dewhitelist_type(array('PHPSandbox', 'PHPParser'));"/>
+          <tag line="4390" name="param" description="String of type name or array of type names to remove from whitelist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4370" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4390" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4382">
+        <argument line="4402">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4398" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4418" package="Default">
         <name>deblacklist_type</name>
         <full_name>deblacklist_type</full_name>
-        <docblock line="4386">
+        <docblock line="4406">
           <description>Remove type from blacklist</description>
           <long-description>&lt;p&gt;You can pass a string of type name, or pass an array of the type names to remove from blacklist&lt;/p&gt;</long-description>
-          <tag line="4386" name="example" description="$sandbox-&gt;deblacklist_type('PHPSandbox');"/>
-          <tag line="4386" name="example" description="$sandbox-&gt;deblacklist_type(array('PHPSandbox', 'PHPParser'));"/>
-          <tag line="4386" name="param" description="String of type name or array of type names to remove from blacklist" type="string|array" variable="$name">
+          <tag line="4406" name="example" description="$sandbox-&gt;deblacklist_type('PHPSandbox');"/>
+          <tag line="4406" name="example" description="$sandbox-&gt;deblacklist_type(array('PHPSandbox', 'PHPParser'));"/>
+          <tag line="4406" name="param" description="String of type name or array of type names to remove from blacklist" type="string|array" variable="$name">
             <type by_reference="false">string</type>
             <type by_reference="false">array</type>
           </tag>
-          <tag line="4386" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4406" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4398">
+        <argument line="4418">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4408" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4428" package="Default">
         <name>check_func</name>
         <full_name>check_func</full_name>
-        <docblock line="4402">
+        <docblock line="4422">
           <description>Check function name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4402" name="param" description="String of the function name to check" type="string" variable="$name">
+          <tag line="4422" name="param" description="String of the function name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4402" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4422" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
-          <tag line="4402" name="return" description="Returns true if function is valid, this is used for testing closures" type="bool">
+          <tag line="4422" name="return" description="Returns true if function is valid, this is used for testing closures" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="4408">
+        <argument line="4428">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4436" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4456" package="Default">
         <name>check_var</name>
         <full_name>check_var</full_name>
-        <docblock line="4432">
+        <docblock line="4452">
           <description>Check variable name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4432" name="param" description="String of the variable name to check" type="string" variable="$name">
+          <tag line="4452" name="param" description="String of the variable name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4432" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4452" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4436">
+        <argument line="4456">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4459" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4479" package="Default">
         <name>check_global</name>
         <full_name>check_global</full_name>
-        <docblock line="4455">
+        <docblock line="4475">
           <description>Check global name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4455" name="param" description="String of the global name to check" type="string" variable="$name">
+          <tag line="4475" name="param" description="String of the global name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4455" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4475" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4459">
+        <argument line="4479">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4480" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4500" package="Default">
         <name>check_superglobal</name>
         <full_name>check_superglobal</full_name>
-        <docblock line="4476">
+        <docblock line="4496">
           <description>Check superglobal name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4476" name="param" description="String of the superglobal name to check" type="string" variable="$name">
+          <tag line="4496" name="param" description="String of the superglobal name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4476" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4496" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4480">
+        <argument line="4500">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4504" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4524" package="Default">
         <name>check_const</name>
         <full_name>check_const</full_name>
-        <docblock line="4500">
+        <docblock line="4520">
           <description>Check constant name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4500" name="param" description="String of the constant name to check" type="string" variable="$name">
+          <tag line="4520" name="param" description="String of the constant name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4500" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4520" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4504">
+        <argument line="4524">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4535" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4555" package="Default">
         <name>check_magic_const</name>
         <full_name>check_magic_const</full_name>
-        <docblock line="4531">
+        <docblock line="4551">
           <description>Check magic constant name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4531" name="param" description="String of the magic constant name to check" type="string" variable="$name">
+          <tag line="4551" name="param" description="String of the magic constant name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4531" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4551" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4535">
+        <argument line="4555">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4559" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4579" package="Default">
         <name>check_namespace</name>
         <full_name>check_namespace</full_name>
-        <docblock line="4555">
+        <docblock line="4575">
           <description>Check namespace name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4555" name="param" description="String of the namespace name to check" type="string" variable="$name">
+          <tag line="4575" name="param" description="String of the namespace name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4555" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4575" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4559">
+        <argument line="4579">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4581" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4601" package="Default">
         <name>check_alias</name>
         <full_name>check_alias</full_name>
-        <docblock line="4577">
+        <docblock line="4597">
           <description>Check alias name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4577" name="param" description="String of the alias name to check" type="string" variable="$name">
+          <tag line="4597" name="param" description="String of the alias name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4577" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4597" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4581">
+        <argument line="4601">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4606" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4626" package="Default">
         <name>check_use</name>
         <full_name>check_use</full_name>
-        <docblock line="4599">
+        <docblock line="4619">
           <description>Check use (or alias) name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4599" name="alias" description="check_alias();"/>
-          <tag line="4599" name="param" description="String of the use (or alias) name to check" type="string" variable="$name">
+          <tag line="4619" name="alias" description="check_alias();"/>
+          <tag line="4619" name="param" description="String of the use (or alias) name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4599" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4619" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4606">
+        <argument line="4626">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4613" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4633" package="Default">
         <name>check_class</name>
         <full_name>check_class</full_name>
-        <docblock line="4609">
+        <docblock line="4629">
           <description>Check class name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4609" name="param" description="String of the class name to check" type="string" variable="$name">
+          <tag line="4629" name="param" description="String of the class name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4609" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4629" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4613">
+        <argument line="4633">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4635" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4655" package="Default">
         <name>check_interface</name>
         <full_name>check_interface</full_name>
-        <docblock line="4631">
+        <docblock line="4651">
           <description>Check interface name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4631" name="param" description="String of the interface name to check" type="string" variable="$name">
+          <tag line="4651" name="param" description="String of the interface name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4631" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4651" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4635">
+        <argument line="4655">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4657" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4677" package="Default">
         <name>check_trait</name>
         <full_name>check_trait</full_name>
-        <docblock line="4653">
+        <docblock line="4673">
           <description>Check trait name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4653" name="param" description="String of the trait name to check" type="string" variable="$name">
+          <tag line="4673" name="param" description="String of the trait name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4653" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+          <tag line="4673" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4657">
-          <name>$name</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4679" package="Default">
-        <name>check_keyword</name>
-        <full_name>check_keyword</full_name>
-        <docblock line="4675">
-          <description>Check keyword name against PHPSandbox validation rules.</description>
-          <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4675" name="param" description="String of the keyword name to check" type="string" variable="$name">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="4675" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
-            <type by_reference="false">\PHPSandbox\Error</type>
-          </tag>
-        </docblock>
-        <argument line="4679">
+        <argument line="4677">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4699" package="Default">
-        <name>check_operator</name>
-        <full_name>check_operator</full_name>
+        <name>check_keyword</name>
+        <full_name>check_keyword</full_name>
         <docblock line="4695">
-          <description>Check operator name against PHPSandbox validation rules.</description>
+          <description>Check keyword name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4695" name="param" description="String of the type operator to check" type="string" variable="$name">
+          <tag line="4695" name="param" description="String of the keyword name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="4695" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
@@ -5857,12 +5838,12 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4719" package="Default">
-        <name>check_primitive</name>
-        <full_name>check_primitive</full_name>
+        <name>check_operator</name>
+        <full_name>check_operator</full_name>
         <docblock line="4715">
-          <description>Check primitive name against PHPSandbox validation rules.</description>
+          <description>Check operator name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4715" name="param" description="String of the primitive name to check" type="string" variable="$name">
+          <tag line="4715" name="param" description="String of the type operator to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="4715" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
@@ -5876,12 +5857,12 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4739" package="Default">
-        <name>check_type</name>
-        <full_name>check_type</full_name>
+        <name>check_primitive</name>
+        <full_name>check_primitive</full_name>
         <docblock line="4735">
-          <description>Check type name against PHPSandbox validation rules.</description>
+          <description>Check primitive name against PHPSandbox validation rules.</description>
           <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
-          <tag line="4735" name="param" description="String of the type name to check" type="string" variable="$name">
+          <tag line="4735" name="param" description="String of the primitive name to check" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="4735" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
@@ -5894,310 +5875,329 @@ or pass an array of superglobal names, or an associative array of superglobal na
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4759" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4759" package="Default">
+        <name>check_type</name>
+        <full_name>check_type</full_name>
+        <docblock line="4755">
+          <description>Check type name against PHPSandbox validation rules.</description>
+          <long-description>&lt;p&gt;This is an internal PHPSandbox function but requires public access to work.&lt;/p&gt;</long-description>
+          <tag line="4755" name="param" description="String of the type name to check" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="4755" name="throws" description="Throws exception if validation error occurs" type="\PHPSandbox\Error">
+            <type by_reference="false">\PHPSandbox\Error</type>
+          </tag>
+        </docblock>
+        <argument line="4759">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4779" package="Default">
         <name>prepare_vars</name>
         <full_name>prepare_vars</full_name>
-        <docblock line="4757">
+        <docblock line="4777">
           <description>Prepare defined variables for execution</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4782" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4802" package="Default">
         <name>prepare_consts</name>
         <full_name>prepare_consts</full_name>
-        <docblock line="4780">
+        <docblock line="4800">
           <description>Prepare defined constants for execution</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4805" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4825" package="Default">
         <name>prepare_namespaces</name>
         <full_name>prepare_namespaces</full_name>
-        <docblock line="4803">
+        <docblock line="4823">
           <description>Prepare defined namespaces for execution</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4818" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4838" package="Default">
         <name>prepare_aliases</name>
         <full_name>prepare_aliases</full_name>
-        <docblock line="4816">
+        <docblock line="4836">
           <description>Prepare defined aliases for execution</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4832" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4852" package="Default">
         <name>prepare_uses</name>
         <full_name>prepare_uses</full_name>
-        <docblock line="4829">
+        <docblock line="4849">
           <description>Prepare defined uses (or aliases) for execution</description>
           <long-description></long-description>
-          <tag line="4829" name="alias" description="prepare_aliases();"/>
+          <tag line="4849" name="alias" description="prepare_aliases();"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4843" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4863" package="Default">
         <name>disassemble</name>
         <full_name>disassemble</full_name>
-        <docblock line="4835">
+        <docblock line="4855">
           <description>Disassemble callable to string</description>
           <long-description></long-description>
-          <tag line="4835" name="param" description="The callable to disassemble" type="callable" variable="$closure">
+          <tag line="4855" name="param" description="The callable to disassemble" type="callable" variable="$closure">
             <type by_reference="false">callable</type>
           </tag>
-          <tag line="4835" name="throws" description="Throw exception if callable is passed and FunctionParser library is missing" type="\PHPSandbox\Error">
+          <tag line="4855" name="throws" description="Throw exception if callable is passed and FunctionParser library is missing" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
-          <tag line="4835" name="return" description="Return the disassembled code string" type="string">
+          <tag line="4855" name="return" description="Return the disassembled code string" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="4843">
+        <argument line="4863">
           <name>$closure</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4863" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4883" package="Default">
         <name>auto_whitelist</name>
         <full_name>auto_whitelist</full_name>
-        <docblock line="4856">
+        <docblock line="4876">
           <description>Automatically whitelisted trusted code</description>
           <long-description></long-description>
-          <tag line="4856" name="param" description="String of trusted $code to automatically whitelist" type="string" variable="$code">
+          <tag line="4876" name="param" description="String of trusted $code to automatically whitelist" type="string" variable="$code">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="4856" name="param" description="Flag if this code ir prended or appended (true = appended)" type="bool" variable="$appended">
+          <tag line="4876" name="param" description="Flag if this code ir prended or appended (true = appended)" type="bool" variable="$appended">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="4856" name="throws" description="Throw exception if code cannot be parsed for whitelisting" type="\PHPSandbox\Error">
+          <tag line="4876" name="throws" description="Throw exception if code cannot be parsed for whitelisting" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
         </docblock>
-        <argument line="4863">
+        <argument line="4883">
           <name>$code</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="4863">
+        <argument line="4883">
           <name>$appended</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4878" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="4898" package="Default">
         <name>auto_define</name>
         <full_name>auto_define</full_name>
-        <docblock line="4875">
+        <docblock line="4895">
           <description>Automatically define variables passed to disassembled closure</description>
           <long-description></long-description>
-          <tag line="4875" name="param" description="" type="\FunctionParser\FunctionParser" variable="$disassembled_closure">
+          <tag line="4895" name="param" description="" type="\FunctionParser\FunctionParser" variable="$disassembled_closure">
             <type by_reference="false">\FunctionParser\FunctionParser</type>
           </tag>
         </docblock>
-        <argument line="4878">
+        <argument line="4898">
           <name>$disassembled_closure</name>
           <default></default>
           <type>\FunctionParser\FunctionParser</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4892" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4912" package="Default">
         <name>prepend</name>
         <full_name>prepend</full_name>
-        <docblock line="4887">
+        <docblock line="4907">
           <description>Prepend trusted code</description>
           <long-description></long-description>
-          <tag line="4887" name="param" description="String or callable of trusted $code to prepend to generated code" type="string|callable" variable="$code">
+          <tag line="4907" name="param" description="String or callable of trusted $code to prepend to generated code" type="string|callable" variable="$code">
             <type by_reference="false">string</type>
             <type by_reference="false">callable</type>
           </tag>
-          <tag line="4887" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4907" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4892">
+        <argument line="4912">
           <name>$code</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4908" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4928" package="Default">
         <name>append</name>
         <full_name>append</full_name>
-        <docblock line="4903">
+        <docblock line="4923">
           <description>Append trusted code</description>
           <long-description></long-description>
-          <tag line="4903" name="param" description="String or callable of trusted $code to append to generated code" type="string|callable" variable="$code">
+          <tag line="4923" name="param" description="String or callable of trusted $code to append to generated code" type="string|callable" variable="$code">
             <type by_reference="false">string</type>
             <type by_reference="false">callable</type>
           </tag>
-          <tag line="4903" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4923" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
-        <argument line="4908">
+        <argument line="4928">
           <name>$code</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4923" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4943" package="Default">
         <name>clear</name>
         <full_name>clear</full_name>
-        <docblock line="4919">
+        <docblock line="4939">
           <description>Clear all trusted and sandboxed code</description>
           <long-description></long-description>
-          <tag line="4919" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4939" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4932" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4952" package="Default">
         <name>clear_trusted_code</name>
         <full_name>clear_trusted_code</full_name>
-        <docblock line="4928">
+        <docblock line="4948">
           <description>Clear all trusted code</description>
           <long-description></long-description>
-          <tag line="4928" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4948" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4941" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4961" package="Default">
         <name>clear_prepend</name>
         <full_name>clear_prepend</full_name>
-        <docblock line="4937">
+        <docblock line="4957">
           <description>Clear all prepended trusted code</description>
           <long-description></long-description>
-          <tag line="4937" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4957" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4949" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4969" package="Default">
         <name>clear_append</name>
         <full_name>clear_append</full_name>
-        <docblock line="4945">
+        <docblock line="4965">
           <description>Clear all appended trusted code</description>
           <long-description></long-description>
-          <tag line="4945" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4965" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4957" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4977" package="Default">
         <name>clear_closure</name>
         <full_name>clear_closure</full_name>
-        <docblock line="4953">
+        <docblock line="4973">
           <description>Clear generated closure</description>
           <long-description></long-description>
-          <tag line="4953" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
+          <tag line="4973" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4973" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4993" package="Default">
         <name>get_prepared_time</name>
         <full_name>get_prepared_time</full_name>
-        <docblock line="4961">
+        <docblock line="4981">
           <description>Return the amount of time the sandbox spent preparing the sandboxed code</description>
           <long-description>&lt;p&gt;You can pass the number of digits you wish to round the return value&lt;/p&gt;</long-description>
-          <tag line="4961" name="example" description="$sandbox-&gt;get_prepared_time();"/>
-          <tag line="4961" name="example" description="$sandbox-&gt;get_prepared_time(3);"/>
-          <tag line="4961" name="param" description="The number of digits to round the return value" type="int|null" variable="$round">
+          <tag line="4981" name="example" description="$sandbox-&gt;get_prepared_time();"/>
+          <tag line="4981" name="example" description="$sandbox-&gt;get_prepared_time(3);"/>
+          <tag line="4981" name="param" description="The number of digits to round the return value" type="int|null" variable="$round">
             <type by_reference="false">int</type>
             <type by_reference="false">null</type>
           </tag>
-          <tag line="4961" name="return" description="The amount of time in microseconds it took to prepare the sandboxed code" type="float">
+          <tag line="4981" name="return" description="The amount of time in microseconds it took to prepare the sandboxed code" type="float">
             <type by_reference="false">float</type>
           </tag>
         </docblock>
-        <argument line="4973">
+        <argument line="4993">
           <name>$round</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="4988" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="5008" package="Default">
         <name>get_execution_time</name>
         <full_name>get_execution_time</full_name>
-        <docblock line="4976">
+        <docblock line="4996">
           <description>Return the amount of time the sandbox spent executing the sandboxed code</description>
           <long-description>&lt;p&gt;You can pass the number of digits you wish to round the return value&lt;/p&gt;</long-description>
-          <tag line="4976" name="example" description="$sandbox-&gt;get_execution_time();"/>
-          <tag line="4976" name="example" description="$sandbox-&gt;get_execution_time(3);"/>
-          <tag line="4976" name="param" description="The number of digits to round the return value" type="int|null" variable="$round">
+          <tag line="4996" name="example" description="$sandbox-&gt;get_execution_time();"/>
+          <tag line="4996" name="example" description="$sandbox-&gt;get_execution_time(3);"/>
+          <tag line="4996" name="param" description="The number of digits to round the return value" type="int|null" variable="$round">
             <type by_reference="false">int</type>
             <type by_reference="false">null</type>
           </tag>
-          <tag line="4976" name="return" description="The amount of time in microseconds it took to execute the sandboxed code" type="float">
+          <tag line="4996" name="return" description="The amount of time in microseconds it took to execute the sandboxed code" type="float">
             <type by_reference="false">float</type>
           </tag>
         </docblock>
-        <argument line="4988">
+        <argument line="5008">
           <name>$round</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="5003" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="5023" package="Default">
         <name>get_time</name>
         <full_name>get_time</full_name>
-        <docblock line="4991">
+        <docblock line="5011">
           <description>Return the amount of time the sandbox spent preparing and executing the sandboxed code</description>
           <long-description>&lt;p&gt;You can pass the number of digits you wish to round the return value&lt;/p&gt;</long-description>
-          <tag line="4991" name="example" description="$sandbox-&gt;get_time();"/>
-          <tag line="4991" name="example" description="$sandbox-&gt;get_time(3);"/>
-          <tag line="4991" name="param" description="The number of digits to round the return value" type="int|null" variable="$round">
+          <tag line="5011" name="example" description="$sandbox-&gt;get_time();"/>
+          <tag line="5011" name="example" description="$sandbox-&gt;get_time(3);"/>
+          <tag line="5011" name="param" description="The number of digits to round the return value" type="int|null" variable="$round">
             <type by_reference="false">int</type>
             <type by_reference="false">null</type>
           </tag>
-          <tag line="4991" name="return" description="The amount of time in microseconds it took to prepare and execute the sandboxed code" type="float">
+          <tag line="5011" name="return" description="The amount of time in microseconds it took to prepare and execute the sandboxed code" type="float">
             <type by_reference="false">float</type>
           </tag>
         </docblock>
-        <argument line="5003">
+        <argument line="5023">
           <name>$round</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="5018" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="5038" package="Default">
         <name>prepare</name>
         <full_name>prepare</full_name>
-        <docblock line="5006">
+        <docblock line="5026">
           <description>Prepare passed callable for execution</description>
           <long-description>&lt;p&gt;This function validates your code and automatically whitelists it according to your specified configuration&lt;/p&gt;</long-description>
-          <tag line="5006" name="example" description="$sandbox-&gt;prepare(function(){ var_dump('Hello world!'); });"/>
-          <tag line="5006" name="param" description="The callable to prepare for execution" type="callable" variable="$code">
+          <tag line="5026" name="example" description="$sandbox-&gt;prepare(function(){ var_dump('Hello world!'); });"/>
+          <tag line="5026" name="param" description="The callable to prepare for execution" type="callable" variable="$code">
             <type by_reference="false">callable</type>
           </tag>
-          <tag line="5006" name="throws" description="Throws exception if error occurs in parsing, validation or whitelisting" type="\PHPSandbox\Error">
+          <tag line="5026" name="throws" description="Throws exception if error occurs in parsing, validation or whitelisting" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
-          <tag line="5006" name="return" description="The prepared closure (this can also be accessed via $sandbox-&gt;generated_closure)" type="\Closure">
+          <tag line="5026" name="return" description="The prepared closure (this can also be accessed via $sandbox-&gt;generated_closure)" type="\Closure">
             <type by_reference="false">\Closure</type>
           </tag>
         </docblock>
-        <argument line="5018">
+        <argument line="5038">
           <name>$code</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="5083" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PHPSandbox" line="5103" package="Default">
         <name>execute</name>
         <full_name>execute</full_name>
-        <docblock line="5069">
+        <docblock line="5089">
           <description>Prepare and execute callable and return output</description>
           <long-description>&lt;p&gt;This function validates your code and automatically whitelists it according to your specified configuration, then executes it.
 You can also pass an unlimited number of arguments to override variables configured in the function. If the first argument is
 not callable and a valid generated closure exists, then all arguments are passed to the executed code&lt;/p&gt;</long-description>
-          <tag line="5069" name="example" description="$sandbox-&gt;execute(function(){ var_dump('Hello world!'); });"/>
-          <tag line="5069" name="example" description="$sandbox-&gt;execute(function($test){ var_dump($test); }, 'Hello world!'); //Hello world!"/>
-          <tag line="5069" name="throws" description="Throws exception if error occurs in parsing, validation or whitelisting or if generated closure is invalid" type="\PHPSandbox\Error">
+          <tag line="5089" name="example" description="$sandbox-&gt;execute(function(){ var_dump('Hello world!'); });"/>
+          <tag line="5089" name="example" description="$sandbox-&gt;execute(function($test){ var_dump($test); }, 'Hello world!'); //Hello world!"/>
+          <tag line="5089" name="throws" description="Throws exception if error occurs in parsing, validation or whitelisting or if generated closure is invalid" type="\PHPSandbox\Error">
             <type by_reference="false">\PHPSandbox\Error</type>
           </tag>
-          <tag line="5069" name="return" description="The output from the executed sandboxed code" type="mixed">
+          <tag line="5089" name="return" description="The output from the executed sandboxed code" type="mixed">
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
@@ -6267,10 +6267,10 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
       </method>
     </class>
   </file>
-  <file path="ValidatorVisitor.php" hash="e655cef87b0f6a61270ed7d841f20a43" package="PHPSandbox">
+  <file path="ValidatorVisitor.php" hash="36f063c8e768042000a43269271bded9" package="PHPSandbox">
     <docblock line="2">
       <description>ValidatorVisitor class declaration</description>
-      <long-description></long-description>
+      <long-description/>
       <tag line="2" name="package" description="PHPSandbox"/>
     </docblock>
     <class final="false" abstract="false" namespace="PHPSandbox" line="18" package="Default">
@@ -6287,10 +6287,10 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
       </docblock>
       <property final="false" static="false" visibility="protected" line="22" namespace="PHPSandbox" package="Default">
         <name>$sandbox</name>
-        <default></default>
+        <default/>
         <docblock line="19">
           <description>The PHPSandbox instance to check against</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="19" name="var" description="" type="\PHPSandbox\PHPSandbox">
             <type by_reference="false">\PHPSandbox\PHPSandbox</type>
           </tag>
@@ -6308,7 +6308,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="29">
           <name>$sandbox</name>
-          <default></default>
+          <default/>
           <type>\PHPSandbox\PHPSandbox</type>
         </argument>
       </method>
@@ -6317,7 +6317,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>leaveNode</full_name>
         <docblock line="32">
           <description>Examine the current PHPParser_Node node against the PHPSandbox configuration for validating sandboxed code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="32" name="param" description="The sandboxed $node to validate" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6332,7 +6332,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="40">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6341,7 +6341,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_magic_const</full_name>
         <docblock line="266">
           <description>Test the current PHPParser_Node node to see if it is a magic constant, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="266" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6352,7 +6352,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="272">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6361,7 +6361,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_keyword</full_name>
         <docblock line="293">
           <description>Test the current PHPParser_Node node to see if it is a keyword, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="293" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6372,7 +6372,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="299">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6381,7 +6381,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_operator</full_name>
         <docblock line="358">
           <description>Test the current PHPParser_Node node to see if it is an operator, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="358" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6392,7 +6392,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="364">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6401,7 +6401,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_primitive</full_name>
         <docblock line="461">
           <description>Test the current PHPParser_Node node to see if it is a primitive, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="461" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6415,7 +6415,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="469">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>

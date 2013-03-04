@@ -3460,16 +3460,22 @@
             }
             if(is_array($name)){
                 foreach($name as $_name => $key){
-                    $_name = $this->normalize_superglobal($_name);
-                    if(!isset($this->whitelist['superglobals'][$_name]) && is_string($_name) && $_name){
-                        $this->whitelist['superglobals'][$_name] = array();
-                    }
-                    if(isset($this->whitelist['superglobals'][$_name]) && is_string($key) && $key){
-                        $this->whitelist['superglobals'][$_name][$key] = true;
-                    } else if(isset($this->whitelist['superglobals'][$_name]) && is_array($key)){
-                        foreach($key as $_key){
-                            if(is_string($_key) && $_key){
-                                $this->whitelist['superglobals'][$_name][$_name] = true;
+                    if(is_int($_name)){
+                        if(is_string($key) && $key){
+                            $this->whitelist['superglobals'][$key] = array();
+                        }
+                    } else {
+                        $_name = $this->normalize_superglobal($_name);
+                        if(!isset($this->whitelist['superglobals'][$_name]) && is_string($_name) && $_name){
+                            $this->whitelist['superglobals'][$_name] = array();
+                        }
+                        if(isset($this->whitelist['superglobals'][$_name]) && is_string($key) && $key){
+                            $this->whitelist['superglobals'][$_name][$key] = true;
+                        } else if(isset($this->whitelist['superglobals'][$_name]) && is_array($key)){
+                            foreach($key as $_key){
+                                if(is_string($_key) && $_key){
+                                    $this->whitelist['superglobals'][$_name][$_name] = true;
+                                }
                             }
                         }
                     }
@@ -3512,16 +3518,22 @@
             }
             if(is_array($name)){
                 foreach($name as $_name => $key){
-                    $_name = $this->normalize_superglobal($_name);
-                    if(!isset($this->blacklist['superglobals'][$_name]) && is_string($_name) && $_name){
-                        $this->blacklist['superglobals'][$_name] = array();
-                    }
-                    if(isset($this->blacklist['superglobals'][$_name]) && is_string($key) && $key){
-                        $this->blacklist['superglobals'][$_name][$key] = true;
-                    } else if(isset($this->blacklist['superglobals'][$_name]) && is_array($key)){
-                        foreach($key as $_key){
-                            if(is_string($_key) && $_key){
-                                $this->blacklist['superglobals'][$_name][$_name] = true;
+                    if(is_int($_name)){
+                        if(is_string($key) && $key){
+                            $this->blacklist['superglobals'][$key] = array();
+                        }
+                    } else {
+                        $_name = $this->normalize_superglobal($_name);
+                        if(!isset($this->blacklist['superglobals'][$_name]) && is_string($_name) && $_name){
+                            $this->blacklist['superglobals'][$_name] = array();
+                        }
+                        if(isset($this->blacklist['superglobals'][$_name]) && is_string($key) && $key){
+                            $this->blacklist['superglobals'][$_name][$key] = true;
+                        } else if(isset($this->blacklist['superglobals'][$_name]) && is_array($key)){
+                            foreach($key as $_key){
+                                if(is_string($_key) && $_key){
+                                    $this->blacklist['superglobals'][$_name][$_name] = true;
+                                }
                             }
                         }
                     }
@@ -3561,7 +3573,11 @@
             }
             if(is_array($name)){
                 foreach($name as $_name => $key){
-                    if(isset($this->whitelist['superglobals'][$_name]) && is_string($key) && $key && isset($this->whitelist['superglobals'][$_name][$key])){
+                    if(is_int($_name)){
+                        if(isset($this->whitelist['superglobals'][$key])){
+                            $this->whitelist['superglobals'][$key] = array();
+                        }
+                    } else if(isset($this->whitelist['superglobals'][$_name]) && is_string($key) && $key && isset($this->whitelist['superglobals'][$_name][$key])){
                         unset($this->whitelist['superglobals'][$_name][$key]);
                     } else if(isset($this->whitelist['superglobals'][$_name]) && is_array($key)){
                         foreach($key as $_key){
@@ -3608,7 +3624,11 @@
             }
             if(is_array($name)){
                 foreach($name as $_name => $key){
-                    if(isset($this->blacklist['superglobals'][$_name]) && is_string($key) && $key && isset($this->blacklist['superglobals'][$_name][$key])){
+                    if(is_int($_name)){
+                        if(isset($this->blacklist['superglobals'][$key])){
+                            $this->blacklist['superglobals'][$key] = array();
+                        }
+                    } else if(isset($this->blacklist['superglobals'][$_name]) && is_string($key) && $key && isset($this->blacklist['superglobals'][$_name][$key])){
                         unset($this->blacklist['superglobals'][$_name][$key]);
                     } else if(isset($this->blacklist['superglobals'][$_name]) && is_array($key)){
                         foreach($key as $_key){
