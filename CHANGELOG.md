@@ -1,5 +1,8 @@
 #CHANGELOG
 
+##03/04/2013
+- Added the ability to redefine classes, interfaces and traits
+
 ##03/03/2013
 
 - Major updates to dynamic demonstrations system, not know as the PHPSandbox Toolkit. Allows for almost unlimited configuration of PHPSandbox environments

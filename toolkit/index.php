@@ -1327,14 +1327,14 @@
         class_preview($("#class_editor_name").val(), $("#class_editor_value").val());
     });
     function interface_preview(name, value){
-        $("#interface_editor_preview").html(name ? ('new ' + name + (value ? ' => new ' + value : '')) : '');
+        $("#interface_editor_preview").html(name ? (name + (value ? ' => ' + value : '')) : '');
     }
     $("#interface_editor_name, #interface_editor_value").on('keyup', function(){
         $(this).val($(this).val().replace(/[^a-z0-9_\\]+/i, '_'));
         interface_preview($("#interface_editor_name").val(), $("#interface_editor_value").val());
     });
     function trait_preview(name, value){
-        $("#trait_editor_preview").html(name ? ('new ' + name + (value ? ' => new ' + value : '')) : '');
+        $("#trait_editor_preview").html(name ? (name + (value ? ' => ' + value : '')) : '');
     }
     $("#trait_editor_name, #trait_editor_value").on('keyup', function(){
         $(this).val($(this).val().replace(/[^a-z0-9_\\]+/i, '_'));
