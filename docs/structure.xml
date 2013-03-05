@@ -3,7 +3,7 @@
   <file path="Error.php" hash="dd3a03cf5bd934982d5068ad36a9cb68" package="PHPSandbox">
     <docblock line="2">
       <description>Error class declaration</description>
-      <long-description></long-description>
+      <long-description/>
       <tag line="2" name="package" description="PHPSandbox"/>
     </docblock>
     <class final="false" abstract="false" namespace="PHPSandbox" line="16" package="Default">
@@ -22,7 +22,7 @@
   <file path="PHPSandbox.php" hash="01b1b78d5bb1564cfc64edff9096f039" package="PHPSandbox">
     <docblock line="2">
       <description>PHPSandbox class declaration</description>
-      <long-description></long-description>
+      <long-description/>
       <tag line="2" name="package" description="PHPSandbox"/>
     </docblock>
     <class final="false" abstract="false" namespace="PHPSandbox" line="18" package="Default">
@@ -42,8 +42,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>IMPORT_ALL</full_name>
         <value>0</value>
         <docblock line="23">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="23" name="var" description="A bit flag for the import() method, signifies to import all data from a template" type="int">
             <type by_reference="false">int</type>
           </tag>
@@ -54,8 +54,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>IMPORT_OPTIONS</full_name>
         <value>1</value>
         <docblock line="27">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="27" name="var" description="A bit flag for the import() method, signifies to import only options from a template" type="int">
             <type by_reference="false">int</type>
           </tag>
@@ -66,8 +66,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>IMPORT_DEFINITIONS</full_name>
         <value>2</value>
         <docblock line="31">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="31" name="var" description="A bit flag for the import() method, signifies to import only definitions from a template" type="int">
             <type by_reference="false">int</type>
           </tag>
@@ -78,8 +78,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>IMPORT_WHITELIST</full_name>
         <value>4</value>
         <docblock line="35">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="35" name="var" description="A bit flag for the import() method, signifies to import only whitelists from a template" type="int">
             <type by_reference="false">int</type>
           </tag>
@@ -90,8 +90,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>IMPORT_BLACKLIST</full_name>
         <value>8</value>
         <docblock line="39">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="39" name="var" description="A bit flag for the import() method, signifies to import only blacklists from a template" type="int">
             <type by_reference="false">int</type>
           </tag>
@@ -102,8 +102,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>IMPORT_TRUSTED_CODE</full_name>
         <value>16</value>
         <docblock line="43">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="43" name="var" description="A bit flag for the import() method, signifies to import only trusted code from a template" type="int">
             <type by_reference="false">int</type>
           </tag>
@@ -114,8 +114,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>IMPORT_CODE</full_name>
         <value>32</value>
         <docblock line="47">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="47" name="var" description="A bit flag for the import() method, signifies to import only sandboxed code from a template" type="int">
             <type by_reference="false">int</type>
           </tag>
@@ -125,8 +125,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$function_prefix</name>
         <default>'__PHPSandbox_'</default>
         <docblock line="19">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="19" name="var" description="The prefix given to the obfuscated sandbox variable passed to the generated code" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -136,8 +136,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$superglobals</name>
         <default>array('_GET', '_POST', '_COOKIE', '_FILES', '_ENV', '_REQUEST', '_SERVER', '_SESSION', 'GLOBALS')</default>
         <docblock line="51">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="51" name="var" description="A static array of superglobal names used for redefining superglobal values" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -147,8 +147,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$magic_constants</name>
         <default>array('__LINE__', '__FILE__', '__DIR__', '__FUNCTION__', '__CLASS__', '__TRAIT__', '__METHOD__', '__NAMESPACE__')</default>
         <docblock line="65">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="65" name="var" description="A static array of magic constant names used for redefining magic constant values" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -158,8 +158,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$defined_funcs</name>
         <default>array('get_defined_functions', 'get_defined_vars', 'get_defined_constants', 'get_declared_classes', 'get_declared_interfaces', 'get_declared_traits')</default>
         <docblock line="78">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="78" name="var" description="A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -169,8 +169,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$arg_funcs</name>
         <default>array('func_get_args', 'func_get_arg', 'func_num_args')</default>
         <docblock line="89">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="89" name="var" description="A static array of func_get_args, func_get_arg, and func_num_args used for redefining those functions" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -180,8 +180,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$name</name>
         <default>''</default>
         <docblock line="97">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="97" name="var" description="The randomly generated name of the PHPSandbox variable passed to the generated closure" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -191,8 +191,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$definitions</name>
         <default>array('functions' =&gt; array(), 'variables' =&gt; array(), 'superglobals' =&gt; array(), 'constants' =&gt; array(), 'magic_constants' =&gt; array(), 'namespaces' =&gt; array(), 'aliases' =&gt; array(), 'classes' =&gt; array(), 'interfaces' =&gt; array(), 'traits' =&gt; array())</default>
         <docblock line="101">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="101" name="var" description="Array of defined functions, superglobals, etc. If an array type contains elements, then it overwrites its external counterpart" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -202,8 +202,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$whitelist</name>
         <default>array('functions' =&gt; array(), 'variables' =&gt; array(), 'globals' =&gt; array(), 'superglobals' =&gt; array(), 'constants' =&gt; array(), 'magic_constants' =&gt; array(), 'namespaces' =&gt; array(), 'aliases' =&gt; array(), 'classes' =&gt; array(), 'interfaces' =&gt; array(), 'traits' =&gt; array(), 'keywords' =&gt; array(), 'operators' =&gt; array(), 'primitives' =&gt; array(), 'types' =&gt; array())</default>
         <docblock line="116">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="116" name="var" description="Array of whitelisted functions, classes, etc. If an array type contains elements, then it overrides its blacklist counterpart" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -213,8 +213,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$blacklist</name>
         <default>array('functions' =&gt; array(), 'variables' =&gt; array(), 'globals' =&gt; array(), 'superglobals' =&gt; array(), 'constants' =&gt; array(), 'magic_constants' =&gt; array(), 'namespaces' =&gt; array(), 'aliases' =&gt; array(), 'classes' =&gt; array(), 'interfaces' =&gt; array(), 'traits' =&gt; array(), 'keywords' =&gt; array('declare' =&gt; true, 'include' =&gt; true, 'eval' =&gt; true, 'exit' =&gt; true, 'halt' =&gt; true), 'operators' =&gt; array(), 'primitives' =&gt; array(), 'types' =&gt; array())</default>
         <docblock line="136">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="136" name="var" description="Array of blacklisted functions, classes, etc. Any whitelisted array types override their counterpart in this array" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -224,8 +224,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$error_level</name>
         <default>null</default>
         <docblock line="163">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="163" name="var" description="The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level." type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -236,8 +236,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$auto_whitelist_trusted_code</name>
         <default>true</default>
         <docblock line="168">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="168" name="var" description="Should PHPSandbox automagically whitelist prepended and appended code?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -248,8 +248,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$auto_whitelist_functions</name>
         <default>true</default>
         <docblock line="173">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="173" name="var" description="Should PHPSandbox automagically whitelist functions created in sandboxed code if $allow_functions is true?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -260,8 +260,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$auto_whitelist_constants</name>
         <default>true</default>
         <docblock line="178">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="178" name="var" description="Should PHPSandbox automagically whitelist constants created in sandboxed code if $allow_constants is true?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -272,8 +272,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$auto_whitelist_globals</name>
         <default>true</default>
         <docblock line="183">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="183" name="var" description="Should PHPSandbox automagically whitelist global variables created in sandboxed code if $allow_globals is true? (Used to whitelist them in the variables list)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -284,8 +284,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$auto_whitelist_classes</name>
         <default>true</default>
         <docblock line="188">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="188" name="var" description="Should PHPSandbox automagically whitelist classes created in sandboxed code if $allow_classes is true?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -296,8 +296,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$auto_whitelist_interfaces</name>
         <default>true</default>
         <docblock line="193">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="193" name="var" description="Should PHPSandbox automagically whitelist interfaces created in sandboxed code if $allow_interfaces is true?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -308,8 +308,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$auto_whitelist_traits</name>
         <default>true</default>
         <docblock line="198">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="198" name="var" description="Should PHPSandbox automagically whitelist traits created in sandboxed code if $allow_traits is true?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -320,8 +320,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$auto_define_vars</name>
         <default>true</default>
         <docblock line="203">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="203" name="var" description="Should PHPSandbox automagically define variables passed to prepended, appended and prepared code closures?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -332,8 +332,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$overwrite_defined_funcs</name>
         <default>true</default>
         <docblock line="208">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="208" name="var" description="Should PHPSandbox overwrite get_defined_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -344,8 +344,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$overwrite_func_get_args</name>
         <default>true</default>
         <docblock line="213">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="213" name="var" description="Should PHPSandbox overwrite func_get_args, func_get_arg and func_num_args?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -356,8 +356,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$overwrite_superglobals</name>
         <default>true</default>
         <docblock line="218">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="218" name="var" description="Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays." type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -368,8 +368,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_functions</name>
         <default>false</default>
         <docblock line="223">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="223" name="var" description="Should PHPSandbox allow sandboxed code to declare functions?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -380,8 +380,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_closures</name>
         <default>false</default>
         <docblock line="228">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="228" name="var" description="Should PHPSandbox allow sandboxed code to declare closures?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -392,8 +392,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_variables</name>
         <default>true</default>
         <docblock line="233">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="233" name="var" description="Should PHPSandbox allow sandboxed code to create variables?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -404,8 +404,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_static_variables</name>
         <default>true</default>
         <docblock line="238">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="238" name="var" description="Should PHPSandbox allow sandboxed code to create static variables?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -416,8 +416,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_objects</name>
         <default>true</default>
         <docblock line="243">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="243" name="var" description="Should PHPSandbox allow sandboxed code to create objects of allow classes (e.g. new keyword)?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -428,8 +428,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_constants</name>
         <default>false</default>
         <docblock line="248">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="248" name="var" description="Should PHPSandbox allow sandboxed code to define constants?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -440,8 +440,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_globals</name>
         <default>false</default>
         <docblock line="253">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="253" name="var" description="Should PHPSandbox allow sandboxed code to use global keyword to access variables in the global scope?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -452,8 +452,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_namespaces</name>
         <default>false</default>
         <docblock line="258">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="258" name="var" description="Should PHPSandbox allow sandboxed code to declare namespaces (utilizing the define_namespace function?)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -464,8 +464,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_aliases</name>
         <default>false</default>
         <docblock line="263">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="263" name="var" description="Should PHPSandbox allow sandboxed code to use namespaces and declare namespace aliases (utilizing the define_alias function?)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -476,8 +476,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_classes</name>
         <default>false</default>
         <docblock line="268">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="268" name="var" description="Should PHPSandbox allow sandboxed code to declare classes?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -488,8 +488,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_interfaces</name>
         <default>false</default>
         <docblock line="273">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="273" name="var" description="Should PHPSandbox allow sandboxed code to declare interfaces?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -500,8 +500,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_traits</name>
         <default>false</default>
         <docblock line="278">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="278" name="var" description="Should PHPSandbox allow sandboxed code to declare traits?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -512,8 +512,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_escaping</name>
         <default>false</default>
         <docblock line="283">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="283" name="var" description="Should PHPSandbox allow sandboxed code to escape to HTML?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -524,8 +524,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_casting</name>
         <default>false</default>
         <docblock line="288">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="288" name="var" description="Should PHPSandbox allow sandboxed code to cast types? (This will still be subject to allowed classes)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -536,8 +536,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_error_suppressing</name>
         <default>false</default>
         <docblock line="293">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="293" name="var" description="Should PHPSandbox allow sandboxed code to suppress errors (e.g. the @ operator?)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -548,8 +548,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_references</name>
         <default>true</default>
         <docblock line="298">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="298" name="var" description="Should PHPSandbox allow sandboxed code to assign references?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -560,8 +560,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_backticks</name>
         <default>false</default>
         <docblock line="303">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="303" name="var" description="Should PHPSandbox allow sandboxed code to use backtick execution? (e.g. $var = \`ping google.com\`; This will also be disabled if shell_exec is not whitelisted or if it is blacklisted, and will be converted to a defined shell_exec function call if one is defined)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -572,8 +572,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$allow_halting</name>
         <default>false</default>
         <docblock line="308">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="308" name="var" description="Should PHPSandbox allow sandboxed code to halt the PHP compiler?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -584,8 +584,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$prepended_code</name>
         <default>''</default>
         <docblock line="314">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="314" name="var" description="String of prepended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -595,8 +595,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$appended_code</name>
         <default>''</default>
         <docblock line="318">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="318" name="var" description="String of appended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -606,8 +606,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$prepare_time</name>
         <default>null</default>
         <docblock line="323">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="323" name="var" description="Float of the number of microseconds it took to prepare the sandbox" type="float|null">
             <type by_reference="false">float</type>
             <type by_reference="false">null</type>
@@ -618,8 +618,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$execution_time</name>
         <default>null</default>
         <docblock line="327">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="327" name="var" description="Float of the number of microseconds it took to execute the sandbox" type="float|null">
             <type by_reference="false">float</type>
             <type by_reference="false">null</type>
@@ -630,8 +630,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$preparsed_code</name>
         <default>''</default>
         <docblock line="331">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="331" name="var" description="String of preparsed code, for debugging and serialization purposes" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -641,8 +641,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$parsed_ast</name>
         <default>array()</default>
         <docblock line="335">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="335" name="var" description="Array of parsed code broken down into AST tokens, for debugging and serialization purposes" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -652,8 +652,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$prepared_code</name>
         <default>''</default>
         <docblock line="339">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="339" name="var" description="String of prepared code, for debugging and serialization purposes" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -663,8 +663,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$prepared_ast</name>
         <default>array()</default>
         <docblock line="343">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="343" name="var" description="Array of prepared code broken down into AST tokens, for debugging and serialization purposes" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -674,8 +674,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$generated_code</name>
         <default>''</default>
         <docblock line="347">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="347" name="var" description="String of generated code, for debugging and serialization purposes" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -685,8 +685,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <name>$generated_closure</name>
         <default>null</default>
         <docblock line="351">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="351" name="var" description="Closure generated by PHPSandbox execution, stored for future executions without the need to reparse and validate the code" type="\Closure|null">
             <type by_reference="false">\Closure</type>
             <type by_reference="false">null</type>
@@ -698,7 +698,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>__construct</full_name>
         <docblock line="355">
           <description>PHPSandbox class constructor</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="355" name="example" description="$sandbox = new PHPSandbox\PHPSandbox;&#13;&#10;You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor"/>
           <tag line="355" name="param" description="Optional array of options to set for the sandbox" type="array" variable="$options">
             <type by_reference="false">array</type>
@@ -911,7 +911,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         </docblock>
         <argument line="442">
           <name>$code</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -920,7 +920,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>__sleep</full_name>
         <docblock line="445">
           <description>PHPSandbox __sleep magic method</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="445" name="example" description="$sandbox = new PHPSandbox\PHPSandbox; serialize($sandbox);"/>
           <tag line="445" name="return" description="An array of property keys to be serialized" type="array">
             <type by_reference="false">array</type>
@@ -932,7 +932,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>__wakeup</full_name>
         <docblock line="455">
           <description>PHPSandbox __wakeup magic method</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="455" name="example" description="$sandbox = unserialize($sandbox_string);"/>
         </docblock>
       </method>
@@ -941,7 +941,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>import</full_name>
         <docblock line="464">
           <description>Import JSON template into sandbox</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="464" name="example" description="$sandbox-&gt;import(array('code' =&gt; 'echo &quot;Hello World!&quot;;'));"/>
           <tag line="464" name="example" description="$sandbox-&gt;import(file_get_contents(&quot;template.json&quot;));"/>
           <tag line="464" name="param" description="The JSON array or string template to import" type="array|string" variable="$template">
@@ -960,7 +960,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         </docblock>
         <argument line="476">
           <name>$template</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="476">
@@ -974,7 +974,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>importJSON</full_name>
         <docblock line="571">
           <description>Import JSON template into sandbox</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="571" name="alias" description="import();"/>
           <tag line="571" name="example" description="$sandbox-&gt;importJSON(array('code' =&gt; 'echo &quot;Hello World!&quot;;'));"/>
           <tag line="571" name="example" description="$sandbox-&gt;importJSON(file_get_contents(&quot;template.json&quot;));"/>
@@ -994,7 +994,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         </docblock>
         <argument line="585">
           <name>$template</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="585">
@@ -1008,7 +1008,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_name</full_name>
         <docblock line="588">
           <description>Get name of PHPSandbox variable</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="588" name="return" description="The name of the PHPSandbox variable" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -1038,7 +1038,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         </docblock>
         <argument line="609">
           <name>$option</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="609">
@@ -1070,7 +1070,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         </docblock>
         <argument line="721">
           <name>$options</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="721">
@@ -1084,7 +1084,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>reset_options</full_name>
         <docblock line="730">
           <description>Reset PHPSandbox options to their default values</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="730" name="example" description="$sandbox-&gt;reset_options();"/>
           <tag line="730" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
@@ -1109,7 +1109,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         </docblock>
         <argument line="754">
           <name>$option</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1118,7 +1118,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_prepended_code</full_name>
         <docblock line="850">
           <description>Get PHPSandbox prepended code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="850" name="return" description="Returns a string of the prepended code" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -1129,7 +1129,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_appended_code</full_name>
         <docblock line="856">
           <description>Get PHPSandbox appended code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="856" name="return" description="Returns a string of the appended code" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -1140,7 +1140,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_preparsed_code</full_name>
         <docblock line="862">
           <description>Get PHPSandbox preparsed code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="862" name="return" description="Returns a string of the preparsed code" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -1151,7 +1151,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_parsed_ast</full_name>
         <docblock line="868">
           <description>Get PHPSandbox parsed AST array</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="868" name="return" description="Returns an array of the parsed AST code" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -1162,7 +1162,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_prepared_code</full_name>
         <docblock line="874">
           <description>Get PHPSandbox prepared code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="874" name="return" description="Returns a string of the prepared code" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -1173,7 +1173,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_prepared_ast</full_name>
         <docblock line="880">
           <description>Get PHPSandbox parsed AST array</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="880" name="return" description="Returns an array of the parsed AST code" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -1184,7 +1184,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_generated_code</full_name>
         <docblock line="886">
           <description>Get PHPSandbox generated code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="886" name="return" description="Returns a string of the generated code" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -1195,7 +1195,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_generated_closure</full_name>
         <docblock line="892">
           <description>Get PHPSandbox generated closure</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="892" name="return" description="Returns the generated closure" type="\Closure">
             <type by_reference="false">\Closure</type>
           </tag>
@@ -1206,7 +1206,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>get_closure</full_name>
         <docblock line="898">
           <description>Get PHPSandbox generated closure</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="898" name="alias" description="get_generated_closure()"/>
           <tag line="898" name="return" description="Returns the generated closure" type="\Closure">
             <type by_reference="false">\Closure</type>
@@ -1266,7 +1266,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         </docblock>
         <argument line="956">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1285,7 +1285,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         </docblock>
         <argument line="1000">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1370,7 +1370,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>_func_get_args</full_name>
         <docblock line="1177">
           <description>Get PHPSandbox redefined function arguments array</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1177" name="param" description="Array result from func_get_args() is passed here" type="array" variable="$arguments">
             <type by_reference="false">array</type>
           </tag>
@@ -1389,7 +1389,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>_func_get_arg</full_name>
         <docblock line="1191">
           <description>Get PHPSandbox redefined function argument</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1191" name="param" description="Array result from func_get_args() is passed here" type="array" variable="$arguments">
             <type by_reference="false">array</type>
           </tag>
@@ -1416,7 +1416,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
         <full_name>_func_num_args</full_name>
         <docblock line="1205">
           <description>Get PHPSandbox redefined number of function arguments</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1205" name="param" description="Array result from func_get_args() is passed here" type="array" variable="$arguments">
             <type by_reference="false">array</type>
           </tag>
@@ -1472,7 +1472,7 @@ an associative array of their corresponding values&lt;/p&gt;</long-description>
         </docblock>
         <argument line="1258">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1258">
@@ -1509,7 +1509,7 @@ and an array of key names to undefine&lt;/p&gt;</long-description>
         </docblock>
         <argument line="1311">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1311">
@@ -1547,12 +1547,12 @@ functions to define, which can have callable values or arrays of the function ca
         </docblock>
         <argument line="1373">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1373">
           <name>$function</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1373">
@@ -1586,7 +1586,7 @@ functions to define, which can have callable values or arrays of the function ca
         <full_name>has_defined_funcs</full_name>
         <docblock line="1411">
           <description>Query whether PHPSandbox instance has defined functions</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1411" name="example" description="$sandbox-&gt;has_defined_funcs(); //returns number of defined functions, or zero if none defined"/>
           <tag line="1411" name="return" description="Returns the number of functions this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -1598,7 +1598,7 @@ functions to define, which can have callable values or arrays of the function ca
         <full_name>is_defined_func</full_name>
         <docblock line="1420">
           <description>Check if PHPSandbox instance has $name function defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1420" name="example" description="$sandbox-&gt;is_defined_func('test');"/>
           <tag line="1420" name="param" description="String of function $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -1609,7 +1609,7 @@ functions to define, which can have callable values or arrays of the function ca
         </docblock>
         <argument line="1428">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1631,7 +1631,7 @@ functions to define, which can have callable values or arrays of the function ca
         </docblock>
         <argument line="1444">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1680,12 +1680,12 @@ functions to define, which can have callable values or arrays of the function ca
         </docblock>
         <argument line="1491">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1491">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1714,7 +1714,7 @@ functions to define, which can have callable values or arrays of the function ca
         <full_name>has_defined_vars</full_name>
         <docblock line="1517">
           <description>Query whether PHPSandbox instance has defined variables</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1517" name="example" description="$sandbox-&gt;has_defined_vars(); //returns number of defined variables, or zero if none defined"/>
           <tag line="1517" name="return" description="Returns the number of variables this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -1726,7 +1726,7 @@ functions to define, which can have callable values or arrays of the function ca
         <full_name>is_defined_var</full_name>
         <docblock line="1526">
           <description>Check if PHPSandbox instance has $name variable defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1526" name="example" description="$sandbox-&gt;is_defined_var('test');"/>
           <tag line="1526" name="param" description="String of variable $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -1737,7 +1737,7 @@ functions to define, which can have callable values or arrays of the function ca
         </docblock>
         <argument line="1534">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1759,7 +1759,7 @@ functions to define, which can have callable values or arrays of the function ca
         </docblock>
         <argument line="1549">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1809,12 +1809,12 @@ functions to define, which can have callable values or arrays of the function ca
         </docblock>
         <argument line="1597">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1597">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1843,7 +1843,7 @@ functions to define, which can have callable values or arrays of the function ca
         <full_name>has_defined_superglobals</full_name>
         <docblock line="1630">
           <description>Query whether PHPSandbox instance has defined superglobals, or if superglobal $name has defined keys</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1630" name="example" description="$sandbox-&gt;has_defined_superglobals(); //returns number of defined superglobals, or zero if none defined"/>
           <tag line="1630" name="example" description="$sandbox-&gt;has_defined_superglobals('_GET'); //returns number of defined superglobal _GET keys, or zero if none defined"/>
           <tag line="1630" name="param" description="String of superglobal $name to check for keys" type="string|null" variable="$name">
@@ -1866,7 +1866,7 @@ functions to define, which can have callable values or arrays of the function ca
         <full_name>is_defined_superglobal</full_name>
         <docblock line="1644">
           <description>Check if PHPSandbox instance has $name superglobal defined, or if superglobal $name key is defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1644" name="example" description="$sandbox-&gt;is_defined_superglobal('_GET');"/>
           <tag line="1644" name="example" description="$sandbox-&gt;is_defined_superglobal('_GET', 'page');"/>
           <tag line="1644" name="param" description="String of superglobal $name to query" type="string" variable="$name">
@@ -1882,7 +1882,7 @@ functions to define, which can have callable values or arrays of the function ca
         </docblock>
         <argument line="1655">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1655">
@@ -1915,7 +1915,7 @@ superglobal names to undefine, or an an associative array of superglobal names a
         </docblock>
         <argument line="1675">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1675">
@@ -1971,12 +1971,12 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="1730">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1730">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2005,7 +2005,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_defined_consts</full_name>
         <docblock line="1756">
           <description>Query whether PHPSandbox instance has defined constants</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1756" name="example" description="$sandbox-&gt;has_defined_consts(); //returns number of defined constants, or zero if none defined"/>
           <tag line="1756" name="return" description="Returns the number of constants this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -2017,7 +2017,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_defined_const</full_name>
         <docblock line="1765">
           <description>Check if PHPSandbox instance has $name constant defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1765" name="example" description="$sandbox-&gt;is_defined_const('test');"/>
           <tag line="1765" name="param" description="String of constant $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2028,7 +2028,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="1773">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2050,7 +2050,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="1788">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2099,12 +2099,12 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="1834">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="1834">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2133,7 +2133,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_defined_magic_consts</full_name>
         <docblock line="1861">
           <description>Query whether PHPSandbox instance has defined magic constants</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1861" name="example" description="$sandbox-&gt;has_defined_magic_consts(); //returns number of defined magic constants, or zero if none defined"/>
           <tag line="1861" name="return" description="Returns the number of magic constants this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -2145,7 +2145,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_defined_magic_const</full_name>
         <docblock line="1870">
           <description>Check if PHPSandbox instance has $name magic constant defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1870" name="example" description="$sandbox-&gt;is_defined_magic_const('__LINE__');"/>
           <tag line="1870" name="param" description="String of magic constant $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2156,7 +2156,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="1878">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2178,7 +2178,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="1894">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2224,7 +2224,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="1940">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2253,7 +2253,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_defined_namespaces</full_name>
         <docblock line="1967">
           <description>Query whether PHPSandbox instance has defined namespaces</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1967" name="example" description="$sandbox-&gt;has_defined_namespaces(); //returns number of defined namespaces, or zero if none defined"/>
           <tag line="1967" name="return" description="Returns the number of namespaces this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -2265,7 +2265,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_defined_namespace</full_name>
         <docblock line="1976">
           <description>Check if PHPSandbox instance has $name namespace defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="1976" name="example" description="$sandbox-&gt;is_defined_namespace('Foo');"/>
           <tag line="1976" name="param" description="String of namespace $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2276,7 +2276,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="1984">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2298,7 +2298,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2000">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2350,7 +2350,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2051">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="2051">
@@ -2388,7 +2388,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_defined_aliases</full_name>
         <docblock line="2082">
           <description>Query whether PHPSandbox instance has defined aliases</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2082" name="example" description="$sandbox-&gt;has_defined_aliases(); //returns number of defined aliases, or zero if none defined"/>
           <tag line="2082" name="return" description="Returns the number of aliases this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -2400,7 +2400,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_defined_alias</full_name>
         <docblock line="2091">
           <description>Check if PHPSandbox instance has $name alias defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2091" name="example" description="$sandbox-&gt;is_defined_alias('Foo');"/>
           <tag line="2091" name="param" description="String of alias $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2411,7 +2411,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2099">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2433,7 +2433,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2115">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2463,7 +2463,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>define_use</full_name>
         <docblock line="2147">
           <description>Define PHPSandbox use (or alias)</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2147" name="alias" description="define_alias();&#13;&#10;You can pass the namespace $name and $alias to use, an array of namespaces to use, or an associative array of namespaces to use and their aliases"/>
           <tag line="2147" name="example" description="$sandbox-&gt;define_use('Foo');  //use Foo;"/>
           <tag line="2147" name="example" description="$sandbox-&gt;define_use('Foo', 'Bar');  //use Foo as Bar;"/>
@@ -2486,7 +2486,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2168">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="2168">
@@ -2500,7 +2500,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>define_uses</full_name>
         <docblock line="2171">
           <description>Define PHPSandbox uses (or aliases) by array</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2171" name="alias" description="define_aliases();&#13;&#10;You can pass an array of namespaces to use, or an associative array of namespaces to use and their aliases"/>
           <tag line="2171" name="example" description="$sandbox-&gt;define_uses(array('Foo', 'Bar')); //use Foo; use Bar;"/>
           <tag line="2171" name="example" description="$sandbox-&gt;define_uses(array('Foo' =&gt; 'Bar')); //use Foo as Bar;"/>
@@ -2525,7 +2525,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_defined_uses</full_name>
         <docblock line="2190">
           <description>Query whether PHPSandbox instance has defined uses (or aliases)</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2190" name="alias" description="has_defined_aliases();"/>
           <tag line="2190" name="example" description="$sandbox-&gt;has_defined_uses(); //returns number of defined uses (or aliases) or zero if none defined"/>
           <tag line="2190" name="return" description="Returns the number of uses (or aliases) this instance has defined" type="int">
@@ -2538,7 +2538,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_defined_use</full_name>
         <docblock line="2201">
           <description>Check if PHPSandbox instance has $name uses (or alias) defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2201" name="alias" description="is_defined_alias();"/>
           <tag line="2201" name="example" description="$sandbox-&gt;is_defined_use('Foo');"/>
           <tag line="2201" name="param" description="String of use (or alias) $name to query" type="string" variable="$name">
@@ -2550,7 +2550,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2211">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2572,7 +2572,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2226">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2581,7 +2581,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>undefine_uses</full_name>
         <docblock line="2229">
           <description>Undefine PHPSandbox uses (or aliases) by array</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2229" name="alias" description="undefine_aliases();&#13;&#10;You can pass an array of use (or alias) names to undefine, or an empty array or null argument to undefine all uses (or aliases)"/>
           <tag line="2229" name="example" description="$sandbox-&gt;undefine_uses(array('Foo', 'Bar'));"/>
           <tag line="2229" name="example" description="$sandbox-&gt;undefine_uses(); //WILL UNDEFINE ALL USES (OR ALIASES!)"/>
@@ -2622,12 +2622,12 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2261">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="2261">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2656,7 +2656,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_defined_classes</full_name>
         <docblock line="2288">
           <description>Query whether PHPSandbox instance has defined classes</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2288" name="example" description="$sandbox-&gt;has_defined_classes(); //returns number of defined classes, or zero if none defined"/>
           <tag line="2288" name="return" description="Returns the number of classes this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -2668,7 +2668,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_defined_class</full_name>
         <docblock line="2297">
           <description>Check if PHPSandbox instance has $name class defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2297" name="example" description="$sandbox-&gt;is_defined_class('Test');"/>
           <tag line="2297" name="param" description="String of class $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2679,7 +2679,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2305">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2688,7 +2688,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>get_defined_class</full_name>
         <docblock line="2309">
           <description>Get defined class of $name</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2309" name="example" description="$sandbox-&gt;get_defined_class('Test');"/>
           <tag line="2309" name="param" description="String of class $name to get" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2702,7 +2702,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2319">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2724,7 +2724,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2338">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2773,12 +2773,12 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2385">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="2385">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2807,7 +2807,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_defined_interfaces</full_name>
         <docblock line="2412">
           <description>Query whether PHPSandbox instance has defined interfaces</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2412" name="example" description="$sandbox-&gt;has_defined_interfaces(); //returns number of defined interfaces, or zero if none defined"/>
           <tag line="2412" name="return" description="Returns the number of interfaces this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -2819,7 +2819,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_defined_interface</full_name>
         <docblock line="2421">
           <description>Check if PHPSandbox instance has $name interface defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2421" name="example" description="$sandbox-&gt;is_defined_interface('Test');"/>
           <tag line="2421" name="param" description="String of interface $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2830,7 +2830,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2429">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2839,7 +2839,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>get_defined_interface</full_name>
         <docblock line="2433">
           <description>Get defined interface of $name</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2433" name="example" description="$sandbox-&gt;get_defined_interface('Test');"/>
           <tag line="2433" name="param" description="String of interface $name to get" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2853,7 +2853,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2443">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2875,7 +2875,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2462">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2924,12 +2924,12 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2509">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="2509">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2958,7 +2958,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_defined_traits</full_name>
         <docblock line="2536">
           <description>Query whether PHPSandbox instance has defined traits</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2536" name="example" description="$sandbox-&gt;has_defined_traits(); //returns number of defined traits, or zero if none defined"/>
           <tag line="2536" name="return" description="Returns the number of traits this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -2970,7 +2970,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_defined_trait</full_name>
         <docblock line="2545">
           <description>Check if PHPSandbox instance has $name trait defined</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2545" name="example" description="$sandbox-&gt;is_defined_trait('Test');"/>
           <tag line="2545" name="param" description="String of trait $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2981,7 +2981,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2553">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2990,7 +2990,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>get_defined_trait</full_name>
         <docblock line="2557">
           <description>Get defined trait of $name</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2557" name="example" description="$sandbox-&gt;get_defined_trait('Test');"/>
           <tag line="2557" name="param" description="String of trait $name to get" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3004,7 +3004,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2567">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3026,7 +3026,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2586">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3068,7 +3068,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2624">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3089,7 +3089,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2639">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3110,7 +3110,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2654">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3131,7 +3131,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2669">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3152,7 +3152,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2684">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3174,7 +3174,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2701">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3195,7 +3195,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2710">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3216,7 +3216,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2725">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3237,7 +3237,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2740">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3258,7 +3258,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2755">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3279,7 +3279,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2799">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3300,7 +3300,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2824">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3321,7 +3321,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2845">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3351,7 +3351,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2869">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="2869">
@@ -3386,7 +3386,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2908">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="2908">
@@ -3421,12 +3421,12 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2947">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="2947">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3456,12 +3456,12 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="2980">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="2980">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3470,7 +3470,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist</full_name>
         <docblock line="2998">
           <description>Query whether PHPSandbox instance has whitelist type</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="2998" name="example" description="$sandbox-&gt;has_whitelist('functions'); //returns number of whitelisted functions, or zero if none whitelisted"/>
           <tag line="2998" name="param" description="The whitelist type to query" type="string" variable="$type">
             <type by_reference="false">string</type>
@@ -3481,7 +3481,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3006">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3490,7 +3490,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist</full_name>
         <docblock line="3009">
           <description>Query whether PHPSandbox instance has blacklist type.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3009" name="example" description="$sandbox-&gt;has_blacklist('functions'); //returns number of blacklisted functions, or zero if none blacklisted"/>
           <tag line="3009" name="param" description="The blacklist type to query" type="string" variable="$type">
             <type by_reference="false">string</type>
@@ -3501,7 +3501,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3017">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3510,7 +3510,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted</full_name>
         <docblock line="3020">
           <description>Check if PHPSandbox instance has whitelist type and name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3020" name="example" description="$sandbox-&gt;is_whitelisted('functions', 'test');"/>
           <tag line="3020" name="param" description="String of whitelist $type to query" type="string" variable="$type">
             <type by_reference="false">string</type>
@@ -3524,12 +3524,12 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3029">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="3029">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3538,7 +3538,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted</full_name>
         <docblock line="3032">
           <description>Check if PHPSandbox instance has blacklist type and name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3032" name="example" description="$sandbox-&gt;is_blacklisted('functions', 'test');"/>
           <tag line="3032" name="param" description="String of blacklist $type to query" type="string" variable="$type">
             <type by_reference="false">string</type>
@@ -3552,12 +3552,12 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3041">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="3041">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3566,7 +3566,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_funcs</full_name>
         <docblock line="3044">
           <description>Query whether PHPSandbox instance has whitelisted functions.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3044" name="example" description="$sandbox-&gt;has_whitelist_funcs(); //returns number of whitelisted functions, or zero if none whitelisted"/>
           <tag line="3044" name="return" description="Returns the number of whitelisted functions this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3578,7 +3578,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_funcs</full_name>
         <docblock line="3053">
           <description>Query whether PHPSandbox instance has blacklisted functions.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3053" name="example" description="$sandbox-&gt;has_blacklist_funcs(); //returns number of blacklisted functions, or zero if none blacklisted"/>
           <tag line="3053" name="return" description="Returns the number of blacklisted functions this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3590,7 +3590,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_func</full_name>
         <docblock line="3062">
           <description>Check if PHPSandbox instance has whitelisted function name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3062" name="example" description="$sandbox-&gt;is_whitelisted_func('test');"/>
           <tag line="3062" name="param" description="String of function $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3601,7 +3601,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3070">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3610,7 +3610,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_func</full_name>
         <docblock line="3074">
           <description>Check if PHPSandbox instance has blacklisted function name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3074" name="example" description="$sandbox-&gt;is_blacklisted_func('test');"/>
           <tag line="3074" name="param" description="String of function $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3621,7 +3621,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3082">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3630,7 +3630,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_vars</full_name>
         <docblock line="3086">
           <description>Query whether PHPSandbox instance has whitelisted variables.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3086" name="example" description="$sandbox-&gt;has_whitelist_vars(); //returns number of whitelisted variables, or zero if none whitelisted"/>
           <tag line="3086" name="return" description="Returns the number of whitelisted variables this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3642,7 +3642,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_vars</full_name>
         <docblock line="3095">
           <description>Query whether PHPSandbox instance has blacklisted variables.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3095" name="example" description="$sandbox-&gt;has_blacklist_vars(); //returns number of blacklisted variables, or zero if none blacklisted"/>
           <tag line="3095" name="return" description="Returns the number of blacklisted variables this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3654,7 +3654,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_var</full_name>
         <docblock line="3104">
           <description>Check if PHPSandbox instance has whitelisted variable name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3104" name="example" description="$sandbox-&gt;is_whitelisted_var('test');"/>
           <tag line="3104" name="param" description="String of variable $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3665,7 +3665,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3112">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3674,7 +3674,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_var</full_name>
         <docblock line="3115">
           <description>Check if PHPSandbox instance has blacklisted variable name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3115" name="example" description="$sandbox-&gt;is_blacklisted_var('test');"/>
           <tag line="3115" name="param" description="String of variable $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3685,7 +3685,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3123">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3694,7 +3694,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_globals</full_name>
         <docblock line="3126">
           <description>Query whether PHPSandbox instance has whitelisted globals.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3126" name="example" description="$sandbox-&gt;has_whitelist_globals(); //returns number of whitelisted globals, or zero if none whitelisted"/>
           <tag line="3126" name="return" description="Returns the number of whitelisted globals this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3706,7 +3706,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_globals</full_name>
         <docblock line="3135">
           <description>Query whether PHPSandbox instance has blacklisted globals.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3135" name="example" description="$sandbox-&gt;has_blacklist_globals(); //returns number of blacklisted globals, or zero if none blacklisted"/>
           <tag line="3135" name="return" description="Returns the number of blacklisted globals this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3718,7 +3718,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_global</full_name>
         <docblock line="3144">
           <description>Check if PHPSandbox instance has whitelisted global name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3144" name="example" description="$sandbox-&gt;is_whitelisted_global('test');"/>
           <tag line="3144" name="param" description="String of global $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3729,7 +3729,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3152">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3738,7 +3738,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_global</full_name>
         <docblock line="3155">
           <description>Check if PHPSandbox instance has blacklisted global name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3155" name="example" description="$sandbox-&gt;is_blacklisted_global('test');"/>
           <tag line="3155" name="param" description="String of global $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3749,7 +3749,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3163">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3758,7 +3758,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_superglobals</full_name>
         <docblock line="3166">
           <description>Query whether PHPSandbox instance has whitelisted superglobals, or superglobal keys</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3166" name="example" description="$sandbox-&gt;has_whitelist_superglobals(); //returns number of whitelisted superglobals, or zero if none whitelisted"/>
           <tag line="3166" name="example" description="$sandbox-&gt;has_whitelist_superglobals('_GET'); //returns number of whitelisted superglobal keys, or zero if none whitelisted"/>
           <tag line="3166" name="param" description="The whitelist superglobal key to query" type="string" variable="$name">
@@ -3779,7 +3779,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_superglobals</full_name>
         <docblock line="3180">
           <description>Query whether PHPSandbox instance has blacklisted superglobals, or superglobal keys</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3180" name="example" description="$sandbox-&gt;has_blacklist_superglobals(); //returns number of blacklisted superglobals, or zero if none blacklisted"/>
           <tag line="3180" name="example" description="$sandbox-&gt;has_blacklist_superglobals('_GET'); //returns number of blacklisted superglobal keys, or zero if none blacklisted"/>
           <tag line="3180" name="param" description="The blacklist superglobal key to query" type="string" variable="$name">
@@ -3800,7 +3800,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_superglobal</full_name>
         <docblock line="3194">
           <description>Check if PHPSandbox instance has whitelisted superglobal or superglobal key set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3194" name="example" description="$sandbox-&gt;is_whitelisted_superglobal('_GET');"/>
           <tag line="3194" name="example" description="$sandbox-&gt;is_whitelisted_superglobal('_GET', 'page');"/>
           <tag line="3194" name="param" description="String of whitelisted superglobal $name to query" type="string" variable="$name">
@@ -3815,7 +3815,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3205">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="3205">
@@ -3829,7 +3829,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_superglobal</full_name>
         <docblock line="3209">
           <description>Check if PHPSandbox instance has blacklisted superglobal or superglobal key set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3209" name="example" description="$sandbox-&gt;is_blacklisted_superglobal('_GET');"/>
           <tag line="3209" name="example" description="$sandbox-&gt;is_blacklisted_superglobal('_GET', 'page');"/>
           <tag line="3209" name="param" description="String of blacklisted superglobal $name to query" type="string" variable="$name">
@@ -3844,7 +3844,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3220">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="3220">
@@ -3858,7 +3858,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_consts</full_name>
         <docblock line="3224">
           <description>Query whether PHPSandbox instance has whitelisted constants.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3224" name="example" description="$sandbox-&gt;has_whitelist_consts(); //returns number of whitelisted constants, or zero if none whitelisted"/>
           <tag line="3224" name="return" description="Returns the number of whitelisted constants this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3870,7 +3870,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_consts</full_name>
         <docblock line="3233">
           <description>Query whether PHPSandbox instance has blacklisted constants.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3233" name="example" description="$sandbox-&gt;has_blacklist_consts(); //returns number of blacklisted constants, or zero if none blacklisted"/>
           <tag line="3233" name="return" description="Returns the number of blacklisted constants this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3882,7 +3882,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_const</full_name>
         <docblock line="3242">
           <description>Check if PHPSandbox instance has whitelisted constant name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3242" name="example" description="$sandbox-&gt;is_whitelisted_const('TEST');"/>
           <tag line="3242" name="param" description="String of constant $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3893,7 +3893,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3250">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3902,7 +3902,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_const</full_name>
         <docblock line="3253">
           <description>Check if PHPSandbox instance has blacklisted constant name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3253" name="example" description="$sandbox-&gt;is_blacklisted_const('TEST');"/>
           <tag line="3253" name="param" description="String of constant $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3913,7 +3913,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3261">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3922,7 +3922,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_magic_consts</full_name>
         <docblock line="3264">
           <description>Query whether PHPSandbox instance has whitelisted magic constants.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3264" name="example" description="$sandbox-&gt;has_whitelist_magic_consts(); //returns number of whitelisted magic constants, or zero if none whitelisted"/>
           <tag line="3264" name="return" description="Returns the number of whitelisted magic constants this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3934,7 +3934,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_magic_consts</full_name>
         <docblock line="3273">
           <description>Query whether PHPSandbox instance has blacklisted magic constants.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3273" name="example" description="$sandbox-&gt;has_blacklist_magic_consts(); //returns number of blacklisted magic constants, or zero if none blacklisted"/>
           <tag line="3273" name="return" description="Returns the number of blacklisted magic constants this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3946,7 +3946,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_magic_const</full_name>
         <docblock line="3282">
           <description>Check if PHPSandbox instance has whitelisted magic constant name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3282" name="example" description="$sandbox-&gt;is_whitelisted_magic_const('__LINE__');"/>
           <tag line="3282" name="param" description="String of magic constant $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3957,7 +3957,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3290">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3966,7 +3966,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_magic_const</full_name>
         <docblock line="3294">
           <description>Check if PHPSandbox instance has blacklisted magic constant name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3294" name="example" description="$sandbox-&gt;is_blacklisted_magic_const('__LINE__');"/>
           <tag line="3294" name="param" description="String of magic constant $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3977,7 +3977,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3302">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3986,7 +3986,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_namespaces</full_name>
         <docblock line="3306">
           <description>Query whether PHPSandbox instance has whitelisted namespaces.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3306" name="example" description="$sandbox-&gt;has_whitelist_namespaces(); //returns number of whitelisted namespaces, or zero if none whitelisted"/>
           <tag line="3306" name="return" description="Returns the number of whitelisted namespaces this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -3998,7 +3998,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_namespaces</full_name>
         <docblock line="3315">
           <description>Query whether PHPSandbox instance has blacklisted namespaces.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3315" name="example" description="$sandbox-&gt;has_blacklist_namespaces(); //returns number of blacklisted namespaces, or zero if none blacklisted"/>
           <tag line="3315" name="return" description="Returns the number of blacklisted namespaces this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4010,7 +4010,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_namespace</full_name>
         <docblock line="3324">
           <description>Check if PHPSandbox instance has whitelisted namespace name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3324" name="example" description="$sandbox-&gt;is_whitelisted_namespace('Test');"/>
           <tag line="3324" name="param" description="String of namespace $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4021,7 +4021,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3332">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4030,7 +4030,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_namespace</full_name>
         <docblock line="3336">
           <description>Check if PHPSandbox instance has blacklisted namespace name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3336" name="example" description="$sandbox-&gt;is_blacklisted_namespace('Test');"/>
           <tag line="3336" name="param" description="String of namespace $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4041,7 +4041,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3344">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4050,7 +4050,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_aliases</full_name>
         <docblock line="3348">
           <description>Query whether PHPSandbox instance has whitelisted aliases.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3348" name="example" description="$sandbox-&gt;has_whitelist_aliases(); //returns number of whitelisted aliases, or zero if none whitelisted"/>
           <tag line="3348" name="return" description="Returns the number of whitelisted aliases this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4062,7 +4062,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_aliases</full_name>
         <docblock line="3357">
           <description>Query whether PHPSandbox instance has blacklisted aliases.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3357" name="example" description="$sandbox-&gt;has_blacklist_aliases(); //returns number of blacklisted aliases, or zero if none blacklisted"/>
           <tag line="3357" name="return" description="Returns the number of blacklisted aliases this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4074,7 +4074,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_alias</full_name>
         <docblock line="3366">
           <description>Check if PHPSandbox instance has whitelisted alias name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3366" name="example" description="$sandbox-&gt;is_whitelisted_alias('Test');"/>
           <tag line="3366" name="param" description="String of alias $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4085,7 +4085,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3374">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4094,7 +4094,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_alias</full_name>
         <docblock line="3378">
           <description>Check if PHPSandbox instance has blacklisted alias name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3378" name="example" description="$sandbox-&gt;is_blacklisted_alias('Test');"/>
           <tag line="3378" name="param" description="String of alias $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4105,7 +4105,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3386">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4114,7 +4114,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_uses</full_name>
         <docblock line="3390">
           <description>Query whether PHPSandbox instance has whitelisted uses (or aliases.)</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3390" name="alias" description="has_whitelist_aliases();"/>
           <tag line="3390" name="example" description="$sandbox-&gt;has_whitelist_uses(); //returns number of whitelisted uses (or aliases) or zero if none whitelisted"/>
           <tag line="3390" name="return" description="Returns the number of whitelisted uses (or aliases) this instance has defined" type="int">
@@ -4127,7 +4127,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_uses</full_name>
         <docblock line="3401">
           <description>Query whether PHPSandbox instance has blacklisted uses (or aliases.)</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3401" name="alias" description="has_blacklist_aliases();"/>
           <tag line="3401" name="example" description="$sandbox-&gt;has_blacklist_uses(); //returns number of blacklisted uses (or aliases) or zero if none blacklisted"/>
           <tag line="3401" name="return" description="Returns the number of blacklisted uses (or aliases) this instance has defined" type="int">
@@ -4140,7 +4140,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_use</full_name>
         <docblock line="3412">
           <description>Check if PHPSandbox instance has whitelisted use (or alias) name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3412" name="alias" description="is_whitelisted_alias();"/>
           <tag line="3412" name="example" description="$sandbox-&gt;is_whitelisted_use('Test');"/>
           <tag line="3412" name="param" description="String of use (or alias) $name to query" type="string" variable="$name">
@@ -4152,7 +4152,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3422">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4161,7 +4161,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_use</full_name>
         <docblock line="3425">
           <description>Check if PHPSandbox instance has blacklisted use (or alias) name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3425" name="alias" description="is_blacklisted_alias();"/>
           <tag line="3425" name="example" description="$sandbox-&gt;is_blacklisted_use('Test');"/>
           <tag line="3425" name="param" description="String of use (or alias) $name to query" type="string" variable="$name">
@@ -4173,7 +4173,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3435">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4182,7 +4182,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_classes</full_name>
         <docblock line="3438">
           <description>Query whether PHPSandbox instance has whitelisted classes.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3438" name="example" description="$sandbox-&gt;has_whitelist_classes(); //returns number of whitelisted classes, or zero if none whitelisted"/>
           <tag line="3438" name="return" description="Returns the number of whitelisted classes this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4194,7 +4194,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_classes</full_name>
         <docblock line="3447">
           <description>Query whether PHPSandbox instance has blacklisted classes.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3447" name="example" description="$sandbox-&gt;has_blacklist_classes(); //returns number of blacklisted classes, or zero if none blacklisted"/>
           <tag line="3447" name="return" description="Returns the number of blacklisted classes this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4206,7 +4206,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_class</full_name>
         <docblock line="3456">
           <description>Check if PHPSandbox instance has whitelisted class name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3456" name="example" description="$sandbox-&gt;is_whitelisted_class('Test');"/>
           <tag line="3456" name="param" description="String of class $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4217,7 +4217,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3464">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4226,7 +4226,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_class</full_name>
         <docblock line="3468">
           <description>Check if PHPSandbox instance has blacklisted class name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3468" name="example" description="$sandbox-&gt;is_blacklisted_class('Test');"/>
           <tag line="3468" name="param" description="String of class $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4237,7 +4237,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3476">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4246,7 +4246,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_interfaces</full_name>
         <docblock line="3480">
           <description>Query whether PHPSandbox instance has whitelisted interfaces.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3480" name="example" description="$sandbox-&gt;has_whitelist_interfaces(); //returns number of whitelisted interfaces, or zero if none whitelisted"/>
           <tag line="3480" name="return" description="Returns the number of whitelisted interfaces this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4258,7 +4258,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_interfaces</full_name>
         <docblock line="3489">
           <description>Query whether PHPSandbox instance has blacklisted interfaces.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3489" name="example" description="$sandbox-&gt;has_blacklist_interfaces(); //returns number of blacklisted interfaces, or zero if none blacklisted"/>
           <tag line="3489" name="return" description="Returns the number of blacklisted interfaces this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4270,7 +4270,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_interface</full_name>
         <docblock line="3498">
           <description>Check if PHPSandbox instance has whitelisted interface name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3498" name="example" description="$sandbox-&gt;is_whitelisted_interface('Test');"/>
           <tag line="3498" name="param" description="String of interface $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4281,7 +4281,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3506">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4290,7 +4290,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_interface</full_name>
         <docblock line="3510">
           <description>Check if PHPSandbox instance has blacklisted interface name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3510" name="example" description="$sandbox-&gt;is_blacklisted_interface('Test');"/>
           <tag line="3510" name="param" description="String of interface $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4301,7 +4301,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3518">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4310,7 +4310,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_traits</full_name>
         <docblock line="3522">
           <description>Query whether PHPSandbox instance has whitelisted traits.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3522" name="example" description="$sandbox-&gt;has_whitelist_traits(); //returns number of whitelisted traits, or zero if none whitelisted"/>
           <tag line="3522" name="return" description="Returns the number of whitelisted traits this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4322,7 +4322,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_traits</full_name>
         <docblock line="3531">
           <description>Query whether PHPSandbox instance has blacklisted traits.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3531" name="example" description="$sandbox-&gt;has_blacklist_traits(); //returns number of blacklisted traits, or zero if none blacklisted"/>
           <tag line="3531" name="return" description="Returns the number of blacklisted traits this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4334,7 +4334,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_trait</full_name>
         <docblock line="3540">
           <description>Check if PHPSandbox instance has whitelisted trait name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3540" name="example" description="$sandbox-&gt;is_whitelisted_trait('Test');"/>
           <tag line="3540" name="param" description="String of trait $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4345,7 +4345,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3548">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4354,7 +4354,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_trait</full_name>
         <docblock line="3552">
           <description>Check if PHPSandbox instance has blacklisted trait name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3552" name="example" description="$sandbox-&gt;is_blacklisted_trait('Test');"/>
           <tag line="3552" name="param" description="String of trait $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4365,7 +4365,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3560">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4374,7 +4374,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_keywords</full_name>
         <docblock line="3564">
           <description>Query whether PHPSandbox instance has whitelisted keywords.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3564" name="example" description="$sandbox-&gt;has_whitelist_keywords(); //returns number of whitelisted keywords, or zero if none whitelisted"/>
           <tag line="3564" name="return" description="Returns the number of whitelisted keywords this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4386,7 +4386,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_keywords</full_name>
         <docblock line="3573">
           <description>Query whether PHPSandbox instance has blacklisted keywords.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3573" name="example" description="$sandbox-&gt;has_blacklist_keywords(); //returns number of blacklisted keywords, or zero if none blacklisted"/>
           <tag line="3573" name="return" description="Returns the number of blacklisted keywords this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4398,7 +4398,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_keyword</full_name>
         <docblock line="3582">
           <description>Check if PHPSandbox instance has whitelisted keyword name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3582" name="example" description="$sandbox-&gt;is_whitelisted_keyword('echo');"/>
           <tag line="3582" name="param" description="String of keyword $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4409,7 +4409,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3590">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4418,7 +4418,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_keyword</full_name>
         <docblock line="3594">
           <description>Check if PHPSandbox instance has blacklisted keyword name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3594" name="example" description="$sandbox-&gt;is_blacklisted_keyword('echo');"/>
           <tag line="3594" name="param" description="String of keyword $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4429,7 +4429,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3602">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4438,7 +4438,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_operators</full_name>
         <docblock line="3606">
           <description>Query whether PHPSandbox instance has whitelisted operators.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3606" name="example" description="$sandbox-&gt;has_whitelist_operators(); //returns number of whitelisted operators, or zero if none whitelisted"/>
           <tag line="3606" name="return" description="Returns the number of whitelisted operators this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4450,7 +4450,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_operators</full_name>
         <docblock line="3615">
           <description>Query whether PHPSandbox instance has blacklisted operators.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3615" name="example" description="$sandbox-&gt;has_blacklist_operators(); //returns number of blacklisted operators, or zero if none blacklisted"/>
           <tag line="3615" name="return" description="Returns the number of blacklisted operators this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4462,7 +4462,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_operator</full_name>
         <docblock line="3624">
           <description>Check if PHPSandbox instance has whitelisted operator name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3624" name="example" description="$sandbox-&gt;is_whitelisted_operator('+');"/>
           <tag line="3624" name="param" description="String of operator $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4473,7 +4473,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3632">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4482,7 +4482,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_operator</full_name>
         <docblock line="3636">
           <description>Check if PHPSandbox instance has blacklisted operator name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3636" name="example" description="$sandbox-&gt;is_blacklisted_operator('+');"/>
           <tag line="3636" name="param" description="String of operator $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4493,7 +4493,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3644">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4502,7 +4502,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_primitives</full_name>
         <docblock line="3648">
           <description>Query whether PHPSandbox instance has whitelisted primitives.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3648" name="example" description="$sandbox-&gt;has_whitelist_primitives(); //returns number of whitelisted primitives, or zero if none whitelisted"/>
           <tag line="3648" name="return" description="Returns the number of whitelisted primitives this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4514,7 +4514,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_primitives</full_name>
         <docblock line="3657">
           <description>Query whether PHPSandbox instance has blacklisted primitives.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3657" name="example" description="$sandbox-&gt;has_blacklist_primitives(); //returns number of blacklisted primitives, or zero if none blacklisted"/>
           <tag line="3657" name="return" description="Returns the number of blacklisted primitives this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4526,7 +4526,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_primitive</full_name>
         <docblock line="3666">
           <description>Check if PHPSandbox instance has whitelisted primitive name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3666" name="example" description="$sandbox-&gt;is_whitelisted_primitive('array');"/>
           <tag line="3666" name="param" description="String of primitive $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4537,7 +4537,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3674">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4546,7 +4546,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_primitive</full_name>
         <docblock line="3678">
           <description>Check if PHPSandbox instance has blacklisted primitive name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3678" name="example" description="$sandbox-&gt;is_blacklisted_primitive('array');"/>
           <tag line="3678" name="param" description="String of primitive $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4557,7 +4557,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3686">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4566,7 +4566,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_whitelist_types</full_name>
         <docblock line="3690">
           <description>Query whether PHPSandbox instance has whitelisted types.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3690" name="example" description="$sandbox-&gt;has_whitelist_types(); //returns number of whitelisted types, or zero if none whitelisted"/>
           <tag line="3690" name="return" description="Returns the number of whitelisted types this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4578,7 +4578,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>has_blacklist_types</full_name>
         <docblock line="3699">
           <description>Query whether PHPSandbox instance has blacklisted types.</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3699" name="example" description="$sandbox-&gt;has_blacklist_types(); //returns number of blacklisted types, or zero if none blacklisted"/>
           <tag line="3699" name="return" description="Returns the number of blacklisted types this instance has defined" type="int">
             <type by_reference="false">int</type>
@@ -4590,7 +4590,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_whitelisted_type</full_name>
         <docblock line="3708">
           <description>Check if PHPSandbox instance has whitelisted type name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3708" name="example" description="$sandbox-&gt;is_whitelisted_type('array');"/>
           <tag line="3708" name="param" description="String of type $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4601,7 +4601,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3716">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4610,7 +4610,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         <full_name>is_blacklisted_type</full_name>
         <docblock line="3720">
           <description>Check if PHPSandbox instance has blacklisted type name set</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3720" name="example" description="$sandbox-&gt;is_blacklisted_type('array');"/>
           <tag line="3720" name="param" description="String of type $name to query" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -4621,7 +4621,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3728">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4643,7 +4643,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3744">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4665,7 +4665,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3760">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4687,7 +4687,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3776">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4709,7 +4709,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3792">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4731,7 +4731,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3808">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4753,7 +4753,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3823">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4775,7 +4775,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3838">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4797,7 +4797,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3853">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4819,7 +4819,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3868">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4841,7 +4841,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3883">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4863,7 +4863,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3898">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4885,7 +4885,7 @@ to undefine, or an empty array or null to undefine all superglobals&lt;/p&gt;</l
         </docblock>
         <argument line="3913">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4913,7 +4913,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="3934">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="3934">
@@ -4930,7 +4930,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 *
 You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
 or pass an array of superglobal names, or an associative array of superglobal names and their keys to blacklist</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="3974" name="example" description="$sandbox-&gt;blacklist_superglobal('_GET');"/>
           <tag line="3974" name="example" description="$sandbox-&gt;blacklist_superglobal('_GET', 'page');"/>
           <tag line="3974" name="example" description="$sandbox-&gt;blacklist_superglobal(array('_GET', '_POST'));"/>
@@ -4948,7 +4948,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="3992">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="3992">
@@ -4965,7 +4965,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 *
 You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
 or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="4032" name="example" description="$sandbox-&gt;dewhitelist_superglobal('_GET');"/>
           <tag line="4032" name="example" description="$sandbox-&gt;dewhitelist_superglobal('_GET', 'page');"/>
           <tag line="4032" name="example" description="$sandbox-&gt;dewhitelist_superglobal(array('_GET', '_POST'));"/>
@@ -4983,7 +4983,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4050">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="4050">
@@ -5000,7 +5000,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 *
 You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
 or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="4083" name="example" description="$sandbox-&gt;deblacklist_superglobal('_GET');"/>
           <tag line="4083" name="example" description="$sandbox-&gt;deblacklist_superglobal('_GET', 'page');"/>
           <tag line="4083" name="example" description="$sandbox-&gt;deblacklist_superglobal(array('_GET', '_POST'));"/>
@@ -5018,7 +5018,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4101">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="4101">
@@ -5045,7 +5045,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4146">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5067,7 +5067,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4161">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5089,7 +5089,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4176">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5111,7 +5111,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4191">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5133,7 +5133,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4206">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5155,7 +5155,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4222">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5177,7 +5177,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4238">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5199,7 +5199,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4254">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5221,7 +5221,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4270">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5243,7 +5243,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4286">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5265,7 +5265,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4302">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5287,7 +5287,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4318">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5309,7 +5309,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4334">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5331,7 +5331,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4350">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5353,7 +5353,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4366">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5375,7 +5375,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4382">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5398,7 +5398,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4400">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5421,7 +5421,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4417">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5444,7 +5444,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4434">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5467,7 +5467,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4451">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5489,7 +5489,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4466">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5511,7 +5511,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4482">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5533,7 +5533,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4498">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5555,7 +5555,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4514">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5577,7 +5577,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4530">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5599,7 +5599,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4546">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5621,7 +5621,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4562">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5643,7 +5643,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4578">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5665,7 +5665,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4594">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5687,7 +5687,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4610">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5709,7 +5709,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4626">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5731,7 +5731,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4642">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5753,7 +5753,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4658">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5775,7 +5775,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4674">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5797,7 +5797,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4690">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5819,7 +5819,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4706">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5841,7 +5841,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4722">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5863,7 +5863,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4738">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5885,7 +5885,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4754">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5907,7 +5907,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4770">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5929,7 +5929,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4786">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5951,7 +5951,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4802">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5973,7 +5973,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4818">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5995,7 +5995,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4834">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6017,7 +6017,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4850">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6039,7 +6039,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4866">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6061,7 +6061,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4882">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6083,7 +6083,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4898">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6105,7 +6105,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4908">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6124,7 +6124,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4936">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6143,7 +6143,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4959">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6162,7 +6162,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="4980">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6181,7 +6181,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5004">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6200,7 +6200,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5035">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6219,7 +6219,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5059">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6238,7 +6238,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5081">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6258,7 +6258,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5106">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6280,7 +6280,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5114">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="5114">
@@ -6304,7 +6304,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5139">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6323,7 +6323,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5163">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6342,7 +6342,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5187">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6361,7 +6361,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5207">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6380,7 +6380,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5227">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6399,7 +6399,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5247">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6408,7 +6408,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>prepare_vars</full_name>
         <docblock line="5267">
           <description>Prepare defined variables for execution</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="5292" package="Default">
@@ -6416,7 +6416,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>prepare_consts</full_name>
         <docblock line="5290">
           <description>Prepare defined constants for execution</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="5315" package="Default">
@@ -6424,7 +6424,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>prepare_namespaces</full_name>
         <docblock line="5313">
           <description>Prepare defined namespaces for execution</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="5328" package="Default">
@@ -6432,7 +6432,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>prepare_aliases</full_name>
         <docblock line="5326">
           <description>Prepare defined aliases for execution</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="PHPSandbox" line="5342" package="Default">
@@ -6440,7 +6440,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>prepare_uses</full_name>
         <docblock line="5339">
           <description>Prepare defined uses (or aliases) for execution</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5339" name="alias" description="prepare_aliases();"/>
         </docblock>
       </method>
@@ -6449,7 +6449,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>disassemble</full_name>
         <docblock line="5345">
           <description>Disassemble callable to string</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5345" name="param" description="The callable to disassemble" type="callable" variable="$closure">
             <type by_reference="false">callable</type>
           </tag>
@@ -6462,7 +6462,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5353">
           <name>$closure</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6471,7 +6471,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>auto_whitelist</full_name>
         <docblock line="5366">
           <description>Automatically whitelisted trusted code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5366" name="param" description="String of trusted $code to automatically whitelist" type="string" variable="$code">
             <type by_reference="false">string</type>
           </tag>
@@ -6484,7 +6484,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5373">
           <name>$code</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="5373">
@@ -6498,14 +6498,14 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>auto_define</full_name>
         <docblock line="5385">
           <description>Automatically define variables passed to disassembled closure</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5385" name="param" description="" type="\FunctionParser\FunctionParser" variable="$disassembled_closure">
             <type by_reference="false">\FunctionParser\FunctionParser</type>
           </tag>
         </docblock>
         <argument line="5388">
           <name>$disassembled_closure</name>
-          <default></default>
+          <default/>
           <type>\FunctionParser\FunctionParser</type>
         </argument>
       </method>
@@ -6514,7 +6514,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>prepend</full_name>
         <docblock line="5397">
           <description>Prepend trusted code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5397" name="param" description="String or callable of trusted $code to prepend to generated code" type="string|callable" variable="$code">
             <type by_reference="false">string</type>
             <type by_reference="false">callable</type>
@@ -6525,7 +6525,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5402">
           <name>$code</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6534,7 +6534,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>append</full_name>
         <docblock line="5413">
           <description>Append trusted code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5413" name="param" description="String or callable of trusted $code to append to generated code" type="string|callable" variable="$code">
             <type by_reference="false">string</type>
             <type by_reference="false">callable</type>
@@ -6545,7 +6545,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5418">
           <name>$code</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6554,7 +6554,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>clear</full_name>
         <docblock line="5429">
           <description>Clear all trusted and sandboxed code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5429" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
@@ -6565,7 +6565,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>clear_trusted_code</full_name>
         <docblock line="5438">
           <description>Clear all trusted code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5438" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
@@ -6576,7 +6576,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>clear_prepend</full_name>
         <docblock line="5447">
           <description>Clear all prepended trusted code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5447" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
@@ -6587,7 +6587,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>clear_append</full_name>
         <docblock line="5455">
           <description>Clear all appended trusted code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5455" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
@@ -6598,7 +6598,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         <full_name>clear_closure</full_name>
         <docblock line="5463">
           <description>Clear generated closure</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="5463" name="return" description="Returns the PHPSandbox instance for chainability" type="$this">
             <type by_reference="false">$this</type>
           </tag>
@@ -6689,7 +6689,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
         </docblock>
         <argument line="5528">
           <name>$code</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -6716,7 +6716,7 @@ not callable and a valid generated closure exists, then all arguments are passed
   <file path="SandboxWhitelistVisitor.php" hash="9485841f708523445bc65bc0c4d67b02" package="PHPSandbox">
     <docblock line="2">
       <description>SandboxWhitelistVisitor class declaration</description>
-      <long-description></long-description>
+      <long-description/>
       <tag line="2" name="package" description="PHPSandbox"/>
     </docblock>
     <class final="false" abstract="false" namespace="PHPSandbox" line="18" package="Default">
@@ -6733,10 +6733,10 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
       </docblock>
       <property final="false" static="false" visibility="protected" line="22" namespace="PHPSandbox" package="Default">
         <name>$sandbox</name>
-        <default></default>
+        <default/>
         <docblock line="19">
           <description>The PHPSandbox instance to check against</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="19" name="var" description="" type="\PHPSandbox\PHPSandbox">
             <type by_reference="false">\PHPSandbox\PHPSandbox</type>
           </tag>
@@ -6754,7 +6754,7 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
         </docblock>
         <argument line="29">
           <name>$sandbox</name>
-          <default></default>
+          <default/>
           <type>\PHPSandbox\PHPSandbox</type>
         </argument>
       </method>
@@ -6763,14 +6763,14 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
         <full_name>leaveNode</full_name>
         <docblock line="32">
           <description>Examine the current PHPParser_Node node against the PHPSandbox configuration for whitelisting sandboxed code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="32" name="param" description="The sandboxed $node to examine" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
         </docblock>
         <argument line="36">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6779,7 +6779,7 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
   <file path="ValidatorVisitor.php" hash="481227b16ddfc3f46aa3e5f6e1476f05" package="PHPSandbox">
     <docblock line="2">
       <description>ValidatorVisitor class declaration</description>
-      <long-description></long-description>
+      <long-description/>
       <tag line="2" name="package" description="PHPSandbox"/>
     </docblock>
     <class final="false" abstract="false" namespace="PHPSandbox" line="18" package="Default">
@@ -6796,10 +6796,10 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
       </docblock>
       <property final="false" static="false" visibility="protected" line="22" namespace="PHPSandbox" package="Default">
         <name>$sandbox</name>
-        <default></default>
+        <default/>
         <docblock line="19">
           <description>The PHPSandbox instance to check against</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="19" name="var" description="" type="\PHPSandbox\PHPSandbox">
             <type by_reference="false">\PHPSandbox\PHPSandbox</type>
           </tag>
@@ -6817,7 +6817,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="29">
           <name>$sandbox</name>
-          <default></default>
+          <default/>
           <type>\PHPSandbox\PHPSandbox</type>
         </argument>
       </method>
@@ -6826,7 +6826,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>leaveNode</full_name>
         <docblock line="32">
           <description>Examine the current PHPParser_Node node against the PHPSandbox configuration for validating sandboxed code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="32" name="param" description="The sandboxed $node to validate" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6841,7 +6841,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="40">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6850,7 +6850,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_magic_const</full_name>
         <docblock line="301">
           <description>Test the current PHPParser_Node node to see if it is a magic constant, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="301" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6861,7 +6861,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="307">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6870,7 +6870,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_keyword</full_name>
         <docblock line="328">
           <description>Test the current PHPParser_Node node to see if it is a keyword, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="328" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6881,7 +6881,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="334">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6890,7 +6890,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_operator</full_name>
         <docblock line="393">
           <description>Test the current PHPParser_Node node to see if it is an operator, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="393" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6901,7 +6901,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="399">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6910,7 +6910,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         <full_name>is_primitive</full_name>
         <docblock line="496">
           <description>Test the current PHPParser_Node node to see if it is a primitive, and return the name if it is and null if it is not</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="496" name="param" description="The sandboxed $node to test" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6924,7 +6924,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
         </docblock>
         <argument line="504">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
@@ -6933,7 +6933,7 @@ configuration for errors, and throws exceptions if they are found&lt;/p&gt;</lon
   <file path="WhitelistVisitor.php" hash="7c68f98bdfae58e03427e4f57335259f" package="PHPSandbox">
     <docblock line="2">
       <description>WhitelistVisitor class declaration</description>
-      <long-description></long-description>
+      <long-description/>
       <tag line="2" name="package" description="PHPSandbox"/>
     </docblock>
     <class final="false" abstract="false" namespace="PHPSandbox" line="18" package="Default">
@@ -6950,10 +6950,10 @@ autmatically whitelist trusted code functions, classes, etc. if the appropriate 
       </docblock>
       <property final="false" static="false" visibility="protected" line="22" namespace="PHPSandbox" package="Default">
         <name>$sandbox</name>
-        <default></default>
+        <default/>
         <docblock line="19">
           <description>The PHPSandbox instance to check against</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="19" name="var" description="" type="\PHPSandbox\PHPSandbox">
             <type by_reference="false">\PHPSandbox\PHPSandbox</type>
           </tag>
@@ -6971,7 +6971,7 @@ autmatically whitelist trusted code functions, classes, etc. if the appropriate 
         </docblock>
         <argument line="29">
           <name>$sandbox</name>
-          <default></default>
+          <default/>
           <type>\PHPSandbox\PHPSandbox</type>
         </argument>
       </method>
@@ -6980,7 +6980,7 @@ autmatically whitelist trusted code functions, classes, etc. if the appropriate 
         <full_name>leaveNode</full_name>
         <docblock line="32">
           <description>Examine the current PHPParser_Node node against the PHPSandbox configuration for whitelisting trusted code</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="32" name="param" description="The trusted $node to examine" type="\PHPParser_Node" variable="$node">
             <type by_reference="false">\PHPParser_Node</type>
           </tag>
@@ -6991,7 +6991,7 @@ autmatically whitelist trusted code functions, classes, etc. if the appropriate 
         </docblock>
         <argument line="38">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type>\PHPParser_Node</type>
         </argument>
       </method>
