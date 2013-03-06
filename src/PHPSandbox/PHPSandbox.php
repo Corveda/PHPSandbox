@@ -5344,7 +5344,7 @@
         }
         /** Disassemble callable to string
          *
-         * @param   callable    $closure    The callable to disassemble
+         * @param   callable    $closure                The callable to disassemble
          *
          * @throws  Error       Throw exception if callable is passed and FunctionParser library is missing
          *
@@ -5403,11 +5403,11 @@
             if(!$code){
                 return $this;
             }
-            $code = $this->disassemble($code);
+            $code = $this->disassemble($code, false);
             if($this->auto_whitelist_trusted_code){
                 $this->auto_whitelist($code);
             }
-            $this->prepended_code .= $code . "\r\n";
+            $this->prepended_code .= substr($code, 6) . "\r\n"; //remove opening php tag
             return $this;
         }
         /** Append trusted code
@@ -5419,11 +5419,11 @@
             if(!$code){
                 return $this;
             }
-            $code = $this->disassemble($code);
+            $code = $this->disassemble($code, false);
             if($this->auto_whitelist_trusted_code){
                 $this->auto_whitelist($code, true);
             }
-            $this->appended_code .= "\r\n" . $code . "\r\n";
+            $this->appended_code .= "\r\n" . substr($code, 6) . "\r\n"; //remove opening php tag
             return $this;
         }
         /** Clear all trusted and sandboxed code
