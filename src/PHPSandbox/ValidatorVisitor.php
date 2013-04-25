@@ -115,6 +115,9 @@
                 if(is_array($node->implements)){
                     $this->sandbox->check_keyword('implements');
                     foreach($node->implements as $implement){
+                        /**
+                         * @var \PHPParser_Node_Name   $implement
+                         */
                         if(!$implement->toString()){
                             throw new Error("Sandboxed code attempted to implement unnamed interface!");
                         }
@@ -143,6 +146,9 @@
                 $this->sandbox->check_keyword('use');
                 if(is_array($node->traits)){
                     foreach($node->traits as $trait){
+                        /**
+                         * @var \PHPParser_Node_Name   $trait
+                         */
                         if(!$trait->toString()){
                             throw new Error("Sandboxed code attempted to use unnamed trait!");
                         }
@@ -316,7 +322,7 @@
                     return '__FUNCTION__';
                 case 'Scalar_LineConst':
                     return '__LINE__';
-                case 'Scalar_DirConst':
+                case 'Scalar_MethodConst':
                     return '__METHOD__';
                 case 'Scalar_NSConst':
                     return '__NAMESPACE__';
