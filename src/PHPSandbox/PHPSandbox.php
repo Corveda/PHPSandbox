@@ -3,6 +3,7 @@
      * @package PHPSandbox
      */
     namespace PHPSandbox;
+    use FunctionParser\FunctionParser;
 
     /**
      * PHPSandbox class for PHP Sandboxes.
@@ -369,7 +370,7 @@
          * @param   array   $classes            Optional array of classes to define for the sandbox
          * @param   array   $interfaces         Optional array of interfaces to define for the sandbox
          * @param   array   $traits             Optional array of traits to define for the sandbox
-         * @return  $this                       The returned PHPSandbox variable
+         * @return  PHPSandbox                       The returned PHPSandbox variable
          */
 		public function __construct(array $options = array(),
                                     array $functions = array(),
@@ -471,7 +472,7 @@
          *
          * @throws  Error           Throws exception if JSON template could not be imported
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function import($template, $import_flag = 0){
             if(is_string($template)){
@@ -492,7 +493,7 @@
                                     $function = null;
                                     @eval('$function = ' . $value["fullcode"] .';');
                                     if(!is_callable($function)){
-                                        throw new \PHPSandbox\Error("Could not import function $key! Please check your code for errors!");
+                                        throw new Error("Could not import function $key! Please check your code for errors!");
                                     }
                                     $this->define_func($key, $function, $value["pass"]);
                                 }
@@ -580,7 +581,7 @@
          *
          * @throws  Error           Throws exception if JSON template could not be imported
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function importJSON($template, $import_flag = 0){
             return $this->import($template, $import_flag);
@@ -604,7 +605,7 @@
          * @param   string|array    $option     String or array of strings or associative array of keys of option names to set $value to
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function set_option($option, $value = null){
             if(is_array($option)){
@@ -716,7 +717,7 @@
          * @param   array|string    $options    Array of strings or associative array of keys of option names to set $value to, or JSON array or string template to import
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function set_options($options, $value = null){
             if(is_string($options) || (is_array($options) && isset($options["options"]))){
@@ -731,7 +732,7 @@
          *
          * @example $sandbox->reset_options();
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function reset_options(){
             foreach(get_class_vars(__CLASS__) as $option => $value){
@@ -1253,7 +1254,7 @@
          * @param   string|array|null   $name       Associative array or string of definition name to define
          * @param   mixed|null          $value      Value of definition to define
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function define($type, $name = null, $value = null){
             if(is_array($type)){
@@ -1306,7 +1307,7 @@
          * @param   string|array    $type       Associative array or string of definition type to undefine
          * @param   string|array    $name       Associative array or string of definition name to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine($type, $name = null){
             if(is_array($type)){
@@ -1368,7 +1369,7 @@
          *
          * @throws  Error           Throws exception if unnamed or uncallable $function is defined
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_func($name, $function, $pass_sandbox = false){
             if(is_array($name)){
@@ -1400,7 +1401,7 @@
          *
          * @param   array           $functions       Associative array of $functions to define
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_funcs(array $functions = array()){
             foreach($functions as $name => $function){
@@ -1439,7 +1440,7 @@
          *
          * @param   string|array          $name       String of function name or array of function names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_func($name){
             if(is_array($name)){
@@ -1461,7 +1462,7 @@
          *
          * @param   array           $functions       Array of function names to undefine. Passing an empty array or no argument will result in undefining all functions
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_funcs($functions = array()){
             if(count($functions)){
@@ -1486,7 +1487,7 @@
          *
          * @throws  Error           Throws exception if unnamed variable is defined
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_var($name, $value){
             if(is_array($name)){
@@ -1506,7 +1507,7 @@
          *
          * @param   array           $variables  Associative array of $variables to define
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_vars(array $variables = array()){
             foreach($variables as $name => $value){
@@ -1544,7 +1545,7 @@
          *
          * @param   string|array          $name       String of variable name or an array of variable names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_var($name){
             if(is_array($name)){
@@ -1565,7 +1566,7 @@
          *
          * @param   array           $variables       Array of variable names to undefine. Passing an empty array or no argument will result in undefining all variables
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_vars(array $variables = array()){
             if(count($variables)){
@@ -1592,7 +1593,7 @@
          *
          * @throws  Error           Throws exception if unnamed superglobal is defined
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_superglobal($name, $value){
             if(is_array($name)){
@@ -1619,7 +1620,7 @@
          *
          * @param   array           $superglobals  Associative array of $superglobals to define
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_superglobals(array $superglobals = array()){
             foreach($superglobals as $name => $value){
@@ -1670,7 +1671,7 @@
          * @param   string|array          $name       String of superglobal $name, or array of superglobal names, or associative array of superglobal names and keys to undefine
          * @param   string|null           $key        String of superglobal $key to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_superglobal($name, $key = null){
             if(is_array($name)){
@@ -1699,7 +1700,7 @@
          *
          * @param   array          $superglobals       Associative array of superglobal names and keys or array of superglobal names to undefine
          *
-         * @return  $this          Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox          Returns the PHPSandbox instance for chainability
          */
         public function undefine_superglobals(array $superglobals = array()){
             if(count($superglobals)){
@@ -1725,7 +1726,7 @@
          *
          * @throws  Error           Throws exception if unnamed constant is defined
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_const($name, $value){
             if(is_array($name)){
@@ -1745,7 +1746,7 @@
          *
          * @param   array           $constants  Associative array of $constants to define
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_consts(array $constants = array()){
             foreach($constants as $name => $value){
@@ -1783,7 +1784,7 @@
          *
          * @param   string|array          $name       String of constant name or array of constant names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_const($name){
             if(is_array($name)){
@@ -1804,7 +1805,7 @@
          *
          * @param   array           $constants       Array of constant names to undefine. Passing an empty array or no argument will result in undefining all constants
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_consts(array $constants = array()){
             if(count($constants)){
@@ -1829,7 +1830,7 @@
          *
          * @throws  Error           Throws exception if unnamed magic constant is defined
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_magic_const($name, $value){
             if(is_array($name)){
@@ -1850,7 +1851,7 @@
          *
          * @param   array           $magic_constants  Associative array of $magic_constants to define
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_magic_consts(array $magic_constants = array()){
             foreach($magic_constants as $name => $value){
@@ -1889,7 +1890,7 @@
          *
          * @param   string|array          $name       String of magic constant name, or array of magic constant names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_magic_const($name){
             if(is_array($name)){
@@ -1911,7 +1912,7 @@
          *
          * @param   array           $magic_constants       Array of magic constant names to undefine. Passing an empty array or no argument will result in undefining all magic constants
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_magic_consts(array $magic_constants = array()){
             if(count($magic_constants)){
@@ -1935,7 +1936,7 @@
          *
          * @throws  Error           Throws exception if unnamed namespace is defined
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_namespace($name){
             if(is_array($name)){
@@ -1956,7 +1957,7 @@
          *
          * @param   array           $namespaces  Array of $namespaces to define
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_namespaces(array $namespaces = array()){
             foreach($namespaces as $name => $alias){
@@ -1995,7 +1996,7 @@
          *
          * @param   string|array          $name       String of namespace $name, or an array of namespace names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_namespace($name){
             if(is_array($name)){
@@ -2017,7 +2018,7 @@
          *
          * @param   array           $namespaces       Array of namespace names to undefine. Passing an empty array or no argument will result in undefining all namespaces
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_namespaces(array $namespaces = array()){
             if(count($namespaces)){
@@ -2046,7 +2047,7 @@
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_alias($name, $alias = null){
             if(is_array($name)){
@@ -2071,7 +2072,7 @@
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_aliases(array $aliases = array()){
             foreach($aliases as $name => $alias){
@@ -2110,7 +2111,7 @@
          *
          * @param   string|array          $name       String of alias name, or array of alias names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_alias($name){
             if(is_array($name)){
@@ -2132,7 +2133,7 @@
          *
          * @param   array           $aliases       Array of alias names to undefine. Passing an empty array or no argument will result in undefining all aliases
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_aliases(array $aliases = array()){
             if(count($aliases)){
@@ -2163,7 +2164,7 @@
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_use($name, $alias = null){
             return $this->define_alias($name, $alias);
@@ -2182,7 +2183,7 @@
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_uses(array $uses = array()){
             return $this->define_aliases($uses);
@@ -2221,7 +2222,7 @@
          *
          * @param   string|array          $name       String of use (or alias) name, or array of use (or alias) names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_use($name){
             return $this->undefine_alias($name);
@@ -2238,7 +2239,7 @@
          *
          * @param   array           $uses       Array of use (or alias) names to undefine. Passing an empty array or no argument will result in undefining all uses (or aliases)
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_uses(array $uses = array()){
             return $this->undefine_aliases($uses);
@@ -2256,7 +2257,7 @@
          *
          * @throws  Error           Throws exception if unnamed class is defined
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_class($name, $value){
             if(is_array($name)){
@@ -2277,7 +2278,7 @@
          *
          * @param   array           $classes  Associative array of $classes to define
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_classes(array $classes = array()){
             foreach($classes as $name => $value){
@@ -2333,7 +2334,7 @@
          *
          * @param   string|array          $name       String of class name or an array of class names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_class($name){
             if(is_array($name)){
@@ -2355,7 +2356,7 @@
          *
          * @param   array           $classes       Array of class names to undefine. Passing an empty array or no argument will result in undefining all classes
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_classes(array $classes = array()){
             if(count($classes)){
@@ -2380,7 +2381,7 @@
          *
          * @throws  Error           Throws exception if unnamed interface is defined
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_interface($name, $value){
             if(is_array($name)){
@@ -2401,7 +2402,7 @@
          *
          * @param   array           $interfaces  Associative array of $interfaces to define
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_interfaces(array $interfaces = array()){
             foreach($interfaces as $name => $value){
@@ -2457,7 +2458,7 @@
          *
          * @param   string|array          $name       String of interface name or an array of interface names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_interface($name){
             if(is_array($name)){
@@ -2479,7 +2480,7 @@
          *
          * @param   array           $interfaces       Array of interface names to undefine. Passing an empty array or no argument will result in undefining all interfaces
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_interfaces(array $interfaces = array()){
             if(count($interfaces)){
@@ -2504,7 +2505,7 @@
          *
          * @throws  Error           Throws exception if unnamed trait is defined
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_trait($name, $value){
             if(is_array($name)){
@@ -2525,7 +2526,7 @@
          *
          * @param   array           $traits  Associative array of $traits to define
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_traits(array $traits = array()){
             foreach($traits as $name => $value){
@@ -2581,7 +2582,7 @@
          *
          * @param   string|array          $name       String of trait name or an array of trait names to undefine
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_trait($name){
             if(is_array($name)){
@@ -2603,7 +2604,7 @@
          *
          * @param   array           $traits       Array of trait names to undefine. Passing an empty array or no argument will result in undefining all traits
          *
-         * @return  $this           Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function undefine_traits(array $traits = array()){
             if(count($traits)){
@@ -2864,7 +2865,7 @@
          * @param   string|array        $type       Associative array or string of whitelist type to set
          * @param   string|array|null   $name       Array or string of whitelist name to set
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist($type, $name = null){
             if(is_array($type)){
@@ -2903,7 +2904,7 @@
          * @param   string|array        $type       Associative array or string of blacklist type to set
          * @param   string|array|null   $name       Array or string of blacklist name to set
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist($type, $name = null){
             if(is_array($type)){
@@ -2942,7 +2943,7 @@
          * @param   string|array        $type       Associative array or string of whitelist type to unset
          * @param   string|array|null   $name       Array or string of whitelist name to unset
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist($type, $name){
             if(is_array($type)){
@@ -2975,7 +2976,7 @@
          * @param   string|array        $type       Associative array or string of blacklist type to unset
          * @param   string|array|null   $name       Array or string of blacklist name to unset
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist($type, $name){
             if(is_array($type)){
@@ -3739,7 +3740,7 @@
          *
          * @param   string|array        $name       String of function name, or array of function names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_func($name){
             $name = $this->normalize_func($name);
@@ -3755,7 +3756,7 @@
          *
          * @param   string|array        $name       String of function name, or array of function names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_func($name){
             $name = $this->normalize_func($name);
@@ -3771,7 +3772,7 @@
          *
          * @param   string|array        $name       String of function name or array of function names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_func($name){
             $name = $this->normalize_func($name);
@@ -3787,7 +3788,7 @@
          *
          * @param   string|array        $name       String of function name or array of function names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_func($name){
             $name = $this->normalize_func($name);
@@ -3803,7 +3804,7 @@
          *
          * @param   string|array        $name       String of variable name or array of variable names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_var($name){
             return $this->whitelist('variables', $name);
@@ -3818,7 +3819,7 @@
          *
          * @param   string|array        $name       String of variable name or array of variable names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_var($name){
             return $this->blacklist('variables', $name);
@@ -3833,7 +3834,7 @@
          *
          * @param   string|array        $name       String of variable name or array of variable names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_var($name){
             return $this->dewhitelist('variables', $name);
@@ -3848,7 +3849,7 @@
          *
          * @param   string|array        $name       String of variable name or array of variable names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_var($name){
             return $this->deblacklist('variables', $name);
@@ -3863,7 +3864,7 @@
          *
          * @param   string|array        $name       String of global name or array of global names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_global($name){
             return $this->whitelist('globals', $name);
@@ -3878,7 +3879,7 @@
          *
          * @param   string|array        $name       String of global name or array of global names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_global($name){
             return $this->blacklist('globals', $name);
@@ -3893,7 +3894,7 @@
          *
          * @param   string|array        $name       String of global name or array of global names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_global($name){
             return $this->dewhitelist('globals', $name);
@@ -3908,7 +3909,7 @@
          *
          * @param   string|array        $name       String of global name or array of global names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_global($name){
             return $this->deblacklist('globals', $name);
@@ -3929,7 +3930,7 @@
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to whitelist
          * @param   string              $key        String of superglobal key to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_superglobal($name, $key = null){
             if(is_string($name)){
@@ -3987,7 +3988,7 @@
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to blacklist
          * @param   string              $key        String of superglobal key to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_superglobal($name, $key = null){
             if(is_string($name)){
@@ -4045,7 +4046,7 @@
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist
          * @param   string              $key        String of superglobal key to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_superglobal($name, $key = null){
             if(is_string($name)){
@@ -4096,7 +4097,7 @@
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist
          * @param   string              $key        String of superglobal key to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_superglobal($name, $key = null){
             if(is_string($name)){
@@ -4141,7 +4142,7 @@
          *
          * @param   string|array        $name       String of constant name or array of constant names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_const($name){
             return $this->whitelist('constants', $name);
@@ -4156,7 +4157,7 @@
          *
          * @param   string|array        $name       String of constant name or array of constant names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_const($name){
             return $this->blacklist('constants', $name);
@@ -4171,7 +4172,7 @@
          *
          * @param   string|array        $name       String of constant name or array of constant names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_const($name){
             return $this->dewhitelist('constants', $name);
@@ -4186,7 +4187,7 @@
          *
          * @param   string|array        $name       String of constant name or array of constant names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_const($name){
             return $this->deblacklist('constants', $name);
@@ -4201,7 +4202,7 @@
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_magic_const($name){
             $name = $this->normalize_magic_const($name);
@@ -4217,7 +4218,7 @@
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_magic_const($name){
             $name = $this->normalize_magic_const($name);
@@ -4233,7 +4234,7 @@
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_magic_const($name){
             $name = $this->normalize_magic_const($name);
@@ -4249,7 +4250,7 @@
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_magic_const($name){
             $name = $this->normalize_magic_const($name);
@@ -4265,7 +4266,7 @@
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_namespace($name){
             $name = $this->normalize_namespace($name);
@@ -4281,7 +4282,7 @@
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_namespace($name){
             $name = $this->normalize_namespace($name);
@@ -4297,7 +4298,7 @@
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_namespace($name){
             $name = $this->normalize_namespace($name);
@@ -4313,7 +4314,7 @@
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_namespace($name){
             $name = $this->normalize_namespace($name);
@@ -4329,7 +4330,7 @@
          *
          * @param   string|array        $name       String of alias names  or array of alias names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_alias($name){
             $name = $this->normalize_alias($name);
@@ -4345,7 +4346,7 @@
          *
          * @param   string|array        $name       String of alias name or array of alias names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_alias($name){
             $name = $this->normalize_alias($name);
@@ -4361,7 +4362,7 @@
          *
          * @param   string|array        $name       String of alias name or array of alias names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_alias($name){
             $name = $this->normalize_alias($name);
@@ -4377,7 +4378,7 @@
          *
          * @param   string|array        $name       String of alias name or array of alias names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_alias($name){
             $name = $this->normalize_alias($name);
@@ -4395,7 +4396,7 @@
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_use($name){
             return $this->whitelist_alias($name);
@@ -4412,7 +4413,7 @@
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_use($name){
             return $this->blacklist_alias($name);
@@ -4429,7 +4430,7 @@
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_use($name){
             return $this->dewhitelist_alias($name);
@@ -4446,7 +4447,7 @@
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_use($name){
             return $this->deblacklist_alias($name);
@@ -4461,7 +4462,7 @@
          *
          * @param   string|array        $name       String of class name or array of class names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_class($name){
             $name = $this->normalize_class($name);
@@ -4477,7 +4478,7 @@
          *
          * @param   string|array        $name       String of class name or array of class names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_class($name){
             $name = $this->normalize_class($name);
@@ -4493,7 +4494,7 @@
          *
          * @param   string|array        $name       String of class name or array of class names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_class($name){
             $name = $this->normalize_class($name);
@@ -4509,7 +4510,7 @@
          *
          * @param   string|array        $name       String of class name or array of class names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_class($name){
             $name = $this->normalize_class($name);
@@ -4525,7 +4526,7 @@
          *
          * @param   string|array        $name       String of interface name or array of interface names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_interface($name){
             $name = $this->normalize_interface($name);
@@ -4541,7 +4542,7 @@
          *
          * @param   string|array        $name       String of interface name or array of interface names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_interface($name){
             $name = $this->normalize_interface($name);
@@ -4557,7 +4558,7 @@
          *
          * @param   string|array        $name       String of interface name or array of interface names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_interface($name){
             $name = $this->normalize_interface($name);
@@ -4573,7 +4574,7 @@
          *
          * @param   string|array        $name       String of interface name or array of interface names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_interface($name){
             $name = $this->normalize_interface($name);
@@ -4589,7 +4590,7 @@
          *
          * @param   string|array        $name       String of trait name or array of trait names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_trait($name){
             $name = $this->normalize_trait($name);
@@ -4605,7 +4606,7 @@
          *
          * @param   string|array        $name       String of trait name or array of trait names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_trait($name){
             $name = $this->normalize_trait($name);
@@ -4621,7 +4622,7 @@
          *
          * @param   string|array        $name       String of trait name or array of trait names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_trait($name){
             $name = $this->normalize_trait($name);
@@ -4637,7 +4638,7 @@
          *
          * @param   string|array        $name       String of trait name or array of trait names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_trait($name){
             $name = $this->normalize_trait($name);
@@ -4653,7 +4654,7 @@
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_keyword($name){
             $name = $this->normalize_keyword($name);
@@ -4669,7 +4670,7 @@
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_keyword($name){
             $name = $this->normalize_keyword($name);
@@ -4685,7 +4686,7 @@
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_keyword($name){
             $name = $this->normalize_keyword($name);
@@ -4701,7 +4702,7 @@
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_keyword($name){
             $name = $this->normalize_keyword($name);
@@ -4717,7 +4718,7 @@
          *
          * @param   string|array        $name       String of operator name or array of operator names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_operator($name){
             $name = $this->normalize_operator($name);
@@ -4733,7 +4734,7 @@
          *
          * @param   string|array        $name       String of operator name or array of operator names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_operator($name){
             $name = $this->normalize_operator($name);
@@ -4749,7 +4750,7 @@
          *
          * @param   string|array        $name       String of operator name or array of operator names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_operator($name){
             $name = $this->normalize_operator($name);
@@ -4765,7 +4766,7 @@
          *
          * @param   string|array        $name       String of operator name or array of operator names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_operator($name){
             $name = $this->normalize_operator($name);
@@ -4781,7 +4782,7 @@
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_primitive($name){
             $name = $this->normalize_primitive($name);
@@ -4797,7 +4798,7 @@
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_primitive($name){
             $name = $this->normalize_primitive($name);
@@ -4813,7 +4814,7 @@
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_primitive($name){
             $name = $this->normalize_primitive($name);
@@ -4829,7 +4830,7 @@
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_primitive($name){
             $name = $this->normalize_primitive($name);
@@ -4845,7 +4846,7 @@
          *
          * @param   string|array        $name       String of type name or array of type names to whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_type($name){
             $name = $this->normalize_type($name);
@@ -4861,7 +4862,7 @@
          *
          * @param   string|array        $name       String of type name or array of type names to blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_type($name){
             $name = $this->normalize_type($name);
@@ -4877,7 +4878,7 @@
          *
          * @param   string|array        $name       String of type name or array of type names to remove from whitelist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_type($name){
             $name = $this->normalize_type($name);
@@ -4893,7 +4894,7 @@
          *
          * @param   string|array        $name       String of type name or array of type names to remove from blacklist
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_type($name){
             $name = $this->normalize_type($name);
@@ -4906,9 +4907,6 @@
          * @return  bool     Returns true if function is valid, this is used for testing closures
          */
         public function check_func($name){
-            if(is_callable($name) && $this->allow_closures){
-                return true;
-            }
             $original_name = $name;
             if(!$name || !is_string($name)){
                 throw new Error("Sandboxed code attempted to call unnamed function!");
@@ -5357,7 +5355,7 @@
             if(is_string($closure) && !is_callable($closure)){
                 return strpos($closure, '<?') === 0 ? $closure : '<?php ' . $closure;
             }
-            $disassembled_closure = \FunctionParser\FunctionParser::fromCallable($closure);
+            $disassembled_closure = FunctionParser::fromCallable($closure);
             if($this->auto_define_vars){
                 $this->auto_define($disassembled_closure);
             }
@@ -5383,9 +5381,9 @@
             $traverser->traverse($statements);
         }
         /** Automatically define variables passed to disassembled closure
-         * @param \FunctionParser\FunctionParser    $disassembled_closure
+         * @param FunctionParser    $disassembled_closure
          */
-        protected function auto_define(\FunctionParser\FunctionParser $disassembled_closure){
+        protected function auto_define(FunctionParser $disassembled_closure){
             $parameters = $disassembled_closure->getReflection()->getParameters();
             foreach($parameters as $param){
                 /**
@@ -5397,7 +5395,7 @@
         /** Prepend trusted code
          * @param   string|callable     $code         String or callable of trusted $code to prepend to generated code
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function prepend($code){
             if(!$code){
@@ -5413,7 +5411,7 @@
         /** Append trusted code
          * @param   string|callable     $code         String or callable of trusted $code to append to generated code
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function append($code){
             if(!$code){
@@ -5428,7 +5426,7 @@
         }
         /** Clear all trusted and sandboxed code
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function clear(){
             $this->prepended_code = '';
@@ -5437,7 +5435,7 @@
         }
         /** Clear all trusted code
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function clear_trusted_code(){
             $this->prepended_code = '';
@@ -5446,7 +5444,7 @@
         }
         /** Clear all prepended trusted code
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function clear_prepend(){
             $this->prepended_code = '';
@@ -5454,7 +5452,7 @@
         }
         /** Clear all appended trusted code
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function clear_append(){
             $this->appended_code = '';
@@ -5462,7 +5460,7 @@
         }
         /** Clear generated closure
          *
-         * @return  $this               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function clear_closure(){
             $this->generated_closure = null;
