@@ -68,8 +68,6 @@
                         }
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array('func_get_args'))))), $node->getAttributes());
                     }
-                } else if(!$this->sandbox->allow_closures){
-                    throw new Error("Sandboxed code attempted to call a closure!");
                 } else {
                     return new \PHPParser_Node_Expr_Ternary(
                         new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_Variable($this->sandbox->name), 'check_func', array(new \PHPParser_Node_Arg($node->name)), $node->getAttributes()),
