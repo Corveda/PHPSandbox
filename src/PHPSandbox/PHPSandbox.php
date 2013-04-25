@@ -4908,6 +4908,12 @@
          */
         public function check_func($name){
             $original_name = $name;
+            if($name instanceof \Closure){
+                if(!$this->allow_closures){
+                    throw new Error("Sandboxed code attempted to call closure!");
+                }
+                return true;
+            }
             if(!$name || !is_string($name)){
                 throw new Error("Sandboxed code attempted to call unnamed function!");
             }
