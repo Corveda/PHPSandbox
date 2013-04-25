@@ -250,7 +250,7 @@
          * @var    bool       Should PHPSandbox allow sandboxed code to define constants?
          * @default false
          */
-        public $allow_constants             = false;         //allow sandboxed code to define constants?
+        public $allow_constants             = false;
         /**
          * @var    bool       Should PHPSandbox allow sandboxed code to use global keyword to access variables in the global scope?
          * @default false
