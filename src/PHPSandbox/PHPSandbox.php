@@ -1378,7 +1378,7 @@
             if(!$name){
                 throw new Error("Cannot define unnamed function!");
             }
-            if(is_array($function) && count($function)){    //so you can pass array of functio names and array of function and pass_sandbox flag
+            if(is_array($function) && count($function)){    //so you can pass array of function names and array of function and pass_sandbox flag
                 $pass_sandbox = isset($function[1]) ? $function[1] : false;
                 $function = $function[0];
             }

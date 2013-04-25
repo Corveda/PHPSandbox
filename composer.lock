@@ -1,9 +1,5 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
-    ],
-    "hash": "31a4eb1abbbe503920a3898568ce5160",
+    "hash": "d8b8238f869b95f0f793fc653d98dfd2",
     "packages": [
         {
             "name": "jeremeamia/FunctionParser",
@@ -28,7 +24,7 @@
                     "FunctionParser": "src/"
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
