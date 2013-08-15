@@ -5548,12 +5548,12 @@
 
             $this->preparsed_code = $this->disassemble($code);
 
-            $parser = new \PHPParser_Parser(new \PHPParser_Lexer);
+            $parser = new \PHPParser_Parser(new \PHPParser_Lexer_Emulative);
 
             try {
                 $this->parsed_ast = $parser->parse($this->preparsed_code);
             } catch (\PHPParser_Error $error) {
-                throw new Error("Error parsing sandboxed code!");
+                throw new Error($error);
             }
 
             $traverser = new \PHPParser_NodeTraverser;
