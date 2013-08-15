@@ -1,5 +1,10 @@
 #CHANGELOG
 
+
+
+##08/15/2013
+- Added support for PHP 5.5. and new allow_generators flag for configuring the sandbox to enable or disable PHP 5.5 generators
+
 ##03/04/2013
 - Added the ability to redefine classes, interfaces and traits
 
