@@ -153,6 +153,11 @@
                         $this->sandbox->check_trait($trait->toString());
                     }
                 }
+            } else if($node instanceof \PHPParser_Node_Expr_Yield){
+                if(!$this->sandbox->allow_generators){
+                    throw new Error("Sandboxed code attempted to create a generator!");
+                }
+                $this->sandbox->check_keyword('yield');
             } else if($node instanceof \PHPParser_Node_Stmt_Global){
                 if(!$this->sandbox->allow_globals){
                     throw new Error("Sandboxed code attempted to use global keyword!");

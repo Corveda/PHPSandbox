@@ -282,6 +282,11 @@
          */
         public $allow_traits                = false;
         /**
+         * @var    bool       Should PHPSandbox allow sandboxed code to create generators?
+         * @default true
+         */
+        public $allow_generators            = true;
+        /**
          * @var    bool       Should PHPSandbox allow sandboxed code to escape to HTML?
          * @default false
          */
@@ -685,6 +690,9 @@
                 case 'allow_traits':
                     $this->allow_traits = $value ? true : false;
                     break;
+                case 'allow_generators':
+                    $this->allow_generators = $value ? true : false;
+                    break;
                 case 'allow_escaping':
                     $this->allow_escaping = $value ? true : false;
                     break;
@@ -826,6 +834,9 @@
                     break;
                 case 'allow_traits':
                     return $this->allow_traits;
+                    break;
+                case 'allow_generators':
+                    return $this->allow_generators;
                     break;
                 case 'allow_escaping':
                     return $this->allow_escaping;
