@@ -13,7 +13,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.0
+     * @version 1.1
      */
     class SandboxWhitelistVisitor extends \PHPParser_NodeVisitorAbstract {
         /** The PHPSandbox instance to check against

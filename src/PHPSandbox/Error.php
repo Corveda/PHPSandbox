@@ -11,6 +11,6 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.0
+     * @version 1.1
      */
 	class Error extends \Exception {}

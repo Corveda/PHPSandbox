@@ -381,6 +381,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <li class="property public "><a href="#property_allow_error_suppressing" title="$allow_error_suppressing :: "><span class="description">Should PHPSandbox allow sandboxed code to suppress errors (e.g. the @ operator?)</span><pre>$allow_error_suppressing</pre></a></li>
 <li class="property public "><a href="#property_allow_escaping" title="$allow_escaping :: "><span class="description">Should PHPSandbox allow sandboxed code to escape to HTML?</span><pre>$allow_escaping</pre></a></li>
 <li class="property public "><a href="#property_allow_functions" title="$allow_functions :: "><span class="description">Should PHPSandbox allow sandboxed code to declare functions?</span><pre>$allow_functions</pre></a></li>
+<li class="property public "><a href="#property_allow_generators" title="$allow_generators :: "><span class="description">Should PHPSandbox allow sandboxed code to create generators?</span><pre>$allow_generators</pre></a></li>
 <li class="property public "><a href="#property_allow_globals" title="$allow_globals :: "><span class="description">Should PHPSandbox allow sandboxed code to use global keyword to access variables in the global scope?</span><pre>$allow_globals</pre></a></li>
 <li class="property public "><a href="#property_allow_halting" title="$allow_halting :: "><span class="description">Should PHPSandbox allow sandboxed code to halt the PHP compiler?</span><pre>$allow_halting</pre></a></li>
 <li class="property public "><a href="#property_allow_interfaces" title="$allow_interfaces :: "><span class="description">Should PHPSandbox allow sandboxed code to declare interfaces?</span><pre>$allow_interfaces</pre></a></li>
@@ -474,7 +475,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
 </tr>
 <tr>
 <th>version</th>
-<td>1.0</td>
+<td>1.1</td>
 </tr>
 </table>
 <h3>
@@ -486,17 +487,11 @@ only has to create a PHPSandbox instance, configure its options, and run their c
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox = new PHPSandbox\PHPSandbox;
 You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$options</h4>
@@ -790,10 +785,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$code</h4>
@@ -825,10 +816,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <tr>
 <th>example</th>
 <td>$sandbox->blacklist('functions', 'test');</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -866,10 +853,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <th>example</th>
 <td>$sandbox->blacklist_alias(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -901,10 +884,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <tr>
 <th>example</th>
 <td>$sandbox->blacklist_class(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -938,10 +917,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <th>example</th>
 <td>$sandbox->blacklist_const(array('FOO', 'BAR'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -973,10 +948,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <tr>
 <th>example</th>
 <td>$sandbox->blacklist_func(array('var_dump', 'print_r'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -1010,10 +981,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <th>example</th>
 <td>$sandbox->blacklist_global(array('a', 'b'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -1045,10 +1012,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <tr>
 <th>example</th>
 <td>$sandbox->blacklist_interface(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -1082,10 +1045,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <th>example</th>
 <td>$sandbox->blacklist_keyword(array('echo', 'eval'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -1117,10 +1076,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <tr>
 <th>example</th>
 <td>$sandbox->blacklist_magic_const(array('__LINE__', '__FILE__'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -1154,10 +1109,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <th>example</th>
 <td>$sandbox->blacklist_namespace(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -1190,10 +1141,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <th>example</th>
 <td>$sandbox->blacklist_operator(array('+', '-'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -1225,10 +1172,6 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
 <tr>
 <th>example</th>
 <td>$sandbox->blacklist_primitive(array('int', 'float'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -1273,10 +1216,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->blacklist_superglobal(array('_GET' => 'page'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -1314,10 +1253,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->blacklist_trait(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -1349,10 +1284,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->blacklist_type(array('PHPSandbox', 'PHPParser'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -1390,10 +1321,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->blacklist_use(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -1426,10 +1353,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->blacklist_var(array('a', 'b'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -1752,10 +1675,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
@@ -1767,10 +1686,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
@@ -1782,10 +1697,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
@@ -1797,10 +1708,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
@@ -1812,10 +1719,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
@@ -1898,10 +1801,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist('functions', 'test');</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -1938,10 +1837,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_alias(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -1973,10 +1868,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->deblacklist_class(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2010,10 +1901,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_const(array('FOO', 'BAR'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2045,10 +1932,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->deblacklist_func(array('var_dump', 'print_r'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2082,10 +1965,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_global(array('a', 'b'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2117,10 +1996,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->deblacklist_interface(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2154,10 +2029,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_keyword(array('echo', 'eval'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2189,10 +2060,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->deblacklist_magic_const(array('__LINE__', '__FILE__'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2226,10 +2093,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_namespace(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2262,10 +2125,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_operator(array('+', '-'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2297,10 +2156,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->deblacklist_primitive(array('int', 'float'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2345,10 +2200,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_superglobal(array('_GET' => 'page'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2386,10 +2237,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_trait(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2421,10 +2268,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->deblacklist_type(array('PHPSandbox', 'PHPParser'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2462,10 +2305,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_use(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2499,10 +2338,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->deblacklist_var(array('a', 'b'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2535,10 +2370,6 @@ an associative array of their corresponding values</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->define(array('functions' => array('test' => function(){ echo 'test'; }));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2586,10 +2417,6 @@ an associative array of their corresponding values</p></div>
 <th>example</th>
 <td>$sandbox->define_alias(array('Foo' => 'Bar')); //use Foo as Bar;</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2634,10 +2461,6 @@ an associative array of their corresponding values</p></div>
 <th>example</th>
 <td>$sandbox->define_aliases(array('Foo' => 'Bar')); //use Foo as Bar;</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2675,10 +2498,6 @@ an associative array of their corresponding values</p></div>
 <th>example</th>
 <td>$sandbox->define_class(array('Test' => 'Test2'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -2711,16 +2530,10 @@ an associative array of their corresponding values</p></div>
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"><p>You can pass an associative array of classes to define</p></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->define_classes(array('Test' => 'Test2'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$classes</h4>
@@ -2751,10 +2564,6 @@ an associative array of their corresponding values</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->define_const(array('TEST' => 1));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2788,16 +2597,10 @@ an associative array of their corresponding values</p></div>
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"><p>You can pass an associative array of constants to define</p></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->define_consts(array('test' => 1));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$constants</h4>
@@ -2833,10 +2636,6 @@ functions to define, which can have callable values or arrays of the function ca
 <tr>
 <th>example</th>
 <td>$sandbox->define_func(array('test' => array(function(){ echo 'test'; }, true)));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2876,16 +2675,10 @@ functions to define, which can have callable values or arrays of the function ca
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"><p>You can pass an associative array of functions to define</p></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->define_funcs(array('test' => function(){ echo 'test'; }));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$functions</h4>
@@ -2916,10 +2709,6 @@ functions to define, which can have callable values or arrays of the function ca
 <tr>
 <th>example</th>
 <td>$sandbox->define_interface(array('Test' => 'Test2'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -2953,16 +2742,10 @@ functions to define, which can have callable values or arrays of the function ca
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"><p>You can pass an associative array of interfaces to define</p></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->define_interfaces(array('Test' => 'Test2'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$interfaces</h4>
@@ -2993,10 +2776,6 @@ functions to define, which can have callable values or arrays of the function ca
 <tr>
 <th>example</th>
 <td>$sandbox->define_magic_const(array('__LINE__' => 1));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -3030,16 +2809,10 @@ functions to define, which can have callable values or arrays of the function ca
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"><p>You can pass an associative array of magic constants to define</p></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->define_magic_consts(array('__LINE__' => 1));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$magic_constants</h4>
@@ -3071,10 +2844,6 @@ functions to define, which can have callable values or arrays of the function ca
 <th>example</th>
 <td>$sandbox->define_namespace(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3104,16 +2873,10 @@ functions to define, which can have callable values or arrays of the function ca
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"><p>You can pass an array of namespaces to define</p></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->define_namespaces(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$namespaces</h4>
@@ -3149,10 +2912,6 @@ functions to define, which can have callable values or arrays of the function ca
 <th>example</th>
 <td>$sandbox->define_superglobal('_GET', 'page', 1);</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3186,16 +2945,10 @@ functions to define, which can have callable values or arrays of the function ca
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"><p>You can pass an associative array of superglobals to define</p></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->define_superglobals(array('_GET' => array('page' => 1)));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$superglobals</h4>
@@ -3226,10 +2979,6 @@ functions to define, which can have callable values or arrays of the function ca
 <tr>
 <th>example</th>
 <td>$sandbox->define_trait(array('Test' => 'Test2'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -3263,16 +3012,10 @@ functions to define, which can have callable values or arrays of the function ca
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"><p>You can pass an associative array of traits to define</p></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->define_traits(array('Test' => 'Test2'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$traits</h4>
@@ -3316,10 +3059,6 @@ You can pass the namespace $name and $alias to use, an array of namespaces to us
 <tr>
 <th>example</th>
 <td>$sandbox->define_use(array('Foo' => 'Bar')); //use Foo as Bar;</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -3370,10 +3109,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <th>example</th>
 <td>$sandbox->define_uses(array('Foo' => 'Bar')); //use Foo as Bar;</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3411,10 +3146,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <th>example</th>
 <td>$sandbox->define_var(array('test' => 1));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3447,16 +3178,10 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"><p>You can pass an associative array of variables to define</p></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->define_vars(array('test' => 1));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$variables</h4>
@@ -3494,10 +3219,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <th>example</th>
 <td>$sandbox->dewhitelist('functions', 'test');</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3534,10 +3255,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <th>example</th>
 <td>$sandbox->dewhitelist_alias(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3569,10 +3286,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <tr>
 <th>example</th>
 <td>$sandbox->dewhitelist_class(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -3606,10 +3319,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <th>example</th>
 <td>$sandbox->dewhitelist_const(array('FOO', 'BAR'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3641,10 +3350,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <tr>
 <th>example</th>
 <td>$sandbox->dewhitelist_func(array('var_dump', 'print_r'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -3678,10 +3383,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <th>example</th>
 <td>$sandbox->dewhitelist_global(array('a', 'b'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3713,10 +3414,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <tr>
 <th>example</th>
 <td>$sandbox->dewhitelist_interface(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -3750,10 +3447,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <th>example</th>
 <td>$sandbox->dewhitelist_keyword(array('echo', 'eval'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3785,10 +3478,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <tr>
 <th>example</th>
 <td>$sandbox->dewhitelist_magic_const(array('__LINE__', '__FILE__'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -3822,10 +3511,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <th>example</th>
 <td>$sandbox->dewhitelist_namespace(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3858,10 +3543,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <th>example</th>
 <td>$sandbox->dewhitelist_operator(array('+', '-'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3893,10 +3574,6 @@ You can pass an array of namespaces to use, or an associative array of namespace
 <tr>
 <th>example</th>
 <td>$sandbox->dewhitelist_primitive(array('int', 'float'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -3941,10 +3618,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->dewhitelist_superglobal(array('_GET' => 'page'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -3982,10 +3655,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->dewhitelist_trait(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -4017,10 +3686,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->dewhitelist_type(array('PHPSandbox', 'PHPParser'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -4058,10 +3723,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->dewhitelist_use(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -4094,10 +3755,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->dewhitelist_var(array('a', 'b'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -5500,10 +5157,6 @@ not callable and a valid generated closure exists, then all arguments are passed
 <th>example</th>
 <td>$sandbox->import(file_get_contents("template.json"));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -5547,10 +5200,6 @@ not callable and a valid generated closure exists, then all arguments are passed
 <tr>
 <th>example</th>
 <td>$sandbox->importJSON(file_get_contents("template.json"));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -6840,10 +6489,6 @@ not callable and a valid generated closure exists, then all arguments are passed
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$code</h4>
@@ -6861,16 +6506,10 @@ not callable and a valid generated closure exists, then all arguments are passed
 <div class="row collapse">
 <div class="span4">
 <div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
+<table class="table table-bordered"><tr>
 <th>example</th>
 <td>$sandbox->reset_options();</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
-</table>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></code>Returns the PHPSandbox instance for chainability</div>
@@ -6900,10 +6539,6 @@ not callable and a valid generated closure exists, then all arguments are passed
 <tr>
 <th>example</th>
 <td>$sandbox->set_option('allow_functions', true);</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -6943,10 +6578,6 @@ not callable and a valid generated closure exists, then all arguments are passed
 <th>example</th>
 <td>$sandbox->set_option(array('allow_functions', 'allow_classes'), true);</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -6985,10 +6616,6 @@ and an array of key names to undefine</p></div>
 <th>example</th>
 <td>$sandbox->undefine(array('functions' => array('test'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7024,10 +6651,6 @@ and an array of key names to undefine</p></div>
 <th>example</th>
 <td>$sandbox->undefine_alias(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7059,10 +6682,6 @@ and an array of key names to undefine</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_aliases(); //WILL UNDEFINE ALL ALIASES!</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7096,10 +6715,6 @@ and an array of key names to undefine</p></div>
 <th>example</th>
 <td>$sandbox->undefine_class(array('Test', 'Test2'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7131,10 +6746,6 @@ and an array of key names to undefine</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_classes(); //WILL UNDEFINE ALL CLASSES!</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7168,10 +6779,6 @@ and an array of key names to undefine</p></div>
 <th>example</th>
 <td>$sandbox->undefine_const(array('test', 'test2'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7203,10 +6810,6 @@ and an array of key names to undefine</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_consts(); //WILL UNDEFINE ALL CONSTANTS!</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7240,10 +6843,6 @@ and an array of key names to undefine</p></div>
 <th>example</th>
 <td>$sandbox->undefine_func(array('test', 'test2'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7275,10 +6874,6 @@ and an array of key names to undefine</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_funcs(); //WILL UNDEFINE ALL FUNCTIONS!</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7312,10 +6907,6 @@ and an array of key names to undefine</p></div>
 <th>example</th>
 <td>$sandbox->undefine_interface(array('Test', 'Test2'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7347,10 +6938,6 @@ and an array of key names to undefine</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_interfaces(); //WILL UNDEFINE ALL INTERFACES!</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7384,10 +6971,6 @@ and an array of key names to undefine</p></div>
 <th>example</th>
 <td>$sandbox->undefine_magic_const(array('__LINE__', '__FILE__'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7419,10 +7002,6 @@ and an array of key names to undefine</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_magic_consts(); //WILL UNDEFINE ALL MAGIC CONSTANTS!</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7456,10 +7035,6 @@ and an array of key names to undefine</p></div>
 <th>example</th>
 <td>$sandbox->undefine_namespace(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7492,10 +7067,6 @@ and an array of key names to undefine</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_namespaces(); //WILL UNDEFINE ALL NAMESPACES!</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7533,10 +7104,6 @@ superglobal names to undefine, or an an associative array of superglobal names a
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_superglobal(array('_GET', '_POST'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7581,10 +7148,6 @@ to undefine, or an empty array or null to undefine all superglobals</p></div>
 <th>example</th>
 <td>$sandbox->undefine_superglobals(); //WILL UNDEFINE ALL SUPERGLOBALS!</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7618,10 +7181,6 @@ to undefine, or an empty array or null to undefine all superglobals</p></div>
 <th>example</th>
 <td>$sandbox->undefine_trait(array('Test', 'Test2'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7654,10 +7213,6 @@ to undefine, or an empty array or null to undefine all superglobals</p></div>
 <th>example</th>
 <td>$sandbox->undefine_traits(); //WILL UNDEFINE ALL TRAITS!</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7689,10 +7244,6 @@ to undefine, or an empty array or null to undefine all superglobals</p></div>
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_use(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7732,10 +7283,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <th>example</th>
 <td>$sandbox->undefine_uses(); //WILL UNDEFINE ALL USES (OR ALIASES!)</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7769,10 +7316,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <th>example</th>
 <td>$sandbox->undefine_var(array('test', 'test2'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7804,10 +7347,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <tr>
 <th>example</th>
 <td>$sandbox->undefine_vars(); //WILL UNDEFINE ALL VARIABLES!</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7847,10 +7386,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <th>example</th>
 <td>$sandbox->whitelist('functions', 'test');</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7887,10 +7422,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <th>example</th>
 <td>$sandbox->whitelist_alias(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7922,10 +7453,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <tr>
 <th>example</th>
 <td>$sandbox->whitelist_class(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -7959,10 +7486,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <th>example</th>
 <td>$sandbox->whitelist_const(array('FOO', 'BAR'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -7994,10 +7517,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <tr>
 <th>example</th>
 <td>$sandbox->whitelist_func(array('var_dump', 'print_r'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -8031,10 +7550,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <th>example</th>
 <td>$sandbox->whitelist_global(array('a', 'b'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -8066,10 +7581,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <tr>
 <th>example</th>
 <td>$sandbox->whitelist_interface(array('Foo', 'Bar'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -8103,10 +7614,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <th>example</th>
 <td>$sandbox->whitelist_keyword(array('echo', 'eval'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -8138,10 +7645,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <tr>
 <th>example</th>
 <td>$sandbox->whitelist_magic_const(array('__LINE__', '__FILE__'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -8175,10 +7678,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <th>example</th>
 <td>$sandbox->whitelist_namespace(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -8211,10 +7710,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <th>example</th>
 <td>$sandbox->whitelist_operator(array('+', '-'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -8246,10 +7741,6 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
 <tr>
 <th>example</th>
 <td>$sandbox->whitelist_primitive(array('int', 'float'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -8292,10 +7783,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->whitelist_superglobal(array('_GET' => 'page'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -8333,10 +7820,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->whitelist_trait(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -8368,10 +7851,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->whitelist_type(array('PHPSandbox', 'PHPParser'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -8409,10 +7888,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <th>example</th>
 <td>$sandbox->whitelist_use(array('Foo', 'Bar'));</td>
 </tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
-</tr>
 </table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -8445,10 +7920,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <tr>
 <th>example</th>
 <td>$sandbox->whitelist_var(array('a', 'b'));</td>
-</tr>
-<tr>
-<th>fluent</th>
-<td>This method is part of a fluent interface and will return the same instance</td>
 </tr>
 </table>
 <h3>Parameters</h3>
@@ -8879,6 +8350,18 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </tr></table>
 </div></div>
 </div>
+<a id="property_allow_generators"> </a><div class="element clickable property public property_allow_generators" data-toggle="collapse" data-target=".property_allow_generators .collapse">
+<h2>Should PHPSandbox allow sandboxed code to create generators?</h2>
+<pre>$allow_generators : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>default</th>
+<td>true</td>
+</tr></table>
+</div></div>
+</div>
 <a id="property_allow_globals"> </a><div class="element clickable property public property_allow_globals" data-toggle="collapse" data-target=".property_allow_globals .collapse">
 <h2>Should PHPSandbox allow sandboxed code to use global keyword to access variables in the global scope?</h2>
 <pre>$allow_globals : bool</pre>
@@ -9303,7 +8786,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-03-05T14:12:16-05:00.<br></footer></div>
+            generated on 2013-08-15T14:23:23-04:00.<br></footer></div>
 </div>
 </body>
 </html>
