@@ -16,7 +16,7 @@
 
     if(isset($_POST['save']) || isset($_POST['download'])){
         if(isset($_POST['download'])){
-            $data = json_decode($_POST['download'], JSON_OBJECT_AS_ARRAY);
+            $data = json_decode($_POST['download'], 1);
             if(!is_array($data)){
                 header('Content-type: text/html');
                 die('<html><body><script>alert("Template could not be saved!");</script></body></html>');
@@ -153,7 +153,7 @@
         exit;
     }
 
-    $data = json_decode(file_get_contents("templates/001 - Hello World.json"), JSON_OBJECT_AS_ARRAY);
+    $data = json_decode(file_get_contents("templates/001 - Hello World.json"), 1);
 ?>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
