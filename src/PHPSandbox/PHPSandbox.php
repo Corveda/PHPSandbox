@@ -160,6 +160,26 @@
             'primitives' => array(),
             'types' => array()
         );
+        /**
+         * @var     array       Array of custom validation functions
+         */
+        protected $validation = array(
+            'function' => null,
+            'variable' => null,
+            'global' => null,
+            'superglobal' => null,
+            'constant' => null,
+            'magic_constant' => null,
+            'namespace' => null,
+            'alias' => null,
+            'class' => null,
+            'interface' => null,
+            'trait' => null,
+            'keyword' => null,
+            'operator' => null,
+            'primitive' => null,
+            'type' => null
+        );
         /* CONFIGURATION OPTION FLAGS */
         /**
          * @var    bool       The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
@@ -858,6 +878,49 @@
                     break;
             }
             return null;
+        }
+        /** Set validation callable for specified $type
+         *
+         * Validator callable must accept two parameters: a string of the name of the checked element, and the PHPSandbox
+         * instance
+         *
+         * @example $sandbox->set_validator('function', function($function, PHPSandbox $sandbox){ return true; });
+         *
+         * @param   string          $type       String of $type name to set validator for
+         * @param   callable        $callable   Callable that validates the passed element
+         *
+         * @return  $this           Returns the PHPSandbox instance
+         */
+        public function set_validator($type, callable $callable){
+            if(array_key_exists($type, $this->validation)){
+                $this->validation[$type] = $callable;
+            }
+            return $this;
+        }
+        /** Get validation callable for specified $type
+         *
+         * @example $sandbox->get_validator('function'); //return callable
+         *
+         * @param   string          $type       String of $type to return
+         *
+         * @return  callable|null
+         */
+        public function get_validator($type){
+            return isset($this->validation[$type]) ? $this->validation[$type] : null;
+        }
+        /** Unset validation callable for specified $type
+         *
+         * @example $sandbox->unet_validator('function'); //clear custom validation
+         *
+         * @param   string          $type       String of $type to unset
+         *
+         * @return  $this           Returns the PHPSandbox instance
+         */
+        public function unset_validator($type){
+            if(isset($this->validation[$type])){
+                $this->validation[$type] = null;
+            }
+            return $this;
         }
         /** Get PHPSandbox prepended code
          * @return  string          Returns a string of the prepended code
@@ -4929,6 +4992,9 @@
                 throw new Error("Sandboxed code attempted to call unnamed function!");
             }
             $name = $this->normalize_func($name);
+            if(is_callable($this->validation['function'])){
+                return call_user_func_array($this->validation['function'], array($name, $this));
+            }
             if(!isset($this->definitions['functions'][$name]) || !is_callable($this->definitions['functions'][$name]['function'])){
                 if(count($this->whitelist['functions'])){
                     if(!isset($this->whitelist['functions'][$name])){
