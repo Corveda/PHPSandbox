@@ -187,11 +187,6 @@
          */
         public $error_level                 = null;
         /**
-         * @var    bool       Flag whether to return output via an output buffer
-         * @default false
-         */
-        public $capture_output              = false;
-        /**
          * @var    bool       Should PHPSandbox automagically whitelist prepended and appended code?
          * @default true
          */
@@ -5799,9 +5794,6 @@
                 throw new Error("Sandboxed code attempted to $action unnamed class!");
             }
             $name = $this->normalize_class($name);
-            if($name == 'self' || $name == 'static' || $name == 'parent'){
-                return true;
-            }
             if(is_callable($this->validation['class'])){
                 return call_user_func_array($this->validation['class'], array($name, $this));
             }
@@ -6013,11 +6005,10 @@
                         $output[] = '$' . $name . " = null";
                     }
                 } else {
-                    //throw new Error("Sandboxed code attempted to pass non-scalar default variable value: $name");
-                    $output[] = '$' . $name . " = unserialize('" . serialize($value) . "')";
+                    throw new Error("Sandboxed code attempted to pass non-scalar default variable value: $name");
                 }
             }
-            return count($output) ? "\r\n" . implode(";\r\n", $output) . ";\r\n" : '';
+            return count($output) ? ', ' . implode(', ', $output) : '';
         }
         /** Prepare defined constants for execution
          */
@@ -6086,16 +6077,14 @@
             if(!class_exists('\FunctionParser\FunctionParser', true) && is_callable($closure)){
                 throw new Error("Cannot disassemble callable code because the FunctionParser library could not be found!");
             }
-            $short_open_tag = '<' . '?';
-            $open_tag = $short_open_tag . 'php ';
             if(is_string($closure) && !is_callable($closure)){
-                return $closure;
+                return strpos($closure, '<?') === 0 ? $closure : '<?php ' . $closure;
             }
             $disassembled_closure = FunctionParser::fromCallable($closure);
             if($this->auto_define_vars){
                 $this->auto_define($disassembled_closure);
             }
-            return $open_tag . $disassembled_closure->getBody();
+            return '<?php ' . $disassembled_closure->getBody();
         }
         /** Automatically whitelisted trusted code
          *
@@ -6300,11 +6289,12 @@
             $this->generated_code = $this->prepare_namespaces() .
                 $this->prepare_aliases() .
                 $this->prepare_consts() .
-                $this->prepare_vars() .
+                '$this->generated_closure = function($' . $this->name . $this->prepare_vars() . "){\r\n" .
                 $this->prepended_code .
                 $this->prepared_code .
-                $this->appended_code;
-            //@eval($this->generated_code);
+                $this->appended_code .
+                "\r\n};";
+            @eval($this->generated_code);
             usleep(1); //guarantee at least some time passes
             $this->prepare_time = (microtime(true) - $this->prepare_time);
             return $this->generated_closure;
@@ -6325,31 +6315,21 @@
          */
         public function execute(){
             $arguments = func_get_args();
-            if(count($arguments)){
+            if(count($arguments) && !($this->generated_closure && is_callable($this->generated_closure))){
                 $this->prepare(array_shift($arguments));
             }
 
-            //if(is_callable($this->generated_closure)){
+            if(is_callable($this->generated_closure)){
                 if($this->error_level !== null){
                     error_reporting($this->error_level);
                 }
                 array_unshift($arguments, $this);
                 $this->execution_time = microtime(true);
-                eval('$' . $this->name . ' = $this;');
-                file_put_contents("C:/wamp/www/tmp.php", "<?php\r\n" . $this->generated_code);
-                if($this->capture_output){
-                    ob_start();
-                    //call_user_func_array($this->generated_closure, $arguments);
-                    include("C:/wamp/www/tmp.php");
-                    $result = ob_get_clean();
-                } else {
-                    //$result = call_user_func_array($this->generated_closure, $arguments);
-                    $result = include("C:/wamp/www/tmp.php");
-                }
+                $result = call_user_func_array($this->generated_closure, $arguments);
                 usleep(1); //guarantee at least some time passes
                 $this->execution_time = (microtime(true) - $this->execution_time);
                 return $result;
-            //}
-            //throw new Error("Error generating sandboxed code!");
+            }
+            throw new Error("Error generating sandboxed code!");
 		}
 	}
