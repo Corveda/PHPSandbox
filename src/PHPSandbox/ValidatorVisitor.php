@@ -299,12 +299,15 @@
                     throw new Error("Keyword failed custom validation!");
                 }
                 if($node->name instanceof \PHPParser_Node_Name){
-                    $this->sandbox->check_namespace($node->name->toString());
-                    $this->sandbox->define_namespace($node->name->toString());
+                    $namespace = $node->name->toString();
+                    $this->sandbox->check_namespace($namespace);
+                    if(!$this->sandbox->is_defined_namespace($namespace)){
+                        $this->sandbox->define_namespace($namespace);
+                    }
                 } else {
                     throw new Error("Sandboxed code attempted use invalid namespace!");
                 }
-                return false;
+                return $node->stmts;
             } else if($node instanceof \PHPParser_Node_Stmt_Use){
                 if(!$this->sandbox->allow_aliases){
                     throw new Error("Sandboxed code attempted to use namespace and/or alias!");

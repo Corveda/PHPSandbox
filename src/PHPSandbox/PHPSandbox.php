@@ -2575,8 +2575,8 @@
             if(!$name){
                 throw new Error("Cannot define unnamed namespace!");
             }
-            $name = $this->normalize_namespace($name);
-            $this->definitions['namespaces'][$name] = $name;
+            $normalized_name = $this->normalize_namespace($name);
+            $this->definitions['namespaces'][$normalized_name] = $name;
             return $this;
         }
         /** Define PHPSandbox namespaces by array
@@ -2615,6 +2615,23 @@
         public function is_defined_namespace($name){
             $name = $this->normalize_namespace($name);
             return isset($this->definitions['namespaces'][$name]);
+        }
+        /** Get defined namespace of $name
+         *
+         * @example $sandbox->get_defined_namespace('Test');
+         *
+         * @param   string          $name       String of namespace $name to get
+         *
+         * @throws  Error           Throws an exception if an invalid namespace name is requested
+         *
+         * @return  string          Returns string of defined namespace value
+         */
+        public function get_defined_namespace($name){
+            $name = $this->normalize_namespace($name);
+            if(!isset($this->definitions['namespaces'][$name])){
+                throw new Error("Could not get undefined namespace: $name");
+            }
+            return $this->definitions['namespaces'][$name];
         }
         /** Undefine PHPSandbox namespace
          *
@@ -5732,16 +5749,18 @@
             if(is_callable($this->validation['namespace'])){
                 return call_user_func_array($this->validation['namespace'], array($name, $this));
             }
-            if(count($this->whitelist['namespaces'])){
-                if(!isset($this->whitelist['namespaces'][$name])){
-                    throw new Error("Sandboxed code attempted to call non-whitelisted namespace: $original_name");
+            if(!isset($this->definitions['namespaces'][$name])){
+                if(count($this->whitelist['namespaces'])){
+                    if(!isset($this->whitelist['namespaces'][$name])){
+                        throw new Error("Sandboxed code attempted to call non-whitelisted namespace: $original_name");
+                    }
+                } else if(count($this->blacklist['namespaces'])){
+                    if(isset($this->blacklist['namespaces'][$name])){
+                        throw new Error("Sandboxed code attempted to call blacklisted namespace: $original_name");
+                    }
+                } else if(!$this->allow_namespaces){
+                    throw new Error("Sandboxed code attempted to call invalid namespace: $original_name");
                 }
-            } else if(count($this->blacklist['namespaces'])){
-                if(isset($this->blacklist['namespaces'][$name])){
-                    throw new Error("Sandboxed code attempted to call blacklisted namespace: $original_name");
-                }
-            } else if(!$this->allow_namespaces){
-                throw new Error("Sandboxed code attempted to call invalid namespace: $original_name");
             }
             return true;
         }
@@ -6325,7 +6344,7 @@
          */
         public function execute(){
             $arguments = func_get_args();
-            if(count($arguments)){
+            if(count($arguments) && !$this->prepared_code){
                 $this->prepare(array_shift($arguments));
             }
 
@@ -6336,15 +6355,14 @@
                 array_unshift($arguments, $this);
                 $this->execution_time = microtime(true);
                 eval('$' . $this->name . ' = $this;');
-                file_put_contents("C:/wamp/www/tmp.php", "<?php\r\n" . $this->generated_code);
                 if($this->capture_output){
                     ob_start();
                     //call_user_func_array($this->generated_closure, $arguments);
-                    include("C:/wamp/www/tmp.php");
+                    eval($this->generated_code);
                     $result = ob_get_clean();
                 } else {
                     //$result = call_user_func_array($this->generated_closure, $arguments);
-                    $result = include("C:/wamp/www/tmp.php");
+                    $result = eval($this->generated_code);
                 }
                 usleep(1); //guarantee at least some time passes
                 $this->execution_time = (microtime(true) - $this->execution_time);
