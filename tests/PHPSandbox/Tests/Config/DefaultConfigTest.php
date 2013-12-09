@@ -266,4 +266,29 @@
             $this->setExpectedException('PHPSandbox\Error');
             $this->sandbox->execute(function(){ return new \stdClass; });
         }
+
+        /**
+         * Test whether sandbox custom function validation succeeds
+         */
+        public function testCustomFunctionValidationSuccess(){
+            $this->expectOutputString('success');
+            $this->sandbox->set_func_validator(function($name, $sandbox){
+                return $name == 'phpsandbox\tests\config\test';
+            });
+            function test(){
+                echo 'success';
+            }
+            $this->sandbox->execute(function(){ \PHPSandbox\Tests\Config\test(); });
+        }
+
+        /**
+         * Test whether sandbox custom function validation succeeds
+         */
+        public function testCustomFunctionValidationFailure(){
+            $this->setExpectedException('PHPSandbox\Error');
+            $this->sandbox->set_func_validator(function($name, $sandbox){
+                return $name == 'test';
+            });
+            $this->sandbox->execute(function(){ test2(); });
+        }
     }

@@ -1,6 +1,7 @@
 #CHANGELOG
 
-
+##12/09/2013
+- Added ability to define custom validation functions for fine-grained control of the sandbox elements
 
 ##08/15/2013
 - Added support for PHP 5.5. and new allow_generators flag for configuring the sandbox to enable or disable PHP 5.5 generators
