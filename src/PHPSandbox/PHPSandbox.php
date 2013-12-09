@@ -190,7 +190,7 @@
          * @var    bool       Flag to indicate whether the sandbox should return error_reporting to its previous level after execution
          * @default true
          */
-        public $resume_error_level          = true;
+        public $restore_error_level          = true;
         /**
          * @var    bool       Flag whether to return output via an output buffer
          * @default false
@@ -642,8 +642,8 @@
                 case 'error_level':
                     $this->error_level = is_numeric($value) ? intval($value) : null;
                     break;
-                case 'resume_error_level':
-                    $this->resume_error_level = $value ? true : false;
+                case 'restore_error_level':
+                    $this->restore_error_level = $value ? true : false;
                     break;
                 case 'capture_output':
                     $this->capture_output = $value ? true : false;
@@ -793,8 +793,8 @@
                 case 'error_level':
                     return $this->error_level;
                     break;
-                case 'resume_error_level':
-                    return $this->resume_error_level;
+                case 'restore_error_level':
+                    return $this->restore_error_level;
                     break;
                 case 'capture_output':
                     return $this->capture_output;
@@ -4585,7 +4585,7 @@
             if(is_string($name)){
                 $name = $this->normalize_superglobal($name);
             }
-            if(!isset($this->whitelist['superglobals'][$name]) && is_string($name) && $name){
+            if(is_string($name) && $name && !isset($this->whitelist['superglobals'][$name])){
                 $this->whitelist['superglobals'][$name] = array();
             }
             if(is_array($name)){
@@ -6112,16 +6112,14 @@
             if(!class_exists('\FunctionParser\FunctionParser', true) && is_callable($closure)){
                 throw new Error("Cannot disassemble callable code because the FunctionParser library could not be found!");
             }
-            $short_open_tag = '<' . '?';
-            $open_tag = $short_open_tag . 'php ';
             if(is_string($closure) && !is_callable($closure)){
-                return $closure;
+                return substr($closure, 0, 2) == '<?' ? $closure : '<?php ' . $closure;
             }
             $disassembled_closure = FunctionParser::fromCallable($closure);
             if($this->auto_define_vars){
                 $this->auto_define($disassembled_closure);
             }
-            return $open_tag . $disassembled_closure->getBody();
+            return '<?php' . $disassembled_closure->getBody();
         }
         /** Automatically whitelisted trusted code
          *
@@ -6366,7 +6364,7 @@
             }
             usleep(1); //guarantee at least some time passes
             $this->execution_time = (microtime(true) - $this->execution_time);
-            if($this->error_level !== null && $this->resume_error_level){
+            if($this->error_level !== null && $this->restore_error_level){
                 error_reporting($saved_error_level);
             }
             return $result;

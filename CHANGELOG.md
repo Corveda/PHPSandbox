@@ -2,6 +2,8 @@
 
 ##12/09/2013
 - Added ability to define custom validation functions for fine-grained control of the sandbox elements
+- Added capture_output flag to indicate whether to capture and return output of sandbox execution via output buffering
+- Added restore_error_level flag to indicate whether the to restore error level after setting custom error level in sandbox
 
 ##08/15/2013
 - Added support for PHP 5.5. and new allow_generators flag for configuring the sandbox to enable or disable PHP 5.5 generators

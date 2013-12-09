@@ -139,28 +139,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1135226863"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-425409181"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1135226863" class="accordion-body collapse in">
+            <div id="namespace-425409181" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-404291506"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1230773583"></a>
                                 <a href="../namespaces/PHPSandbox.html" style="margin-left: 30px; padding-left: 0">PHPSandbox</a>
             </div>
-            <div id="namespace-404291506" class="accordion-body collapse ">
+            <div id="namespace-1230773583" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
                     <ul>
-                                                                                                    <li class="class"><a href="../classes/PHPSandbox.ValidatorVisitor.html">ValidatorVisitor</a></li>
-                                                    <li class="class"><a href="../classes/PHPSandbox.Error.html">Error</a></li>
-                                                    <li class="class"><a href="../classes/PHPSandbox.SandboxWhitelistVisitor.html">SandboxWhitelistVisitor</a></li>
-                                                    <li class="class"><a href="../classes/PHPSandbox.WhitelistVisitor.html">WhitelistVisitor</a></li>
+                                                                                                    <li class="class"><a href="../classes/PHPSandbox.Error.html">Error</a></li>
                                                     <li class="class"><a href="../classes/PHPSandbox.PHPSandbox.html">PHPSandbox</a></li>
+                                                    <li class="class"><a href="../classes/PHPSandbox.SandboxWhitelistVisitor.html">SandboxWhitelistVisitor</a></li>
+                                                    <li class="class"><a href="../classes/PHPSandbox.ValidatorVisitor.html">ValidatorVisitor</a></li>
+                                                    <li class="class"><a href="../classes/PHPSandbox.WhitelistVisitor.html">WhitelistVisitor</a></li>
                                             </ul>
                 </div>
             </div>
@@ -535,7 +535,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_arg_funcs" class="">$arg_funcs</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_name" class="">$name</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_error_level" class="">$error_level</a><br />
-                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_resume_error_level" class="">$resume_error_level</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_restore_error_level" class="">$restore_error_level</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_capture_output" class="">$capture_output</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_auto_whitelist_trusted_code" class="">$auto_whitelist_trusted_code</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_auto_whitelist_functions" class="">$auto_whitelist_functions</a><br />
@@ -1016,10 +1016,10 @@ only has to create a PHPSandbox instance, configure its options, and run their c
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="property_resume_error_level" name="property_resume_error_level" class="anchor"></a>
+            <a id="property_restore_error_level" name="property_restore_error_level" class="anchor"></a>
             <article class="property">
-                <h3 class="public ">$resume_error_level</h3>
-                <pre class="signature">$resume_error_level : bool</pre>
+                <h3 class="public ">$restore_error_level</h3>
+                <pre class="signature">$restore_error_level : bool</pre>
                 <p><em></em></p>
                 
 
@@ -3275,7 +3275,7 @@ and the PHPSandbox instance</p>
                 <pre class="signature" style="margin-right: 54px;">set_func_validator(callable <span class="argument">$callable</span>) : $this</pre>
                 <p><em>Set validation callable for functions</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
-and the PHPSandbox instance</p>
+and the PHPSandbox instance. NOTE: Normalized function names include the namespace and are lowercase!</p>
 
 
                                     <h4>Parameters</h4>
@@ -3283,7 +3283,7 @@ and the PHPSandbox instance</p>
                                                     <tr>
                                 <td>callable</td>
                                 <td>$callable</td>
-                                <td><p>Callable that validates the passed function name</p>
+                                <td><p>Callable that validates the normalized passed function name</p>
 </td>
                             </tr>
                                             </table>
@@ -3641,7 +3641,7 @@ and the PHPSandbox instance</p>
                 <pre class="signature" style="margin-right: 54px;">set_superglobal_validator(callable <span class="argument">$callable</span>) : $this</pre>
                 <p><em>Set validation callable for superglobals</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
-and the PHPSandbox instance</p>
+and the PHPSandbox instance. NOTE: Normalized superglobal names are uppercase and without a leading _</p>
 
 
                                     <h4>Parameters</h4>
@@ -3885,7 +3885,7 @@ and the PHPSandbox instance</p>
                 <pre class="signature" style="margin-right: 54px;">set_magic_const_validator(callable <span class="argument">$callable</span>) : $this</pre>
                 <p><em>Set validation callable for magic constants</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
-and the PHPSandbox instance</p>
+and the PHPSandbox instance. NOTE: Normalized magic constant names are upper case and trimmed of __</p>
 
 
                                     <h4>Parameters</h4>
@@ -4400,7 +4400,7 @@ and the PHPSandbox instance</p>
                 <pre class="signature" style="margin-right: 54px;">set_class_validator(callable <span class="argument">$callable</span>) : $this</pre>
                 <p><em>Set validation callable for classes</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
-and the PHPSandbox instance</p>
+and the PHPSandbox instance. NOTE: Normalized class names are lowercase</p>
 
 
                                     <h4>Parameters</h4>
@@ -4522,7 +4522,7 @@ and the PHPSandbox instance</p>
                 <pre class="signature" style="margin-right: 54px;">set_interface_validator(callable <span class="argument">$callable</span>) : $this</pre>
                 <p><em>Set validation callable for interfaces</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
-and the PHPSandbox instance</p>
+and the PHPSandbox instance. NOTE: Normalized interface names are lowercase</p>
 
 
                                     <h4>Parameters</h4>
@@ -4644,7 +4644,7 @@ and the PHPSandbox instance</p>
                 <pre class="signature" style="margin-right: 54px;">set_trait_validator(callable <span class="argument">$callable</span>) : $this</pre>
                 <p><em>Set validation callable for traits</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
-and the PHPSandbox instance</p>
+and the PHPSandbox instance. NOTE: Normalized trait names are lowercase</p>
 
 
                                     <h4>Parameters</h4>
@@ -18143,7 +18143,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on December 9th, 2013 at 16:51.
+                    on December 9th, 2013 at 17:32.
                 </section>
             </section>
         </section>
