@@ -6297,8 +6297,6 @@
                 throw new Error($error);
             }
 
-            $traverser = new \PHPParser_NodeTraverser;
-
             $prettyPrinter = new \PHPParser_PrettyPrinter_Default;
 
             if(($this->allow_functions && $this->auto_whitelist_functions) ||
@@ -6307,9 +6305,14 @@
                 ($this->allow_interfaces && $this->auto_whitelist_interfaces) ||
                 ($this->allow_traits && $this->auto_whitelist_traits) ||
                 ($this->allow_globals && $this->auto_whitelist_globals)){
+
+                $traverser = new \PHPParser_NodeTraverser;
                 $whitelister = new SandboxWhitelistVisitor($this);
                 $traverser->addVisitor($whitelister);
+                $traverser->traverse($this->parsed_ast);
             }
+
+            $traverser = new \PHPParser_NodeTraverser;
 
             $validator = new ValidatorVisitor($this);
 
