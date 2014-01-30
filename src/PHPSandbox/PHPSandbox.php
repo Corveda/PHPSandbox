@@ -6294,7 +6294,7 @@
             try {
                 $this->parsed_ast = $parser->parse($this->preparsed_code);
             } catch (\PHPParser_Error $error) {
-                throw new Error($error);
+                throw new Error($error, 0, $error);
             }
 
             $prettyPrinter = new \PHPParser_PrettyPrinter_Default;
