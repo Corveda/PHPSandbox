@@ -109,10 +109,6 @@
          * @var mixed      The data of the Error
          */
         protected $data;
-        /**
-         * @var string      The raw message of the Error
-         */
-        protected $raw_message = '';
         /** Constructs the Error
          * @param string                $message        The message to pass to the Error
          * @param int                   $code           The error code to pass to the Error
@@ -121,28 +117,9 @@
          * @param \Exception            $previous       The previous exception to pass to the Error
          */
         public function __construct($message = '', $code = 0, \PHPParser_Node $node = null, $data = null, \Exception $previous = null){
-            $this->raw_message = $message;
             $this->node = $node;
             $this->data = $data;
-            parent::__construct('', $code, $previous);
-        }
-        /** Returns raw message of the Error
-         *
-         * @alias getRawMessage();
-         *
-         * @return  string  The raw message of the error to return
-         */
-        public function get_raw_message(){
-            return $this->raw_message;
-        }
-        /** Returns raw message of the Error
-         *
-         * @alias get_raw_message();
-         *
-         * @return  string  The raw message of the error to return
-         */
-        public function getRawMessage(){
-            return $this->raw_message;
+            parent::__construct($message, $code, $previous);
         }
         /** Returns data of the Error
          *
