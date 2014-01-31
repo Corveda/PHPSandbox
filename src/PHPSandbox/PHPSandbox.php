@@ -6139,6 +6139,7 @@ class PHPSandbox {
         $whitelister = new WhitelistVisitor($this);
         $traverser->addVisitor($whitelister);
         $traverser->traverse($statements);
+        return true;
     }
     /** Automatically define variables passed to disassembled closure
      * @param FunctionParser    $disassembled_closure
@@ -6432,15 +6433,13 @@ class PHPSandbox {
      * @return  mixed
      */
     public function error($error, $code = 0, \PHPParser_Node $node = null, $data = null, \Exception $previous = null){
-        if($error instanceof \Exception){
-            $error = ($error instanceof Error)
+        $error = ($error instanceof \Exception)
+            ? (($error instanceof Error)
                 ? new Error($error->getRawMessage(), $error->getCode(), $error->getNode(), $error->getData(), $error->getPrevious() ?: $this->last_error)
-                : new Error($error->getMessage(), $error->getCode(), null, null, $error->getPrevious() ?: $this->last_error);
-            $this->last_error = $error;
-        } else {
-            $this->last_error = new Error($error, $code, $node, $data, $previous ?: $this->last_error);
-        }
-        if(is_callable($this->error_handler)){
+                : new Error($error->getMessage(), $error->getCode(), null, null, $error->getPrevious() ?: $this->last_error))
+            : new Error($error, $code, $node, $data, $previous ?: $this->last_error);
+        $this->last_error = $error;
+        if($this->error_handler && is_callable($this->error_handler)){
             $result = call_user_func_array($this->error_handler, array($error, $this));
             if($result instanceof \Exception){
                 throw $result;

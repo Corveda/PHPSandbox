@@ -139,28 +139,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-425409181"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1295423145"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-425409181" class="accordion-body collapse in">
+            <div id="namespace-1295423145" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1230773583"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-507692184"></a>
                                 <a href="../namespaces/PHPSandbox.html" style="margin-left: 30px; padding-left: 0">PHPSandbox</a>
             </div>
-            <div id="namespace-1230773583" class="accordion-body collapse ">
+            <div id="namespace-507692184" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
                     <ul>
-                                                                                                    <li class="class"><a href="../classes/PHPSandbox.Error.html">Error</a></li>
-                                                    <li class="class"><a href="../classes/PHPSandbox.PHPSandbox.html">PHPSandbox</a></li>
+                                                                                                    <li class="class"><a href="../classes/PHPSandbox.ValidatorVisitor.html">ValidatorVisitor</a></li>
+                                                    <li class="class"><a href="../classes/PHPSandbox.Error.html">Error</a></li>
                                                     <li class="class"><a href="../classes/PHPSandbox.SandboxWhitelistVisitor.html">SandboxWhitelistVisitor</a></li>
-                                                    <li class="class"><a href="../classes/PHPSandbox.ValidatorVisitor.html">ValidatorVisitor</a></li>
                                                     <li class="class"><a href="../classes/PHPSandbox.WhitelistVisitor.html">WhitelistVisitor</a></li>
+                                                    <li class="class"><a href="../classes/PHPSandbox.PHPSandbox.html">PHPSandbox</a></li>
                                             </ul>
                 </div>
             </div>
@@ -514,7 +514,6 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_check_operator" class="">check_operator()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_check_primitive" class="">check_primitive()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_check_type" class="">check_type()</a><br />
-                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_throw_error" class="">throw_error()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_prepend" class="">prepend()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_append" class="">append()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_clear" class="">clear()</a><br />
@@ -527,6 +526,11 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_get_time" class="">get_time()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_prepare" class="">prepare()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_execute" class="">execute()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_error_handler" class="">set_error_handler()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_get_error_handler" class="">get_error_handler()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_unset_error_handler" class="">unset_error_handler()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_get_last_error" class="">get_last_error()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_error" class="">error()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_superglobals" class="">$superglobals</a><br />
@@ -617,6 +621,8 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_whitelist" class="">$whitelist</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_blacklist" class="">$blacklist</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_validation" class="">$validation</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_error_handler" class="">$error_handler</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_last_error" class="">$last_error</a><br />
                                                             </section>
                             <section class="span4">
                                 <em>N/A</em>
@@ -2408,6 +2414,56 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                 <h4>Type</h4>
                 array
                 &mdash; Array of custom validation functions                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_error_handler" name="property_error_handler" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$error_handler</h3>
+                <pre class="signature">$error_handler : null|callable</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                null|callable
+                &mdash; Callable that handles any thrown errors when set                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_last_error" name="property_last_error" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$last_error</h3>
+                <pre class="signature">$last_error : \Exception|\PHPSandbox\Error</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                \Exception|<a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a>
+                &mdash; The last error thrown by the sandbox                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -16783,47 +16839,6 @@ or pass an array of superglobal names, or an associative array of superglobal na
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_throw_error" name="method_throw_error" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">throw_error()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">throw_error(string <span class="argument">$message</span>)</pre>
-                <p><em>Throw Sandbox Error with specified $message</em></p>
-                
-
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>string</td>
-                                <td>$message</td>
-                                <td><p>The error text to throw</p>
-</td>
-                            </tr>
-                                            </table>
-                
-                                    <h4>Throws</h4>
-                    <dl>
-                                                    <dt>\PHPSandbox\Error</dt>
-                            <dd><p>The specified error thrown</p>
-</dd>
-                                                                    </dl>
-                
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
             <a id="method_prepend" name="method_prepend" class="anchor"></a>
             <article class="method">
                 <h3 class="public ">prepend()</h3>
@@ -17256,7 +17271,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
             <article class="method">
                 <h3 class="public ">execute()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">execute( <span class="argument">$callable</span>) : mixed</pre>
+                <pre class="signature" style="margin-right: 54px;">execute(callable|string <span class="argument">$callable</span>) : mixed</pre>
                 <p><em>Prepare and execute callable and return output</em></p>
                 <p>This function validates your code and automatically whitelists it according to your specified configuration, then executes it.</p>
 
@@ -17264,9 +17279,9 @@ or pass an array of superglobal names, or an associative array of superglobal na
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>callable|string</td>
                                 <td>$callable</td>
-                                <td>
+                                <td><p>Callable or string of PHP code to prepare and execute within the sandbox</p>
 </td>
                             </tr>
                                             </table>
@@ -17296,6 +17311,232 @@ or pass an array of superglobal names, or an associative array of superglobal na
                         </th>
                         <td>
                                                             <p>var_dump('Hello world!'); });</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_set_error_handler" name="method_set_error_handler" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">set_error_handler()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">set_error_handler(callable <span class="argument">$handler</span>) : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Set callable to handle thrown Errors</em></p>
+                <p>This function sets the sandbox Error handler. The handler accepts the thrown Error and the sandbox instance
+as arguments. If the error handler does not handle validation errors correctly then the sandbox's security may
+become compromised!</p>
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>callable</td>
+                                <td>$handler</td>
+                                <td><p>Callable to handle thrown Errors</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            example
+                        </th>
+                        <td>
+                                                            <p>$e, PHPSandbox $s){});  //ignore all thrown Errors, INSECURE</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_get_error_handler" name="method_get_error_handler" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">get_error_handler()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">get_error_handler() : null|callable</pre>
+                <p><em>Get error handler</em></p>
+                <p>This function returns the sandbox error handler.</p>
+
+
+                
+                
+                                    <h4>Returns</h4>
+                    null|callable
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            example
+                        </th>
+                        <td>
+                                                            <p>//callable</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_unset_error_handler" name="method_unset_error_handler" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">unset_error_handler()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">unset_error_handler() : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Unset error handler</em></p>
+                <p>This function unsets the sandbox error handler.</p>
+
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            example
+                        </th>
+                        <td>
+                                                            
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_get_last_error" name="method_get_last_error" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">get_last_error()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">get_last_error() : \Exception|\PHPSandbox\Error</pre>
+                <p><em>Gets the last error thrown by the sandbox</em></p>
+                
+
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Exception|<a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_error" name="method_error" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">error()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">error(\Exception|\PHPSandbox\Error|string <span class="argument">$error</span>, int <span class="argument">$code</span>, \PHPParser_Node|null <span class="argument">$node</span>, mixed <span class="argument">$data</span>, \Exception|\PHPSandbox\Error|null <span class="argument">$previous</span>) : mixed</pre>
+                <p><em>Invoke sandbox error handler if it exists, throw Error otherwise</em></p>
+                
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Exception|<a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a>|string</td>
+                                <td>$error</td>
+                                <td><p>Error to throw if Error is not handled, or error message string</p>
+</td>
+                            </tr>
+                                                    <tr>
+                                <td>int</td>
+                                <td>$code</td>
+                                <td><p>The error code</p>
+</td>
+                            </tr>
+                                                    <tr>
+                                <td>\PHPParser_Node|null</td>
+                                <td>$node</td>
+                                <td><p>The error parser node</p>
+</td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$data</td>
+                                <td><p>The error data</p>
+</td>
+                            </tr>
+                                                    <tr>
+                                <td>\Exception|<a href="../classes/PHPSandbox.Error.html">\PHPSandbox\Error</a>|null</td>
+                                <td>$previous</td>
+                                <td><p>The previous Error thrown</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception|\PHPSandbox\Error</dt>
+                            <dd>
+</dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            example
+                        </th>
+                        <td>
+                                                            <p>);</p>
 
                                                     </td>
                     </tr>
@@ -18017,7 +18258,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
             <article class="method">
                 <h3 class="protected ">auto_whitelist()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">auto_whitelist(string <span class="argument">$code</span>, bool <span class="argument">$appended</span>)</pre>
+                <pre class="signature" style="margin-right: 54px;">auto_whitelist(string <span class="argument">$code</span>, bool <span class="argument">$appended</span>) : mixed</pre>
                 <p><em>Automatically whitelisted trusted code</em></p>
                 
 
@@ -18045,7 +18286,11 @@ or pass an array of superglobal names, or an associative array of superglobal na
 </dd>
                                                                     </dl>
                 
-                            </article>
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>Return result of error handler if $code could not be parsed</p>
+
+                                                </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -18143,7 +18388,7 @@ or pass an array of superglobal names, or an associative array of superglobal na
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on December 9th, 2013 at 17:32.
+                    on January 31st, 2014 at 00:50.
                 </section>
             </section>
         </section>
