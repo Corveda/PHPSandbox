@@ -119,7 +119,7 @@
             'blacklist' => $blacklist,
             'definitions' => $definitions
         ));
-        $sandbox->set_error_handler(function(\PHPSandbox\Error $e){ echo '<h2 style="color: red;">' . $e->getRawMessage() . '</h2>'; });
+        $sandbox->set_error_handler(function(\PHPSandbox\Error $e){ echo '<h2 style="color: red;">' . $e->getMessage() . '</h2>'; });
         try {
             ob_start();
             if($setup_code){
@@ -137,7 +137,7 @@
             ob_end_clean();
             die('<pre>' . $buffer . '</pre>');
         } catch(\PHPSandbox\Error $e){
-            echo '<h2 style="color: red;">' . $e->getRawMessage() . '</h2>';
+            echo '<h2 style="color: red;">' . $e->getMessage() . '</h2>';
         }
     }
 
