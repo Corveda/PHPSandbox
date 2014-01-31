@@ -910,7 +910,7 @@ class PHPSandbox {
      * @param   string          $type       String of $type name to set validator for
      * @param   callable        $callable   Callable that validates the passed element
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_validator($type, callable $callable){
         $type = strtolower($type);  //normalize type
@@ -937,7 +937,7 @@ class PHPSandbox {
      *
      * @param   string          $type       String of $type to unset
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_validator($type){
         $type = strtolower($type);  //normalize type
@@ -955,7 +955,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the normalized passed function name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_func_validator(callable $callable){
         $this->validation['function'] = $callable;
@@ -974,7 +974,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_func_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_func_validator(){
         $this->validation['function'] = null;
@@ -989,7 +989,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed variable name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_var_validator(callable $callable){
         $this->validation['variable'] = $callable;
@@ -1008,7 +1008,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_var_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_var_validator(){
         $this->validation['variable'] = null;
@@ -1023,7 +1023,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed global name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_global_validator(callable $callable){
         $this->validation['global'] = $callable;
@@ -1042,7 +1042,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_global_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_global_validator(){
         $this->validation['global'] = null;
@@ -1057,7 +1057,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed superglobal name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_superglobal_validator(callable $callable){
         $this->validation['superglobal'] = $callable;
@@ -1076,7 +1076,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_superglobal_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_superglobal_validator(){
         $this->validation['superglobal'] = null;
@@ -1091,7 +1091,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed constant name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_const_validator(callable $callable){
         $this->validation['constant'] = $callable;
@@ -1110,7 +1110,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_const_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_const_validator(){
         $this->validation['constant'] = null;
@@ -1125,7 +1125,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed magic constant name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_magic_const_validator(callable $callable){
         $this->validation['magic_constant'] = $callable;
@@ -1144,7 +1144,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_magic_const_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_magic_const_validator(){
         $this->validation['magic_constant'] = null;
@@ -1159,7 +1159,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed namespace name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_namespace_validator(callable $callable){
         $this->validation['namespace'] = $callable;
@@ -1178,7 +1178,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_namespace_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_namespace_validator(){
         $this->validation['namespace'] = null;
@@ -1193,7 +1193,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed alias name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_alias_validator(callable $callable){
         $this->validation['alias'] = $callable;
@@ -1212,7 +1212,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_alias_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_alias_validator(){
         $this->validation['alias'] = null;
@@ -1229,7 +1229,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed use (aka alias) name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_use_validator(callable $callable){
         return $this->set_alias_validator($callable);
@@ -1251,7 +1251,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_use_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_use_validator(){
         return $this->unset_alias_validator();
@@ -1265,7 +1265,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed class name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_class_validator(callable $callable){
         $this->validation['class'] = $callable;
@@ -1284,7 +1284,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_class_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_class_validator(){
         $this->validation['class'] = null;
@@ -1299,7 +1299,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed interface name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_interface_validator(callable $callable){
         $this->validation['interface'] = $callable;
@@ -1318,7 +1318,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_interface_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_interface_validator(){
         $this->validation['interface'] = null;
@@ -1333,7 +1333,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed trait name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_trait_validator(callable $callable){
         $this->validation['trait'] = $callable;
@@ -1352,7 +1352,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_trait_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_trait_validator(){
         $this->validation['trait'] = null;
@@ -1367,7 +1367,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed keyword name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_keyword_validator(callable $callable){
         $this->validation['keyword'] = $callable;
@@ -1386,7 +1386,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_keyword_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_keyword_validator(){
         $this->validation['keyword'] = null;
@@ -1401,7 +1401,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed operator name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_operator_validator(callable $callable){
         $this->validation['operator'] = $callable;
@@ -1420,7 +1420,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_operator_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_operator_validator(){
         $this->validation['operator'] = null;
@@ -1435,7 +1435,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed primitive name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_primitive_validator(callable $callable){
         $this->validation['primitive'] = $callable;
@@ -1454,7 +1454,7 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_primitive_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function unset_primitive_validator(){
         $this->validation['primitive'] = null;
@@ -1469,7 +1469,7 @@ class PHPSandbox {
      *
      * @param   callable        $callable   Callable that validates the passed type name
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return PHPSandbox           Returns the PHPSandbox instance for chainability
      */
     public function set_type_validator(callable $callable){
         $this->validation['type'] = $callable;
@@ -1488,10 +1488,92 @@ class PHPSandbox {
      *
      * @example $sandbox->unset_type_validator(); //clear custom validation
      *
-     * @return  $this           Returns the PHPSandbox instance
+     * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
      */
     public function unset_type_validator(){
         $this->validation['type'] = null;
+        return $this;
+    }
+    /** Set PHPSandbox prepended code
+     *
+     * @param   string         $prepended_code      Sets a string of the prepended code
+     *
+     * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+     */
+    public function set_prepended_code($prepended_code = ''){
+        $this->prepended_code = $prepended_code;
+        return $this;
+    }
+    /** Set PHPSandbox appended code
+     *
+     * @param   string         $appended_code       Sets a string of the appended code
+     *
+     * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+     */
+    public function set_appended_code($appended_code = ''){
+        $this->appended_code = $appended_code;
+        return $this;
+    }
+    /** Set PHPSandbox preparsed code
+     *
+     * @param   string         $preparsed_code       Sets a string of the preparsed code
+     *
+     * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+     */
+    public function set_preparsed_code($preparsed_code = ''){
+        $this->preparsed_code = $preparsed_code;
+        return $this;
+    }
+    /** Set PHPSandbox parsed AST array
+     *
+     * @param   array          $parsed_ast          Sets an array of the parsed AST code
+     *
+     * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+     */
+    public function set_parsed_ast(array $parsed_ast = array()){
+        $this->parsed_ast = $parsed_ast;
+        return $this;
+    }
+    /** Set PHPSandbox prepared code
+     *
+     * @param   string         $prepared_code       Sets a string of the prepared code
+     *
+     * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+     */
+    public function set_prepared_code($prepared_code = ''){
+        $this->prepared_code = $prepared_code;
+        return $this;
+    }
+    /** Set PHPSandbox prepared AST array
+     *
+     * @param   array          $prepared_ast        Sets an array of the prepared AST code
+     *
+     * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+     */
+    public function set_prepared_ast(array $prepared_ast = array()){
+        $this->prepared_ast = $prepared_ast;
+        return $this;
+    }
+    /** Set PHPSandbox generated code
+     *
+     * @param   string         $generated_code      Sets a string of the generated code
+     *
+     * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+     */
+    public function set_generated_code($generated_code = ''){
+        $this->generated_code = $generated_code;
+        return $this;
+    }
+    /** Set PHPSandbox generated code
+     *
+     * @alias   set_generated_code();
+     *
+     * @param  string          $generated_code      Sets a string of the generated code
+     *
+     * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+     */
+    public function set_code($generated_code = ''){
+        $this->generated_code = $generated_code;
         return $this;
     }
     /** Get PHPSandbox prepended code
@@ -1524,11 +1606,11 @@ class PHPSandbox {
     public function get_prepared_code(){
         return $this->prepared_code;
     }
-    /** Get PHPSandbox parsed AST array
-     * @return  array           Returns an array of the parsed AST code
+    /** Get PHPSandbox prepared AST array
+     * @return  array           Returns an array of the prepared AST code
      */
     public function get_prepared_ast(){
-        return $this->prepended_code;
+        return $this->prepared_ast;
     }
     /** Get PHPSandbox generated code
      * @return  string          Returns a string of the generated code
@@ -1541,7 +1623,7 @@ class PHPSandbox {
      * @return  string          Returns a string of the generated code
      */
     public function get_code(){
-        return $this->get_generated_code();
+        return $this->generated_code;
     }
     /** Get PHPSandbox redefined functions in place of get_defined_functions(). This is an internal PHPSandbox function but requires public access to work.
      *

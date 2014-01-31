@@ -139,19 +139,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-853085231"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-333459524"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-853085231" class="accordion-body collapse in">
+            <div id="namespace-333459524" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1878499505"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1412785994"></a>
                                 <a href="../namespaces/PHPSandbox.html" style="margin-left: 30px; padding-left: 0">PHPSandbox</a>
             </div>
-            <div id="namespace-1878499505" class="accordion-body collapse ">
+            <div id="namespace-1412785994" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -270,6 +270,14 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_type_validator" class="">set_type_validator()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_get_type_validator" class="">get_type_validator()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_unset_type_validator" class="">unset_type_validator()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_prepended_code" class="">set_prepended_code()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_appended_code" class="">set_appended_code()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_preparsed_code" class="">set_preparsed_code()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_parsed_ast" class="">set_parsed_ast()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_prepared_code" class="">set_prepared_code()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_prepared_ast" class="">set_prepared_ast()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_generated_code" class="">set_generated_code()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_set_code" class="">set_code()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_get_prepended_code" class="">get_prepended_code()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_get_appended_code" class="">get_appended_code()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_get_preparsed_code" class="">get_preparsed_code()</a><br />
@@ -3182,7 +3190,7 @@ You can pass optional arrays of predefined functions, variables, etc. to the san
             <article class="method">
                 <h3 class="public ">set_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_validator(string <span class="argument">$type</span>, callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_validator(string <span class="argument">$type</span>, callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for specified $type</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -3206,8 +3214,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3281,7 +3289,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_validator(string <span class="argument">$type</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_validator(string <span class="argument">$type</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for specified $type</em></p>
                 
 
@@ -3298,8 +3306,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3328,7 +3336,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_func_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_func_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_func_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for functions</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance. NOTE: Normalized function names include the namespace and are lowercase!</p>
@@ -3346,8 +3354,8 @@ and the PHPSandbox instance. NOTE: Normalized function names include the namespa
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3412,7 +3420,7 @@ and the PHPSandbox instance. NOTE: Normalized function names include the namespa
             <article class="method">
                 <h3 class="public ">unset_func_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_func_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_func_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for functions</em></p>
                 
 
@@ -3420,8 +3428,8 @@ and the PHPSandbox instance. NOTE: Normalized function names include the namespa
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3450,7 +3458,7 @@ and the PHPSandbox instance. NOTE: Normalized function names include the namespa
             <article class="method">
                 <h3 class="public ">set_var_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_var_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_var_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for variables</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -3468,8 +3476,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3534,7 +3542,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_var_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_var_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_var_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for variables</em></p>
                 
 
@@ -3542,8 +3550,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3572,7 +3580,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_global_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_global_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_global_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for globals</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -3590,8 +3598,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3656,7 +3664,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_global_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_global_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_global_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for globals</em></p>
                 
 
@@ -3664,8 +3672,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3694,7 +3702,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_superglobal_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_superglobal_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_superglobal_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for superglobals</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance. NOTE: Normalized superglobal names are uppercase and without a leading _</p>
@@ -3712,8 +3720,8 @@ and the PHPSandbox instance. NOTE: Normalized superglobal names are uppercase an
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3778,7 +3786,7 @@ and the PHPSandbox instance. NOTE: Normalized superglobal names are uppercase an
             <article class="method">
                 <h3 class="public ">unset_superglobal_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_superglobal_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_superglobal_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for superglobals</em></p>
                 
 
@@ -3786,8 +3794,8 @@ and the PHPSandbox instance. NOTE: Normalized superglobal names are uppercase an
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3816,7 +3824,7 @@ and the PHPSandbox instance. NOTE: Normalized superglobal names are uppercase an
             <article class="method">
                 <h3 class="public ">set_const_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_const_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_const_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for constants</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -3834,8 +3842,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3900,7 +3908,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_const_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_const_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_const_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for constants</em></p>
                 
 
@@ -3908,8 +3916,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -3938,7 +3946,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_magic_const_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_magic_const_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_magic_const_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for magic constants</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance. NOTE: Normalized magic constant names are upper case and trimmed of __</p>
@@ -3956,8 +3964,8 @@ and the PHPSandbox instance. NOTE: Normalized magic constant names are upper cas
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4022,7 +4030,7 @@ and the PHPSandbox instance. NOTE: Normalized magic constant names are upper cas
             <article class="method">
                 <h3 class="public ">unset_magic_const_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_magic_const_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_magic_const_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for magic constants</em></p>
                 
 
@@ -4030,8 +4038,8 @@ and the PHPSandbox instance. NOTE: Normalized magic constant names are upper cas
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4060,7 +4068,7 @@ and the PHPSandbox instance. NOTE: Normalized magic constant names are upper cas
             <article class="method">
                 <h3 class="public ">set_namespace_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_namespace_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_namespace_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for namespaces</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -4078,8 +4086,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4144,7 +4152,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_namespace_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_namespace_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_namespace_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for namespaces</em></p>
                 
 
@@ -4152,8 +4160,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4182,7 +4190,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_alias_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_alias_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_alias_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for aliases</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -4200,8 +4208,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4266,7 +4274,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_alias_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_alias_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_alias_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for aliases</em></p>
                 
 
@@ -4274,8 +4282,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4304,7 +4312,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_use_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_use_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_use_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for uses (aka aliases)</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -4322,8 +4330,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4406,7 +4414,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_use_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_use_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_use_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for uses (aka aliases)</em></p>
                 
 
@@ -4414,8 +4422,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4453,7 +4461,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_class_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_class_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_class_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for classes</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance. NOTE: Normalized class names are lowercase</p>
@@ -4471,8 +4479,8 @@ and the PHPSandbox instance. NOTE: Normalized class names are lowercase</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4537,7 +4545,7 @@ and the PHPSandbox instance. NOTE: Normalized class names are lowercase</p>
             <article class="method">
                 <h3 class="public ">unset_class_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_class_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_class_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for classes</em></p>
                 
 
@@ -4545,8 +4553,8 @@ and the PHPSandbox instance. NOTE: Normalized class names are lowercase</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4575,7 +4583,7 @@ and the PHPSandbox instance. NOTE: Normalized class names are lowercase</p>
             <article class="method">
                 <h3 class="public ">set_interface_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_interface_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_interface_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for interfaces</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance. NOTE: Normalized interface names are lowercase</p>
@@ -4593,8 +4601,8 @@ and the PHPSandbox instance. NOTE: Normalized interface names are lowercase</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4659,7 +4667,7 @@ and the PHPSandbox instance. NOTE: Normalized interface names are lowercase</p>
             <article class="method">
                 <h3 class="public ">unset_interface_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_interface_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_interface_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for interfaces</em></p>
                 
 
@@ -4667,8 +4675,8 @@ and the PHPSandbox instance. NOTE: Normalized interface names are lowercase</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4697,7 +4705,7 @@ and the PHPSandbox instance. NOTE: Normalized interface names are lowercase</p>
             <article class="method">
                 <h3 class="public ">set_trait_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_trait_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_trait_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for traits</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance. NOTE: Normalized trait names are lowercase</p>
@@ -4715,8 +4723,8 @@ and the PHPSandbox instance. NOTE: Normalized trait names are lowercase</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4781,7 +4789,7 @@ and the PHPSandbox instance. NOTE: Normalized trait names are lowercase</p>
             <article class="method">
                 <h3 class="public ">unset_trait_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_trait_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_trait_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for traits</em></p>
                 
 
@@ -4789,8 +4797,8 @@ and the PHPSandbox instance. NOTE: Normalized trait names are lowercase</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4819,7 +4827,7 @@ and the PHPSandbox instance. NOTE: Normalized trait names are lowercase</p>
             <article class="method">
                 <h3 class="public ">set_keyword_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_keyword_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_keyword_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for keywords</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -4837,8 +4845,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4903,7 +4911,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_keyword_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_keyword_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_keyword_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for keywords</em></p>
                 
 
@@ -4911,8 +4919,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -4941,7 +4949,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_operator_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_operator_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_operator_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for operators</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -4959,8 +4967,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -5025,7 +5033,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_operator_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_operator_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_operator_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for operators</em></p>
                 
 
@@ -5033,8 +5041,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -5063,7 +5071,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_primitive_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_primitive_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_primitive_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for primitives</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -5081,8 +5089,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -5147,7 +5155,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_primitive_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_primitive_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_primitive_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for primitives</em></p>
                 
 
@@ -5155,8 +5163,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -5185,7 +5193,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">set_type_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">set_type_validator(callable <span class="argument">$callable</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">set_type_validator(callable <span class="argument">$callable</span>) : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Set validation callable for types</em></p>
                 <p>Validator callable must accept two parameters: a string of the normalized name of the checked element,
 and the PHPSandbox instance</p>
@@ -5203,8 +5211,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -5269,7 +5277,7 @@ and the PHPSandbox instance</p>
             <article class="method">
                 <h3 class="public ">unset_type_validator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">unset_type_validator() : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">unset_type_validator() : \PHPSandbox\PHPSandbox</pre>
                 <p><em>Unset validation callable for types</em></p>
                 
 
@@ -5277,8 +5285,8 @@ and the PHPSandbox instance</p>
                 
                 
                                     <h4>Returns</h4>
-                    $this
-                                            &mdash; <p>Returns the PHPSandbox instance</p>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
 
                                                 </article>
         </div>
@@ -5294,6 +5302,326 @@ and the PHPSandbox instance</p>
                         </th>
                         <td>
                                                             <p>//clear custom validation</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_set_prepended_code" name="method_set_prepended_code" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">set_prepended_code()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">set_prepended_code(string <span class="argument">$prepended_code</span>) : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Set PHPSandbox prepended code</em></p>
+                
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$prepended_code</td>
+                                <td><p>Sets a string of the prepended code</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_set_appended_code" name="method_set_appended_code" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">set_appended_code()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">set_appended_code(string <span class="argument">$appended_code</span>) : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Set PHPSandbox appended code</em></p>
+                
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$appended_code</td>
+                                <td><p>Sets a string of the appended code</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_set_preparsed_code" name="method_set_preparsed_code" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">set_preparsed_code()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">set_preparsed_code(string <span class="argument">$preparsed_code</span>) : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Set PHPSandbox preparsed code</em></p>
+                
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$preparsed_code</td>
+                                <td><p>Sets a string of the preparsed code</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_set_parsed_ast" name="method_set_parsed_ast" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">set_parsed_ast()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">set_parsed_ast(array <span class="argument">$parsed_ast</span>) : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Set PHPSandbox parsed AST array</em></p>
+                
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$parsed_ast</td>
+                                <td><p>Sets an array of the parsed AST code</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_set_prepared_code" name="method_set_prepared_code" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">set_prepared_code()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">set_prepared_code(string <span class="argument">$prepared_code</span>) : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Set PHPSandbox prepared code</em></p>
+                
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$prepared_code</td>
+                                <td><p>Sets a string of the prepared code</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_set_prepared_ast" name="method_set_prepared_ast" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">set_prepared_ast()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">set_prepared_ast(array <span class="argument">$prepared_ast</span>) : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Set PHPSandbox prepared AST array</em></p>
+                
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$prepared_ast</td>
+                                <td><p>Sets an array of the prepared AST code</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_set_generated_code" name="method_set_generated_code" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">set_generated_code()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">set_generated_code(string <span class="argument">$generated_code</span>) : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Set PHPSandbox generated code</em></p>
+                
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$generated_code</td>
+                                <td><p>Sets a string of the generated code</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_set_code" name="method_set_code" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">set_code()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">set_code(string <span class="argument">$generated_code</span>) : \PHPSandbox\PHPSandbox</pre>
+                <p><em>Set PHPSandbox generated code</em></p>
+                
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$generated_code</td>
+                                <td><p>Sets a string of the generated code</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a>
+                                            &mdash; <p>Returns the PHPSandbox instance for chainability</p>
+
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            alias
+                        </th>
+                        <td>
+                                                            <p>set_generated_code();</p>
 
                                                     </td>
                     </tr>
@@ -5458,7 +5786,7 @@ and the PHPSandbox instance</p>
                 <h3 class="public ">get_prepared_ast()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">get_prepared_ast() : array</pre>
-                <p><em>Get PHPSandbox parsed AST array</em></p>
+                <p><em>Get PHPSandbox prepared AST array</em></p>
                 
 
 
@@ -5466,7 +5794,7 @@ and the PHPSandbox instance</p>
                 
                                     <h4>Returns</h4>
                     array
-                                            &mdash; <p>Returns an array of the parsed AST code</p>
+                                            &mdash; <p>Returns an array of the prepared AST code</p>
 
                                                 </article>
         </div>
@@ -18388,7 +18716,7 @@ become compromised!</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on January 31st, 2014 at 01:00.
+                    on January 31st, 2014 at 01:30.
                 </section>
             </section>
         </section>
