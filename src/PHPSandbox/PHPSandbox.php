@@ -6294,7 +6294,7 @@ class PHPSandbox {
         try {
             $this->parsed_ast = $parser->parse($this->preparsed_code);
         } catch (\PHPParser_Error $error) {
-            $this->error("Could not parse code!", Error::PARSER_ERROR, null, $this->preparsed_code, $error);
+            $this->error("Could not parse sandboxed code!", Error::PARSER_ERROR, null, $this->preparsed_code, $error);
         }
 
         $prettyPrinter = new \PHPParser_PrettyPrinter_Default;
