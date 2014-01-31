@@ -21,6 +21,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 - Can pass arguments directly to the sandboxed code through the execute method to reveal chosen outside variables to the sandbox.
 - Can access the parsed, prepared and generated code ASTs for further analysis or for serialization.
 - Can define custom validation functions for fine-grained control of every element of the sandbox.
+- Can specify an error handler to intercept all thrown exceptions and handle them with custom logic.
 
 ##Example usage:
 
@@ -43,14 +44,27 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
     }
 
     $sandbox = new PHPSandbox\PHPSandbox;
-    //this will mark any function valid that begins with "custom_*"
-    $sandbox->set_func_validator(function($function_name, $sandbox){
+    //this will mark any function valid that begins with "custom_"
+    $sandbox->set_func_validator(function($function_name, PHPSandbox\PHPSandbox $sandbox){
         return (substr($function_name, 0, 7) == 'custom_');  //return true if function is valid, false otherwise
     });
     $sandbox->execute(function(){
         custom_func();
     });
     //echoes "I am valid!"
+
+##Custom error handler example:
+
+    $sandbox = new PHPSandbox\PHPSandbox;
+    //this will intercept parser errors and quietly exit, otherwise it will throw the error
+    $sandbox->set_error_handler(function(PHPSandbox\Error $error, PHPSandbox\PHPSandbox $sandbox){
+        if($error->getCode() == PHPSandbox\Error::PARSER_ERROR){ //PARSER_ERROR == 1
+            exit;
+        }
+        throw $error;
+    });
+    $sandbox->execute('<?php i am malformed PHP code; ?>');
+    //does nothing
 
 ##Requirements
 
@@ -74,7 +88,7 @@ Then run *composer install --dry-run* to check for any potential problems, and *
 
 ##LICENSE
 
-    Copyright (c) 2013 by Elijah Horton (fieryprophet [at] yahoo.com)
+    Copyright (c) 2013-2014 by Elijah Horton (fieryprophet [at] yahoo.com)
 
     Some rights reserved.
 

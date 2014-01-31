@@ -1,5 +1,8 @@
 #CHANGELOG
 
+##01/30/2014
+- Implemented overhaul of error handling system. Can now specify a custom error handler to intercept thrown exceptions.
+
 ##12/09/2013
 - Added ability to define custom validation functions for fine-grained control of the sandbox elements
 - Added capture_output flag to indicate whether to capture and return output of sandbox execution via output buffering

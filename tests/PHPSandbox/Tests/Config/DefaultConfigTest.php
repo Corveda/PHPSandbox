@@ -291,4 +291,15 @@
             });
             $this->sandbox->execute(function(){ test2(); });
         }
+
+        /**
+         * Test whether sandbox custom error handler intercepts exceptions
+         */
+        public function testCustomErrorHandler(){
+            $this->setExpectedException('PHPSandbox\Error');
+            $this->sandbox->set_error_handler(function($error, $sandbox){
+                throw $error;
+            });
+            $this->sandbox->execute(function(){ test2(); });
+        }
     }
