@@ -912,7 +912,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_validator($type, callable $callable){
+        public function set_validator($type, $callable){
             $type = strtolower($type);  //normalize type
             if(array_key_exists($type, $this->validation)){
                 $this->validation[$type] = $callable;
@@ -957,11 +957,11 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_func_validator(callable $callable){
+        public function set_func_validator($callable){
             $this->validation['function'] = $callable;
             return $this;
         }
-        /** Get validation callable for functions
+        /** Get validation for functions
          *
          * @example $sandbox->get_func_validator(); //return callable
          *
@@ -991,7 +991,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_var_validator(callable $callable){
+        public function set_var_validator($callable){
             $this->validation['variable'] = $callable;
             return $this;
         }
@@ -1025,7 +1025,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_global_validator(callable $callable){
+        public function set_global_validator($callable){
             $this->validation['global'] = $callable;
             return $this;
         }
@@ -1059,7 +1059,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_superglobal_validator(callable $callable){
+        public function set_superglobal_validator($callable){
             $this->validation['superglobal'] = $callable;
             return $this;
         }
@@ -1093,7 +1093,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_const_validator(callable $callable){
+        public function set_const_validator($callable){
             $this->validation['constant'] = $callable;
             return $this;
         }
@@ -1127,7 +1127,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_magic_const_validator(callable $callable){
+        public function set_magic_const_validator($callable){
             $this->validation['magic_constant'] = $callable;
             return $this;
         }
@@ -1161,7 +1161,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_namespace_validator(callable $callable){
+        public function set_namespace_validator($callable){
             $this->validation['namespace'] = $callable;
             return $this;
         }
@@ -1195,7 +1195,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_alias_validator(callable $callable){
+        public function set_alias_validator($callable){
             $this->validation['alias'] = $callable;
             return $this;
         }
@@ -1231,7 +1231,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_use_validator(callable $callable){
+        public function set_use_validator($callable){
             return $this->set_alias_validator($callable);
         }
         /** Get validation callable for uses (aka aliases)
@@ -1267,7 +1267,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_class_validator(callable $callable){
+        public function set_class_validator($callable){
             $this->validation['class'] = $callable;
             return $this;
         }
@@ -1301,7 +1301,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_interface_validator(callable $callable){
+        public function set_interface_validator($callable){
             $this->validation['interface'] = $callable;
             return $this;
         }
@@ -1335,7 +1335,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_trait_validator(callable $callable){
+        public function set_trait_validator($callable){
             $this->validation['trait'] = $callable;
             return $this;
         }
@@ -1369,7 +1369,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_keyword_validator(callable $callable){
+        public function set_keyword_validator($callable){
             $this->validation['keyword'] = $callable;
             return $this;
         }
@@ -1403,7 +1403,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_operator_validator(callable $callable){
+        public function set_operator_validator($callable){
             $this->validation['operator'] = $callable;
             return $this;
         }
@@ -1437,7 +1437,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_primitive_validator(callable $callable){
+        public function set_primitive_validator($callable){
             $this->validation['primitive'] = $callable;
             return $this;
         }
@@ -1471,7 +1471,7 @@
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for chainability
          */
-        public function set_type_validator(callable $callable){
+        public function set_type_validator($callable){
             $this->validation['type'] = $callable;
             return $this;
         }
@@ -6467,7 +6467,7 @@
          *
          * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
          */
-        public function set_error_handler(callable $handler){
+        public function set_error_handler($handler){
             $this->error_handler = $handler;
             return $this;
         }
