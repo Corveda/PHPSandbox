@@ -12,6 +12,8 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/fieryprophet/php-sandbox/badges/quality-score.png?s=4f2d82525b9e2c6bae18e26cf643ca3fd09333fc)](https://scrutinizer-ci.com/g/fieryprophet/php-sandbox/)
 
+[![Code Coverage](https://scrutinizer-ci.com/g/fieryprophet/php-sandbox/badges/coverage.png?s=d6cef7d18a66d2ac39b76410b76c89fa15d84b8c)](https://scrutinizer-ci.com/g/fieryprophet/php-sandbox/)
+
 ##Features:
 
 - Finegrained whitelisting and blacklisting, with sensible defaults configured.
