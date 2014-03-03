@@ -28,6 +28,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 - Can access the parsed, prepared and generated code ASTs for further analysis or for serialization.
 - Can define custom validation functions for fine-grained control of every element of the sandbox.
 - Can specify an error handler to intercept all thrown exceptions and handle them with custom logic.
+- **Can intercept callbacks and validate them against function whitelists and blacklists, even if they are called as strings**
 
 ##Example usage:
 

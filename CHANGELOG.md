@@ -1,5 +1,10 @@
 #CHANGELOG
 
+##03/03/2014
+- Implemented function checking mechanism for callbacks, which should now obey function whitelists and blacklists
+- Replaced passed sandbox instance variable with static method call that allows the sandbox to be accessed for validation within sandboxed functions and closures
+- Added overwritten var_dump, print_r and var_export methods that automatically hide the sandbox instance and return the string value of sandboxed strings
+
 ##01/30/2014
 - Implemented overhaul of error handling system. Can now specify a custom error handler to intercept thrown exceptions.
 

@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3
+     * @version 1.3.1
      */
     class PHPSandbox {
         /**
@@ -86,6 +86,14 @@
             'get_declared_classes',
             'get_declared_interfaces',
             'get_declared_traits'
+        );
+        /**
+         * @var    array          A static array of var_dump, print_r and var_export for redefining those functions
+         */
+        public static $var_funcs = array(
+            'var_dump',
+            'print_r',
+            'var_export'
         );
         /**
          * @var    array          A static array of func_get_args, func_get_arg, and func_num_args used for redefining those functions
@@ -180,6 +188,10 @@
             'primitive' => null,
             'type' => null
         );
+        /**
+         * @var     PHPSandbox[]       Array of PHPSandboxes
+         */
+        protected static $sandboxes = array();
         /* CONFIGURATION OPTION FLAGS */
         /**
          * @var    bool       The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
@@ -241,6 +253,11 @@
          * @default true
          */
         public $overwrite_defined_funcs     = true;
+        /**
+         * @var    bool       Should PHPSandbox overwrite var_dump, print_r, and var_export?
+         * @default true
+         */
+        public $overwrite_var_funcs         = true;
         /**
          * @var    bool       Should PHPSandbox overwrite func_get_args, func_get_arg and func_num_args?
          * @default true
@@ -683,6 +700,9 @@
                 case 'overwrite_defined_funcs':
                     $this->overwrite_defined_funcs = $value ? true : false;
                     break;
+                case 'overwrite_var_funcs':
+                    $this->overwrite_var_funcs = $value ? true : false;
+                    break;
                 case 'overwrite_func_get_args':
                     $this->overwrite_func_get_args = $value ? true : false;
                     break;
@@ -833,6 +853,9 @@
                     break;
                 case 'overwrite_defined_funcs':
                     return $this->overwrite_defined_funcs;
+                    break;
+                case 'overwrite_var_funcs':
+                    return $this->overwrite_var_funcs;
                     break;
                 case 'overwrite_func_get_args':
                     return $this->overwrite_func_get_args;
@@ -1896,6 +1919,51 @@
                 }
             }
             return array_values($traits);
+        }
+        /** Get PHPSandbox redefined var_dump
+         *
+         * @return  array           Returns the redefined var_dump
+         */
+        public function _var_dump(){
+            $arguments = func_get_args();
+            foreach($arguments as $index => $value){
+                if($value instanceof self){
+                    unset($arguments[$index]); //hide PHPSandbox variable
+                } else if($value instanceof SandboxedString){
+                    $arguments[$index] = strval($value);
+                }
+            }
+            return call_user_func_array('var_dump', $arguments);
+        }
+        /** Get PHPSandbox redefined print_r
+         *
+         * @return  array           Returns the redefined print_r
+         */
+        public function _print_r(){
+            $arguments = func_get_args();
+            foreach($arguments as $index => $value){
+                if($value instanceof self){
+                    unset($arguments[$index]); //hide PHPSandbox variable
+                } else if($value instanceof SandboxedString){
+                    $arguments[$index] = strval($value);
+                }
+            }
+            return call_user_func_array('print_r', $arguments);
+        }
+        /** Get PHPSandbox redefined var_export
+         *
+         * @return  array           Returns the redefined var_export
+         */
+        public function _var_export(){
+            $arguments = func_get_args();
+            foreach($arguments as $index => $value){
+                if($value instanceof self){
+                    unset($arguments[$index]); //hide PHPSandbox variable
+                } else if($value instanceof SandboxedString){
+                    $arguments[$index] = strval($value);
+                }
+            }
+            return call_user_func_array('var_export', $arguments);
         }
         /** Get PHPSandbox redefined function arguments array
          *
@@ -6405,15 +6473,17 @@
 
             $this->prepared_code = $prettyPrinter->prettyPrint($this->prepared_ast);
 
+            static::$sandboxes[$this->name] = $this;
+
             $this->generated_code = $this->prepare_namespaces() .
                 $this->prepare_aliases() .
                 $this->prepare_consts() .
-                "\r\n" . 'return call_user_func(function($' . $this->name . '){' .
+                "\r\n" . 'return call_user_func(function(){' .
                 $this->prepare_vars() .
                 $this->prepended_code .
                 $this->prepared_code .
                 $this->appended_code .
-                "\r\n" . '}, $this);';
+                "\r\n" . '});';
 
             usleep(1); //guarantee at least some time passes
             $this->prepare_time = (microtime(true) - $this->prepare_time);
@@ -6530,5 +6600,9 @@
             } else {
                 throw $error;
             }
+        }
+
+        public static function getSandbox($name){
+            return isset(static::$sandboxes[$name]) ? static::$sandboxes[$name] : null;
         }
     }
