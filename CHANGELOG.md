@@ -1,5 +1,8 @@
 #CHANGELOG
 
+##03/05/2014
+- Corrected an issue where the sandbox variable could be accessed from within the sandbox in PHP 5.4+
+
 ##03/03/2014
 - Implemented function checking mechanism for callbacks, which should now obey function whitelists and blacklists
 - Replaced passed sandbox instance variable with static method call that allows the sandbox to be accessed for validation within sandboxed functions and closures

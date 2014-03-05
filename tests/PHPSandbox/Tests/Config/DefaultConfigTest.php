@@ -302,4 +302,12 @@
             });
             $this->sandbox->execute(function(){ test2(); });
         }
+
+        /**
+         * Test whether sandbox disallows violating callbacks
+         */
+        public function testCallbackViolations(){
+            $this->setExpectedException('PHPSandbox\Error');
+            $this->sandbox->execute(function(){ array_filter(array("1"), "var_dump"); });
+        }
     }

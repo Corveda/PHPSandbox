@@ -139,19 +139,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-388823445"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-311995741"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-388823445" class="accordion-body collapse in">
+            <div id="namespace-311995741" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1866497963"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-380911250"></a>
                                 <a href="../namespaces/PHPSandbox.html" style="margin-left: 30px; padding-left: 0">PHPSandbox</a>
             </div>
-            <div id="namespace-1866497963" class="accordion-body collapse ">
+            <div id="namespace-380911250" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -187,10 +187,9 @@
                                             </nav>
                     <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
 
-                    <h1><small>\PHPSandbox</small>SandboxWhitelistVisitor</h1>
-                    <p><em>SandboxWhitelister class for PHP Sandboxes.</em></p>
-                    <p>This class takes parsed AST code and checks it against the passed PHPSandbox instance configuration to
-autmatically whitelist sandboxed code functions, classes, etc. if the appropriate settings are configured.</p>
+                    <h1><small>\PHPSandbox</small>SandboxedString</h1>
+                    <p><em>Sandboxed string class for PHP Sandboxes.</em></p>
+                    <p>This class wraps sandboxed strings to intercept and check callable invocations</p>
 
 
                     <section id="summary">
@@ -208,8 +207,9 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
                         </section>
                         <section class="row-fluid public">
                             <section class="span4">
-                                                                    <a href="../classes/PHPSandbox.SandboxWhitelistVisitor.html#method___construct" class="">__construct()</a><br />
-                                                                    <a href="../classes/PHPSandbox.SandboxWhitelistVisitor.html#method_leaveNode" class="">leaveNode()</a><br />
+                                                                    <a href="../classes/PHPSandbox.SandboxedString.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/PHPSandbox.SandboxedString.html#method___toString" class="">__toString()</a><br />
+                                                                    <a href="../classes/PHPSandbox.SandboxedString.html#method___invoke" class="">__invoke()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <em>No public properties found</em>
@@ -223,7 +223,7 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
                                                                     <em>No protected methods found</em>
                                                             </section>
                             <section class="span4">
-                                                                    <a href="../classes/PHPSandbox.SandboxWhitelistVisitor.html#property_sandbox" class="">$sandbox</a><br />
+                                                                    <em>No protected properties found</em>
                                                             </section>
                             <section class="span4">
                                 <em>N/A</em>
@@ -234,7 +234,8 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
                                                                     <em>No private methods found</em>
                                                             </section>
                             <section class="span4">
-                                                                    <em>No private properties found</em>
+                                                                    <a href="../classes/PHPSandbox.SandboxedString.html#property_value" class="">$value</a><br />
+                                                                    <a href="../classes/PHPSandbox.SandboxedString.html#property_sandbox" class="">$sandbox</a><br />
                                                             </section>
                             <section class="span4">
                                 <em>N/A</em>
@@ -247,14 +248,12 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
                     
                     <dl>
                         <dt>File</dt>
-                            <dd><a href="../files/SandboxWhitelistVisitor.php.html"><div class="path-wrapper">SandboxWhitelistVisitor.php</div></a></dd>
+                            <dd><a href="../files/SandboxedString.php.html"><div class="path-wrapper">SandboxedString.php</div></a></dd>
                                                 <dt>Package</dt>
                             <dd><div class="namespace-wrapper">\PHPSandbox</div></dd>
                                                 <dt>Class hierarchy</dt>
                             <dd class="hierarchy">
-                                                                                                                                                                                                                                                                                                
-                                        <div class="namespace-wrapper">\PHPParser_NodeVisitorAbstract</div>
-                                                                                                    <div class="namespace-wrapper">\PHPSandbox\SandboxWhitelistVisitor</div>
+                                                                                                                                                                    <div class="namespace-wrapper">\PHPSandbox\SandboxedString</div>
                             </dd>
 
                         
@@ -303,13 +302,38 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
                 <aside class="span4 detailsbar"></aside>
             </div>
 
-                                                    <div class="row-fluid">
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_value" name="property_value" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$value</h3>
+                <pre class="signature">$value : string</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
         <div class="span8 content class">
             <a id="property_sandbox" name="property_sandbox" class="anchor"></a>
             <article class="property">
-                <h3 class="protected ">$sandbox</h3>
+                <h3 class="private ">$sandbox</h3>
                 <pre class="signature">$sandbox : \PHPSandbox\PHPSandbox</pre>
-                <p><em>The PHPSandbox instance to check against</em></p>
+                <p><em></em></p>
                 
 
 
@@ -328,7 +352,7 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
         </aside>
     </div>
 
-                                            
+                            
                                     <a id="methods" name="methods"></a>
             <div class="row-fluid">
                 <div class="span8 content class"><h2>Methods</h2></div>
@@ -341,17 +365,23 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
             <article class="method">
                 <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__construct(\PHPSandbox\PHPSandbox <span class="argument">$sandbox</span>)</pre>
-                <p><em>SandboxWhitelistVisitor class constructor</em></p>
-                <p>This constructor takes a passed PHPSandbox instance to check against for whitelisting sandboxed code.</p>
+                <pre class="signature" style="margin-right: 54px;">__construct(string <span class="argument">$value</span>, \PHPSandbox\PHPSandbox <span class="argument">$sandbox</span>)</pre>
+                <p><em>Constructs the SandboxedString</em></p>
+                
 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
+                                <td>string</td>
+                                <td>$value</td>
+                                <td><p>Original string value</p>
+</td>
+                            </tr>
+                                                    <tr>
                                 <td><a href="../classes/PHPSandbox.PHPSandbox.html">\PHPSandbox\PHPSandbox</a></td>
                                 <td>$sandbox</td>
-                                <td><p>The PHPSandbox instance to check against</p>
+                                <td><p>The current sandbox instance to test against</p>
 </td>
                             </tr>
                                             </table>
@@ -372,27 +402,48 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_leaveNode" name="method_leaveNode" class="anchor"></a>
+            <a id="method___toString" name="method___toString" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">leaveNode()</h3>
+                <h3 class="public ">__toString()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">leaveNode(\PHPParser_Node <span class="argument">$node</span>)</pre>
-                <p><em>Examine the current PHPParser_Node node against the PHPSandbox configuration for whitelisting sandboxed code</em></p>
+                <pre class="signature" style="margin-right: 54px;">__toString() : string</pre>
+                <p><em>Returns the original string value</em></p>
                 
 
 
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>\PHPParser_Node</td>
-                                <td>$node</td>
-                                <td><p>The sandboxed $node to examine</p>
-</td>
-                            </tr>
-                                            </table>
                 
                 
-                            </article>
+                                    <h4>Returns</h4>
+                    string
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___invoke" name="method___invoke" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__invoke()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__invoke() : mixed|null</pre>
+                <p><em>Checks the string value against the sandbox function whitelists and blacklists for callback violations</em></p>
+                
+
+
+                
+                
+                                    <h4>Returns</h4>
+                    mixed|null
+                                                </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -411,10 +462,10 @@ autmatically whitelist sandboxed code functions, classes, etc. if the appropriat
     <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="source-view-label">SandboxWhitelistVisitor.php</h3>
+            <h3 id="source-view-label">SandboxedString.php</h3>
         </div>
         <div class="modal-body">
-            <pre data-src="../files/SandboxWhitelistVisitor.php.txt" class="language-php line-numbers"></pre>
+            <pre data-src="../files/SandboxedString.php.txt" class="language-php line-numbers"></pre>
         </div>
     </div>
 

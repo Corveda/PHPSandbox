@@ -14,13 +14,13 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.1
+     * @version 1.3.2
      */
     class PHPSandbox {
         /**
-         * @var    string        The prefix given to the obfuscated sandbox variable passed to the generated code
+         * @const    string      The prefix given to the obfuscated sandbox key passed to the generated code
          */
-        protected static $function_prefix = '__PHPSandbox_';
+        const SANDBOX_PREFIX = '__PHPSandbox_';
         /**
          * @var    int           A bit flag for the import() method, signifies to import all data from a template
          */
@@ -439,7 +439,7 @@
                                     array $classes = array(),
                                     array $interfaces = array(),
                                     array $traits = array()){
-            $this->name = static::$function_prefix . md5(uniqid());
+            $this->name = static::SANDBOX_PREFIX . md5(uniqid());
             $this->set_options($options)
                 ->define_funcs($functions)
                 ->define_vars($variables)
@@ -6478,12 +6478,14 @@
             $this->generated_code = $this->prepare_namespaces() .
                 $this->prepare_aliases() .
                 $this->prepare_consts() .
-                "\r\n" . 'return call_user_func(function(){' .
+                "\r\n" . '$closure = function(){' .
                 $this->prepare_vars() .
                 $this->prepended_code .
                 $this->prepared_code .
                 $this->appended_code .
-                "\r\n" . '});';
+                "\r\n" . '};' .
+                "\r\n" . '$closure = $closure->bindTo(null);' .
+                "\r\n" . 'return $closure();';
 
             usleep(1); //guarantee at least some time passes
             $this->prepare_time = (microtime(true) - $this->prepare_time);
