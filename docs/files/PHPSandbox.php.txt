@@ -6484,7 +6484,7 @@
                 $this->prepared_code .
                 $this->appended_code .
                 "\r\n" . '};' .
-                "\r\n" . '$closure = $closure->bindTo(null);' .
+                "\r\n" . 'if( PHP_MAJOR_VERSION >= 5 && PHP_MINOR_VERSION > 3){ $closure = $closure->bindTo(null); }' .
                 "\r\n" . 'return $closure();';
 
             usleep(1); //guarantee at least some time passes
