@@ -52,6 +52,8 @@
                     return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_intval', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
                 } else if($node instanceof \PHPParser_Node_Expr_Cast_Double){
                     return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_floatval', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
+                } else if($node instanceof \PHPParser_Node_Expr_Cast_Bool){
+                    return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_boolval', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
                 } else if($node instanceof \PHPParser_Node_Expr_Cast_Array){
                     return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_arrayval', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
                 } else if($node instanceof \PHPParser_Node_Expr_Cast_Object){

@@ -105,6 +105,7 @@
             'var_export',
             'intval',
             'floatval',
+            'boolval',
             'is_string',
             'is_object',
             'is_scalar',
@@ -2041,6 +2042,18 @@
          */
         public function _floatval($value){
             return floatval($value instanceof SandboxedString ? strval($value): $value);
+        }
+        /** Return boolean value of SandboxedString or mixed value
+         *
+         * @param   mixed           $value      Value to return as boolean
+         *
+         * @return  boolean           Returns the boolean value
+         */
+        public function _boolval($value){
+            if($value instanceof SandboxedString){
+                return (bool)strval($value);
+            }
+            return is_bool($value) ? $value : (bool)$value;
         }
         /** Return array value of SandboxedString or mixed value
          *
