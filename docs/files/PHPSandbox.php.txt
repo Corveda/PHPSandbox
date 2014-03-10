@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.2
+     * @version 1.3.3
      */
     class PHPSandbox {
         /**
@@ -88,20 +88,27 @@
             'get_declared_traits'
         );
         /**
-         * @var    array          A static array of var_dump, print_r and var_export for redefining those functions
-         */
-        public static $var_funcs = array(
-            'var_dump',
-            'print_r',
-            'var_export'
-        );
-        /**
          * @var    array          A static array of func_get_args, func_get_arg, and func_num_args used for redefining those functions
          */
         public static $arg_funcs = array(
             'func_get_args',
             'func_get_arg',
             'func_num_args'
+        );
+        /**
+         * @var    array          A static array of var_dump, print_r and var_export, intval, floatval, is_string, is_object,
+         *                          is_scalar and is_callable for redefining those functions
+         */
+        public static $sandboxed_string_funcs = array(
+            'var_dump',
+            'print_r',
+            'var_export',
+            'intval',
+            'floatval',
+            'is_string',
+            'is_object',
+            'is_scalar',
+            'is_callable'
         );
         /**
          * @var    string       The randomly generated name of the PHPSandbox variable passed to the generated closure
@@ -254,17 +261,17 @@
          */
         public $overwrite_defined_funcs     = true;
         /**
-         * @var    bool       Should PHPSandbox overwrite var_dump, print_r, and var_export?
-         * @default true
-         */
-        public $overwrite_var_funcs         = true;
-        /**
          * @var    bool       Should PHPSandbox overwrite func_get_args, func_get_arg and func_num_args?
          * @default true
          */
         public $overwrite_func_get_args     = true;
         /**
          * @var    bool       Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.
+         * @default true
+         */
+        public $overwrite_sandboxed_string_funcs         = true;
+        /**
+         * @var    bool       Should PHPSandbox overwrite functions to help hide SandboxedStrings?
          * @default true
          */
         public $overwrite_superglobals      = true;
@@ -1920,6 +1927,58 @@
             }
             return array_values($traits);
         }
+        /** Get PHPSandbox redefined function arguments array
+         *
+         * @param   array           $arguments      Array result from func_get_args() is passed here
+         *
+         * @return  array           Returns the redefined arguments array
+         */
+        public function _func_get_args(array $arguments = array()){
+            foreach($arguments as $index => $value){
+                if($value instanceof self){
+                    unset($arguments[$index]); //hide PHPSandbox variable
+                }
+            }
+            return $arguments;
+        }
+        /** Get PHPSandbox redefined function argument
+         *
+         * @param   array           $arguments      Array result from func_get_args() is passed here
+         *
+         * @param   int             $index          Requested func_get_arg index is passed here
+         *
+         * @return  array           Returns the redefined argument
+         */
+        public function _func_get_arg(array $arguments = array(), $index = 0){
+            if($arguments[$index] instanceof self){
+                $index++;   //get next argument instead
+            }
+            return isset($arguments[$index]) && !($arguments[$index] instanceof self) ? $arguments[$index] : null;
+        }
+        /** Get PHPSandbox redefined number of function arguments
+         *
+         * @param   array           $arguments      Array result from func_get_args() is passed here
+         *
+         * @return  int             Returns the redefined number of function arguments
+         */
+        public function _func_num_args(array $arguments = array()){
+            $count = count($arguments);
+            foreach($arguments as $argument){
+                if($argument instanceof self){
+                    $count--;
+                }
+            }
+            return $count > 0 ? $count : 0;
+        }
+        /** Wrap output value in SandboxString
+         *
+         * @param   mixed                   $value      Value to wrap
+         *
+         * @return  mixed|SandboxedString   Returns the wrapped value
+         */
+        public function _wrap($value){
+            return is_string($value) ? new SandboxedString($value, $this) : $value;
+        }
         /** Get PHPSandbox redefined var_dump
          *
          * @return  array           Returns the redefined var_dump
@@ -1965,48 +2024,86 @@
             }
             return call_user_func_array('var_export', $arguments);
         }
-        /** Get PHPSandbox redefined function arguments array
+        /** Return integer value of SandboxedString or mixed value
          *
-         * @param   array           $arguments      Array result from func_get_args() is passed here
+         * @param   mixed           $value      Value to return as integer
          *
-         * @return  array           Returns the redefined arguments array
+         * @return  int             Returns the integer value
          */
-        public function _func_get_args(array $arguments = array()){
-            foreach($arguments as $index => $value){
-                if($value instanceof self){
-                    unset($arguments[$index]); //hide PHPSandbox variable
-                }
-            }
-            return $arguments;
+        public function _intval($value){
+            return intval($value instanceof SandboxedString ? strval($value): $value);
         }
-        /** Get PHPSandbox redefined function argument
+        /** Return float value of SandboxedString or mixed value
          *
-         * @param   array           $arguments      Array result from func_get_args() is passed here
+         * @param   mixed           $value      Value to return as float
          *
-         * @param   int             $index          Requested func_get_arg index is passed here
-         *
-         * @return  array           Returns the redefined argument
+         * @return  float           Returns the float value
          */
-        public function _func_get_arg(array $arguments = array(), $index = 0){
-            if($arguments[$index] instanceof self){
-                $index++;   //get next argument instead
-            }
-            return isset($arguments[$index]) && !($arguments[$index] instanceof self) ? $arguments[$index] : null;
+        public function _floatval($value){
+            return floatval($value instanceof SandboxedString ? strval($value): $value);
         }
-        /** Get PHPSandbox redefined number of function arguments
+        /** Return array value of SandboxedString or mixed value
          *
-         * @param   array           $arguments      Array result from func_get_args() is passed here
+         * @param   mixed           $value      Value to return as array
          *
-         * @return  int             Returns the redefined number of function arguments
+         * @return  array           Returns the array value
          */
-        public function _func_num_args(array $arguments = array()){
-            $count = count($arguments);
-            foreach($arguments as $argument){
-                if($argument instanceof self){
-                    $count--;
-                }
+        public function _arrayval($value){
+            if($value instanceof SandboxedString){
+                return (array)strval($value);
             }
-            return $count > 0 ? $count : 0;
+            return is_array($value) ? $value : (array)$value;
+        }
+        /** Return object value of SandboxedString or mixed value
+         *
+         * @param   mixed           $value      Value to return as object
+         *
+         * @return  object          Returns the object value
+         */
+        public function _objectval($value){
+            if($value instanceof SandboxedString){
+                return (object)strval($value);
+            }
+            return is_object($value) ? $value : (object)$value;
+        }
+        /** Return is_string value of SandboxedString or mixed value
+         *
+         * @param   mixed           $value      Value to check if is_string
+         *
+         * @return  bool            Returns the is_string value
+         */
+        public function _is_string($value){
+            return ($value instanceof SandboxedString) ? true : is_string($value);
+        }
+        /** Return is_object value of SandboxedString or mixed value
+         *
+         * @param   mixed           $value      Value to check if is_object
+         *
+         * @return  bool            Returns the is_object value
+         */
+        public function _is_object($value){
+            return ($value instanceof SandboxedString) ? false : is_object($value);
+        }
+        /** Return is_scalar value of SandboxedString or mixed value
+         *
+         * @param   mixed           $value      Value to check if is_scalar
+         *
+         * @return  bool            Returns the is_scalar value
+         */
+        public function _is_scalar($value){
+            return ($value instanceof SandboxedString) ? true : is_scalar($value);
+        }
+        /** Return is_callable value of SandboxedString or mixed value
+         *
+         * @param   mixed           $value      Value to check if is_callable
+         *
+         * @return  bool            Returns the is_callable value
+         */
+        public function _is_callable($value){
+            if($value instanceof SandboxedString){
+                $value = strval($value);
+            }
+            return is_callable($value);
         }
         /** Get PHPSandbox redefined function. This is an internal PHPSandbox function but requires public access to work.
          *
@@ -5720,6 +5817,8 @@
                     $this->error("Sandboxed code attempted to call closure!", Error::CLOSURE_ERROR);
                 }
                 return true;
+            } else if($name instanceof SandboxedString){
+                $name = strval($name);
             }
             if(!$name || !is_string($name)){
                 $this->error("Sandboxed code attempted to call unnamed function!", Error::VALID_FUNC_ERROR, null, '');
@@ -5751,6 +5850,9 @@
          */
         public function check_var($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed variable!", Error::VALID_VAR_ERROR, null, '');
             }
@@ -5780,6 +5882,9 @@
          */
         public function check_global($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed global!", Error::VALID_GLOBAL_ERROR, null, '');
             }
@@ -5807,6 +5912,9 @@
          */
         public function check_superglobal($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed superglobal!", Error::VALID_SUPERGLOBAL_ERROR, null, '');
             }
@@ -5837,6 +5945,9 @@
          */
         public function check_const($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed constant!", Error::VALID_CONST_ERROR, null, '');
             }
@@ -5872,6 +5983,9 @@
          */
         public function check_magic_const($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed magic constant!", Error::VALID_MAGIC_CONST_ERROR, null, '');
             }
@@ -5902,6 +6016,9 @@
          */
         public function check_namespace($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed namespace!", Error::VALID_NAMESPACE_ERROR, null, '');
             }
@@ -5932,6 +6049,9 @@
          */
         public function check_alias($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed alias!", Error::VALID_ALIAS_ERROR, null, '');
             }
@@ -5973,6 +6093,9 @@
          */
         public function check_class($name, $extends = false){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             $action = $extends ? 'extend' : 'call';
             if(!$name){
                 $this->error("Sandboxed code attempted to $action unnamed class!", Error::VALID_CLASS_ERROR, null, '');
@@ -6007,6 +6130,9 @@
          */
         public function check_interface($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed interface!", Error::VALID_INTERFACE_ERROR, null, '');
             }
@@ -6037,6 +6163,9 @@
          */
         public function check_trait($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed trait!", Error::VALID_TRAIT_ERROR, null, '');
             }
@@ -6067,6 +6196,9 @@
          */
         public function check_keyword($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed keyword!", Error::VALID_KEYWORD_ERROR, null, '');
             }
@@ -6093,6 +6225,9 @@
          */
         public function check_operator($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed operator!", Error::VALID_OPERATOR_ERROR, null, '');
             }
@@ -6119,6 +6254,9 @@
          */
         public function check_primitive($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed primitive!", Error::VALID_PRIMITIVE_ERROR, null, '');
             }
@@ -6145,6 +6283,9 @@
          */
         public function check_type($name){
             $original_name = $name;
+            if($name instanceof SandboxedString){
+                $name = strval($name);
+            }
             if(!$name){
                 $this->error("Sandboxed code attempted to call unnamed type!", Error::VALID_TYPE_ERROR, null, '');
             }
@@ -6484,7 +6625,7 @@
                 $this->prepared_code .
                 $this->appended_code .
                 "\r\n" . '};' .
-                "\r\n" . 'if( PHP_MAJOR_VERSION >= 5 && PHP_MINOR_VERSION > 3){ $closure = $closure->bindTo(null); }' .
+                "\r\n" . 'if(method_exists($closure, "bindTo")){ $closure = $closure->bindTo(null); }' .
                 "\r\n" . 'return $closure();';
 
             usleep(1); //guarantee at least some time passes

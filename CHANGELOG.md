@@ -1,5 +1,12 @@
 #CHANGELOG
 
+##03/10/2014
+- Addressed potential vulnerabilities related to SandboxedStrings where sandboxed code could manipulate the strings in a way that could defeat their protection
+- Solved errors from casting sandboxed strings to int
+- Overwrote some internal PHP functions to further mask SandboxedStrings from the sandboxed code and prevent type-checking errors
+- Added more tests related to SandboxedStrings
+- Made some minor tweaks to PHPSandbox Toolkit
+
 ##03/05/2014
 - Corrected an issue where the sandbox variable could be accessed from within the sandbox in PHP 5.4+
 

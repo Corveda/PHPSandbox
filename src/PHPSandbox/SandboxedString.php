@@ -11,9 +11,9 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.2
+     * @version 1.3.3
      */
-    class SandboxedString {
+    class SandboxedString implements \ArrayAccess, \IteratorAggregate {
         /**
          * @var string
          */
@@ -23,8 +23,8 @@
          */
         private $sandbox;
         /** Constructs the SandboxedString
-         * @param   string      $value      Original string value
-         * @param   PHPSandbox  $sandbox    The current sandbox instance to test against
+         * @param   string      $value          Original string value
+         * @param   PHPSandbox  $sandbox        The current sandbox instance to test against
          */
         public function __construct($value, PHPSandbox $sandbox){
             $this->value = $value;
@@ -43,12 +43,51 @@
             if($this->sandbox->check_func($this->value)){
                 $name = strtolower($this->value);
                 if((in_array($name, PHPSandbox::$defined_funcs) && $this->sandbox->overwrite_defined_funcs)
-                    || (in_array($name, PHPSandbox::$var_funcs) && $this->sandbox->overwrite_var_funcs)
+                    || (in_array($name, PHPSandbox::$sandboxed_string_funcs) && $this->sandbox->overwrite_sandboxed_string_funcs)
                     || (in_array($name, PHPSandbox::$arg_funcs) && $this->sandbox->overwrite_func_get_args)){
                     return call_user_func_array(array($this->sandbox, '_' . $this->value), func_get_args());
                 }
                 return call_user_func_array($name, func_get_args());
             }
-            return null;
+            return '';
+        }
+        /** Set string value at specified offset
+         * @param   mixed       $offset            Offset to set value
+         * @param   mixed       $value             Value to set
+         */
+        public function offsetSet($offset, $value){
+            if($offset === null){
+                $this->value .= $value;
+            } else {
+                $this->value[$offset] = $value;
+            }
+        }
+        /** Get string value at specified offset
+         * @param   mixed       $offset            Offset to get value
+         *
+         * @return  string      Value to return
+         */
+        public function offsetGet($offset){
+            return $this->value[$offset];
+        }
+        /** Check if specified offset exists in string value
+         * @param   mixed       $offset            Offset to check
+         *
+         * @return  bool        Return true if offset exists, false otherwise
+         */
+        public function offsetExists($offset){
+            return isset($this->value[$offset]);
+        }
+        /** Unset string value at specified offset
+         * @param   mixed       $offset            Offset to unset
+         */
+        public function offsetUnset($offset){
+            unset($this->value[$offset]);
+        }
+        /** Return iterator for string value
+         * @return  \ArrayIterator      Array iterator to return
+         */
+        public function getIterator(){
+            return new \ArrayIterator(str_split(strval($this->value)));
         }
     }

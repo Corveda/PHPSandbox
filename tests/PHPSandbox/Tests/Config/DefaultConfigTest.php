@@ -310,4 +310,34 @@
             $this->setExpectedException('PHPSandbox\Error');
             $this->sandbox->execute(function(){ array_filter(array("1"), "var_dump"); });
         }
+
+        /**
+         * Test whether sandbox disallows violating callbacks even with manipulated sandboxed strings
+         */
+        public function testCallbackViolationsWithStringManipulation(){
+            $this->setExpectedException('PHPSandbox\Error');
+            $this->sandbox->execute(function(){ $x = substr("var_dump2", 0, -1); array_filter(array("1"), $x); });
+        }
+
+        /**
+         * Test whether sandboxed strings do not cause conflicts with intval
+         */
+        public function testSandboxedStringsSatisfyIntval(){
+            $this->sandbox->whitelist_func('intval');
+            $this->assertEquals(1, $this->sandbox->execute(function(){ return intval("1"); }));
+        }
+
+        /**
+         * Test whether sandboxed strings do not cause conflicts with is_string, is_object, or is_scalar
+         */
+        public function testSandboxedStringsMimicStrings(){
+            $this->sandbox->whitelist_func(array(
+                'is_string',
+                'is_object',
+                'is_scalar'
+            ));
+            $this->assertEquals(true, $this->sandbox->execute(function(){ return is_string("1"); }));
+            $this->assertEquals(false, $this->sandbox->execute(function(){ return is_object("1"); }));
+            $this->assertEquals(true, $this->sandbox->execute(function(){ return is_scalar("1"); }));
+        }
     }

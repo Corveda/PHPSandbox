@@ -13,7 +13,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.2
+     * @version 1.3.3
      */
     class ValidatorVisitor extends \PHPParser_NodeVisitorAbstract {
         /** The PHPSandbox instance to check against
@@ -42,9 +42,20 @@
                 if(!$this->sandbox->allow_escaping){
                     $this->sandbox->error("Sandboxed code attempted to escape to HTML!", Error::ESCAPE_ERROR, $node);
                 }
+            } else if($node instanceof \PHPParser_Node_Expr_Cast_String){
+                return new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg($node->expr), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))))));
             } else if($node instanceof \PHPParser_Node_Expr_Cast){
                 if(!$this->sandbox->allow_casting){
                     $this->sandbox->error("Sandboxed code attempted to cast!", Error::CAST_ERROR, $node);
+                }
+                if($node instanceof \PHPParser_Node_Expr_Cast_Int){
+                    return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_intval', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
+                } else if($node instanceof \PHPParser_Node_Expr_Cast_Double){
+                    return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_floatval', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
+                } else if($node instanceof \PHPParser_Node_Expr_Cast_Array){
+                    return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_arrayval', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
+                } else if($node instanceof \PHPParser_Node_Expr_Cast_Object){
+                    return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_objectval', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
                 }
             } else if($node instanceof \PHPParser_Node_Expr_FuncCall){
                 if($node->name instanceof \PHPParser_Node_Name){
@@ -60,7 +71,7 @@
                     if($this->sandbox->overwrite_defined_funcs && in_array($name, PHPSandbox::$defined_funcs)){
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array($name))))), $node->getAttributes());
                     }
-                    if($this->sandbox->overwrite_var_funcs && in_array($name, PHPSandbox::$var_funcs)){
+                    if($this->sandbox->overwrite_sandboxed_string_funcs && in_array($name, PHPSandbox::$sandboxed_string_funcs)){
                         $args = $node->args;
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_' . $name, $args, $node->getAttributes());
                     }
@@ -74,6 +85,7 @@
                         }
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array('func_get_args'))))), $node->getAttributes());
                     }
+                    return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_wrap', array(new \PHPParser_Node_Arg($node)), $node->getAttributes());
                 } else {
                     return new \PHPParser_Node_Expr_Ternary(
                         new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), 'check_func', array(new \PHPParser_Node_Arg($node->name)), $node->getAttributes()),
@@ -371,6 +383,11 @@
                 if(!$this->sandbox->check_operator($name)){
                     $this->sandbox->error("Operator failed custom validation!", Error::VALID_OPERATOR_ERROR, $node, $name);
                 }
+                if($node instanceof \PHPParser_Node_Expr_Concat){
+                    return new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg($node), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))))));
+                } else if($node instanceof \PHPParser_Node_Expr_AssignConcat){
+                    return new \PHPParser_Node_Expr_Assign($node->var, new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_Concat($node->var, $node->expr)), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name)))))));
+                }
             } else if($name = $this->is_primitive($node)){
                 if(!$this->sandbox->check_primitive($name)){
                     $this->sandbox->error("Primitive failed custom validation!", Error::VALID_PRIMITIVE_ERROR, $node, $name);
@@ -580,24 +597,9 @@
          *
          * @param   \PHPParser_Node   $node          The sandboxed $node to test
          *
-         * @throws  Error             Throws exception if $node attempts to cast when $allow_casting is false in the PHPSandbox configuration
-         *
          * @return  string|null       Return string name of node, or null if it is not a primitive
          */
         protected function is_primitive(\PHPParser_Node $node){
-            switch($node->getType()){
-                case 'Expr_Cast_Array':
-                case 'Expr_Cast_Bool':
-                case 'Expr_Cast_Double':
-                case 'Expr_Cast_Int':
-                case 'Expr_Cast_String':
-                case 'Expr_Cast_Object':
-                case 'Expr_Cast_Unset':
-                    if(!$this->sandbox->allow_casting){
-                        $this->sandbox->error("Sandboxed code attempted to cast!", Error::CAST_ERROR, $node);
-                    }
-                    break;
-            }
             switch($node->getType()){
                 case 'Expr_Cast_Array':
                 case 'Expr_Array':

@@ -119,7 +119,7 @@
             'blacklist' => $blacklist,
             'definitions' => $definitions
         ));
-        $sandbox->set_error_handler(function(\PHPSandbox\Error $e){ echo '<h2 style="color: red;">' . $e->getMessage() . '</h2>'; });
+        $sandbox->set_error_handler(function(\PHPSandbox\Error $e){ die('<h2 style="color: red;">' . $e->getMessage() . '</h2>'); });
         try {
             ob_start();
             if($setup_code){
@@ -137,7 +137,7 @@
             ob_end_clean();
             die('<pre>' . $buffer . '</pre>');
         } catch(\PHPSandbox\Error $e){
-            echo '<h2 style="color: red;">' . $e->getMessage() . '</h2>';
+            die('<h2 style="color: red;">' . $e->getMessage() . '</h2>');
         }
     }
 
@@ -313,6 +313,7 @@
             <a href="javascript:;" class="help">Help</a>
         </strong>
     </p>
+    <div align="center" style="font-size: 8px; font-weight: bold;">&copy; Copyright 2013 - <?php echo date("Y"); ?> Elijah Horton. - Some Rights Reserved.<br/>See <a href="../LICENSE" target="_blank">LICENSE</a> for details.</div>
     <hr class="hr"/>
     <h3 style="margin: 0;">Choose Template:</h3>
     <br/>
@@ -558,6 +559,7 @@
     <br/>
     <br/>
     <input type="button" value="Run Code In Sandbox" id="run" style="width: 100%;"/>
+    <br/>
 </div>
 <div id="output_container">
     <h2>Output</h2>
