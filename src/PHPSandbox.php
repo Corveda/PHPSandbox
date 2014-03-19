@@ -2011,17 +2011,8 @@
         public function _wrap($value){
             if(is_object($value) && is_callable($value, '__toString')){
                 return $this->_wrap(strval($value));
-            }
-            if(is_string($value)){
-                if(filter_var($value, FILTER_VALIDATE_INT) !== false){
-                    return intval($value);
-                }
-                if(filter_var($value, FILTER_VALIDATE_FLOAT) !== false){
-                    return floatval($value);
-                }
-                if(is_callable($value)){
-                    return new SandboxedString($value, $this);
-                }
+            } else if(is_string($value) && is_callable($value)){
+                return new SandboxedString($value, $this);
             }
             return $value;
         }
