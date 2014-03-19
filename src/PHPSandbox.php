@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.4
+     * @version 1.3.5
      */
     class PHPSandbox {
         /**

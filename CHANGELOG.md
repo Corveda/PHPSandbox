@@ -8,6 +8,7 @@
 - Revised SandboxedString insertion to more intelligently provide sandboxing of callbacks
 - Changed method visibility to public for error() and exception() to resolve PHP 5.3's failure to use them in the proper context
 - Addressed issue where functions expecting float or int values passed as strings would throw errors
+- You can now specify an unlimited number of parameters for all whitelist_*, blacklist_*, etc. methods etc for _superglobal. This works the same as passing an array of parameters.
 
 ##03/10/2014
 - Addressed potential vulnerabilities related to SandboxedStrings where sandboxed code could manipulate the strings in a way that could defeat their protection
