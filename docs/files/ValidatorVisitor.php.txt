@@ -38,13 +38,13 @@
          * @return  \PHPParser_Node|bool|null        Return rewritten node, false if node must be removed, or null if no changes to the node are made
          */
         public function leaveNode(\PHPParser_Node $node){
-            if($node instanceof \PHPParser_Node_Stmt_InlineHTML){
+            if($node instanceof \PHPParser_Node_Arg){
+                return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_wrap', array($node), $node->getAttributes());
+            } else if($node instanceof \PHPParser_Node_Stmt_InlineHTML){
                 if(!$this->sandbox->allow_escaping){
                     $this->sandbox->validation_error("Sandboxed code attempted to escape to HTML!", Error::ESCAPE_ERROR, $node);
                 }
-            } else if($node instanceof \PHPParser_Node_Expr_Cast_String){
-                return new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg($node->expr), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))))));
-            } else if($node instanceof \PHPParser_Node_Expr_Cast){
+            }else if($node instanceof \PHPParser_Node_Expr_Cast){
                 if(!$this->sandbox->allow_casting){
                     $this->sandbox->validation_error("Sandboxed code attempted to cast!", Error::CAST_ERROR, $node);
                 }
@@ -87,7 +87,6 @@
                         }
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_' . $name, array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_FuncCall(new \PHPParser_Node_Name(array('func_get_args'))))), $node->getAttributes());
                     }
-                    return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_wrap', array(new \PHPParser_Node_Arg($node)), $node->getAttributes());
                 } else {
                     return new \PHPParser_Node_Expr_Ternary(
                         new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), 'check_func', array(new \PHPParser_Node_Arg($node->name)), $node->getAttributes()),
@@ -385,17 +384,9 @@
                 if(!$this->sandbox->check_operator($name)){
                     $this->sandbox->validation_error("Operator failed custom validation!", Error::VALID_OPERATOR_ERROR, $node, $name);
                 }
-                if($node instanceof \PHPParser_Node_Expr_Concat){
-                    return new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg($node), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))))));
-                } else if($node instanceof \PHPParser_Node_Expr_AssignConcat){
-                    return new \PHPParser_Node_Expr_Assign($node->var, new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_Concat($node->var, $node->expr)), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name)))))));
-                }
             } else if($name = $this->is_primitive($node)){
                 if(!$this->sandbox->check_primitive($name)){
                     $this->sandbox->validation_error("Primitive failed custom validation!", Error::VALID_PRIMITIVE_ERROR, $node, $name);
-                }
-                if($node instanceof \PHPParser_Node_Scalar_String){
-                    return new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg($node), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))))));
                 }
             }
             return null;

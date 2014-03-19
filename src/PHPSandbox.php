@@ -6616,23 +6616,10 @@
         public function get_time($round = null){
             return $round ? round($this->prepare_time + $this->execution_time, $round) : ($this->prepare_time + $this->execution_time);
         }
-        /** Prepare passed callable for execution
-         *
-         * This function validates your code and automatically whitelists it according to your specified configuration
-         *
-         * @example $sandbox->prepare(function(){ var_dump('Hello world!'); });
-         *
-         * @param   callable    $code       The callable to prepare for execution
-         *
-         * @throws  Error       Throws exception if error occurs in parsing, validation or whitelisting
-         *
-         * @return  string      The generated code (this can also be accessed via $sandbox->generated_code)
+        /**
+         * Validates passed callable for execution
          */
-        public function prepare($code){
-            $this->prepare_time = microtime(true);
-            if($this->allow_constants && !$this->is_defined_func('define') && ($this->has_whitelist_funcs() || !$this->has_blacklist_funcs())){
-                $this->whitelist_func('define');    //makes no sense to allow constants if you can't define them!
-            }
+        public function validate($code){
             $this->preparsed_code = $this->disassemble($code);
             $parser = new \PHPParser_Parser(new \PHPParser_Lexer_Emulative);
 
@@ -6666,6 +6653,30 @@
             $this->prepared_ast = $traverser->traverse($this->parsed_ast);
 
             $this->prepared_code = $prettyPrinter->prettyPrint($this->prepared_ast);
+        }
+        /** Prepare passed callable for execution
+         *
+         * This function validates your code and automatically whitelists it according to your specified configuration
+         *
+         * @example $sandbox->prepare(function(){ var_dump('Hello world!'); });
+         *
+         * @param   callable    $code               The callable to prepare for execution
+         * @param   boolean     $skip_validation    Boolean flag to indicate whether the sandbox should skip validation. Default is false.
+         *
+         * @throws  Error       Throws exception if error occurs in parsing, validation or whitelisting
+         *
+         * @return  string      The generated code (this can also be accessed via $sandbox->generated_code)
+         */
+        public function prepare($code, $skip_validation = false){
+            $this->prepare_time = microtime(true);
+
+            if($this->allow_constants && !$this->is_defined_func('define') && ($this->has_whitelist_funcs() || !$this->has_blacklist_funcs())){
+                $this->whitelist_func('define');    //makes no sense to allow constants if you can't define them!
+            }
+
+            if(!$skip_validation){
+                $this->validate($code);
+            }
 
             static::$sandboxes[$this->name] = $this;
 
@@ -6675,7 +6686,7 @@
                 "\r\n" . '$closure = function(){' .
                 $this->prepare_vars() .
                 $this->prepended_code .
-                $this->prepared_code .
+                ($skip_validation ? $code : $this->prepared_code) .
                 $this->appended_code .
                 "\r\n" . '};' .
                 "\r\n" . 'if(method_exists($closure, "bindTo")){ $closure = $closure->bindTo(null); }' .
@@ -6691,22 +6702,23 @@
          *
          * @example $sandbox->execute(function(){ var_dump('Hello world!'); });
          *
-         * @param   callable|string     $callable       Callable or string of PHP code to prepare and execute within the sandbox
+         * @param   callable|string     $callable           Callable or string of PHP code to prepare and execute within the sandbox
+         * @param   boolean             $skip_validation    Boolean flag to indicate whether the sandbox should skip validation of the pass callable. Default is false.
          *
          * @throws  Error       Throws exception if error occurs in parsing, validation or whitelisting or if generated closure is invalid
          *
          * @return  mixed       The output from the executed sandboxed code
          */
-        public function execute($callable = null){
+        public function execute($callable = null, $skip_validation = false){
             if($callable !== null){
-                $this->prepare($callable);
+                $this->prepare($callable, $skip_validation);
             }
             $saved_error_level = null;
             if($this->error_level !== null){
                 $saved_error_level = error_reporting();
                 error_reporting($this->error_level);
             }
-            if(is_callable($this->error_handler)){
+            if(is_callable($this->error_handler) || $this->convert_errors){
                 set_error_handler(array($this, 'error'), $this->error_handler_types);
             }
             $this->execution_time = microtime(true);
@@ -6721,7 +6733,7 @@
                     $result = eval($this->generated_code);
                 }
             } catch(\Exception $exception){}
-            if(is_callable($this->error_handler)){
+            if(is_callable($this->error_handler) || $this->convert_errors){
                 restore_error_handler();
             }
             usleep(1); //guarantee at least some time passes

@@ -3,6 +3,8 @@
 
     use \PHPSandbox\PHPSandbox;
 
+    error_reporting(E_ALL);
+
     class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
         /**
          * @var PHPSandbox
@@ -319,7 +321,7 @@
          * Test whether sandbox converts errors to exceptions
          */
         public function testConvertErrors(){
-            $this->setExpectedException('PHPUnit_Framework_Error_Notice');
+            $this->setExpectedException('ErrorException');
             $this->sandbox->convert_errors = true;
             $this->sandbox->set_exception_handler(function($error, $sandbox){
                 throw $error;

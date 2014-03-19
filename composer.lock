@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e5c93435d8031b06c119fe050ea2f791",
+    "hash": "55746051944622c97f8ea7a6bd9db80b",
     "packages": [
         {
             "name": "jeremeamia/FunctionParser",
@@ -327,7 +327,7 @@
                     "email": "roman@code-factory.org"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -1910,12 +1910,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "7a1e03d503b144891bda936e494645578eb6b17f"
+                "reference": "54059dedb1e5982cb1cae4f82ac9d1d75e471bf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/7a1e03d503b144891bda936e494645578eb6b17f",
-                "reference": "7a1e03d503b144891bda936e494645578eb6b17f",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/54059dedb1e5982cb1cae4f82ac9d1d75e471bf5",
+                "reference": "54059dedb1e5982cb1cae4f82ac9d1d75e471bf5",
                 "shasum": ""
             },
             "require": {
@@ -1956,7 +1956,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-17 23:05:29"
+            "time": "2014-03-19 06:24:10"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -2336,12 +2336,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "fb7034669c44f503aad72778d64d228620647e39"
+                "reference": "e26028da2416ea03227ec1dd8953459d8dddf0ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/fb7034669c44f503aad72778d64d228620647e39",
-                "reference": "fb7034669c44f503aad72778d64d228620647e39",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/e26028da2416ea03227ec1dd8953459d8dddf0ab",
+                "reference": "e26028da2416ea03227ec1dd8953459d8dddf0ab",
                 "shasum": ""
             },
             "require": {
@@ -2394,7 +2394,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-10 12:58:20"
+            "time": "2014-03-19 09:45:16"
         },
         {
             "name": "symfony/yaml",
