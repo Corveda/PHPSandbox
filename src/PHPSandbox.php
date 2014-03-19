@@ -6782,7 +6782,7 @@
          * @param   array                       $errcontext     Error context array
          * @return  mixed
          */
-        protected function error($errno, $errstr, $errfile, $errline, $errcontext){
+        public function error($errno, $errstr, $errfile, $errline, $errcontext){
             $this->last_error = error_get_last();
             if($this->convert_errors){
                 return $this->exception(new \ErrorException($errstr, 0, $errno, $errfile, $errline));
@@ -6843,7 +6843,7 @@
          *
          * @return  mixed
          */
-        protected function exception(\Exception $exception){
+        public function exception(\Exception $exception){
             $this->last_exception = $exception;
             if(is_callable($this->exception_handler)){
                 return call_user_func_array($this->exception_handler, array($exception, $this));
