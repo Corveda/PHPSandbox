@@ -293,11 +293,46 @@
         }
 
         /**
-         * Test whether sandbox custom error handler intercepts exceptions
+         * Test whether sandbox custom error handler intercepts errors
          */
         public function testCustomErrorHandler(){
+            $this->setExpectedException('Exception');
+            $this->sandbox->set_error_handler(function($errno, $errstr){
+                throw new \Exception($errstr);
+            });
+            $this->sandbox->execute(function(){ $a[1]; });
+        }
+
+        /**
+         * Test whether sandbox custom exception handler intercepts exceptions
+         */
+        public function testCustomExceptionHandler(){
+            $this->setExpectedException('Exception');
+            $this->sandbox->whitelist_type('Exception');
+            $this->sandbox->set_exception_handler(function($exception, $sandbox){
+                throw $exception;
+            });
+            $this->sandbox->execute(function(){ throw new \Exception; });
+        }
+
+        /**
+         * Test whether sandbox converts errors to exceptions
+         */
+        public function testConvertErrors(){
+            $this->setExpectedException('PHPUnit_Framework_Error_Notice');
+            $this->convert_errors = true;
+            $this->sandbox->set_exception_handler(function($error, $sandbox){
+                throw $error;
+            });
+            $this->sandbox->execute(function(){ $a[1]; });
+        }
+
+        /**
+         * Test whether sandbox custom validation error handler intercepts validation Errors
+         */
+        public function testCustomValidationErrorHandler(){
             $this->setExpectedException('PHPSandbox\Error');
-            $this->sandbox->set_error_handler(function($error, $sandbox){
+            $this->sandbox->set_validation_error_handler(function($error, $sandbox){
                 throw $error;
             });
             $this->sandbox->execute(function(){ test2(); });

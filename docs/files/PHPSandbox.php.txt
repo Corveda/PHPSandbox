@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.3
+     * @version 1.3.4
      */
     class PHPSandbox {
         /**
@@ -105,6 +105,7 @@
             'var_export',
             'intval',
             'floatval',
+            'boolval',
             'is_string',
             'is_object',
             'is_scalar',
@@ -209,7 +210,12 @@
          * @var    bool       Flag to indicate whether the sandbox should return error_reporting to its previous level after execution
          * @default true
          */
-        public $restore_error_level          = true;
+        public $restore_error_level         = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should convert errors to exceptions
+         * @default false
+         */
+        public $convert_errors              = false;
         /**
          * @var    bool       Flag whether to return output via an output buffer
          * @default false
@@ -409,13 +415,33 @@
          */
         public $generated_code = '';
         /**
-         * @var    null|callable    Callable that handles any thrown errors when set
+         * @var    null|callable       Callable that handles any errors when set
          */
         protected $error_handler;
         /**
-         * @var    \Exception|Error    The last error thrown by the sandbox
+         * @var    int                 Integer value of the error types to handle (default is E_ALL)
+         */
+        protected $error_handler_types = E_ALL;
+        /**
+         * @var    array               The last error thrown by the sandbox
          */
         protected $last_error;
+        /**
+         * @var    null|callable       Callable that handles any thrown exceptions when set
+         */
+        protected $exception_handler;
+        /**
+         * @var    \Exception          The last exception thrown by the sandbox
+         */
+        protected $last_exception;
+        /**
+         * @var    null|callable       Callable that handles any thrown validation errors when set
+         */
+        protected $validation_error_handler;
+        /**
+         * @var    \Exception|Error    The last validation error thrown by the sandbox
+         */
+        protected $last_validation_error;
         /** PHPSandbox class constructor
          *
          * @example $sandbox = new PHPSandbox\PHPSandbox;
@@ -537,7 +563,7 @@
                 $template = json_decode($template);
             }
             if(!is_array($template)){
-                $this->error("Sandbox could not import malformed JSON template!", Error::IMPORT_ERROR, null, $template);
+                $this->validation_error("Sandbox could not import malformed JSON template!", Error::IMPORT_ERROR, null, $template);
             }
             if(isset($template['options']) && is_array($template['options']) && (!$import_flag || ($import_flag & static::IMPORT_OPTIONS))){
                 $this->set_options($template['options']);
@@ -551,7 +577,7 @@
                                     $function = null;
                                     @eval('$function = ' . $value["fullcode"] .';');
                                     if(!is_callable($function)){
-                                        $this->error("Could not import function $key! Please check your code for errors!", Error::IMPORT_ERROR, null, $function);
+                                        $this->validation_error("Could not import function $key! Please check your code for errors!", Error::IMPORT_ERROR, null, $function);
                                     }
                                     $this->define_func($key, $function, $value["pass"]);
                                 }
@@ -677,6 +703,9 @@
                 case 'restore_error_level':
                     $this->restore_error_level = $value ? true : false;
                     break;
+                case 'convert_errors':
+                    $this->convert_errors = $value ? true : false;
+                    break;
                 case 'capture_output':
                     $this->capture_output = $value ? true : false;
                     break;
@@ -707,8 +736,8 @@
                 case 'overwrite_defined_funcs':
                     $this->overwrite_defined_funcs = $value ? true : false;
                     break;
-                case 'overwrite_var_funcs':
-                    $this->overwrite_var_funcs = $value ? true : false;
+                case 'overwrite_sandboxed_string_funcs':
+                    $this->overwrite_sandboxed_string_funcs = $value ? true : false;
                     break;
                 case 'overwrite_func_get_args':
                     $this->overwrite_func_get_args = $value ? true : false;
@@ -831,6 +860,9 @@
                 case 'restore_error_level':
                     return $this->restore_error_level;
                     break;
+                case 'convert_errors':
+                    return $this->convert_errors;
+                    break;
                 case 'capture_output':
                     return $this->capture_output;
                     break;
@@ -861,8 +893,8 @@
                 case 'overwrite_defined_funcs':
                     return $this->overwrite_defined_funcs;
                     break;
-                case 'overwrite_var_funcs':
-                    return $this->overwrite_var_funcs;
+                case 'overwrite_sandboxed_string_funcs':
+                    return $this->overwrite_sandboxed_string_funcs;
                     break;
                 case 'overwrite_func_get_args':
                     return $this->overwrite_func_get_args;
@@ -2042,6 +2074,18 @@
         public function _floatval($value){
             return floatval($value instanceof SandboxedString ? strval($value): $value);
         }
+        /** Return boolean value of SandboxedString or mixed value
+         *
+         * @param   mixed           $value      Value to return as boolean
+         *
+         * @return  boolean           Returns the boolean value
+         */
+        public function _boolval($value){
+            if($value instanceof SandboxedString){
+                return (bool)strval($value);
+            }
+            return is_bool($value) ? $value : (bool)$value;
+        }
         /** Return array value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to return as array
@@ -2126,7 +2170,7 @@
             if(is_callable($name)){
                 return call_user_func_array($name, $arguments);
             }
-            return $this->error("Sandboxed code attempted to call invalid function: $original_name", Error::VALID_FUNC_ERROR, null, $original_name);
+            return $this->validation_error("Sandboxed code attempted to call invalid function: $original_name", Error::VALID_FUNC_ERROR, null, $original_name);
         }
         /** Define PHPSandbox definitions, such as functions, constants, namespaces, etc.
          *
@@ -2263,7 +2307,7 @@
                 return $this->define_funcs($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed function!", Error::DEFINE_FUNC_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed function!", Error::DEFINE_FUNC_ERROR, null, '');
             }
             if(is_array($function) && count($function)){    //so you can pass array of function names and array of function and pass_sandbox flag
                 $pass_sandbox = isset($function[1]) ? $function[1] : false;
@@ -2272,7 +2316,7 @@
             $original_name = $name;
             $name = $this->normalize_func($name);
             if(!is_callable($function)){
-                $this->error("Cannot define uncallable function : $original_name", Error::DEFINE_FUNC_ERROR, null, $original_name);
+                $this->validation_error("Cannot define uncallable function : $original_name", Error::DEFINE_FUNC_ERROR, null, $original_name);
             }
             $this->definitions['functions'][$name] = array(
                 'function' => $function,
@@ -2381,7 +2425,7 @@
                 return $this->define_vars($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed variable!", Error::DEFINE_VAR_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed variable!", Error::DEFINE_VAR_ERROR, null, '');
             }
             $this->definitions['variables'][$name] = $value;
             return $this;
@@ -2487,7 +2531,7 @@
                 return $this->define_superglobals($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed superglobal!", Error::DEFINE_SUPERGLOBAL_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed superglobal!", Error::DEFINE_SUPERGLOBAL_ERROR, null, '');
             }
             $name = $this->normalize_superglobal($name);
             if(func_num_args() > 2){
@@ -2620,7 +2664,7 @@
                 return $this->define_consts($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed constant!", Error::DEFINE_CONST_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed constant!", Error::DEFINE_CONST_ERROR, null, '');
             }
             $this->definitions['constants'][$name] = $value;
             return $this;
@@ -2724,7 +2768,7 @@
                 return $this->define_magic_consts($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed magic constant!", Error::DEFINE_MAGIC_CONST_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed magic constant!", Error::DEFINE_MAGIC_CONST_ERROR, null, '');
             }
             $name = $this->normalize_magic_const($name);
             $this->definitions['magic_constants'][$name] = $value;
@@ -2830,7 +2874,7 @@
                 return $this->define_namespaces($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed namespace!", Error::DEFINE_NAMESPACE_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed namespace!", Error::DEFINE_NAMESPACE_ERROR, null, '');
             }
             $normalized_name = $this->normalize_namespace($name);
             $this->definitions['namespaces'][$normalized_name] = $name;
@@ -2886,7 +2930,7 @@
         public function get_defined_namespace($name){
             $name = $this->normalize_namespace($name);
             if(!isset($this->definitions['namespaces'][$name])){
-                $this->error("Could not get undefined namespace: $name", Error::VALID_NAMESPACE_ERROR, null, $name);
+                $this->validation_error("Could not get undefined namespace: $name", Error::VALID_NAMESPACE_ERROR, null, $name);
             }
             return $this->definitions['namespaces'][$name];
         }
@@ -2958,7 +3002,7 @@
                 return $this->define_aliases($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed namespace alias!", Error::DEFINE_ALIAS_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed namespace alias!", Error::DEFINE_ALIAS_ERROR, null, '');
             }
             $name = $this->normalize_alias($name);
             $this->definitions['aliases'][$name] = $alias;
@@ -3168,7 +3212,7 @@
                 return $this->define_classes($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed class!", Error::DEFINE_CLASS_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed class!", Error::DEFINE_CLASS_ERROR, null, '');
             }
             $name = $this->normalize_class($name);
             $this->definitions['classes'][$name] = $value;
@@ -3224,7 +3268,7 @@
         public function get_defined_class($name){
             $name = $this->normalize_class($name);
             if(!isset($this->definitions['classes'][$name])){
-                $this->error("Could not get undefined class: $name", Error::VALID_CLASS_ERROR, null, $name);
+                $this->validation_error("Could not get undefined class: $name", Error::VALID_CLASS_ERROR, null, $name);
             }
             return $this->definitions['classes'][$name];
         }
@@ -3292,7 +3336,7 @@
                 return $this->define_interfaces($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed interface!", Error::DEFINE_INTERFACE_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed interface!", Error::DEFINE_INTERFACE_ERROR, null, '');
             }
             $name = $this->normalize_interface($name);
             $this->definitions['interfaces'][$name] = $value;
@@ -3348,7 +3392,7 @@
         public function get_defined_interface($name){
             $name = $this->normalize_interface($name);
             if(!isset($this->definitions['interfaces'][$name])){
-                $this->error("Could not get undefined interface: $name", Error::VALID_INTERFACE_ERROR, null, $name);
+                $this->validation_error("Could not get undefined interface: $name", Error::VALID_INTERFACE_ERROR, null, $name);
             }
             return $this->definitions['interfaces'][$name];
         }
@@ -3416,7 +3460,7 @@
                 return $this->define_traits($name);
             }
             if(!$name){
-                $this->error("Cannot define unnamed trait!", Error::DEFINE_TRAIT_ERROR, null, '');
+                $this->validation_error("Cannot define unnamed trait!", Error::DEFINE_TRAIT_ERROR, null, '');
             }
             $name = $this->normalize_trait($name);
             $this->definitions['traits'][$name] = $value;
@@ -3472,7 +3516,7 @@
         public function get_defined_trait($name){
             $name = $this->normalize_trait($name);
             if(!isset($this->definitions['traits'][$name])){
-                $this->error("Could not get undefined trait: $name", Error::VALID_TRAIT_ERROR, null, $name);
+                $this->validation_error("Could not get undefined trait: $name", Error::VALID_TRAIT_ERROR, null, $name);
             }
             return $this->definitions['traits'][$name];
         }
@@ -5814,14 +5858,14 @@
             $original_name = $name;
             if($name instanceof \Closure){
                 if(!$this->allow_closures){
-                    $this->error("Sandboxed code attempted to call closure!", Error::CLOSURE_ERROR);
+                    $this->validation_error("Sandboxed code attempted to call closure!", Error::CLOSURE_ERROR);
                 }
                 return true;
             } else if($name instanceof SandboxedString){
                 $name = strval($name);
             }
             if(!$name || !is_string($name)){
-                $this->error("Sandboxed code attempted to call unnamed function!", Error::VALID_FUNC_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed function!", Error::VALID_FUNC_ERROR, null, '');
             }
             $name = $this->normalize_func($name);
             if(is_callable($this->validation['function'])){
@@ -5830,14 +5874,14 @@
             if(!isset($this->definitions['functions'][$name]) || !is_callable($this->definitions['functions'][$name]['function'])){
                 if(count($this->whitelist['functions'])){
                     if(!isset($this->whitelist['functions'][$name])){
-                        $this->error("Sandboxed code attempted to call non-whitelisted function: $original_name", Error::WHITELIST_FUNC_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call non-whitelisted function: $original_name", Error::WHITELIST_FUNC_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['functions'])){
                     if(isset($this->blacklist['functions'][$name])){
-                        $this->error("Sandboxed code attempted to call blacklisted function: $original_name", Error::BLACKLIST_FUNC_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call blacklisted function: $original_name", Error::BLACKLIST_FUNC_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->error("Sandboxed code attempted to call invalid function: $original_name", Error::VALID_FUNC_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call invalid function: $original_name", Error::VALID_FUNC_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -5854,7 +5898,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed variable!", Error::VALID_VAR_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed variable!", Error::VALID_VAR_ERROR, null, '');
             }
             if(is_callable($this->validation['variable'])){
                 return call_user_func_array($this->validation['variable'], array($name, $this));
@@ -5862,14 +5906,14 @@
             if(!isset($this->definitions['variables'][$name])){
                 if(count($this->whitelist['variables'])){
                     if(!isset($this->whitelist['variables'][$name])){
-                        $this->error("Sandboxed code attempted to call non-whitelisted variable: $original_name", Error::WHITELIST_VAR_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call non-whitelisted variable: $original_name", Error::WHITELIST_VAR_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['variables'])){
                     if(isset($this->blacklist['variables'][$name])){
-                        $this->error("Sandboxed code attempted to call blacklisted variable: $original_name", Error::BLACKLIST_VAR_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call blacklisted variable: $original_name", Error::BLACKLIST_VAR_ERROR, null, $original_name);
                     }
                 } else if(!$this->allow_variables){
-                    $this->error("Sandboxed code attempted to call invalid variable: $original_name", Error::VALID_VAR_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call invalid variable: $original_name", Error::VALID_VAR_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -5886,21 +5930,21 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed global!", Error::VALID_GLOBAL_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed global!", Error::VALID_GLOBAL_ERROR, null, '');
             }
             if(is_callable($this->validation['global'])){
                 return call_user_func_array($this->validation['global'], array($name, $this));
             }
             if(count($this->whitelist['globals'])){
                 if(!isset($this->whitelist['globals'][$name])){
-                    $this->error("Sandboxed code attempted to call non-whitelisted global: $original_name", Error::WHITELIST_GLOBAL_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call non-whitelisted global: $original_name", Error::WHITELIST_GLOBAL_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['globals'])){
                 if(isset($this->blacklist['globals'][$name])){
-                    $this->error("Sandboxed code attempted to call blacklisted global: $original_name", Error::BLACKLIST_GLOBAL_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call blacklisted global: $original_name", Error::BLACKLIST_GLOBAL_ERROR, null, $original_name);
                 }
             } else {
-                $this->error("Sandboxed code attempted to call invalid global: $original_name", Error::VALID_GLOBAL_ERROR, null, $original_name);
+                $this->validation_error("Sandboxed code attempted to call invalid global: $original_name", Error::VALID_GLOBAL_ERROR, null, $original_name);
             }
             return true;
         }
@@ -5916,7 +5960,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed superglobal!", Error::VALID_SUPERGLOBAL_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed superglobal!", Error::VALID_SUPERGLOBAL_ERROR, null, '');
             }
             $name = $this->normalize_superglobal($name);
             if(is_callable($this->validation['superglobal'])){
@@ -5925,14 +5969,14 @@
             if(!isset($this->definitions['superglobals'][$name])){
                 if(count($this->whitelist['superglobals'])){
                     if(!isset($this->whitelist['superglobals'][$name])){
-                        $this->error("Sandboxed code attempted to call non-whitelisted superglobal: $original_name", Error::WHITELIST_SUPERGLOBAL_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call non-whitelisted superglobal: $original_name", Error::WHITELIST_SUPERGLOBAL_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['superglobals'])){
                     if(isset($this->blacklist['superglobals'][$name]) && !count($this->blacklist['superglobals'][$name])){
-                        $this->error("Sandboxed code attempted to call blacklisted superglobal: $original_name", Error::BLACKLIST_SUPERGLOBAL_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call blacklisted superglobal: $original_name", Error::BLACKLIST_SUPERGLOBAL_ERROR, null, $original_name);
                     }
                 } else if(!$this->overwrite_superglobals){
-                    $this->error("Sandboxed code attempted to call invalid superglobal: $original_name", Error::VALID_SUPERGLOBAL_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call invalid superglobal: $original_name", Error::VALID_SUPERGLOBAL_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -5949,7 +5993,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed constant!", Error::VALID_CONST_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed constant!", Error::VALID_CONST_ERROR, null, '');
             }
             if(strtolower($name) == 'true' || strtolower($name) == 'false'){
                 return $this->check_primitive('bool');
@@ -5963,14 +6007,14 @@
             if(!isset($this->definitions['constants'][$name])){
                 if(count($this->whitelist['constants'])){
                     if(!isset($this->whitelist['constants'][$name])){
-                        $this->error("Sandboxed code attempted to call non-whitelisted constant: $original_name", Error::WHITELIST_CONST_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call non-whitelisted constant: $original_name", Error::WHITELIST_CONST_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['constants'])){
                     if(isset($this->blacklist['constants'][$name])){
-                        $this->error("Sandboxed code attempted to call blacklisted constant: $original_name", Error::BLACKLIST_CONST_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call blacklisted constant: $original_name", Error::BLACKLIST_CONST_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->error("Sandboxed code attempted to call invalid constant: $original_name", Error::VALID_CONST_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call invalid constant: $original_name", Error::VALID_CONST_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -5987,7 +6031,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed magic constant!", Error::VALID_MAGIC_CONST_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed magic constant!", Error::VALID_MAGIC_CONST_ERROR, null, '');
             }
             $name = $this->normalize_magic_const($name);
             if(is_callable($this->validation['magic_constant'])){
@@ -5996,14 +6040,14 @@
             if(!isset($this->definitions['magic_constants'][$name])){
                 if(count($this->whitelist['magic_constants'])){
                     if(!isset($this->whitelist['magic_constants'][$name])){
-                        $this->error("Sandboxed code attempted to call non-whitelisted magic constant: $original_name", Error::WHITELIST_MAGIC_CONST_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call non-whitelisted magic constant: $original_name", Error::WHITELIST_MAGIC_CONST_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['magic_constants'])){
                     if(isset($this->blacklist['magic_constants'][$name])){
-                        $this->error("Sandboxed code attempted to call blacklisted magic constant: $original_name", Error::BLACKLIST_MAGIC_CONST_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call blacklisted magic constant: $original_name", Error::BLACKLIST_MAGIC_CONST_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->error("Sandboxed code attempted to call invalid magic constant: $original_name", Error::VALID_MAGIC_CONST_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call invalid magic constant: $original_name", Error::VALID_MAGIC_CONST_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6020,7 +6064,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed namespace!", Error::VALID_NAMESPACE_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed namespace!", Error::VALID_NAMESPACE_ERROR, null, '');
             }
             $name = $this->normalize_namespace($name);
             if(is_callable($this->validation['namespace'])){
@@ -6029,14 +6073,14 @@
             if(!isset($this->definitions['namespaces'][$name])){
                 if(count($this->whitelist['namespaces'])){
                     if(!isset($this->whitelist['namespaces'][$name])){
-                        $this->error("Sandboxed code attempted to call non-whitelisted namespace: $original_name", Error::WHITELIST_NAMESPACE_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call non-whitelisted namespace: $original_name", Error::WHITELIST_NAMESPACE_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['namespaces'])){
                     if(isset($this->blacklist['namespaces'][$name])){
-                        $this->error("Sandboxed code attempted to call blacklisted namespace: $original_name", Error::BLACKLIST_NAMESPACE_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call blacklisted namespace: $original_name", Error::BLACKLIST_NAMESPACE_ERROR, null, $original_name);
                     }
                 } else if(!$this->allow_namespaces){
-                    $this->error("Sandboxed code attempted to call invalid namespace: $original_name", Error::VALID_NAMESPACE_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call invalid namespace: $original_name", Error::VALID_NAMESPACE_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6053,7 +6097,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed alias!", Error::VALID_ALIAS_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed alias!", Error::VALID_ALIAS_ERROR, null, '');
             }
             $name = $this->normalize_alias($name);
             if(is_callable($this->validation['alias'])){
@@ -6061,14 +6105,14 @@
             }
             if(count($this->whitelist['aliases'])){
                 if(!isset($this->whitelist['aliases'][$name])){
-                    $this->error("Sandboxed code attempted to call non-whitelisted alias: $original_name", Error::WHITELIST_ALIAS_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call non-whitelisted alias: $original_name", Error::WHITELIST_ALIAS_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['aliases'])){
                 if(isset($this->blacklist['aliases'][$name])){
-                    $this->error("Sandboxed code attempted to call blacklisted alias: $original_name", Error::BLACKLIST_ALIAS_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call blacklisted alias: $original_name", Error::BLACKLIST_ALIAS_ERROR, null, $original_name);
                 }
             } else if(!$this->allow_aliases){
-                $this->error("Sandboxed code attempted to call invalid alias: $original_name", Error::VALID_ALIAS_ERROR, null, $original_name);
+                $this->validation_error("Sandboxed code attempted to call invalid alias: $original_name", Error::VALID_ALIAS_ERROR, null, $original_name);
             }
             return true;
         }
@@ -6098,7 +6142,7 @@
             }
             $action = $extends ? 'extend' : 'call';
             if(!$name){
-                $this->error("Sandboxed code attempted to $action unnamed class!", Error::VALID_CLASS_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to $action unnamed class!", Error::VALID_CLASS_ERROR, null, '');
             }
             $name = $this->normalize_class($name);
             if($name == 'self' || $name == 'static' || $name == 'parent'){
@@ -6110,14 +6154,14 @@
             if(!isset($this->definitions['classes'][$name])){
                 if(count($this->whitelist['classes'])){
                     if(!isset($this->whitelist['classes'][$name])){
-                        $this->error("Sandboxed code attempted to $action non-whitelisted class: $original_name", Error::WHITELIST_CLASS_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to $action non-whitelisted class: $original_name", Error::WHITELIST_CLASS_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['classes'])){
                     if(isset($this->blacklist['classes'][$name])){
-                        $this->error("Sandboxed code attempted to $action blacklisted class: $original_name", Error::BLACKLIST_CLASS_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to $action blacklisted class: $original_name", Error::BLACKLIST_CLASS_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->error("Sandboxed code attempted to $action invalid class: $original_name", Error::VALID_CLASS_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to $action invalid class: $original_name", Error::VALID_CLASS_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6134,7 +6178,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed interface!", Error::VALID_INTERFACE_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed interface!", Error::VALID_INTERFACE_ERROR, null, '');
             }
             $name = $this->normalize_interface($name);
             if(is_callable($this->validation['interface'])){
@@ -6143,14 +6187,14 @@
             if(!isset($this->definitions['interfaces'][$name])){
                 if(count($this->whitelist['interfaces'])){
                     if(!isset($this->whitelist['interfaces'][$name])){
-                        $this->error("Sandboxed code attempted to call non-whitelisted interface: $original_name", Error::WHITELIST_INTERFACE_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call non-whitelisted interface: $original_name", Error::WHITELIST_INTERFACE_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['interfaces'])){
                     if(isset($this->blacklist['interfaces'][$name])){
-                        $this->error("Sandboxed code attempted to call blacklisted interface: $original_name", Error::BLACKLIST_INTERFACE_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call blacklisted interface: $original_name", Error::BLACKLIST_INTERFACE_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->error("Sandboxed code attempted to call invalidnterface: $original_name", Error::VALID_INTERFACE_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call invalidnterface: $original_name", Error::VALID_INTERFACE_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6167,7 +6211,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed trait!", Error::VALID_TRAIT_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed trait!", Error::VALID_TRAIT_ERROR, null, '');
             }
             $name = $this->normalize_trait($name);
             if(is_callable($this->validation['trait'])){
@@ -6176,14 +6220,14 @@
             if(!isset($this->definitions['traits'][$name])){
                 if(count($this->whitelist['traits'])){
                     if(!isset($this->whitelist['traits'][$name])){
-                        $this->error("Sandboxed code attempted to call non-whitelisted trait: $original_name", Error::WHITELIST_TRAIT_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call non-whitelisted trait: $original_name", Error::WHITELIST_TRAIT_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['traits'])){
                     if(isset($this->blacklist['traits'][$name])){
-                        $this->error("Sandboxed code attempted to call blacklisted trait: $original_name", Error::BLACKLIST_TRAIT_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call blacklisted trait: $original_name", Error::BLACKLIST_TRAIT_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->error("Sandboxed code attempted to call invalid trait: $original_name", Error::VALID_TRAIT_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call invalid trait: $original_name", Error::VALID_TRAIT_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6200,7 +6244,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed keyword!", Error::VALID_KEYWORD_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed keyword!", Error::VALID_KEYWORD_ERROR, null, '');
             }
             $name = $this->normalize_keyword($name);
             if(is_callable($this->validation['keyword'])){
@@ -6208,11 +6252,11 @@
             }
             if(count($this->whitelist['keywords'])){
                 if(!isset($this->whitelist['keywords'][$name])){
-                    $this->error("Sandboxed code attempted to call non-whitelisted keyword: $original_name", Error::WHITELIST_KEYWORD_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call non-whitelisted keyword: $original_name", Error::WHITELIST_KEYWORD_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['keywords'])){
                 if(isset($this->blacklist['keywords'][$name])){
-                    $this->error("Sandboxed code attempted to call blacklisted keyword: $original_name", Error::BLACKLIST_KEYWORD_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call blacklisted keyword: $original_name", Error::BLACKLIST_KEYWORD_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6229,7 +6273,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed operator!", Error::VALID_OPERATOR_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed operator!", Error::VALID_OPERATOR_ERROR, null, '');
             }
             $name = $this->normalize_operator($name);
             if(is_callable($this->validation['operator'])){
@@ -6237,11 +6281,11 @@
             }
             if(count($this->whitelist['operators'])){
                 if(!isset($this->whitelist['operators'][$name])){
-                    $this->error("Sandboxed code attempted to call non-whitelisted operator: $original_name", Error::WHITELIST_OPERATOR_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call non-whitelisted operator: $original_name", Error::WHITELIST_OPERATOR_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['operators'])){
                 if(isset($this->blacklist['operators'][$name])){
-                    $this->error("Sandboxed code attempted to call blacklisted operator: $original_name", Error::BLACKLIST_OPERATOR_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call blacklisted operator: $original_name", Error::BLACKLIST_OPERATOR_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6258,7 +6302,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed primitive!", Error::VALID_PRIMITIVE_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed primitive!", Error::VALID_PRIMITIVE_ERROR, null, '');
             }
             $name = $this->normalize_primitive($name);
             if(is_callable($this->validation['primitive'])){
@@ -6266,11 +6310,11 @@
             }
             if(count($this->whitelist['primitives'])){
                 if(!isset($this->whitelist['primitives'][$name])){
-                    $this->error("Sandboxed code attempted to call non-whitelisted primitive: $original_name", Error::WHITELIST_PRIMITIVE_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call non-whitelisted primitive: $original_name", Error::WHITELIST_PRIMITIVE_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['primitives'])){
                 if(isset($this->blacklist['primitives'][$name])){
-                    $this->error("Sandboxed code attempted to call blacklisted primitive: $original_name", Error::BLACKLIST_PRIMITIVE_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call blacklisted primitive: $original_name", Error::BLACKLIST_PRIMITIVE_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6287,7 +6331,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->error("Sandboxed code attempted to call unnamed type!", Error::VALID_TYPE_ERROR, null, '');
+                $this->validation_error("Sandboxed code attempted to call unnamed type!", Error::VALID_TYPE_ERROR, null, '');
             }
             $name = $this->normalize_type($name);
             if(is_callable($this->validation['type'])){
@@ -6296,14 +6340,14 @@
             if(!isset($this->definitions['classes'][$name])){
                 if(count($this->whitelist['types'])){
                     if(!isset($this->whitelist['types'][$name])){
-                        $this->error("Sandboxed code attempted to call non-whitelisted type: $original_name", Error::WHITELIST_TYPE_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call non-whitelisted type: $original_name", Error::WHITELIST_TYPE_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['types'])){
                     if(isset($this->blacklist['types'][$name])){
-                        $this->error("Sandboxed code attempted to call blacklisted type: $original_name", Error::BLACKLIST_TYPE_ERROR, null, $original_name);
+                        $this->validation_error("Sandboxed code attempted to call blacklisted type: $original_name", Error::BLACKLIST_TYPE_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->error("Sandboxed code attempted to call invalid type: $original_name", Error::VALID_TYPE_ERROR, null, $original_name);
+                    $this->validation_error("Sandboxed code attempted to call invalid type: $original_name", Error::VALID_TYPE_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6317,7 +6361,7 @@
             $output = array();
             foreach($this->definitions['variables'] as $name => $value){
                 if(is_int($name)){  //can't define numeric variable names
-                    $this->error("Cannot define variable name that begins with an integer!", Error::DEFINE_VAR_ERROR, null, $name);
+                    $this->validation_error("Cannot define variable name that begins with an integer!", Error::DEFINE_VAR_ERROR, null, $name);
                 }
                 if(is_scalar($value) || is_null($value)){
                     if(is_bool($value)){
@@ -6355,7 +6399,7 @@
                         $output[] = '\define(' . "'" . $name . "', null);";
                     }
                 } else {
-                    $this->error("Sandboxed code attempted to define non-scalar constant value: $name", Error::DEFINE_CONST_ERROR, null, $name);
+                    $this->validation_error("Sandboxed code attempted to define non-scalar constant value: $name", Error::DEFINE_CONST_ERROR, null, $name);
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
@@ -6368,7 +6412,7 @@
                 if(is_string($name) && $name){
                     $output[] = 'namespace ' . $name . ';';
                 } else {
-                    $this->error("Sandboxed code attempted to create invalid namespace: $name", Error::DEFINE_NAMESPACE_ERROR, null, $name);
+                    $this->validation_error("Sandboxed code attempted to create invalid namespace: $name", Error::DEFINE_NAMESPACE_ERROR, null, $name);
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
@@ -6381,7 +6425,7 @@
                 if(is_string($name) && $name){
                     $output[] = 'use ' . $name . ((is_string($alias) && $alias) ? ' as ' . $alias : '') . ';';
                 } else {
-                    $this->error("Sandboxed code attempted to use invalid namespace alias: $name", Error::DEFINE_ALIAS_ERROR, null, $name);
+                    $this->validation_error("Sandboxed code attempted to use invalid namespace alias: $name", Error::DEFINE_ALIAS_ERROR, null, $name);
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
@@ -6424,7 +6468,7 @@
             try {
                 $statements = $parser->parse($code);
             } catch (\PHPParser_Error $error) {
-                return $this->error('Error parsing ' . ($appended ? 'appended' : 'prepended') . ' sandboxed code for auto-whitelisting!', Error::PARSER_ERROR, null, $code, $error);
+                return $this->validation_error('Error parsing ' . ($appended ? 'appended' : 'prepended') . ' sandboxed code for auto-whitelisting!', Error::PARSER_ERROR, null, $code, $error);
             }
             $traverser = new \PHPParser_NodeTraverser;
             $whitelister = new WhitelistVisitor($this);
@@ -6586,7 +6630,7 @@
             try {
                 $this->parsed_ast = $parser->parse($this->preparsed_code);
             } catch (\PHPParser_Error $error) {
-                $this->error("Could not parse sandboxed code!", Error::PARSER_ERROR, null, $this->preparsed_code, $error);
+                $this->validation_error("Could not parse sandboxed code!", Error::PARSER_ERROR, null, $this->preparsed_code, $error);
             }
 
             $prettyPrinter = new \PHPParser_PrettyPrinter_Default;
@@ -6653,35 +6697,49 @@
                 $saved_error_level = error_reporting();
                 error_reporting($this->error_level);
             }
+            if(is_callable($this->error_handler)){
+                set_error_handler(array($this, 'error'), $this->error_handler_types);
+            }
             $this->execution_time = microtime(true);
-            if($this->capture_output){
-                ob_start();
-                eval($this->generated_code);
-                $result = ob_get_clean();
-            } else {
-                $result = eval($this->generated_code);
+            $exception = null;
+            $result = null;
+            try {
+                if($this->capture_output){
+                    ob_start();
+                    eval($this->generated_code);
+                    $result = ob_get_clean();
+                } else {
+                    $result = eval($this->generated_code);
+                }
+            } catch(\Exception $exception){}
+            if(is_callable($this->error_handler)){
+                restore_error_handler();
             }
             usleep(1); //guarantee at least some time passes
             $this->execution_time = (microtime(true) - $this->execution_time);
             if($this->error_level !== null && $this->restore_error_level){
                 error_reporting($saved_error_level);
             }
-            return $result;
+            return $exception instanceof \Exception ? $this->exception($exception) : $result;
         }
-        /** Set callable to handle thrown Errors
+        /** Set callable to handle errors
          *
-         * This function sets the sandbox Error handler. The handler accepts the thrown Error and the sandbox instance
-         * as arguments. If the error handler does not handle validation errors correctly then the sandbox's security may
-         * become compromised!
+         * This function sets the sandbox error handler and the handled error types. The handler accepts the error number,
+         * the error message, the error file, the error line, the error context and the sandbox instance as arguments.
+         * If the error handler does not handle errors correctly then the sandbox's security may become compromised!
          *
-         * @example $sandbox->set_error_handler(function(Error $e, PHPSandbox $s){});  //ignore all thrown Errors, INSECURE
+         * @example $sandbox->set_error_handler(function($errno, $errstr, $errfile, $errline, $errcontext, PHPSandbox $s){
+         *  return false;
+         * }, E_ALL);  //ignore all errors, INSECURE
          *
          * @param   callable        $handler       Callable to handle thrown Errors
+         * @param   int             $error_types   Integer flag of the error types to handle (default is E_ALL)
          *
          * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
          */
-        public function set_error_handler($handler){
+        public function set_error_handler($handler, $error_types = E_ALL){
             $this->error_handler = $handler;
+            $this->error_handler_types = $error_types;
             return $this;
         }
         /** Get error handler
@@ -6707,16 +6765,140 @@
             $this->error_handler = null;
             return $this;
         }
-
-        /** Gets the last error thrown by the sandbox
-         * @return \Exception|Error
+        /** Gets the last sandbox error
+         * @return array
          */
         public function get_last_error(){
             return $this->last_error;
         }
-        /** Invoke sandbox error handler if it exists, throw Error otherwise
+        /** Invoke sandbox error handler
          *
-         * @example $sandbox->error("Error!", 10000);
+         * @example $sandbox->error(0, "Unknown error");
+         *
+         * @param   int                         $errno          Error number
+         * @param   string                      $errstr         Error message
+         * @param   string                      $errfile        Error file
+         * @param   int                         $errline        Error line number
+         * @param   array                       $errcontext     Error context array
+         * @return  mixed
+         */
+        protected function error($errno, $errstr, $errfile, $errline, $errcontext){
+            $this->last_error = error_get_last();
+            if($this->convert_errors){
+                return $this->exception(new \ErrorException($errstr, 0, $errno, $errfile, $errline));
+            }
+            return is_callable($this->error_handler) ? call_user_func_array($this->error_handler, array($errno, $errstr, $errfile, $errline, $errcontext, $this)) : false;
+        }
+        /** Set callable to handle thrown exceptions
+         *
+         * This function sets the sandbox exception handler. The handler accepts the thrown exception and the sandbox instance
+         * as arguments. If the exception handler does not handle exceptions correctly then the sandbox's security may
+         * become compromised!
+         *
+         * @example $sandbox->set_exception_handler(function(Exception $e, PHPSandbox $s){});  //ignore all thrown exceptions, INSECURE
+         *
+         * @param   callable        $handler       Callable to handle thrown exceptions
+         *
+         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         */
+        public function set_exception_handler($handler){
+            $this->exception_handler = $handler;
+            return $this;
+        }
+        /** Get exception handler
+         *
+         * This function returns the sandbox exception handler.
+         *
+         * @example $sandbox->get_exception_handler();  //callable
+         *
+         * @return null|callable
+         */
+        public function get_exception_handler(){
+            return $this->exception_handler;
+        }
+        /** Unset exception handler
+         *
+         * This function unsets the sandbox exception handler.
+         *
+         * @example $sandbox->unset_exception_handler();
+         *
+         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         */
+        public function unset_exception_handler(){
+            $this->exception_handler = null;
+            return $this;
+        }
+        /** Gets the last exception thrown by the sandbox
+         * @return \Exception|Error
+         */
+        public function get_last_exception(){
+            return $this->last_exception;
+        }
+        /** Invoke sandbox exception handler
+         *
+         * @example $sandbox->exception(new Exception("Unknown error!", 0));
+         *
+         * @param   \Exception                  $exception      Error number
+         * @throws  \Exception
+         *
+         * @return  mixed
+         */
+        protected function exception(\Exception $exception){
+            $this->last_exception = $exception;
+            if(is_callable($this->exception_handler)){
+                return call_user_func_array($this->exception_handler, array($exception, $this));
+            }
+            throw $exception;
+        }
+        /** Set callable to handle thrown validation Errors
+         *
+         * This function sets the sandbox validation Error handler. The handler accepts the thrown Error and the sandbox
+         * instance as arguments. If the error handler does not handle validation errors correctly then the sandbox's
+         * security may become compromised!
+         *
+         * @example $sandbox->set_validation_error_handler(function(Error $e, PHPSandbox $s){});  //ignore all thrown Errors, INSECURE
+         *
+         * @param   callable        $handler       Callable to handle thrown validation Errors
+         *
+         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         */
+        public function set_validation_error_handler($handler){
+            $this->validation_error_handler = $handler;
+            return $this;
+        }
+        /** Get validation error handler
+         *
+         * This function returns the sandbox validation error handler.
+         *
+         * @example $sandbox->get_validation_error_handler();  //callable
+         *
+         * @return null|callable
+         */
+        public function get_validation_error_handler(){
+            return $this->validation_error_handler;
+        }
+        /** Unset validation error handler
+         *
+         * This function unsets the sandbox validation error handler.
+         *
+         * @example $sandbox->unset_validation_error_handler();
+         *
+         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         */
+        public function unset_validation_error_handler(){
+            $this->validation_error_handler = null;
+            return $this;
+        }
+
+        /** Gets the last validation error thrown by the sandbox
+         * @return \Exception|Error
+         */
+        public function get_last_validation_error(){
+            return $this->last_validation_error;
+        }
+        /** Invoke sandbox error validation handler if it exists, throw Error otherwise
+         *
+         * @example $sandbox->validation_error("Error!", 10000);
          *
          * @param   \Exception|Error|string     $error      Error to throw if Error is not handled, or error message string
          * @param   int                         $code       The error code
@@ -6727,15 +6909,15 @@
          * @throws  \Exception|Error
          * @return  mixed
          */
-        public function error($error, $code = 0, \PHPParser_Node $node = null, $data = null, \Exception $previous = null){
+        public function validation_error($error, $code = 0, \PHPParser_Node $node = null, $data = null, \Exception $previous = null){
             $error = ($error instanceof \Exception)
                 ? (($error instanceof Error)
-                    ? new Error($error->getMessage(), $error->getCode(), $error->getNode(), $error->getData(), $error->getPrevious() ?: $this->last_error)
-                    : new Error($error->getMessage(), $error->getCode(), null, null, $error->getPrevious() ?: $this->last_error))
-                : new Error($error, $code, $node, $data, $previous ?: $this->last_error);
-            $this->last_error = $error;
-            if($this->error_handler && is_callable($this->error_handler)){
-                $result = call_user_func_array($this->error_handler, array($error, $this));
+                    ? new Error($error->getMessage(), $error->getCode(), $error->getNode(), $error->getData(), $error->getPrevious() ?: $this->last_validation_error)
+                    : new Error($error->getMessage(), $error->getCode(), null, null, $error->getPrevious() ?: $this->last_validation_error))
+                : new Error($error, $code, $node, $data, $previous ?: $this->last_validation_error);
+            $this->last_validation_error = $error;
+            if($this->validation_error_handler && is_callable($this->validation_error_handler)){
+                $result = call_user_func_array($this->validation_error_handler, array($error, $this));
                 if($result instanceof \Exception){
                     throw $result;
                 }
@@ -6744,7 +6926,10 @@
                 throw $error;
             }
         }
-
+        /** Get a named PHPSandbox instance (used to retrieve the sandbox instance from within sandboxed code)
+         * @param $name
+         * @return null|PHPSandbox
+         */
         public static function getSandbox($name){
             return isset(static::$sandboxes[$name]) ? static::$sandboxes[$name] : null;
         }

@@ -1,6 +1,6 @@
 {
     "name": "fieryprophet/php-sandbox",
-    "description": "A PHP library that can be used to run PHP code in a sandbox environment",
+    "description": "A PHP library that can be used to run PHP code in a sandboxed environment",
     "keywords": ["php", "sandbox", "parser", "whitelist", "blacklist"],
     "type": "library",
     "homepage": "http://www.fieryprophet.com/phpsandbox",
@@ -8,12 +8,6 @@
     "authors": [
         {
             "name": "Elijah Horton"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/fieryprophet/php-sandbox"
         }
     ],
     "minimum-stability": "dev",
@@ -27,6 +21,6 @@
         "phpdocumentor/phpdocumentor": "v2.3.0"
     },
     "autoload": {
-        "psr-0": { "PHPSandbox": "src/" }
+        "psr-4": { "PHPSandbox\\": "src/" }
     }
 }

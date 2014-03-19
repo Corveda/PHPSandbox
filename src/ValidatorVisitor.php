@@ -13,7 +13,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.3
+     * @version 1.3.4
      */
     class ValidatorVisitor extends \PHPParser_NodeVisitorAbstract {
         /** The PHPSandbox instance to check against
@@ -40,13 +40,13 @@
         public function leaveNode(\PHPParser_Node $node){
             if($node instanceof \PHPParser_Node_Stmt_InlineHTML){
                 if(!$this->sandbox->allow_escaping){
-                    $this->sandbox->error("Sandboxed code attempted to escape to HTML!", Error::ESCAPE_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to escape to HTML!", Error::ESCAPE_ERROR, $node);
                 }
             } else if($node instanceof \PHPParser_Node_Expr_Cast_String){
                 return new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg($node->expr), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))))));
             } else if($node instanceof \PHPParser_Node_Expr_Cast){
                 if(!$this->sandbox->allow_casting){
-                    $this->sandbox->error("Sandboxed code attempted to cast!", Error::CAST_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to cast!", Error::CAST_ERROR, $node);
                 }
                 if($node instanceof \PHPParser_Node_Expr_Cast_Int){
                     return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_intval', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
@@ -63,7 +63,7 @@
                 if($node->name instanceof \PHPParser_Node_Name){
                     $name = strtolower($node->name->toString());
                     if(!$this->sandbox->check_func($name)){
-                        $this->sandbox->error("Function failed custom validation!", Error::VALID_FUNC_ERROR, $node);
+                        $this->sandbox->validation_error("Function failed custom validation!", Error::VALID_FUNC_ERROR, $node);
                     }
                     if($this->sandbox->is_defined_func($name)){
                         $args = $node->args;
@@ -97,93 +97,93 @@
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Function){
                 if(!$this->sandbox->allow_functions){
-                    $this->sandbox->error("Sandboxed code attempted to define function!", Error::DEFINE_FUNC_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to define function!", Error::DEFINE_FUNC_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('function')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'function');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'function');
                 }
                 if(!$node->name){
-                    $this->sandbox->error("Sandboxed code attempted to define unnamed function!", Error::DEFINE_FUNC_ERROR, $node, '');
+                    $this->sandbox->validation_error("Sandboxed code attempted to define unnamed function!", Error::DEFINE_FUNC_ERROR, $node, '');
                 }
                 if($this->sandbox->is_defined_func($node->name)){
-                    $this->sandbox->error("Sandboxed code attempted to redefine function!", Error::DEFINE_FUNC_ERROR, $node, $node->name);
+                    $this->sandbox->validation_error("Sandboxed code attempted to redefine function!", Error::DEFINE_FUNC_ERROR, $node, $node->name);
                 }
                 if($node->byRef && !$this->sandbox->allow_references){
-                    $this->sandbox->error("Sandboxed code attempted to define function return by reference!", Error::BYREF_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to define function return by reference!", Error::BYREF_ERROR, $node);
                 }
             } else if($node instanceof \PHPParser_Node_Expr_Closure){
                 if(!$this->sandbox->allow_closures){
-                    $this->sandbox->error("Sandboxed code attempted to create a closure!", Error::CLOSURE_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to create a closure!", Error::CLOSURE_ERROR, $node);
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Class){
                 if(!$this->sandbox->allow_classes){
-                    $this->sandbox->error("Sandboxed code attempted to define class!", Error::DEFINE_CLASS_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to define class!", Error::DEFINE_CLASS_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('class')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'class');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'class');
                 }
                 if(!$node->name){
-                    $this->sandbox->error("Sandboxed code attempted to define unnamed class!", Error::DEFINE_CLASS_ERROR, $node, '');
+                    $this->sandbox->validation_error("Sandboxed code attempted to define unnamed class!", Error::DEFINE_CLASS_ERROR, $node, '');
                 }
                 if(!$this->sandbox->check_class($node->name)){
-                    $this->sandbox->error("Class failed custom validation!", Error::VALID_CLASS_ERROR, $node, $node->name);
+                    $this->sandbox->validation_error("Class failed custom validation!", Error::VALID_CLASS_ERROR, $node, $node->name);
                 }
                 if($node->extends instanceof \PHPParser_Node_Name){
                     if(!$this->sandbox->check_keyword('extends')){
-                        $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'extends');
+                        $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'extends');
                     }
                     if(!$node->extends->toString()){
-                        $this->sandbox->error("Sandboxed code attempted to extend unnamed class!", Error::DEFINE_CLASS_ERROR, $node, '');
+                        $this->sandbox->validation_error("Sandboxed code attempted to extend unnamed class!", Error::DEFINE_CLASS_ERROR, $node, '');
                     }
                     if(!$this->sandbox->check_class($node->extends->toString(), true)){
-                        $this->sandbox->error("Class extension failed custom validation!", Error::VALID_CLASS_ERROR, $node, $node->extends->toString());
+                        $this->sandbox->validation_error("Class extension failed custom validation!", Error::VALID_CLASS_ERROR, $node, $node->extends->toString());
                     }
                 }
                 if(is_array($node->implements)){
                     if(!$this->sandbox->check_keyword('implements')){
-                        $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'implements');
+                        $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'implements');
                     }
                     foreach($node->implements as $implement){
                         /**
                          * @var \PHPParser_Node_Name   $implement
                          */
                         if(!$implement->toString()){
-                            $this->sandbox->error("Sandboxed code attempted to implement unnamed interface!", Error::DEFINE_INTERFACE_ERROR, $node, '');
+                            $this->sandbox->validation_error("Sandboxed code attempted to implement unnamed interface!", Error::DEFINE_INTERFACE_ERROR, $node, '');
                         }
                         if(!$this->sandbox->check_interface($implement->toString())){
-                            $this->sandbox->error("Interface failed custom validation!", Error::VALID_INTERFACE_ERROR, $node, $implement->toString());
+                            $this->sandbox->validation_error("Interface failed custom validation!", Error::VALID_INTERFACE_ERROR, $node, $implement->toString());
                         }
                     }
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Interface){
                 if(!$this->sandbox->allow_interfaces){
-                    $this->sandbox->error("Sandboxed code attempted to define interface!", Error::DEFINE_INTERFACE_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to define interface!", Error::DEFINE_INTERFACE_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('interface')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'interface');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'interface');
                 }
                 if(!$node->name){
-                    $this->sandbox->error("Sandboxed code attempted to define unnamed interface!", Error::DEFINE_INTERFACE_ERROR, $node, '');
+                    $this->sandbox->validation_error("Sandboxed code attempted to define unnamed interface!", Error::DEFINE_INTERFACE_ERROR, $node, '');
                 }
                 if(!$this->sandbox->check_interface($node->name)){
-                    $this->sandbox->error("Interface failed custom validation!", Error::VALID_INTERFACE_ERROR, $node, $node->name);
+                    $this->sandbox->validation_error("Interface failed custom validation!", Error::VALID_INTERFACE_ERROR, $node, $node->name);
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Trait){
                 if(!$this->sandbox->allow_traits){
-                    $this->sandbox->error("Sandboxed code attempted to define trait!", Error::DEFINE_TRAIT_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to define trait!", Error::DEFINE_TRAIT_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('trait')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'trait');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'trait');
                 }
                 if(!$node->name){
-                    $this->sandbox->error("Sandboxed code attempted to define unnamed trait!", Error::DEFINE_TRAIT_ERROR, $node, '');
+                    $this->sandbox->validation_error("Sandboxed code attempted to define unnamed trait!", Error::DEFINE_TRAIT_ERROR, $node, '');
                 }
                 if(!$this->sandbox->check_trait($node->name)){
-                    $this->sandbox->error("Trait failed custom validation!", Error::VALID_TRAIT_ERROR, $node, $node->name);
+                    $this->sandbox->validation_error("Trait failed custom validation!", Error::VALID_TRAIT_ERROR, $node, $node->name);
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_TraitUse){
                 if(!$this->sandbox->check_keyword('use')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'use');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'use');
                 }
                 if(is_array($node->traits)){
                     foreach($node->traits as $trait){
@@ -191,26 +191,26 @@
                          * @var \PHPParser_Node_Name   $trait
                          */
                         if(!$trait->toString()){
-                            $this->sandbox->error("Sandboxed code attempted to use unnamed trait!", Error::DEFINE_TRAIT_ERROR, $node, '');
+                            $this->sandbox->validation_error("Sandboxed code attempted to use unnamed trait!", Error::DEFINE_TRAIT_ERROR, $node, '');
                         }
                         if(!$this->sandbox->check_trait($trait->toString())){
-                            $this->sandbox->error("Trait failed custom validation!", Error::VALID_TRAIT_ERROR, $node, $trait->toString());
+                            $this->sandbox->validation_error("Trait failed custom validation!", Error::VALID_TRAIT_ERROR, $node, $trait->toString());
                         }
                     }
                 }
             } else if($node instanceof \PHPParser_Node_Expr_Yield){
                 if(!$this->sandbox->allow_generators){
-                    $this->sandbox->error("Sandboxed code attempted to create a generator!", Error::GENERATOR_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to create a generator!", Error::GENERATOR_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('yield')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'yield');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'yield');
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Global){
                 if(!$this->sandbox->allow_globals){
-                    $this->sandbox->error("Sandboxed code attempted to use global keyword!", Error::GLOBALS_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to use global keyword!", Error::GLOBALS_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('global')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'global');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'global');
                 }
                 foreach($node->vars as $var){
                     /**
@@ -218,57 +218,57 @@
                      */
                     if($var instanceof \PHPParser_Node_Expr_Variable){
                         if(!$this->sandbox->check_global($var->name)){
-                            $this->sandbox->error("Global failed custom validation!", Error::VALID_GLOBAL_ERROR, $node, $var->name);
+                            $this->sandbox->validation_error("Global failed custom validation!", Error::VALID_GLOBAL_ERROR, $node, $var->name);
                         }
                     } else {
-                        $this->sandbox->error("Sandboxed code attempted to pass non-variable to global keyword!", Error::DEFINE_GLOBAL_ERROR, $node);
+                        $this->sandbox->validation_error("Sandboxed code attempted to pass non-variable to global keyword!", Error::DEFINE_GLOBAL_ERROR, $node);
                     }
                 }
             } else if($node instanceof \PHPParser_Node_Expr_Variable){
                 if(!is_string($node->name)){
-                    $this->sandbox->error("Sandboxed code attempted dynamically-named variable call!", Error::DYNAMIC_VAR_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted dynamically-named variable call!", Error::DYNAMIC_VAR_ERROR, $node);
                 }
                 if($node->name == $this->sandbox->name){
-                    $this->sandbox->error("Sandboxed code attempted to access the PHPSandbox instance!", Error::SANDBOX_ACCESS_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to access the PHPSandbox instance!", Error::SANDBOX_ACCESS_ERROR, $node);
                 }
                 if(in_array($node->name, PHPSandbox::$superglobals)){
                     if(!$this->sandbox->check_superglobal($node->name)){
-                        $this->sandbox->error("Superglobal failed custom validation!", Error::VALID_SUPERGLOBAL_ERROR, $node, $node->name);
+                        $this->sandbox->validation_error("Superglobal failed custom validation!", Error::VALID_SUPERGLOBAL_ERROR, $node, $node->name);
                     }
                     if($this->sandbox->overwrite_superglobals){
                         return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_get_superglobal', array(new \PHPParser_Node_Arg(new \PHPParser_Node_Scalar_String($node->name))), $node->getAttributes());
                     }
                 } else {
                     if(!$this->sandbox->check_var($node->name)){
-                        $this->sandbox->error("Variable failed custom validation!", Error::VALID_VAR_ERROR, $node, $node->name);
+                        $this->sandbox->validation_error("Variable failed custom validation!", Error::VALID_VAR_ERROR, $node, $node->name);
                     }
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_StaticVar){
                 if(!$this->sandbox->allow_static_variables){
-                    $this->sandbox->error("Sandboxed code attempted to create static variable!", Error::STATIC_VAR_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to create static variable!", Error::STATIC_VAR_ERROR, $node);
                 }
                 if(!is_string($node->name)){
-                    $this->sandbox->error("Sandboxed code attempted dynamically-named static variable call!", Error::DYNAMIC_STATIC_VAR_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted dynamically-named static variable call!", Error::DYNAMIC_STATIC_VAR_ERROR, $node);
                 }
                 if(!$this->sandbox->check_var($node->name)){
-                    $this->sandbox->error("Variable failed custom validation!", Error::VALID_VAR_ERROR, $node, $node->name);
+                    $this->sandbox->validation_error("Variable failed custom validation!", Error::VALID_VAR_ERROR, $node, $node->name);
                 }
                 if($node->default instanceof \PHPParser_Node_Expr_New){
                     $node->default = $node->default->args[0];
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Const){
-                $this->sandbox->error("Sandboxed code cannot use const keyword in the global scope!", Error::GLOBAL_CONST_ERROR, $node);
+                $this->sandbox->validation_error("Sandboxed code cannot use const keyword in the global scope!", Error::GLOBAL_CONST_ERROR, $node);
             } else if($node instanceof \PHPParser_Node_Expr_ConstFetch){
                 if(!$node->name instanceof \PHPParser_Node_Name){
-                    $this->sandbox->error("Sandboxed code attempted dynamically-named constant call!", Error::DYNAMIC_CONST_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted dynamically-named constant call!", Error::DYNAMIC_CONST_ERROR, $node);
                 }
                 if(!$this->sandbox->check_const($node->name->toString())){
-                    $this->sandbox->error("Constant failed custom validation!", Error::VALID_CONST_ERROR, $node, $node->name->toString());
+                    $this->sandbox->validation_error("Constant failed custom validation!", Error::VALID_CONST_ERROR, $node, $node->name->toString());
                 }
             } else if($node instanceof \PHPParser_Node_Expr_ClassConstFetch || $node instanceof \PHPParser_Node_Expr_StaticCall || $node instanceof \PHPParser_Node_Expr_StaticPropertyFetch){
                 $class = $node->class;
                 if(!$class instanceof \PHPParser_Node_Name){
-                    $this->sandbox->error("Sandboxed code attempted dynamically-named class call!", Error::DYNAMIC_CLASS_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted dynamically-named class call!", Error::DYNAMIC_CLASS_ERROR, $node);
                 }
                 if($this->sandbox->is_defined_class($class)){
                     $node->class = new \PHPParser_Node_Name($this->sandbox->get_defined_class($class));
@@ -277,18 +277,18 @@
                  * @var \PHPParser_Node_Name    $class
                  */
                 if(!$this->sandbox->check_class($class->toString())){
-                    $this->sandbox->error("Class constant failed custom validation!", Error::VALID_CLASS_ERROR, $node, $class->toString());
+                    $this->sandbox->validation_error("Class constant failed custom validation!", Error::VALID_CLASS_ERROR, $node, $class->toString());
                 }
                 return $node;
             } else if($node instanceof \PHPParser_Node_Expr_New){
                 if(!$this->sandbox->allow_objects){
-                    $this->sandbox->error("Sandboxed code attempted to create object!", Error::CREATE_OBJECT_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to create object!", Error::CREATE_OBJECT_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('new')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'new');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'new');
                 }
                 if(!$node->class instanceof \PHPParser_Node_Name){
-                    $this->sandbox->error("Sandboxed code attempted dynamically-named class call!", Error::DYNAMIC_CLASS_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted dynamically-named class call!", Error::DYNAMIC_CLASS_ERROR, $node);
                 }
                 $class = $node->class->toString();
                 if($this->sandbox->is_defined_class($class)){
@@ -298,25 +298,25 @@
                 return $node;
             } else if($node instanceof \PHPParser_Node_Expr_ErrorSuppress){
                 if(!$this->sandbox->allow_error_suppressing){
-                    $this->sandbox->error("Sandboxed code attempted to suppress error!", Error::ERROR_SUPPRESS_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to suppress error!", Error::ERROR_SUPPRESS_ERROR, $node);
                 }
             } else if($node instanceof \PHPParser_Node_Expr_AssignRef){
                 if(!$this->sandbox->allow_references){
-                    $this->sandbox->error("Sandboxed code attempted to assign by reference!", Error::BYREF_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to assign by reference!", Error::BYREF_ERROR, $node);
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_HaltCompiler){
                 if(!$this->sandbox->allow_halting){
-                    $this->sandbox->error("Sandboxed code attempted to halt compiler!", Error::HALT_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to halt compiler!", Error::HALT_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('halt')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'halt');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'halt');
                 }
             } else if($node instanceof \PHPParser_Node_Stmt_Namespace){
                 if(!$this->sandbox->allow_namespaces){
-                    $this->sandbox->error("Sandboxed code attempted to define namespace!", Error::DEFINE_NAMESPACE_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to define namespace!", Error::DEFINE_NAMESPACE_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('namespace')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'namespace');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'namespace');
                 }
                 if($node->name instanceof \PHPParser_Node_Name){
                     $namespace = $node->name->toString();
@@ -325,15 +325,15 @@
                         $this->sandbox->define_namespace($namespace);
                     }
                 } else {
-                    $this->sandbox->error("Sandboxed code attempted use invalid namespace!", Error::DEFINE_NAMESPACE_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted use invalid namespace!", Error::DEFINE_NAMESPACE_ERROR, $node);
                 }
                 return $node->stmts;
             } else if($node instanceof \PHPParser_Node_Stmt_Use){
                 if(!$this->sandbox->allow_aliases){
-                    $this->sandbox->error("Sandboxed code attempted to use namespace and/or alias!", Error::DEFINE_ALIAS_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to use namespace and/or alias!", Error::DEFINE_ALIAS_ERROR, $node);
                 }
                 if(!$this->sandbox->check_keyword('use')){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'use');
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'use');
                 }
                 foreach($node->uses as $use){
                     /**
@@ -343,12 +343,12 @@
                         $this->sandbox->check_alias($use->name->toString());
                         if($use->alias){
                             if(!$this->sandbox->check_keyword('as')){
-                                $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'as');
+                                $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, 'as');
                             }
                         }
                         $this->sandbox->define_alias($use->name->toString(), $use->alias);
                     } else {
-                        $this->sandbox->error("Sandboxed code attempted use invalid namespace or alias!", Error::DEFINE_ALIAS_ERROR, $node);
+                        $this->sandbox->validation_error("Sandboxed code attempted use invalid namespace or alias!", Error::DEFINE_ALIAS_ERROR, $node);
                     }
                 }
                 return false;
@@ -362,28 +362,28 @@
                 }
                 if($this->sandbox->has_whitelist_funcs()){
                     if(!$this->sandbox->is_whitelisted_func('shell_exec')){
-                        $this->sandbox->error("Sandboxed code attempted to use shell execution backticks when the shell_exec function is not whitelisted!", Error::BACKTICKS_ERROR, $node);
+                        $this->sandbox->validation_error("Sandboxed code attempted to use shell execution backticks when the shell_exec function is not whitelisted!", Error::BACKTICKS_ERROR, $node);
                     }
                 } else if($this->sandbox->has_blacklist_funcs() && $this->sandbox->is_blacklisted_func('shell_exec')){
-                    $this->sandbox->error("Sandboxed code attempted to use shell execution backticks when the shell_exec function is blacklisted!", Error::BACKTICKS_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to use shell execution backticks when the shell_exec function is blacklisted!", Error::BACKTICKS_ERROR, $node);
                 }
                 if(!$this->sandbox->allow_backticks){
-                    $this->sandbox->error("Sandboxed code attempted to use shell execution backticks!", Error::BACKTICKS_ERROR, $node);
+                    $this->sandbox->validation_error("Sandboxed code attempted to use shell execution backticks!", Error::BACKTICKS_ERROR, $node);
                 }
             } else if($name = $this->is_magic_const($node)){
                 if(!$this->sandbox->check_magic_const($name)){
-                    $this->sandbox->error("Magic constant failed custom validation!", Error::VALID_MAGIC_CONST_ERROR, $node, $name);
+                    $this->sandbox->validation_error("Magic constant failed custom validation!", Error::VALID_MAGIC_CONST_ERROR, $node, $name);
                 }
                 if($this->sandbox->is_defined_magic_const($name)){
                     return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_get_magic_const', array(new \PHPParser_Node_Arg(new \PHPParser_Node_Scalar_String($name))), $node->getAttributes());
                 }
             } else if($name = $this->is_keyword($node)){
                 if(!$this->sandbox->check_keyword($name)){
-                    $this->sandbox->error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, $name);
+                    $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, $name);
                 }
             } else if($name = $this->is_operator($node)){
                 if(!$this->sandbox->check_operator($name)){
-                    $this->sandbox->error("Operator failed custom validation!", Error::VALID_OPERATOR_ERROR, $node, $name);
+                    $this->sandbox->validation_error("Operator failed custom validation!", Error::VALID_OPERATOR_ERROR, $node, $name);
                 }
                 if($node instanceof \PHPParser_Node_Expr_Concat){
                     return new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg($node), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))))));
@@ -392,7 +392,7 @@
                 }
             } else if($name = $this->is_primitive($node)){
                 if(!$this->sandbox->check_primitive($name)){
-                    $this->sandbox->error("Primitive failed custom validation!", Error::VALID_PRIMITIVE_ERROR, $node, $name);
+                    $this->sandbox->validation_error("Primitive failed custom validation!", Error::VALID_PRIMITIVE_ERROR, $node, $name);
                 }
                 if($node instanceof \PHPParser_Node_Scalar_String){
                     return new \PHPParser_Node_Expr_New(new \PHPParser_Node_Name_FullyQualified(array('PHPSandbox\\SandboxedString')), array(new \PHPParser_Node_Arg($node), new \PHPParser_Node_Arg(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))))));

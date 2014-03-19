@@ -1,5 +1,11 @@
 #CHANGELOG
 
+##03/19/2014
+- API CHANGE: set_error_handler() and its related methods have been changed to set_validation_error_handler(), etc. because that more closely explains their purpose of handling validation errors in the sandbox
+- set_error_handler() its related methods now represent a new error handling mechanism that replicates PHP's set_error_handler() built-in functionality for the sandbox
+- set_exception_handler() and its realted methods represent a new exception handling mechanism that replicates PHP's set_exception_handler() built-in functionality for the sandbox
+- A new convert_errors option flag has been added to the sandbox, which will automatically convert PHP errors in the sandbox to exceptions and send them to the sandbox's exception handler if it is set
+
 ##03/10/2014
 - Addressed potential vulnerabilities related to SandboxedStrings where sandboxed code could manipulate the strings in a way that could defeat their protection
 - Solved errors from casting sandboxed strings to int
