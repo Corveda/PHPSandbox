@@ -320,7 +320,7 @@
          */
         public function testConvertErrors(){
             $this->setExpectedException('PHPUnit_Framework_Error_Notice');
-            $this->convert_errors = true;
+            $this->sandbox->convert_errors = true;
             $this->sandbox->set_exception_handler(function($error, $sandbox){
                 throw $error;
             });
