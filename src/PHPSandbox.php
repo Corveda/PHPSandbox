@@ -2009,7 +2009,16 @@
          * @return  mixed|SandboxedString   Returns the wrapped value
          */
         public function _wrap($value){
-            return is_string($value) ? new SandboxedString($value, $this) : $value;
+            if(is_string($value)){
+                if(filter_var($value, FILTER_VALIDATE_INT) !== false){
+                    return intval($value);
+                }
+                if(filter_var($value, FILTER_VALIDATE_FLOAT) !== false){
+                    return floatval($value);
+                }
+                return new SandboxedString($value, $this);
+            }
+            return $value;
         }
         /** Get PHPSandbox redefined var_dump
          *

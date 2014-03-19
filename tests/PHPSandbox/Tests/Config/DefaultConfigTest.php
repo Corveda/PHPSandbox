@@ -371,8 +371,8 @@
                 'is_object',
                 'is_scalar'
             ));
-            $this->assertEquals(true, $this->sandbox->execute(function(){ return is_string("1"); }));
-            $this->assertEquals(false, $this->sandbox->execute(function(){ return is_object("1"); }));
-            $this->assertEquals(true, $this->sandbox->execute(function(){ return is_scalar("1"); }));
+            $this->assertEquals(true, $this->sandbox->execute(function(){ return is_string("a"); }));
+            $this->assertEquals(false, $this->sandbox->execute(function(){ return is_object("a"); }));
+            $this->assertEquals(true, $this->sandbox->execute(function(){ return is_scalar("a"); }));
         }
     }
