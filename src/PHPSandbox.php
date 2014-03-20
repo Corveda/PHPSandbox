@@ -272,12 +272,12 @@
          */
         public $overwrite_func_get_args     = true;
         /**
-         * @var    bool       Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.
+         * @var    bool       Should PHPSandbox overwrite functions to help hide SandboxedStrings?
          * @default true
          */
         public $overwrite_sandboxed_string_funcs         = true;
         /**
-         * @var    bool       Should PHPSandbox overwrite functions to help hide SandboxedStrings?
+         * @var    bool       Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.
          * @default true
          */
         public $overwrite_superglobals      = true;
