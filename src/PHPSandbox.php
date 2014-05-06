@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.5
+     * @version 1.3.6
      */
     class PHPSandbox {
         /**
@@ -3009,8 +3009,9 @@
             if(!$name){
                 $this->validation_error("Cannot define unnamed namespace alias!", Error::DEFINE_ALIAS_ERROR, null, '');
             }
+            $original_name = $name;
             $name = $this->normalize_alias($name);
-            $this->definitions['aliases'][$name] = $alias;
+            $this->definitions['aliases'][$name] = array('original' => $original_name, 'alias' => $alias);
             return $this;
         }
         /** Define PHPSandbox aliases by array
@@ -6608,11 +6609,11 @@
          */
         protected function prepare_aliases(){
             $output = array();
-            foreach($this->definitions['aliases'] as $name => $alias){
-                if(is_string($name) && $name){
-                    $output[] = 'use ' . $name . ((is_string($alias) && $alias) ? ' as ' . $alias : '') . ';';
+            foreach($this->definitions['aliases'] as $alias){
+                if(is_array($alias) && isset($alias['original']) && is_string($alias['original']) && $alias['original']){
+                    $output[] = 'use ' . $alias['original'] . ((isset($alias['alias']) && is_string($alias['alias']) && $alias['alias']) ? ' as ' . $alias['alias'] : '') . ';';
                 } else {
-                    $this->validation_error("Sandboxed code attempted to use invalid namespace alias: $name", Error::DEFINE_ALIAS_ERROR, null, $name);
+                    $this->validation_error("Sandboxed code attempted to use invalid namespace alias: " . $alias['original'], Error::DEFINE_ALIAS_ERROR, null, $alias['original']);
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';

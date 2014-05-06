@@ -1,5 +1,8 @@
 #CHANGELOG
 
+##05/06/2014
+- Corrected defined alias case-sensitivity issue (see: issue #10)
+
 ##03/19/2014
 - API CHANGE: set_error_handler() and its related methods have been changed to set_validation_error_handler(), etc. because that more closely explains their purpose of handling validation errors in the sandbox
 - set_error_handler() its related methods now represent a new error handling mechanism that replicates PHP's set_error_handler() built-in functionality for the sandbox
