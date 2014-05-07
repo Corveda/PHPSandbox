@@ -207,7 +207,7 @@
          */
         public function testDisallowsCasting(){
             $this->setExpectedException('PHPSandbox\Error');
-            $this->sandbox->execute(function(){ $a = '1'; $b = (bool)$a; });
+            $this->sandbox->execute(function(){ return (bool)'1'; });
         }
 
         /**
@@ -274,7 +274,7 @@
          */
         public function testCustomFunctionValidationSuccess(){
             $this->expectOutputString('success');
-            $this->sandbox->set_func_validator(function($name, $sandbox){
+            $this->sandbox->set_func_validator(function($name){
                 return $name == 'phpsandbox\tests\config\test';
             });
             function test(){
@@ -288,7 +288,7 @@
          */
         public function testCustomFunctionValidationFailure(){
             $this->setExpectedException('PHPSandbox\Error');
-            $this->sandbox->set_func_validator(function($name, $sandbox){
+            $this->sandbox->set_func_validator(function($name){
                 return $name == 'test';
             });
             $this->sandbox->execute(function(){ test2(); });
@@ -311,7 +311,7 @@
         public function testCustomExceptionHandler(){
             $this->setExpectedException('Exception');
             $this->sandbox->whitelist_type('Exception');
-            $this->sandbox->set_exception_handler(function($exception, $sandbox){
+            $this->sandbox->set_exception_handler(function($exception){
                 throw $exception;
             });
             $this->sandbox->execute(function(){ throw new \Exception; });
@@ -323,7 +323,7 @@
         public function testConvertErrors(){
             $this->setExpectedException('ErrorException');
             $this->sandbox->convert_errors = true;
-            $this->sandbox->set_exception_handler(function($error, $sandbox){
+            $this->sandbox->set_exception_handler(function($error){
                 throw $error;
             });
             $this->sandbox->execute(function(){ $a[1]; });
@@ -334,7 +334,7 @@
          */
         public function testCustomValidationErrorHandler(){
             $this->setExpectedException('PHPSandbox\Error');
-            $this->sandbox->set_validation_error_handler(function($error, $sandbox){
+            $this->sandbox->set_validation_error_handler(function($error){
                 throw $error;
             });
             $this->sandbox->execute(function(){ test2(); });

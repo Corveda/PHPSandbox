@@ -16,7 +16,7 @@
      * @author  Elijah Horton <fieryprophet@yahoo.com>
      * @version 1.3.6
      */
-    class PHPSandbox {
+    class PHPSandbox implements \IteratorAggregate {
         /**
          * @const    string      The prefix given to the obfuscated sandbox key passed to the generated code
          */
@@ -530,7 +530,7 @@
          * @return  mixed                      The output of the executed sandboxed code
          */
         public function __invoke($code){
-            return call_user_func_array(array($this, 'execute'), func_get_args());
+            return call_user_func(array($this, 'execute'), $code);
         }
         /** PHPSandbox __sleep magic method
          *
@@ -574,7 +574,7 @@
                         switch($type){
                             case 'func':
                                 foreach($data as $key => $value){
-                                    $function = null;
+                                    $function = function(){};
                                     @eval('$function = ' . $value["fullcode"] .';');
                                     if(!is_callable($function)){
                                         $this->validation_error("Could not import function $key! Please check your code for errors!", Error::IMPORT_ERROR, null, $function);
@@ -856,109 +856,74 @@
             switch($option){
                 case 'error_level':
                     return $this->error_level;
-                    break;
                 case 'restore_error_level':
                     return $this->restore_error_level;
-                    break;
                 case 'convert_errors':
                     return $this->convert_errors;
-                    break;
                 case 'capture_output':
                     return $this->capture_output;
-                    break;
                 case 'auto_whitelist_trusted_code':
                     return $this->auto_whitelist_trusted_code;
-                    break;
                 case 'auto_whitelist_functions':
                     return $this->auto_whitelist_functions;
-                    break;
                 case 'auto_whitelist_constants':
                     return $this->auto_whitelist_constants;
-                    break;
                 case 'auto_whitelist_globals':
                     return $this->auto_whitelist_globals;
-                    break;
                 case 'auto_whitelist_classes':
                     return $this->auto_whitelist_classes;
-                    break;
                 case 'auto_whitelist_interfaces':
                     return $this->auto_whitelist_interfaces;
-                    break;
                 case 'auto_whitelist_traits':
                     return $this->auto_whitelist_traits;
-                    break;
                 case 'auto_define_vars':
                     return $this->auto_define_vars;
-                    break;
                 case 'overwrite_defined_funcs':
                     return $this->overwrite_defined_funcs;
-                    break;
                 case 'overwrite_sandboxed_string_funcs':
                     return $this->overwrite_sandboxed_string_funcs;
-                    break;
                 case 'overwrite_func_get_args':
                     return $this->overwrite_func_get_args;
-                    break;
                 case 'overwrite_superglobals':
                     return $this->overwrite_superglobals;
-                    break;
                 case 'allow_functions':
                     return $this->allow_functions;
-                    break;
                 case 'allow_closures':
                     return $this->allow_closures;
-                    break;
                 case 'allow_variables':
                     return $this->allow_variables;
-                    break;
                 case 'allow_static_variables':
                     return $this->allow_static_variables;
-                    break;
                 case 'allow_objects':
                     return $this->allow_objects;
-                    break;
                 case 'allow_constants':
                     return $this->allow_constants;
-                    break;
                 case 'allow_globals':
                     return $this->allow_globals;
-                    break;
                 case 'allow_namespaces':
                     return $this->allow_namespaces;
-                    break;
                 case 'allow_aliases':
                     return $this->allow_aliases;
-                    break;
                 case 'allow_classes':
                     return $this->allow_classes;
-                    break;
                 case 'allow_interfaces':
                     return $this->allow_interfaces;
-                    break;
                 case 'allow_traits':
                     return $this->allow_traits;
-                    break;
                 case 'allow_generators':
                     return $this->allow_generators;
-                    break;
                 case 'allow_escaping':
                     return $this->allow_escaping;
-                    break;
                 case 'allow_casting':
                     return $this->allow_casting;
-                    break;
                 case 'allow_error_suppressing':
                     return $this->allow_error_suppressing;
-                    break;
                 case 'allow_references':
                     return $this->allow_references;
-                    break;
                 case 'allow_backticks':
                     return $this->allow_backticks;
-                    break;
                 case 'allow_halting':
                     return $this->allow_halting;
-                    break;
             }
             return null;
         }
@@ -2009,7 +1974,7 @@
          * @return  mixed|SandboxedString   Returns the wrapped value
          */
         public function _wrap($value){
-            if(is_object($value) && is_callable($value, '__toString')){
+            if(is_object($value) && method_exists($value, '__toString')){
                 return $this->_wrap(strval($value));
             } else if(is_string($value) && is_callable($value)){
                 return new SandboxedString($value, $this);
@@ -2642,7 +2607,7 @@
             if(count($superglobals)){
                 foreach($superglobals as $superglobal => $name){
                     $name = $this->normalize_superglobal($name);
-                    $this->undefine_superglobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) ? null : $name);
+                    $this->undefine_superglobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) || !is_string($name) ? null : $name);
                 }
             } else {
                 $this->definitions['superglobals'] = array();
@@ -2896,8 +2861,8 @@
          * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_namespaces(array $namespaces = array()){
-            foreach($namespaces as $name => $alias){
-                $this->define_namespace($name, $alias);
+            foreach($namespaces as $name){
+                $this->define_namespace($name);
             }
             return $this;
         }
@@ -6685,7 +6650,7 @@
             if(!$code){
                 return $this;
             }
-            $code = $this->disassemble($code, false);
+            $code = $this->disassemble($code);
             if($this->auto_whitelist_trusted_code){
                 $this->auto_whitelist($code);
             }
@@ -6701,7 +6666,7 @@
             if(!$code){
                 return $this;
             }
-            $code = $this->disassemble($code, false);
+            $code = $this->disassemble($code);
             if($this->auto_whitelist_trusted_code){
                 $this->auto_whitelist($code, true);
             }
@@ -6895,7 +6860,7 @@
             $saved_error_level = null;
             if($this->error_level !== null){
                 $saved_error_level = error_reporting();
-                error_reporting($this->error_level);
+                error_reporting(intval($this->error_level));
             }
             if(is_callable($this->error_handler) || $this->convert_errors){
                 set_error_handler(array($this, 'error'), $this->error_handler_types);
@@ -6911,7 +6876,9 @@
                 } else {
                     $result = eval($this->generated_code);
                 }
-            } catch(\Exception $exception){}
+            } catch(\Exception $exception){
+                //swallow any exceptions
+            }
             if(is_callable($this->error_handler) || $this->convert_errors){
                 restore_error_handler();
             }
@@ -6987,7 +6954,7 @@
             if($this->convert_errors){
                 return $this->exception(new \ErrorException($errstr, 0, $errno, $errfile, $errline));
             }
-            return call_user_func_array($this->error_handler, array($errno, $errstr, $errfile, $errline, $errcontext, $this));
+            return is_callable($this->error_handler) ? call_user_func_array($this->error_handler, array($errno, $errstr, $errfile, $errline, $errcontext, $this)) : null;
         }
         /** Set callable to handle thrown exceptions
          *
@@ -7132,5 +7099,9 @@
          */
         public static function getSandbox($name){
             return isset(static::$sandboxes[$name]) ? static::$sandboxes[$name] : null;
+        }
+
+        public function getIterator(){
+            return new \ArrayIterator(get_object_vars($this));
         }
     }
