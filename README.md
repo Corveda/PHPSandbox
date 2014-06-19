@@ -71,6 +71,14 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
     $sandbox->execute('<?php i am malformed PHP code; ?>');
     //does nothing
 
+##Disable validation example:
+
+    $sandbox = new PHPSandbox\PHPSandbox;
+    //this will disable function validation
+    $sandbox->set_option('validate_functions', false); // or $sandbox->validate_functions = false;
+    $sandbox->execute('<?php echo system("ping google.com"); ?>');
+    //Pinging google.com. . .
+
 ##Requirements
 
 - PHP 5.3.2+
@@ -85,7 +93,7 @@ To install using [composer](http://getcomposer.org/), simply add the following t
     {
         "minimum-stability": "dev",
         "require": {
-            "fieryprophet/php-sandbox": "dev-master"
+            "fieryprophet/php-sandbox": "1.3.*"
         }
     }
 

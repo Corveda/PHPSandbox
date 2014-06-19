@@ -279,6 +279,12 @@
                     $this->sandbox->validation_error("Class constant failed custom validation!", Error::VALID_CLASS_ERROR, $node, $class->toString());
                 }
                 return $node;
+            } else if($node instanceof \PHPParser_Node_Param && $node->type instanceof \PHPParser_Node_Name){
+                $class = $node->type->toString();
+                if($this->sandbox->is_defined_class($class)){
+                    $node->type = new \PHPParser_Node_Name($this->sandbox->get_defined_class($class));
+                }
+                return $node;
             } else if($node instanceof \PHPParser_Node_Expr_New){
                 if(!$this->sandbox->allow_objects){
                     $this->sandbox->validation_error("Sandboxed code attempted to create object!", Error::CREATE_OBJECT_ERROR, $node);

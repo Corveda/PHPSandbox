@@ -14,9 +14,9 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.4
+     * @version 1.3.6
      */
-    class PHPSandbox {
+    class PHPSandbox implements \IteratorAggregate {
         /**
          * @const    string      The prefix given to the obfuscated sandbox key passed to the generated code
          */
@@ -202,8 +202,83 @@
         protected static $sandboxes = array();
         /* CONFIGURATION OPTION FLAGS */
         /**
-         * @var    bool       The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
-         * @default null
+         * @var    bool       Flag to indicate whether the sandbox should validate functions
+         * @default true
+         */
+        public $validate_functions          = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate variables
+         * @default true
+         */
+        public $validate_variables          = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate globals
+         * @default true
+         */
+        public $validate_globals            = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate superglobals
+         * @default true
+         */
+        public $validate_superglobals       = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate constants
+         * @default true
+         */
+        public $validate_constants          = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate magic constants
+         * @default true
+         */
+        public $validate_magic_constants    = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate namespaces
+         * @default true
+         */
+        public $validate_namespaces         = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate aliases (aka use)
+         * @default true
+         */
+        public $validate_aliases            = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate classes
+         * @default true
+         */
+        public $validate_classes            = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate interfaces
+         * @default true
+         */
+        public $validate_interfaces         = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate traits
+         * @default true
+         */
+        public $validate_traits             = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate keywords
+         * @default true
+         */
+        public $validate_keywords           = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate operators
+         * @default true
+         */
+        public $validate_operators          = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate primitives
+         * @default true
+         */
+        public $validate_primitives         = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate types
+         * @default true
+         */
+        public $validate_types              = true;
+        /**
+         * @var    int        The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
+         * @default true
          */
         public $error_level                 = null;
         /**
@@ -272,12 +347,12 @@
          */
         public $overwrite_func_get_args     = true;
         /**
-         * @var    bool       Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.
+         * @var    bool       Should PHPSandbox overwrite functions to help hide SandboxedStrings?
          * @default true
          */
         public $overwrite_sandboxed_string_funcs         = true;
         /**
-         * @var    bool       Should PHPSandbox overwrite functions to help hide SandboxedStrings?
+         * @var    bool       Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.
          * @default true
          */
         public $overwrite_superglobals      = true;
@@ -530,7 +605,7 @@
          * @return  mixed                      The output of the executed sandboxed code
          */
         public function __invoke($code){
-            return call_user_func_array(array($this, 'execute'), func_get_args());
+            return call_user_func(array($this, 'execute'), $code);
         }
         /** PHPSandbox __sleep magic method
          *
@@ -574,7 +649,7 @@
                         switch($type){
                             case 'func':
                                 foreach($data as $key => $value){
-                                    $function = null;
+                                    $function = function(){};
                                     @eval('$function = ' . $value["fullcode"] .';');
                                     if(!is_callable($function)){
                                         $this->validation_error("Could not import function $key! Please check your code for errors!", Error::IMPORT_ERROR, null, $function);
@@ -697,6 +772,51 @@
             }
             $option = strtolower($option); //normalize option names
             switch($option){
+                case 'validate_functions':
+                    $this->validate_functions = $value ? true : false;
+                    break;
+                case 'validate_variables':
+                    $this->validate_variables = $value ? true : false;
+                    break;
+                case 'validate_globals':
+                    $this->validate_globals = $value ? true : false;
+                    break;
+                case 'validate_superglobals':
+                    $this->validate_superglobals = $value ? true : false;
+                    break;
+                case 'validate_constants':
+                    $this->validate_constants = $value ? true : false;
+                    break;
+                case 'validate_magic_constants':
+                    $this->validate_magic_constants = $value ? true : false;
+                    break;
+                case 'validate_namespaces':
+                    $this->validate_namespaces = $value ? true : false;
+                    break;
+                case 'validate_aliases':
+                    $this->validate_aliases = $value ? true : false;
+                    break;
+                case 'validate_classes':
+                    $this->validate_classes = $value ? true : false;
+                    break;
+                case 'validate_interfaces':
+                    $this->validate_interfaces = $value ? true : false;
+                    break;
+                case 'validate_traits':
+                    $this->validate_traits = $value ? true : false;
+                    break;
+                case 'validate_keywords':
+                    $this->validate_keywords = $value ? true : false;
+                    break;
+                case 'validate_operators':
+                    $this->validate_operators = $value ? true : false;
+                    break;
+                case 'validate_primitives':
+                    $this->validate_primitives = $value ? true : false;
+                    break;
+                case 'validate_types':
+                    $this->validate_types = $value ? true : false;
+                    break;
                 case 'error_level':
                     $this->error_level = is_numeric($value) ? intval($value) : null;
                     break;
@@ -854,111 +974,121 @@
         public function get_option($option){
             $option = strtolower($option);  //normalize option names
             switch($option){
+                case 'validate_functions':
+                    return $this->validate_functions;
+                    break;
+                case 'validate_variables':
+                    return $this->validate_variables;
+                    break;
+                case 'validate_globals':
+                    return $this->validate_globals;
+                    break;
+                case 'validate_superglobals':
+                    return $this->validate_superglobals;
+                    break;
+                case 'validate_constants':
+                    return $this->validate_constants;
+                    break;
+                case 'validate_magic_constants':
+                    return $this->validate_magic_constants;
+                    break;
+                case 'validate_namespaces':
+                    return $this->validate_namespaces;
+                    break;
+                case 'validate_aliases':
+                    return $this->validate_aliases;
+                    break;
+                case 'validate_classes':
+                    return $this->validate_classes;
+                    break;
+                case 'validate_interfaces':
+                    return $this->validate_interfaces;
+                    break;
+                case 'validate_traits':
+                    return $this->validate_traits;
+                    break;
+                case 'validate_keywords':
+                    return $this->validate_keywords;
+                    break;
+                case 'validate_operators':
+                    return $this->validate_operators;
+                    break;
+                case 'validate_primitives':
+                    return $this->validate_primitives;
+                    break;
+                case 'validate_types':
+                    return $this->validate_types;
+                    break;
                 case 'error_level':
                     return $this->error_level;
-                    break;
                 case 'restore_error_level':
                     return $this->restore_error_level;
-                    break;
                 case 'convert_errors':
                     return $this->convert_errors;
-                    break;
                 case 'capture_output':
                     return $this->capture_output;
-                    break;
                 case 'auto_whitelist_trusted_code':
                     return $this->auto_whitelist_trusted_code;
-                    break;
                 case 'auto_whitelist_functions':
                     return $this->auto_whitelist_functions;
-                    break;
                 case 'auto_whitelist_constants':
                     return $this->auto_whitelist_constants;
-                    break;
                 case 'auto_whitelist_globals':
                     return $this->auto_whitelist_globals;
-                    break;
                 case 'auto_whitelist_classes':
                     return $this->auto_whitelist_classes;
-                    break;
                 case 'auto_whitelist_interfaces':
                     return $this->auto_whitelist_interfaces;
-                    break;
                 case 'auto_whitelist_traits':
                     return $this->auto_whitelist_traits;
-                    break;
                 case 'auto_define_vars':
                     return $this->auto_define_vars;
-                    break;
                 case 'overwrite_defined_funcs':
                     return $this->overwrite_defined_funcs;
-                    break;
                 case 'overwrite_sandboxed_string_funcs':
                     return $this->overwrite_sandboxed_string_funcs;
-                    break;
                 case 'overwrite_func_get_args':
                     return $this->overwrite_func_get_args;
-                    break;
                 case 'overwrite_superglobals':
                     return $this->overwrite_superglobals;
-                    break;
                 case 'allow_functions':
                     return $this->allow_functions;
-                    break;
                 case 'allow_closures':
                     return $this->allow_closures;
-                    break;
                 case 'allow_variables':
                     return $this->allow_variables;
-                    break;
                 case 'allow_static_variables':
                     return $this->allow_static_variables;
-                    break;
                 case 'allow_objects':
                     return $this->allow_objects;
-                    break;
                 case 'allow_constants':
                     return $this->allow_constants;
-                    break;
                 case 'allow_globals':
                     return $this->allow_globals;
-                    break;
                 case 'allow_namespaces':
                     return $this->allow_namespaces;
-                    break;
                 case 'allow_aliases':
                     return $this->allow_aliases;
-                    break;
                 case 'allow_classes':
                     return $this->allow_classes;
-                    break;
                 case 'allow_interfaces':
                     return $this->allow_interfaces;
-                    break;
                 case 'allow_traits':
                     return $this->allow_traits;
-                    break;
                 case 'allow_generators':
                     return $this->allow_generators;
-                    break;
                 case 'allow_escaping':
                     return $this->allow_escaping;
-                    break;
                 case 'allow_casting':
                     return $this->allow_casting;
-                    break;
                 case 'allow_error_suppressing':
                     return $this->allow_error_suppressing;
-                    break;
                 case 'allow_references':
                     return $this->allow_references;
-                    break;
                 case 'allow_backticks':
                     return $this->allow_backticks;
-                    break;
                 case 'allow_halting':
                     return $this->allow_halting;
-                    break;
             }
             return null;
         }
@@ -2009,13 +2139,9 @@
          * @return  mixed|SandboxedString   Returns the wrapped value
          */
         public function _wrap($value){
-            if(is_string($value)){
-                if(filter_var($value, FILTER_VALIDATE_INT) !== false){
-                    return intval($value);
-                }
-                if(filter_var($value, FILTER_VALIDATE_FLOAT) !== false){
-                    return floatval($value);
-                }
+            if(is_object($value) && method_exists($value, '__toString')){
+                return $this->_wrap(strval($value));
+            } else if(is_string($value) && is_callable($value)){
                 return new SandboxedString($value, $this);
             }
             return $value;
@@ -2072,7 +2198,7 @@
          * @return  int             Returns the integer value
          */
         public function _intval($value){
-            return intval($value instanceof SandboxedString ? strval($value): $value);
+            return intval($value instanceof SandboxedString ? strval($value) : $value);
         }
         /** Return float value of SandboxedString or mixed value
          *
@@ -2081,7 +2207,7 @@
          * @return  float           Returns the float value
          */
         public function _floatval($value){
-            return floatval($value instanceof SandboxedString ? strval($value): $value);
+            return floatval($value instanceof SandboxedString ? strval($value) : $value);
         }
         /** Return boolean value of SandboxedString or mixed value
          *
@@ -2646,7 +2772,7 @@
             if(count($superglobals)){
                 foreach($superglobals as $superglobal => $name){
                     $name = $this->normalize_superglobal($name);
-                    $this->undefine_superglobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) ? null : $name);
+                    $this->undefine_superglobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) || !is_string($name) ? null : $name);
                 }
             } else {
                 $this->definitions['superglobals'] = array();
@@ -2900,8 +3026,8 @@
          * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
          */
         public function define_namespaces(array $namespaces = array()){
-            foreach($namespaces as $name => $alias){
-                $this->define_namespace($name, $alias);
+            foreach($namespaces as $name){
+                $this->define_namespace($name);
             }
             return $this;
         }
@@ -3013,8 +3139,9 @@
             if(!$name){
                 $this->validation_error("Cannot define unnamed namespace alias!", Error::DEFINE_ALIAS_ERROR, null, '');
             }
+            $original_name = $name;
             $name = $this->normalize_alias($name);
-            $this->definitions['aliases'][$name] = $alias;
+            $this->definitions['aliases'][$name] = array('original' => $original_name, 'alias' => $alias);
             return $this;
         }
         /** Define PHPSandbox aliases by array
@@ -4693,13 +4820,18 @@
          *
          * @example $sandbox->whitelist_func('var_dump');
          *
+         * @example $sandbox->whitelist_func('var_dump', 'print_r');
+         *
          * @example $sandbox->whitelist_func(array('var_dump', 'print_r'));
          *
          * @param   string|array        $name       String of function name, or array of function names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  PHPSandbox          Returns the PHPSandbox instance for chainability
          */
         public function whitelist_func($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_func(func_get_args());
+            }
             $name = $this->normalize_func($name);
             return $this->whitelist('functions', $name);
         }
@@ -4716,6 +4848,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_func($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_func(func_get_args());
+            }
             $name = $this->normalize_func($name);
             return $this->blacklist('functions', $name);
         }
@@ -4732,6 +4867,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_func($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_func(func_get_args());
+            }
             $name = $this->normalize_func($name);
             return $this->dewhitelist('functions', $name);
         }
@@ -4748,6 +4886,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_func($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_func(func_get_args());
+            }
             $name = $this->normalize_func($name);
             return $this->deblacklist('functions', $name);
         }
@@ -4764,6 +4905,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_var($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_var(func_get_args());
+            }
             return $this->whitelist('variables', $name);
         }
         /** Blacklist variable
@@ -4779,6 +4923,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_var($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_var(func_get_args());
+            }
             return $this->blacklist('variables', $name);
         }
         /** Remove variable from whitelist
@@ -4794,6 +4941,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_var($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_var(func_get_args());
+            }
             return $this->dewhitelist('variables', $name);
         }
         /** Remove function from blacklist
@@ -4809,6 +4959,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_var($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_var(func_get_args());
+            }
             return $this->deblacklist('variables', $name);
         }
         /** Whitelist global
@@ -4824,6 +4977,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_global($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_global(func_get_args());
+            }
             return $this->whitelist('globals', $name);
         }
         /** Blacklist global
@@ -4839,6 +4995,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_global($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_global(func_get_args());
+            }
             return $this->blacklist('globals', $name);
         }
         /** Remove global from whitelist
@@ -4854,6 +5013,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_global($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_global(func_get_args());
+            }
             return $this->dewhitelist('globals', $name);
         }
         /** Remove global from blacklist
@@ -4869,6 +5031,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_global($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_global(func_get_args());
+            }
             return $this->deblacklist('globals', $name);
         }
         /** Whitelist superglobal or superglobal key
@@ -5102,6 +5267,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_const($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_const(func_get_args());
+            }
             return $this->whitelist('constants', $name);
         }
         /** Blacklist constant
@@ -5117,6 +5285,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_const($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_const(func_get_args());
+            }
             return $this->blacklist('constants', $name);
         }
         /** Remove constant from whitelist
@@ -5132,6 +5303,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_const($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_const(func_get_args());
+            }
             return $this->dewhitelist('constants', $name);
         }
         /** Remove constant from blacklist
@@ -5147,6 +5321,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_const($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_const(func_get_args());
+            }
             return $this->deblacklist('constants', $name);
         }
         /** Whitelist magic constant
@@ -5162,6 +5339,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_magic_const($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_magic_const(func_get_args());
+            }
             $name = $this->normalize_magic_const($name);
             return $this->whitelist('magic_constants', $name);
         }
@@ -5178,6 +5358,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_magic_const($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_magic_const(func_get_args());
+            }
             $name = $this->normalize_magic_const($name);
             return $this->blacklist('magic_constants', $name);
         }
@@ -5194,6 +5377,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_magic_const($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_magic_const(func_get_args());
+            }
             $name = $this->normalize_magic_const($name);
             return $this->dewhitelist('magic_constants', $name);
         }
@@ -5210,6 +5396,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_magic_const($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_magic_const(func_get_args());
+            }
             $name = $this->normalize_magic_const($name);
             return $this->deblacklist('magic_constants', $name);
         }
@@ -5226,6 +5415,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_namespace($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_namespace(func_get_args());
+            }
             $name = $this->normalize_namespace($name);
             return $this->whitelist('namespaces', $name);
         }
@@ -5242,6 +5434,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_namespace($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_namespace(func_get_args());
+            }
             $name = $this->normalize_namespace($name);
             return $this->blacklist('namespaces', $name);
         }
@@ -5258,6 +5453,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_namespace($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_namespace(func_get_args());
+            }
             $name = $this->normalize_namespace($name);
             return $this->dewhitelist('namespaces', $name);
         }
@@ -5274,6 +5472,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_namespace($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_namespace(func_get_args());
+            }
             $name = $this->normalize_namespace($name);
             return $this->deblacklist('namespaces', $name);
         }
@@ -5290,6 +5491,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_alias($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_alias(func_get_args());
+            }
             $name = $this->normalize_alias($name);
             return $this->whitelist('aliases', $name);
         }
@@ -5306,6 +5510,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_alias($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_alias(func_get_args());
+            }
             $name = $this->normalize_alias($name);
             return $this->blacklist('aliases', $name);
         }
@@ -5322,6 +5529,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_alias($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_alias(func_get_args());
+            }
             $name = $this->normalize_alias($name);
             return $this->dewhitelist('aliases', $name);
         }
@@ -5338,6 +5548,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_alias($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_alias(func_get_args());
+            }
             $name = $this->normalize_alias($name);
             return $this->deblacklist('aliases', $name);
         }
@@ -5356,6 +5569,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_use($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_alias(func_get_args());
+            }
             return $this->whitelist_alias($name);
         }
         /** Blacklist use (or alias)
@@ -5373,6 +5589,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_use($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_alias(func_get_args());
+            }
             return $this->blacklist_alias($name);
         }
         /** Remove use (or alias) from whitelist
@@ -5390,6 +5609,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_use($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_alias(func_get_args());
+            }
             return $this->dewhitelist_alias($name);
         }
         /** Remove use (or alias) from blacklist
@@ -5407,6 +5629,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_use($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_alias(func_get_args());
+            }
             return $this->deblacklist_alias($name);
         }
         /** Whitelist class
@@ -5422,6 +5647,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_class($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_class(func_get_args());
+            }
             $name = $this->normalize_class($name);
             return $this->whitelist('classes', $name);
         }
@@ -5438,6 +5666,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_class($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_class(func_get_args());
+            }
             $name = $this->normalize_class($name);
             return $this->blacklist('classes', $name);
         }
@@ -5454,6 +5685,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_class($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_class(func_get_args());
+            }
             $name = $this->normalize_class($name);
             return $this->dewhitelist('classes', $name);
         }
@@ -5470,6 +5704,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_class($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_class(func_get_args());
+            }
             $name = $this->normalize_class($name);
             return $this->deblacklist('classes', $name);
         }
@@ -5486,6 +5723,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_interface($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_interface(func_get_args());
+            }
             $name = $this->normalize_interface($name);
             return $this->whitelist('interfaces', $name);
         }
@@ -5502,6 +5742,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_interface($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_interface(func_get_args());
+            }
             $name = $this->normalize_interface($name);
             return $this->blacklist('interfaces', $name);
         }
@@ -5518,6 +5761,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_interface($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_interface(func_get_args());
+            }
             $name = $this->normalize_interface($name);
             return $this->dewhitelist('interfaces', $name);
         }
@@ -5534,6 +5780,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_interface($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_interface(func_get_args());
+            }
             $name = $this->normalize_interface($name);
             return $this->deblacklist('interfaces', $name);
         }
@@ -5550,6 +5799,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_trait($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_trait(func_get_args());
+            }
             $name = $this->normalize_trait($name);
             return $this->whitelist('traits', $name);
         }
@@ -5566,6 +5818,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_trait($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_trait(func_get_args());
+            }
             $name = $this->normalize_trait($name);
             return $this->blacklist('traits', $name);
         }
@@ -5582,6 +5837,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_trait($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_trait(func_get_args());
+            }
             $name = $this->normalize_trait($name);
             return $this->dewhitelist('traits', $name);
         }
@@ -5598,6 +5856,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_trait($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_trait(func_get_args());
+            }
             $name = $this->normalize_trait($name);
             return $this->deblacklist('traits', $name);
         }
@@ -5614,6 +5875,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_keyword($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_keyword(func_get_args());
+            }
             $name = $this->normalize_keyword($name);
             return $this->whitelist('keywords', $name);
         }
@@ -5630,6 +5894,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_keyword($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_keyword(func_get_args());
+            }
             $name = $this->normalize_keyword($name);
             return $this->blacklist('keywords', $name);
         }
@@ -5646,6 +5913,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_keyword($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_keyword(func_get_args());
+            }
             $name = $this->normalize_keyword($name);
             return $this->dewhitelist('keywords', $name);
         }
@@ -5662,6 +5932,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_keyword($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_keyword(func_get_args());
+            }
             $name = $this->normalize_keyword($name);
             return $this->deblacklist('keywords', $name);
         }
@@ -5678,6 +5951,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_operator($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_operator(func_get_args());
+            }
             $name = $this->normalize_operator($name);
             return $this->whitelist('operators', $name);
         }
@@ -5694,6 +5970,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_operator($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_operator(func_get_args());
+            }
             $name = $this->normalize_operator($name);
             return $this->blacklist('operators', $name);
         }
@@ -5710,6 +5989,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_operator($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_operator(func_get_args());
+            }
             $name = $this->normalize_operator($name);
             return $this->dewhitelist('operators', $name);
         }
@@ -5726,6 +6008,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_operator($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_operator(func_get_args());
+            }
             $name = $this->normalize_operator($name);
             return $this->deblacklist('operators', $name);
         }
@@ -5742,6 +6027,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_primitive($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_primitive(func_get_args());
+            }
             $name = $this->normalize_primitive($name);
             return $this->whitelist('primitives', $name);
         }
@@ -5758,6 +6046,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_primitive($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_primitive(func_get_args());
+            }
             $name = $this->normalize_primitive($name);
             return $this->blacklist('primitives', $name);
         }
@@ -5774,6 +6065,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_primitive($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_primitive(func_get_args());
+            }
             $name = $this->normalize_primitive($name);
             return $this->dewhitelist('primitives', $name);
         }
@@ -5790,6 +6084,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_primitive($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_primitive(func_get_args());
+            }
             $name = $this->normalize_primitive($name);
             return $this->deblacklist('primitives', $name);
         }
@@ -5806,6 +6103,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function whitelist_type($name){
+            if(func_num_args() > 1){
+                return $this->whitelist_type(func_get_args());
+            }
             $name = $this->normalize_type($name);
             return $this->whitelist('types', $name);
         }
@@ -5822,6 +6122,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function blacklist_type($name){
+            if(func_num_args() > 1){
+                return $this->blacklist_type(func_get_args());
+            }
             $name = $this->normalize_type($name);
             return $this->blacklist('types', $name);
         }
@@ -5838,6 +6141,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function dewhitelist_type($name){
+            if(func_num_args() > 1){
+                return $this->dewhitelist_type(func_get_args());
+            }
             $name = $this->normalize_type($name);
             return $this->dewhitelist('types', $name);
         }
@@ -5854,6 +6160,9 @@
          * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
          */
         public function deblacklist_type($name){
+            if(func_num_args() > 1){
+                return $this->deblacklist_type(func_get_args());
+            }
             $name = $this->normalize_type($name);
             return $this->deblacklist('types', $name);
         }
@@ -5864,6 +6173,9 @@
          * @return  bool     Returns true if function is valid, this is also used for testing closures
          */
         public function check_func($name){
+            if(!$this->validate_functions){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof \Closure){
                 if(!$this->allow_closures){
@@ -5902,6 +6214,9 @@
          * @return  bool     Returns true if variable is valid
          */
         public function check_var($name){
+            if(!$this->validate_variables){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -5934,6 +6249,9 @@
          * @return  bool     Returns true if global is valid
          */
         public function check_global($name){
+            if(!$this->validate_globals){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -5964,6 +6282,9 @@
          * @return  bool     Returns true if superglobal is valid
          */
         public function check_superglobal($name){
+            if(!$this->validate_superglobals){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -5997,6 +6318,9 @@
          * @return  bool     Returns true if constant is valid
          */
         public function check_const($name){
+            if(!$this->validate_constants){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6035,6 +6359,9 @@
          * @return  bool     Returns true if magic constant is valid
          */
         public function check_magic_const($name){
+            if(!$this->validate_magic_constants){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6068,6 +6395,9 @@
          * @return  bool     Returns true if namespace is valid
          */
         public function check_namespace($name){
+            if(!$this->validate_namespaces){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6101,6 +6431,9 @@
          * @return  bool     Returns true if alias is valid
          */
         public function check_alias($name){
+            if(!$this->validate_aliases){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6145,6 +6478,9 @@
          * @return  bool     Returns true if class is valid
          */
         public function check_class($name, $extends = false){
+            if(!$this->validate_classes){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6182,6 +6518,9 @@
          * @return  bool     Returns true if interface is valid
          */
         public function check_interface($name){
+            if(!$this->validate_interfaces){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6215,6 +6554,9 @@
          * @return  bool     Returns true if trait is valid
          */
         public function check_trait($name){
+            if(!$this->validate_traits){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6248,6 +6590,9 @@
          * @return  bool     Returns true if keyword is valid
          */
         public function check_keyword($name){
+            if(!$this->validate_keywords){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6277,6 +6622,9 @@
          * @return  bool     Returns true if operator is valid
          */
         public function check_operator($name){
+            if(!$this->validate_operators){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6306,6 +6654,9 @@
          * @return  bool     Returns true if primitive is valid
          */
         public function check_primitive($name){
+            if(!$this->validate_primitives){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6335,6 +6686,9 @@
          * @return  bool     Returns true if type is valid
          */
         public function check_type($name){
+            if(!$this->validate_types){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6430,11 +6784,11 @@
          */
         protected function prepare_aliases(){
             $output = array();
-            foreach($this->definitions['aliases'] as $name => $alias){
-                if(is_string($name) && $name){
-                    $output[] = 'use ' . $name . ((is_string($alias) && $alias) ? ' as ' . $alias : '') . ';';
+            foreach($this->definitions['aliases'] as $alias){
+                if(is_array($alias) && isset($alias['original']) && is_string($alias['original']) && $alias['original']){
+                    $output[] = 'use ' . $alias['original'] . ((isset($alias['alias']) && is_string($alias['alias']) && $alias['alias']) ? ' as ' . $alias['alias'] : '') . ';';
                 } else {
-                    $this->validation_error("Sandboxed code attempted to use invalid namespace alias: $name", Error::DEFINE_ALIAS_ERROR, null, $name);
+                    $this->validation_error("Sandboxed code attempted to use invalid namespace alias: " . $alias['original'], Error::DEFINE_ALIAS_ERROR, null, $alias['original']);
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
@@ -6506,7 +6860,7 @@
             if(!$code){
                 return $this;
             }
-            $code = $this->disassemble($code, false);
+            $code = $this->disassemble($code);
             if($this->auto_whitelist_trusted_code){
                 $this->auto_whitelist($code);
             }
@@ -6522,7 +6876,7 @@
             if(!$code){
                 return $this;
             }
-            $code = $this->disassemble($code, false);
+            $code = $this->disassemble($code);
             if($this->auto_whitelist_trusted_code){
                 $this->auto_whitelist($code, true);
             }
@@ -6716,7 +7070,7 @@
             $saved_error_level = null;
             if($this->error_level !== null){
                 $saved_error_level = error_reporting();
-                error_reporting($this->error_level);
+                error_reporting(intval($this->error_level));
             }
             if(is_callable($this->error_handler) || $this->convert_errors){
                 set_error_handler(array($this, 'error'), $this->error_handler_types);
@@ -6732,7 +7086,9 @@
                 } else {
                     $result = eval($this->generated_code);
                 }
-            } catch(\Exception $exception){}
+            } catch(\Exception $exception){
+                //swallow any exceptions
+            }
             if(is_callable($this->error_handler) || $this->convert_errors){
                 restore_error_handler();
             }
@@ -6808,7 +7164,7 @@
             if($this->convert_errors){
                 return $this->exception(new \ErrorException($errstr, 0, $errno, $errfile, $errline));
             }
-            return call_user_func_array($this->error_handler, array($errno, $errstr, $errfile, $errline, $errcontext, $this));
+            return is_callable($this->error_handler) ? call_user_func_array($this->error_handler, array($errno, $errstr, $errfile, $errline, $errcontext, $this)) : null;
         }
         /** Set callable to handle thrown exceptions
          *
@@ -6953,5 +7309,9 @@
          */
         public static function getSandbox($name){
             return isset(static::$sandboxes[$name]) ? static::$sandboxes[$name] : null;
+        }
+
+        public function getIterator(){
+            return new \ArrayIterator(get_object_vars($this));
         }
     }

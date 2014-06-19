@@ -1,5 +1,10 @@
 #CHANGELOG
 
+##06/19/2014
+- Added flags to enable/disable validation checks for every type (for example, this will help in situations where someone wants to enable all functions but not blacklist a fake function name to remove the function whitelist.) Disabling a validation check also ignores any custom validation check for that type!
+- Fixed issue with toolkit giving incorrect error and exception messages
+- Added ability for sandbox to overwrite static type hints that are redefined to other class names (NOTE: All statically referenced class/interface/trait names are treated as classes by the parser and the sandbox, therefore they must be redefined via define_class())
+
 ##05/06/2014
 - Corrected defined alias case-sensitivity issue (see: issue #10)
 

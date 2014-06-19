@@ -139,19 +139,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-323329186"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1709572556"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-323329186" class="accordion-body collapse in">
+            <div id="namespace-1709572556" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1735187005"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-926988620"></a>
                                 <a href="../namespaces/PHPSandbox.html" style="margin-left: 30px; padding-left: 0">PHPSandbox</a>
             </div>
-            <div id="namespace-1735187005" class="accordion-body collapse ">
+            <div id="namespace-926988620" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -565,6 +565,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_get_last_validation_error" class="">get_last_validation_error()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_validation_error" class="">validation_error()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_getSandbox" class="">getSandbox()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_getIterator" class="">getIterator()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_superglobals" class="">$superglobals</a><br />
@@ -573,6 +574,21 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_arg_funcs" class="">$arg_funcs</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_sandboxed_string_funcs" class="">$sandboxed_string_funcs</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_name" class="">$name</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_functions" class="">$validate_functions</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_variables" class="">$validate_variables</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_globals" class="">$validate_globals</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_superglobals" class="">$validate_superglobals</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_constants" class="">$validate_constants</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_magic_constants" class="">$validate_magic_constants</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_namespaces" class="">$validate_namespaces</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_aliases" class="">$validate_aliases</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_classes" class="">$validate_classes</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_interfaces" class="">$validate_interfaces</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_traits" class="">$validate_traits</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_keywords" class="">$validate_keywords</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_operators" class="">$validate_operators</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_primitives" class="">$validate_primitives</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_types" class="">$validate_types</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_error_level" class="">$error_level</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_restore_error_level" class="">$restore_error_level</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_convert_errors" class="">$convert_errors</a><br />
@@ -1088,16 +1104,511 @@ only has to create a PHPSandbox instance, configure its options, and run their c
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="property_error_level" name="property_error_level" class="anchor"></a>
+            <a id="property_validate_functions" name="property_validate_functions" class="anchor"></a>
             <article class="property">
-                <h3 class="public ">$error_level</h3>
-                <pre class="signature">$error_level : bool</pre>
+                <h3 class="public ">$validate_functions</h3>
+                <pre class="signature">$validate_functions : bool</pre>
                 <p><em></em></p>
                 
 
 
                                 <h4>Type</h4>
                 bool
+                &mdash; Flag to indicate whether the sandbox should validate functions                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_variables" name="property_validate_variables" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_variables</h3>
+                <pre class="signature">$validate_variables : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate variables                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_globals" name="property_validate_globals" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_globals</h3>
+                <pre class="signature">$validate_globals : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate globals                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_superglobals" name="property_validate_superglobals" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_superglobals</h3>
+                <pre class="signature">$validate_superglobals : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate superglobals                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_constants" name="property_validate_constants" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_constants</h3>
+                <pre class="signature">$validate_constants : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate constants                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_magic_constants" name="property_validate_magic_constants" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_magic_constants</h3>
+                <pre class="signature">$validate_magic_constants : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate magic constants                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_namespaces" name="property_validate_namespaces" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_namespaces</h3>
+                <pre class="signature">$validate_namespaces : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate namespaces                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_aliases" name="property_validate_aliases" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_aliases</h3>
+                <pre class="signature">$validate_aliases : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate aliases (aka use)                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_classes" name="property_validate_classes" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_classes</h3>
+                <pre class="signature">$validate_classes : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate classes                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_interfaces" name="property_validate_interfaces" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_interfaces</h3>
+                <pre class="signature">$validate_interfaces : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate interfaces                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_traits" name="property_validate_traits" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_traits</h3>
+                <pre class="signature">$validate_traits : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate traits                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_keywords" name="property_validate_keywords" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_keywords</h3>
+                <pre class="signature">$validate_keywords : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate keywords                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_operators" name="property_validate_operators" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_operators</h3>
+                <pre class="signature">$validate_operators : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate operators                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_primitives" name="property_validate_primitives" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_primitives</h3>
+                <pre class="signature">$validate_primitives : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate primitives                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_validate_types" name="property_validate_types" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$validate_types</h3>
+                <pre class="signature">$validate_types : bool</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                bool
+                &mdash; Flag to indicate whether the sandbox should validate types                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>true</p>
+
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_error_level" name="property_error_level" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$error_level</h3>
+                <pre class="signature">$error_level : int</pre>
+                <p><em></em></p>
+                
+
+
+                                <h4>Type</h4>
+                int
                 &mdash; The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.                            </article>
         </div>
         <aside class="span4 detailsbar">
@@ -1111,7 +1622,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                             default
                         </th>
                         <td>
-                                                            <p>null</p>
+                                                            <p>true</p>
 
                                                     </td>
                     </tr>
@@ -1560,7 +2071,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
 
                                 <h4>Type</h4>
                 bool
-                &mdash; Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.                            </article>
+                &mdash; Should PHPSandbox overwrite functions to help hide SandboxedStrings?                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -1593,7 +2104,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
 
                                 <h4>Type</h4>
                 bool
-                &mdash; Should PHPSandbox overwrite functions to help hide SandboxedStrings?                            </article>
+                &mdash; Should PHPSandbox overwrite $_GET, $_POST, $_COOKIE, $_FILES, $_ENV, $_REQUEST, $_SERVER, $_SESSION and $GLOBALS superglobals? If so, unless alternate superglobal values have been defined they will return as empty arrays.                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -14012,6 +14523,8 @@ You can pass an array of use (or alias) names to undefine, or an empty array or 
                         <td>
                                                             
 
+                                                            <p>'print_r');</p>
+
                                                             <p>'print_r'));</p>
 
                                                     </td>
@@ -19149,6 +19662,32 @@ security may become compromised!</p>
         </aside>
     </div>
 
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getIterator" name="method_getIterator" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getIterator()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getIterator()</pre>
+                <p><em></em></p>
+                
+
+
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
                                                     <div class="row-fluid">
         <div class="span8 content class">
             <a id="method_normalize_func" name="method_normalize_func" class="anchor"></a>
@@ -19993,7 +20532,7 @@ security may become compromised!</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on March 19th, 2014 at 15:47.
+                    on June 19th, 2014 at 14:51.
                 </section>
             </section>
         </section>

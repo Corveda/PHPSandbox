@@ -377,4 +377,22 @@
             $this->assertEquals(false, $this->sandbox->execute(function(){ return is_object("system"); }));
             $this->assertEquals(true, $this->sandbox->execute(function(){ return is_scalar("system"); }));
         }
+
+        public function testStaticTypeOverwriting(){
+            $class = 'B' . md5(time());
+            $this->sandbox->define_class('A', $class);
+            $this->sandbox->allow_classes = true;
+            $this->sandbox->allow_functions = true;
+            $this->assertEquals("Yes", $this->sandbox->execute('<?php
+                class ' . $class . ' {
+                    public $value = "Yes";
+                }
+
+                function test' . $class . '(A $var){
+                    return $var->value;
+                }
+
+                return test' . $class . '(new ' . $class . ');
+            ?>'));
+        }
     }

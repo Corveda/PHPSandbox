@@ -119,7 +119,9 @@
             'blacklist' => $blacklist,
             'definitions' => $definitions
         ));
-        $sandbox->set_error_handler(function(\PHPSandbox\Error $e){ die('<h2 style="color: red;">' . $e->getMessage() . '</h2>'); });
+        $sandbox->set_error_handler(function($errno, $errmsg, $errfile, $errline){ die('<h2 style="color: red;">Error: ' . $errmsg . ' on line ' . $errline . '</h2>'); });
+        $sandbox->set_exception_handler(function(\Exception $e){ die('<h2 style="color: red;">Exception: ' . $e->getMessage() . ' on line ' . $e->getLine() . '</h2>'); });
+        $sandbox->set_validation_error_handler(function(\PHPSandbox\Error $e){ die('<h2 style="color: red;">Validation Error: ' . $e->getMessage() . '</h2>'); });
         try {
             ob_start();
             if($setup_code){

@@ -202,8 +202,83 @@
         protected static $sandboxes = array();
         /* CONFIGURATION OPTION FLAGS */
         /**
-         * @var    bool       The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
-         * @default null
+         * @var    bool       Flag to indicate whether the sandbox should validate functions
+         * @default true
+         */
+        public $validate_functions          = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate variables
+         * @default true
+         */
+        public $validate_variables          = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate globals
+         * @default true
+         */
+        public $validate_globals            = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate superglobals
+         * @default true
+         */
+        public $validate_superglobals       = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate constants
+         * @default true
+         */
+        public $validate_constants          = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate magic constants
+         * @default true
+         */
+        public $validate_magic_constants    = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate namespaces
+         * @default true
+         */
+        public $validate_namespaces         = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate aliases (aka use)
+         * @default true
+         */
+        public $validate_aliases            = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate classes
+         * @default true
+         */
+        public $validate_classes            = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate interfaces
+         * @default true
+         */
+        public $validate_interfaces         = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate traits
+         * @default true
+         */
+        public $validate_traits             = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate keywords
+         * @default true
+         */
+        public $validate_keywords           = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate operators
+         * @default true
+         */
+        public $validate_operators          = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate primitives
+         * @default true
+         */
+        public $validate_primitives         = true;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should validate types
+         * @default true
+         */
+        public $validate_types              = true;
+        /**
+         * @var    int        The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
+         * @default true
          */
         public $error_level                 = null;
         /**
@@ -697,6 +772,51 @@
             }
             $option = strtolower($option); //normalize option names
             switch($option){
+                case 'validate_functions':
+                    $this->validate_functions = $value ? true : false;
+                    break;
+                case 'validate_variables':
+                    $this->validate_variables = $value ? true : false;
+                    break;
+                case 'validate_globals':
+                    $this->validate_globals = $value ? true : false;
+                    break;
+                case 'validate_superglobals':
+                    $this->validate_superglobals = $value ? true : false;
+                    break;
+                case 'validate_constants':
+                    $this->validate_constants = $value ? true : false;
+                    break;
+                case 'validate_magic_constants':
+                    $this->validate_magic_constants = $value ? true : false;
+                    break;
+                case 'validate_namespaces':
+                    $this->validate_namespaces = $value ? true : false;
+                    break;
+                case 'validate_aliases':
+                    $this->validate_aliases = $value ? true : false;
+                    break;
+                case 'validate_classes':
+                    $this->validate_classes = $value ? true : false;
+                    break;
+                case 'validate_interfaces':
+                    $this->validate_interfaces = $value ? true : false;
+                    break;
+                case 'validate_traits':
+                    $this->validate_traits = $value ? true : false;
+                    break;
+                case 'validate_keywords':
+                    $this->validate_keywords = $value ? true : false;
+                    break;
+                case 'validate_operators':
+                    $this->validate_operators = $value ? true : false;
+                    break;
+                case 'validate_primitives':
+                    $this->validate_primitives = $value ? true : false;
+                    break;
+                case 'validate_types':
+                    $this->validate_types = $value ? true : false;
+                    break;
                 case 'error_level':
                     $this->error_level = is_numeric($value) ? intval($value) : null;
                     break;
@@ -854,6 +974,51 @@
         public function get_option($option){
             $option = strtolower($option);  //normalize option names
             switch($option){
+                case 'validate_functions':
+                    return $this->validate_functions;
+                    break;
+                case 'validate_variables':
+                    return $this->validate_variables;
+                    break;
+                case 'validate_globals':
+                    return $this->validate_globals;
+                    break;
+                case 'validate_superglobals':
+                    return $this->validate_superglobals;
+                    break;
+                case 'validate_constants':
+                    return $this->validate_constants;
+                    break;
+                case 'validate_magic_constants':
+                    return $this->validate_magic_constants;
+                    break;
+                case 'validate_namespaces':
+                    return $this->validate_namespaces;
+                    break;
+                case 'validate_aliases':
+                    return $this->validate_aliases;
+                    break;
+                case 'validate_classes':
+                    return $this->validate_classes;
+                    break;
+                case 'validate_interfaces':
+                    return $this->validate_interfaces;
+                    break;
+                case 'validate_traits':
+                    return $this->validate_traits;
+                    break;
+                case 'validate_keywords':
+                    return $this->validate_keywords;
+                    break;
+                case 'validate_operators':
+                    return $this->validate_operators;
+                    break;
+                case 'validate_primitives':
+                    return $this->validate_primitives;
+                    break;
+                case 'validate_types':
+                    return $this->validate_types;
+                    break;
                 case 'error_level':
                     return $this->error_level;
                 case 'restore_error_level':
@@ -6008,6 +6173,9 @@
          * @return  bool     Returns true if function is valid, this is also used for testing closures
          */
         public function check_func($name){
+            if(!$this->validate_functions){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof \Closure){
                 if(!$this->allow_closures){
@@ -6046,6 +6214,9 @@
          * @return  bool     Returns true if variable is valid
          */
         public function check_var($name){
+            if(!$this->validate_variables){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6078,6 +6249,9 @@
          * @return  bool     Returns true if global is valid
          */
         public function check_global($name){
+            if(!$this->validate_globals){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6108,6 +6282,9 @@
          * @return  bool     Returns true if superglobal is valid
          */
         public function check_superglobal($name){
+            if(!$this->validate_superglobals){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6141,6 +6318,9 @@
          * @return  bool     Returns true if constant is valid
          */
         public function check_const($name){
+            if(!$this->validate_constants){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6179,6 +6359,9 @@
          * @return  bool     Returns true if magic constant is valid
          */
         public function check_magic_const($name){
+            if(!$this->validate_magic_constants){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6212,6 +6395,9 @@
          * @return  bool     Returns true if namespace is valid
          */
         public function check_namespace($name){
+            if(!$this->validate_namespaces){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6245,6 +6431,9 @@
          * @return  bool     Returns true if alias is valid
          */
         public function check_alias($name){
+            if(!$this->validate_aliases){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6289,6 +6478,9 @@
          * @return  bool     Returns true if class is valid
          */
         public function check_class($name, $extends = false){
+            if(!$this->validate_classes){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6326,6 +6518,9 @@
          * @return  bool     Returns true if interface is valid
          */
         public function check_interface($name){
+            if(!$this->validate_interfaces){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6359,6 +6554,9 @@
          * @return  bool     Returns true if trait is valid
          */
         public function check_trait($name){
+            if(!$this->validate_traits){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6392,6 +6590,9 @@
          * @return  bool     Returns true if keyword is valid
          */
         public function check_keyword($name){
+            if(!$this->validate_keywords){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6421,6 +6622,9 @@
          * @return  bool     Returns true if operator is valid
          */
         public function check_operator($name){
+            if(!$this->validate_operators){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6450,6 +6654,9 @@
          * @return  bool     Returns true if primitive is valid
          */
         public function check_primitive($name){
+            if(!$this->validate_primitives){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);
@@ -6479,6 +6686,9 @@
          * @return  bool     Returns true if type is valid
          */
         public function check_type($name){
+            if(!$this->validate_types){
+                return true;
+            }
             $original_name = $name;
             if($name instanceof SandboxedString){
                 $name = strval($name);

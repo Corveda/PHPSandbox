@@ -13,7 +13,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.4
+     * @version 1.3.6
      */
     class ValidatorVisitor extends \PHPParser_NodeVisitorAbstract {
         /** The PHPSandbox instance to check against
@@ -277,6 +277,12 @@
                  */
                 if(!$this->sandbox->check_class($class->toString())){
                     $this->sandbox->validation_error("Class constant failed custom validation!", Error::VALID_CLASS_ERROR, $node, $class->toString());
+                }
+                return $node;
+            } else if($node instanceof \PHPParser_Node_Param && $node->type instanceof \PHPParser_Node_Name){
+                $class = $node->type->toString();
+                if($this->sandbox->is_defined_class($class)){
+                    $node->type = new \PHPParser_Node_Name($this->sandbox->get_defined_class($class));
                 }
                 return $node;
             } else if($node instanceof \PHPParser_Node_Expr_New){
