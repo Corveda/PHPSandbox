@@ -18,6 +18,13 @@
             $this->sandbox = new PHPSandbox;
         }
 
+        public function testSettingAndUnsettingOptions(){
+            $this->sandbox->set_option('error_level', 1);
+            $this->assertEquals(1, $this->sandbox->get_option('error_level'));
+            $this->sandbox->set_option('error_level', null);
+            $this->assertEquals(null, $this->sandbox->get_option('error_level'));
+        }
+
         /**
          * Test whether sandbox returns expected value
          */

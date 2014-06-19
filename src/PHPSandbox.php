@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.6
+     * @version 1.3.7
      */
     class PHPSandbox implements \IteratorAggregate {
         /**
@@ -772,155 +772,59 @@
             }
             $option = strtolower($option); //normalize option names
             switch($option){
-                case 'validate_functions':
-                    $this->validate_functions = $value ? true : false;
-                    break;
-                case 'validate_variables':
-                    $this->validate_variables = $value ? true : false;
-                    break;
-                case 'validate_globals':
-                    $this->validate_globals = $value ? true : false;
-                    break;
-                case 'validate_superglobals':
-                    $this->validate_superglobals = $value ? true : false;
-                    break;
-                case 'validate_constants':
-                    $this->validate_constants = $value ? true : false;
-                    break;
-                case 'validate_magic_constants':
-                    $this->validate_magic_constants = $value ? true : false;
-                    break;
-                case 'validate_namespaces':
-                    $this->validate_namespaces = $value ? true : false;
-                    break;
-                case 'validate_aliases':
-                    $this->validate_aliases = $value ? true : false;
-                    break;
-                case 'validate_classes':
-                    $this->validate_classes = $value ? true : false;
-                    break;
-                case 'validate_interfaces':
-                    $this->validate_interfaces = $value ? true : false;
-                    break;
-                case 'validate_traits':
-                    $this->validate_traits = $value ? true : false;
-                    break;
-                case 'validate_keywords':
-                    $this->validate_keywords = $value ? true : false;
-                    break;
-                case 'validate_operators':
-                    $this->validate_operators = $value ? true : false;
-                    break;
-                case 'validate_primitives':
-                    $this->validate_primitives = $value ? true : false;
-                    break;
-                case 'validate_types':
-                    $this->validate_types = $value ? true : false;
-                    break;
                 case 'error_level':
                     $this->error_level = is_numeric($value) ? intval($value) : null;
                     break;
+                case 'validate_functions':
+                case 'validate_variables':
+                case 'validate_globals':
+                case 'validate_superglobals':
+                case 'validate_constants':
+                case 'validate_magic_constants':
+                case 'validate_namespaces':
+                case 'validate_aliases':
+                case 'validate_classes':
+                case 'validate_interfaces':
+                case 'validate_traits':
+                case 'validate_keywords':
+                case 'validate_operators':
+                case 'validate_primitives':
+                case 'validate_types':
                 case 'restore_error_level':
-                    $this->restore_error_level = $value ? true : false;
-                    break;
                 case 'convert_errors':
-                    $this->convert_errors = $value ? true : false;
-                    break;
                 case 'capture_output':
-                    $this->capture_output = $value ? true : false;
-                    break;
                 case 'auto_whitelist_trusted_code':
-                    $this->auto_whitelist_trusted_code = $value ? true : false;
-                    break;
                 case 'auto_whitelist_functions':
-                    $this->auto_whitelist_functions = $value ? true : false;
-                    break;
                 case 'auto_whitelist_constants':
-                    $this->auto_whitelist_constants = $value ? true : false;
-                    break;
                 case 'auto_whitelist_globals':
-                    $this->auto_whitelist_globals = $value ? true : false;
-                    break;
                 case 'auto_whitelist_classes':
-                    $this->auto_whitelist_classes = $value ? true : false;
-                    break;
                 case 'auto_whitelist_interfaces':
-                    $this->auto_whitelist_interfaces = $value ? true : false;
-                    break;
                 case 'auto_whitelist_traits':
-                    $this->auto_whitelist_traits = $value ? true : false;
-                    break;
                 case 'auto_define_vars':
-                    $this->auto_define_vars = $value ? true : false;
-                    break;
                 case 'overwrite_defined_funcs':
-                    $this->overwrite_defined_funcs = $value ? true : false;
-                    break;
                 case 'overwrite_sandboxed_string_funcs':
-                    $this->overwrite_sandboxed_string_funcs = $value ? true : false;
-                    break;
                 case 'overwrite_func_get_args':
-                    $this->overwrite_func_get_args = $value ? true : false;
-                    break;
                 case 'overwrite_superglobals':
-                    $this->overwrite_superglobals = $value ? true : false;
-                    break;
                 case 'allow_functions':
-                    $this->allow_functions = $value ? true : false;
-                    break;
                 case 'allow_closures':
-                    $this->allow_closures = $value ? true : false;
-                    break;
                 case 'allow_variables':
-                    $this->allow_variables = $value ? true : false;
-                    break;
                 case 'allow_static_variables':
-                    $this->allow_static_variables = $value ? true : false;
-                    break;
                 case 'allow_objects':
-                    $this->allow_objects = $value ? true : false;
-                    break;
                 case 'allow_constants':
-                    $this->allow_constants = $value ? true : false;
-                    break;
                 case 'allow_globals':
-                    $this->allow_globals = $value ? true : false;
-                    break;
                 case 'allow_namespaces':
-                    $this->allow_namespaces = $value ? true : false;
-                    break;
                 case 'allow_aliases':
-                    $this->allow_aliases = $value ? true : false;
-                    break;
                 case 'allow_classes':
-                    $this->allow_classes = $value ? true : false;
-                    break;
                 case 'allow_interfaces':
-                    $this->allow_interfaces = $value ? true : false;
-                    break;
                 case 'allow_traits':
-                    $this->allow_traits = $value ? true : false;
-                    break;
                 case 'allow_generators':
-                    $this->allow_generators = $value ? true : false;
-                    break;
                 case 'allow_escaping':
-                    $this->allow_escaping = $value ? true : false;
-                    break;
                 case 'allow_casting':
-                    $this->allow_casting = $value ? true : false;
-                    break;
                 case 'allow_error_suppressing':
-                    $this->allow_error_suppressing = $value ? true : false;
-                    break;
                 case 'allow_references':
-                    $this->allow_references = $value ? true : false;
-                    break;
                 case 'allow_backticks':
-                    $this->allow_backticks = $value ? true : false;
-                    break;
                 case 'allow_halting':
-                    $this->allow_halting = $value ? true : false;
+                    $this->{$option} = !!$value;
                     break;
             }
             return $this;
@@ -975,120 +879,56 @@
             $option = strtolower($option);  //normalize option names
             switch($option){
                 case 'validate_functions':
-                    return $this->validate_functions;
-                    break;
                 case 'validate_variables':
-                    return $this->validate_variables;
-                    break;
                 case 'validate_globals':
-                    return $this->validate_globals;
-                    break;
                 case 'validate_superglobals':
-                    return $this->validate_superglobals;
-                    break;
                 case 'validate_constants':
-                    return $this->validate_constants;
-                    break;
                 case 'validate_magic_constants':
-                    return $this->validate_magic_constants;
-                    break;
                 case 'validate_namespaces':
-                    return $this->validate_namespaces;
-                    break;
                 case 'validate_aliases':
-                    return $this->validate_aliases;
-                    break;
                 case 'validate_classes':
-                    return $this->validate_classes;
-                    break;
                 case 'validate_interfaces':
-                    return $this->validate_interfaces;
-                    break;
                 case 'validate_traits':
-                    return $this->validate_traits;
-                    break;
                 case 'validate_keywords':
-                    return $this->validate_keywords;
-                    break;
                 case 'validate_operators':
-                    return $this->validate_operators;
-                    break;
                 case 'validate_primitives':
-                    return $this->validate_primitives;
-                    break;
                 case 'validate_types':
-                    return $this->validate_types;
-                    break;
                 case 'error_level':
-                    return $this->error_level;
                 case 'restore_error_level':
-                    return $this->restore_error_level;
                 case 'convert_errors':
-                    return $this->convert_errors;
                 case 'capture_output':
-                    return $this->capture_output;
                 case 'auto_whitelist_trusted_code':
-                    return $this->auto_whitelist_trusted_code;
                 case 'auto_whitelist_functions':
-                    return $this->auto_whitelist_functions;
                 case 'auto_whitelist_constants':
-                    return $this->auto_whitelist_constants;
                 case 'auto_whitelist_globals':
-                    return $this->auto_whitelist_globals;
                 case 'auto_whitelist_classes':
-                    return $this->auto_whitelist_classes;
                 case 'auto_whitelist_interfaces':
-                    return $this->auto_whitelist_interfaces;
                 case 'auto_whitelist_traits':
-                    return $this->auto_whitelist_traits;
                 case 'auto_define_vars':
-                    return $this->auto_define_vars;
                 case 'overwrite_defined_funcs':
-                    return $this->overwrite_defined_funcs;
                 case 'overwrite_sandboxed_string_funcs':
-                    return $this->overwrite_sandboxed_string_funcs;
                 case 'overwrite_func_get_args':
-                    return $this->overwrite_func_get_args;
                 case 'overwrite_superglobals':
-                    return $this->overwrite_superglobals;
                 case 'allow_functions':
-                    return $this->allow_functions;
                 case 'allow_closures':
-                    return $this->allow_closures;
                 case 'allow_variables':
-                    return $this->allow_variables;
                 case 'allow_static_variables':
-                    return $this->allow_static_variables;
                 case 'allow_objects':
-                    return $this->allow_objects;
                 case 'allow_constants':
-                    return $this->allow_constants;
                 case 'allow_globals':
-                    return $this->allow_globals;
                 case 'allow_namespaces':
-                    return $this->allow_namespaces;
                 case 'allow_aliases':
-                    return $this->allow_aliases;
                 case 'allow_classes':
-                    return $this->allow_classes;
                 case 'allow_interfaces':
-                    return $this->allow_interfaces;
                 case 'allow_traits':
-                    return $this->allow_traits;
                 case 'allow_generators':
-                    return $this->allow_generators;
                 case 'allow_escaping':
-                    return $this->allow_escaping;
                 case 'allow_casting':
-                    return $this->allow_casting;
                 case 'allow_error_suppressing':
-                    return $this->allow_error_suppressing;
                 case 'allow_references':
-                    return $this->allow_references;
                 case 'allow_backticks':
-                    return $this->allow_backticks;
                 case 'allow_halting':
-                    return $this->allow_halting;
+                    return $this->{$option};
             }
             return null;
         }
