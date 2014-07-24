@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.7
+     * @version 1.3.8
      */
     class PHPSandbox implements \IteratorAggregate {
         /**
@@ -6579,7 +6579,7 @@
                         $output[] = '$' . $name . " = null";
                     }
                 } else {
-                    $output[] = '$' . $name . " = unserialize('" . addcslashes(serialize($value), "'") . "')";
+                    $output[] = '$' . $name . " = unserialize('" . addcslashes(serialize($value), "'\\") . "')";
                 }
             }
             return count($output) ? "\r\n" . implode(";\r\n", $output) . ";\r\n" : '';

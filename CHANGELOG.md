@@ -1,5 +1,8 @@
 #CHANGELOG
 
+##07/24/2014
+- Fixed bug with prepare_vars()
+
 ##06/19/2014
 - Added flags to enable/disable validation checks for every type (for example, this will help in situations where someone wants to enable all functions but not blacklist a fake function name to remove the function whitelist.) Disabling a validation check also ignores any custom validation check for that type!
 - Fixed issue with toolkit giving incorrect error and exception messages
