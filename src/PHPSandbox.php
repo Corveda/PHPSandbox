@@ -6731,6 +6731,7 @@
             $this->prepended_code = '';
             $this->generated_code = null;
             $this->appended_code = '';
+            return $this;
         }
         /** Clear all trusted code
          *
