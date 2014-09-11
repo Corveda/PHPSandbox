@@ -22,34 +22,35 @@
          */
         const SANDBOX_PREFIX = '__PHPSandbox_';
         /**
-         * @var    int           A bit flag for the import() method, signifies to import all data from a template
+         * @const    int           A bit flag for the import() method, signifies to import all data from a template
          */
         const IMPORT_ALL = 0;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only options from a template
+         * @const    int           A bit flag for the import() method, signifies to import only options from a template
          */
         const IMPORT_OPTIONS = 1;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only definitions from a template
+         * @const    int           A bit flag for the import() method, signifies to import only definitions from a template
          */
         const IMPORT_DEFINITIONS = 2;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only whitelists from a template
+         * @const    int           A bit flag for the import() method, signifies to import only whitelists from a template
          */
         const IMPORT_WHITELIST = 4;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only blacklists from a template
+         * @const    int           A bit flag for the import() method, signifies to import only blacklists from a template
          */
         const IMPORT_BLACKLIST = 8;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only trusted code from a template
+         * @const    int           A bit flag for the import() method, signifies to import only trusted code from a template
          */
         const IMPORT_TRUSTED_CODE = 16;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only sandboxed code from a template
+         * @const    int           A bit flag for the import() method, signifies to import only sandboxed code from a template
          */
         const IMPORT_CODE = 32;
         /**
+         * @static
          * @var    array         A static array of superglobal names used for redefining superglobal values
          */
         public static $superglobals = array(
@@ -64,6 +65,7 @@
             'GLOBALS'
         );
         /**
+         * @static
          * @var    array        A static array of magic constant names used for redefining magic constant values
          */
         public static $magic_constants = array(
@@ -77,6 +79,7 @@
             '__NAMESPACE__'
         );
         /**
+         * @static
          * @var    array          A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values
          */
         public static $defined_funcs = array(
@@ -88,6 +91,7 @@
             'get_declared_traits'
         );
         /**
+         * @static
          * @var    array          A static array of func_get_args, func_get_arg, and func_num_args used for redefining those functions
          */
         public static $arg_funcs = array(
@@ -96,6 +100,7 @@
             'func_num_args'
         );
         /**
+         * @static
          * @var    array          A static array of var_dump, print_r and var_export, intval, floatval, is_string, is_object,
          *                          is_scalar and is_callable for redefining those functions
          */
@@ -7151,7 +7156,9 @@
         public static function getSandbox($name){
             return isset(static::$sandboxes[$name]) ? static::$sandboxes[$name] : null;
         }
-
+        /** Get an iterator of all the public PHPSandbox properties
+         * @return array
+         */
         public function getIterator(){
             return new \ArrayIterator(get_object_vars($this));
         }
