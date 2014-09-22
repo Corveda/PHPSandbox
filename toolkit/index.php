@@ -134,7 +134,8 @@
             }
             echo '<hr class="hr"/>Preparation time: ' . round($sandbox->get_prepared_time()*1000, 2) .
                 ' ms, execution time: ' . round($sandbox->get_execution_time()*1000, 2) .
-                ' ms, total time: ' . round($sandbox->get_prepared_time()*1000, 2) . ' ms';
+                ' ms, total time: ' . round($sandbox->get_prepared_time()*1000, 2) . ' ms' .
+                '<hr class="hr"/>Generated Code: <code>' . $sandbox->get_generated_code() . '</code>';
             $buffer = ob_get_contents();
             ob_end_clean();
             die('<pre>' . $buffer . '</pre>');

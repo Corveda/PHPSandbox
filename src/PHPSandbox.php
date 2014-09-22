@@ -6883,7 +6883,7 @@
             $this->generated_code = $this->prepare_namespaces() .
                 $this->prepare_aliases() .
                 $this->prepare_consts() .
-                "\r\n" . '$closure = function(){' .
+                "\r\n" . '$closure = function(){' . "\r\n" .
                 $this->prepare_vars() .
                 $this->prepended_code .
                 ($skip_validation ? $code : $this->prepared_code) .
