@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.8
+     * @version 1.3.9
      */
     class PHPSandbox implements \IteratorAggregate {
         /**
@@ -1976,20 +1976,6 @@
                 }
             }
             return $count > 0 ? $count : 0;
-        }
-        /** Wrap output value in SandboxString
-         *
-         * @param   mixed                   $value      Value to wrap
-         *
-         * @return  mixed|SandboxedString   Returns the wrapped value
-         */
-        public function _wrap($value){
-            if(is_object($value) && method_exists($value, '__toString')){
-                return $this->_wrap(strval($value));
-            } else if(is_string($value) && is_callable($value)){
-                return new SandboxedString($value, $this);
-            }
-            return $value;
         }
         /** Get PHPSandbox redefined var_dump
          *

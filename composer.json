@@ -21,6 +21,7 @@
         "phpdocumentor/phpdocumentor": "v2.3.0"
     },
     "autoload": {
+        "files": [ "src/functions.php" ],
         "psr-4": { "PHPSandbox\\": "src/" }
     }
 }
