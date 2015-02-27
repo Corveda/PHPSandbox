@@ -1,5 +1,8 @@
 #CHANGELOG
 
+##02/27/2015
+- Addressed issue #18 where arrays may potentially allow for compromising the sandbox by encapsulating unsandboxed callables
+
 ##07/24/2014
 - Fixed bug with prepare_vars()
 

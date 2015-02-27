@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.9
+     * @version 1.3.10
      */
     class PHPSandbox implements \IteratorAggregate {
         /**
