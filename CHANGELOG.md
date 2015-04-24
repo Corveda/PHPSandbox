@@ -1,5 +1,8 @@
 #CHANGELOG
 
+##04/24/2015
+- Added the optional ability to sandbox included files and added two flags for this functionality: allow_includes to allow the sandbox to utilize included files, which is disabled by default, and sandbox_includes to sandbox all included files with the current sandbox instance if allow_includes is enabled, which is enabled by default. User-created functions may also be defined in place of the default include(), require(), etc. methods utilized by the sandbox using the define_func() API. Finally, the include keyword is no longer blacklisted by default.
+
 ##02/27/2015
 - Addressed issue #18 where arrays may potentially allow for compromising the sandbox by encapsulating unsandboxed callables
 

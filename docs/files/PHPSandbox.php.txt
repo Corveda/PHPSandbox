@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.6
+     * @version 1.3.11
      */
     class PHPSandbox implements \IteratorAggregate {
         /**
@@ -22,34 +22,35 @@
          */
         const SANDBOX_PREFIX = '__PHPSandbox_';
         /**
-         * @var    int           A bit flag for the import() method, signifies to import all data from a template
+         * @const    int           A bit flag for the import() method, signifies to import all data from a template
          */
         const IMPORT_ALL = 0;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only options from a template
+         * @const    int           A bit flag for the import() method, signifies to import only options from a template
          */
         const IMPORT_OPTIONS = 1;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only definitions from a template
+         * @const    int           A bit flag for the import() method, signifies to import only definitions from a template
          */
         const IMPORT_DEFINITIONS = 2;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only whitelists from a template
+         * @const    int           A bit flag for the import() method, signifies to import only whitelists from a template
          */
         const IMPORT_WHITELIST = 4;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only blacklists from a template
+         * @const    int           A bit flag for the import() method, signifies to import only blacklists from a template
          */
         const IMPORT_BLACKLIST = 8;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only trusted code from a template
+         * @const    int           A bit flag for the import() method, signifies to import only trusted code from a template
          */
         const IMPORT_TRUSTED_CODE = 16;
         /**
-         * @var    int           A bit flag for the import() method, signifies to import only sandboxed code from a template
+         * @const    int           A bit flag for the import() method, signifies to import only sandboxed code from a template
          */
         const IMPORT_CODE = 32;
         /**
+         * @static
          * @var    array         A static array of superglobal names used for redefining superglobal values
          */
         public static $superglobals = array(
@@ -64,6 +65,7 @@
             'GLOBALS'
         );
         /**
+         * @static
          * @var    array        A static array of magic constant names used for redefining magic constant values
          */
         public static $magic_constants = array(
@@ -77,6 +79,7 @@
             '__NAMESPACE__'
         );
         /**
+         * @static
          * @var    array          A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values
          */
         public static $defined_funcs = array(
@@ -85,9 +88,11 @@
             'get_defined_constants',
             'get_declared_classes',
             'get_declared_interfaces',
-            'get_declared_traits'
+            'get_declared_traits',
+            'get_included_files'
         );
         /**
+         * @static
          * @var    array          A static array of func_get_args, func_get_arg, and func_num_args used for redefining those functions
          */
         public static $arg_funcs = array(
@@ -96,6 +101,7 @@
             'func_num_args'
         );
         /**
+         * @static
          * @var    array          A static array of var_dump, print_r and var_export, intval, floatval, is_string, is_object,
          *                          is_scalar and is_callable for redefining those functions
          */
@@ -167,7 +173,6 @@
             'traits' => array(),
             'keywords' => array(
                 'declare' => true,
-                'include' => true,
                 'eval' => true,
                 'exit' => true,
                 'halt' => true
@@ -196,6 +201,10 @@
             'primitive' => null,
             'type' => null
         );
+        /**
+         * @var     array       Array of sandboxed included files
+         */
+        protected $includes = array();
         /**
          * @var     PHPSandbox[]       Array of PHPSandboxes
          */
@@ -281,6 +290,16 @@
          * @default true
          */
         public $error_level                 = null;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should allow included files
+         * @default false
+         */
+        public $allow_includes            = false;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should automatically sandbox included files
+         * @default true
+         */
+        public $sandbox_includes            = true;
         /**
          * @var    bool       Flag to indicate whether the sandbox should return error_reporting to its previous level after execution
          * @default true
@@ -772,155 +791,60 @@
             }
             $option = strtolower($option); //normalize option names
             switch($option){
-                case 'validate_functions':
-                    $this->validate_functions = $value ? true : false;
-                    break;
-                case 'validate_variables':
-                    $this->validate_variables = $value ? true : false;
-                    break;
-                case 'validate_globals':
-                    $this->validate_globals = $value ? true : false;
-                    break;
-                case 'validate_superglobals':
-                    $this->validate_superglobals = $value ? true : false;
-                    break;
-                case 'validate_constants':
-                    $this->validate_constants = $value ? true : false;
-                    break;
-                case 'validate_magic_constants':
-                    $this->validate_magic_constants = $value ? true : false;
-                    break;
-                case 'validate_namespaces':
-                    $this->validate_namespaces = $value ? true : false;
-                    break;
-                case 'validate_aliases':
-                    $this->validate_aliases = $value ? true : false;
-                    break;
-                case 'validate_classes':
-                    $this->validate_classes = $value ? true : false;
-                    break;
-                case 'validate_interfaces':
-                    $this->validate_interfaces = $value ? true : false;
-                    break;
-                case 'validate_traits':
-                    $this->validate_traits = $value ? true : false;
-                    break;
-                case 'validate_keywords':
-                    $this->validate_keywords = $value ? true : false;
-                    break;
-                case 'validate_operators':
-                    $this->validate_operators = $value ? true : false;
-                    break;
-                case 'validate_primitives':
-                    $this->validate_primitives = $value ? true : false;
-                    break;
-                case 'validate_types':
-                    $this->validate_types = $value ? true : false;
-                    break;
                 case 'error_level':
                     $this->error_level = is_numeric($value) ? intval($value) : null;
                     break;
+                case 'validate_functions':
+                case 'validate_variables':
+                case 'validate_globals':
+                case 'validate_superglobals':
+                case 'validate_constants':
+                case 'validate_magic_constants':
+                case 'validate_namespaces':
+                case 'validate_aliases':
+                case 'validate_classes':
+                case 'validate_interfaces':
+                case 'validate_traits':
+                case 'validate_keywords':
+                case 'validate_operators':
+                case 'validate_primitives':
+                case 'validate_types':
+                case 'sandbox_includes':
                 case 'restore_error_level':
-                    $this->restore_error_level = $value ? true : false;
-                    break;
                 case 'convert_errors':
-                    $this->convert_errors = $value ? true : false;
-                    break;
                 case 'capture_output':
-                    $this->capture_output = $value ? true : false;
-                    break;
                 case 'auto_whitelist_trusted_code':
-                    $this->auto_whitelist_trusted_code = $value ? true : false;
-                    break;
                 case 'auto_whitelist_functions':
-                    $this->auto_whitelist_functions = $value ? true : false;
-                    break;
                 case 'auto_whitelist_constants':
-                    $this->auto_whitelist_constants = $value ? true : false;
-                    break;
                 case 'auto_whitelist_globals':
-                    $this->auto_whitelist_globals = $value ? true : false;
-                    break;
                 case 'auto_whitelist_classes':
-                    $this->auto_whitelist_classes = $value ? true : false;
-                    break;
                 case 'auto_whitelist_interfaces':
-                    $this->auto_whitelist_interfaces = $value ? true : false;
-                    break;
                 case 'auto_whitelist_traits':
-                    $this->auto_whitelist_traits = $value ? true : false;
-                    break;
                 case 'auto_define_vars':
-                    $this->auto_define_vars = $value ? true : false;
-                    break;
                 case 'overwrite_defined_funcs':
-                    $this->overwrite_defined_funcs = $value ? true : false;
-                    break;
                 case 'overwrite_sandboxed_string_funcs':
-                    $this->overwrite_sandboxed_string_funcs = $value ? true : false;
-                    break;
                 case 'overwrite_func_get_args':
-                    $this->overwrite_func_get_args = $value ? true : false;
-                    break;
                 case 'overwrite_superglobals':
-                    $this->overwrite_superglobals = $value ? true : false;
-                    break;
                 case 'allow_functions':
-                    $this->allow_functions = $value ? true : false;
-                    break;
                 case 'allow_closures':
-                    $this->allow_closures = $value ? true : false;
-                    break;
                 case 'allow_variables':
-                    $this->allow_variables = $value ? true : false;
-                    break;
                 case 'allow_static_variables':
-                    $this->allow_static_variables = $value ? true : false;
-                    break;
                 case 'allow_objects':
-                    $this->allow_objects = $value ? true : false;
-                    break;
                 case 'allow_constants':
-                    $this->allow_constants = $value ? true : false;
-                    break;
                 case 'allow_globals':
-                    $this->allow_globals = $value ? true : false;
-                    break;
                 case 'allow_namespaces':
-                    $this->allow_namespaces = $value ? true : false;
-                    break;
                 case 'allow_aliases':
-                    $this->allow_aliases = $value ? true : false;
-                    break;
                 case 'allow_classes':
-                    $this->allow_classes = $value ? true : false;
-                    break;
                 case 'allow_interfaces':
-                    $this->allow_interfaces = $value ? true : false;
-                    break;
                 case 'allow_traits':
-                    $this->allow_traits = $value ? true : false;
-                    break;
                 case 'allow_generators':
-                    $this->allow_generators = $value ? true : false;
-                    break;
                 case 'allow_escaping':
-                    $this->allow_escaping = $value ? true : false;
-                    break;
                 case 'allow_casting':
-                    $this->allow_casting = $value ? true : false;
-                    break;
                 case 'allow_error_suppressing':
-                    $this->allow_error_suppressing = $value ? true : false;
-                    break;
                 case 'allow_references':
-                    $this->allow_references = $value ? true : false;
-                    break;
                 case 'allow_backticks':
-                    $this->allow_backticks = $value ? true : false;
-                    break;
                 case 'allow_halting':
-                    $this->allow_halting = $value ? true : false;
+                    $this->{$option} = !!$value;
                     break;
             }
             return $this;
@@ -975,120 +899,57 @@
             $option = strtolower($option);  //normalize option names
             switch($option){
                 case 'validate_functions':
-                    return $this->validate_functions;
-                    break;
                 case 'validate_variables':
-                    return $this->validate_variables;
-                    break;
                 case 'validate_globals':
-                    return $this->validate_globals;
-                    break;
                 case 'validate_superglobals':
-                    return $this->validate_superglobals;
-                    break;
                 case 'validate_constants':
-                    return $this->validate_constants;
-                    break;
                 case 'validate_magic_constants':
-                    return $this->validate_magic_constants;
-                    break;
                 case 'validate_namespaces':
-                    return $this->validate_namespaces;
-                    break;
                 case 'validate_aliases':
-                    return $this->validate_aliases;
-                    break;
                 case 'validate_classes':
-                    return $this->validate_classes;
-                    break;
                 case 'validate_interfaces':
-                    return $this->validate_interfaces;
-                    break;
                 case 'validate_traits':
-                    return $this->validate_traits;
-                    break;
                 case 'validate_keywords':
-                    return $this->validate_keywords;
-                    break;
                 case 'validate_operators':
-                    return $this->validate_operators;
-                    break;
                 case 'validate_primitives':
-                    return $this->validate_primitives;
-                    break;
                 case 'validate_types':
-                    return $this->validate_types;
-                    break;
                 case 'error_level':
-                    return $this->error_level;
+                case 'sandbox_includes':
                 case 'restore_error_level':
-                    return $this->restore_error_level;
                 case 'convert_errors':
-                    return $this->convert_errors;
                 case 'capture_output':
-                    return $this->capture_output;
                 case 'auto_whitelist_trusted_code':
-                    return $this->auto_whitelist_trusted_code;
                 case 'auto_whitelist_functions':
-                    return $this->auto_whitelist_functions;
                 case 'auto_whitelist_constants':
-                    return $this->auto_whitelist_constants;
                 case 'auto_whitelist_globals':
-                    return $this->auto_whitelist_globals;
                 case 'auto_whitelist_classes':
-                    return $this->auto_whitelist_classes;
                 case 'auto_whitelist_interfaces':
-                    return $this->auto_whitelist_interfaces;
                 case 'auto_whitelist_traits':
-                    return $this->auto_whitelist_traits;
                 case 'auto_define_vars':
-                    return $this->auto_define_vars;
                 case 'overwrite_defined_funcs':
-                    return $this->overwrite_defined_funcs;
                 case 'overwrite_sandboxed_string_funcs':
-                    return $this->overwrite_sandboxed_string_funcs;
                 case 'overwrite_func_get_args':
-                    return $this->overwrite_func_get_args;
                 case 'overwrite_superglobals':
-                    return $this->overwrite_superglobals;
                 case 'allow_functions':
-                    return $this->allow_functions;
                 case 'allow_closures':
-                    return $this->allow_closures;
                 case 'allow_variables':
-                    return $this->allow_variables;
                 case 'allow_static_variables':
-                    return $this->allow_static_variables;
                 case 'allow_objects':
-                    return $this->allow_objects;
                 case 'allow_constants':
-                    return $this->allow_constants;
                 case 'allow_globals':
-                    return $this->allow_globals;
                 case 'allow_namespaces':
-                    return $this->allow_namespaces;
                 case 'allow_aliases':
-                    return $this->allow_aliases;
                 case 'allow_classes':
-                    return $this->allow_classes;
                 case 'allow_interfaces':
-                    return $this->allow_interfaces;
                 case 'allow_traits':
-                    return $this->allow_traits;
                 case 'allow_generators':
-                    return $this->allow_generators;
                 case 'allow_escaping':
-                    return $this->allow_escaping;
                 case 'allow_casting':
-                    return $this->allow_casting;
                 case 'allow_error_suppressing':
-                    return $this->allow_error_suppressing;
                 case 'allow_references':
-                    return $this->allow_references;
                 case 'allow_backticks':
-                    return $this->allow_backticks;
                 case 'allow_halting':
-                    return $this->allow_halting;
+                    return $this->{$option};
             }
             return null;
         }
@@ -2132,20 +1993,6 @@
             }
             return $count > 0 ? $count : 0;
         }
-        /** Wrap output value in SandboxString
-         *
-         * @param   mixed                   $value      Value to wrap
-         *
-         * @return  mixed|SandboxedString   Returns the wrapped value
-         */
-        public function _wrap($value){
-            if(is_object($value) && method_exists($value, '__toString')){
-                return $this->_wrap(strval($value));
-            } else if(is_string($value) && is_callable($value)){
-                return new SandboxedString($value, $this);
-            }
-            return $value;
-        }
         /** Get PHPSandbox redefined var_dump
          *
          * @return  array           Returns the redefined var_dump
@@ -2283,6 +2130,97 @@
                 $value = strval($value);
             }
             return is_callable($value);
+        }
+        /** Return get_included_files() and sandboxed included files
+         *
+         * @return  array           Returns array of get_included_files() and sandboxed included files
+         */
+        public function _get_included_files(){
+            return array_merge(get_included_files(), $this->includes);
+        }
+        /** Sandbox included file
+         *
+         * @param   string          $file      Included file to sandbox
+         *
+         * @return  mixed           Returns value passed from included file
+         */
+        public function _include($file){
+            if($file instanceof SandboxedString){
+                $file = strval($file);
+            }
+            $code = @file_get_contents($file, true);
+            if($code === false){
+                trigger_error("include('" . $file . "') [function.include]: failed to open stream. No such file or directory", E_USER_WARNING);
+                return false;
+            }
+            if(!in_array($file, $this->_get_included_files())){
+                $this->includes[] = $file;
+            }
+            return $this->execute($code);
+        }
+        /** Sandbox included once file
+         *
+         * @param   string          $file      Included once file to sandbox
+         *
+         * @return  mixed           Returns value passed from included once file
+         */
+        public function _include_once($file){
+            if($file instanceof SandboxedString){
+                $file = strval($file);
+            }
+            if(!in_array($file, $this->_get_included_files())){
+                $code = @file_get_contents($file, true);
+                if($code === false){
+                    trigger_error("include_once('" . $file . "') [function.include-once]: failed to open stream. No such file or directory", E_USER_WARNING);
+                    return false;
+                }
+                $this->includes[] = $file;
+                return $this->execute($code);
+            }
+            return null;
+        }
+        /** Sandbox required file
+         *
+         * @param   string          $file      Required file to sandbox
+         *
+         * @return  mixed           Returns value passed from required file
+         */
+        public function _require($file){
+            if($file instanceof SandboxedString){
+                $file = strval($file);
+            }
+            $code = @file_get_contents($file, true);
+            if($code === false){
+                trigger_error("require('" . $file . "') [function.require]: failed to open stream. No such file or directory", E_USER_WARNING);
+                trigger_error("Failed opening required '" . $file . "' (include_path='" . get_include_path() . "')", E_USER_ERROR);
+                return false;
+            }
+            if(!in_array($file, $this->_get_included_files())){
+                $this->includes[] = $file;
+            }
+            return $this->execute($code);
+        }
+        /** Sandbox required once file
+         *
+         * @param   string          $file      Required once file to sandbox
+         *
+         * @return  mixed           Returns value passed from required once file
+         */
+        public function _require_once($file){
+            if($file instanceof SandboxedString){
+                $file = strval($file);
+            }
+            if(!in_array($file,  $this->_get_included_files())){
+                $code = @file_get_contents($file, true);
+                if($code === false){
+                    trigger_error("require_once('" . $file . "') [function.require-once]: failed to open stream. No such file or directory", E_USER_WARNING);
+                    trigger_error("Failed opening required '" . $file . "' (include_path='" . get_include_path() . "')", E_USER_ERROR);
+                    return false;
+                }
+                $this->includes[] = $file;
+                return $this->execute($code);
+            }
+            return null;
         }
         /** Get PHPSandbox redefined function. This is an internal PHPSandbox function but requires public access to work.
          *
@@ -6739,7 +6677,7 @@
                         $output[] = '$' . $name . " = null";
                     }
                 } else {
-                    $output[] = '$' . $name . " = unserialize('" . addcslashes(serialize($value), "'") . "')";
+                    $output[] = '$' . $name . " = unserialize('" . addcslashes(serialize($value), "'\\") . "')";
                 }
             }
             return count($output) ? "\r\n" . implode(";\r\n", $output) . ";\r\n" : '';
@@ -6891,6 +6829,7 @@
             $this->prepended_code = '';
             $this->generated_code = null;
             $this->appended_code = '';
+            return $this;
         }
         /** Clear all trusted code
          *
@@ -6970,8 +6909,13 @@
         public function get_time($round = null){
             return $round ? round($this->prepare_time + $this->execution_time, $round) : ($this->prepare_time + $this->execution_time);
         }
-        /**
-         * Validates passed callable for execution
+        /** Validate passed callable for execution
+         *
+         * @example $sandbox->validate('<?php echo "Hello World!"; ?>');
+         *
+         * @param   callable|string $code      The callable or string of code to validate
+         *
+         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
          */
         public function validate($code){
             $this->preparsed_code = $this->disassemble($code);
@@ -7007,6 +6951,8 @@
             $this->prepared_ast = $traverser->traverse($this->parsed_ast);
 
             $this->prepared_code = $prettyPrinter->prettyPrint($this->prepared_ast);
+
+            return $this;
         }
         /** Prepare passed callable for execution
          *
@@ -7037,7 +6983,7 @@
             $this->generated_code = $this->prepare_namespaces() .
                 $this->prepare_aliases() .
                 $this->prepare_consts() .
-                "\r\n" . '$closure = function(){' .
+                "\r\n" . '$closure = function(){' . "\r\n" .
                 $this->prepare_vars() .
                 $this->prepended_code .
                 ($skip_validation ? $code : $this->prepared_code) .
@@ -7310,7 +7256,9 @@
         public static function getSandbox($name){
             return isset(static::$sandboxes[$name]) ? static::$sandboxes[$name] : null;
         }
-
+        /** Get an iterator of all the public PHPSandbox properties
+         * @return array
+         */
         public function getIterator(){
             return new \ArrayIterator(get_object_vars($this));
         }

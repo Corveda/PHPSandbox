@@ -13,7 +13,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.10
+     * @version 1.3.11
      */
     class ValidatorVisitor extends \PHPParser_NodeVisitorAbstract {
         /** The PHPSandbox instance to check against
@@ -385,6 +385,34 @@
             } else if($name = $this->is_keyword($node)){
                 if(!$this->sandbox->check_keyword($name)){
                     $this->sandbox->validation_error("Keyword failed custom validation!", Error::VALID_KEYWORD_ERROR, $node, $name);
+                }
+                if($node instanceof \PHPParser_Node_Expr_Include && !$this->sandbox->allow_includes){
+                    $this->sandbox->validation_error("Sandboxed code attempted to include files!", Error::INCLUDE_ERROR, $node, $name);
+                } else if($node instanceof \PHPParser_Node_Expr_Include &&
+                    (
+                        ($node->type == \PHPParser_Node_Expr_Include::TYPE_INCLUDE && $this->sandbox->is_defined_func('include'))
+                        || ($node->type == \PHPParser_Node_Expr_Include::TYPE_INCLUDE_ONCE && $this->sandbox->is_defined_func('include_once'))
+                        || ($node->type == \PHPParser_Node_Expr_Include::TYPE_REQUIRE && $this->sandbox->is_defined_func('require'))
+                        || ($node->type == \PHPParser_Node_Expr_Include::TYPE_REQUIRE_ONCE && $this->sandbox->is_defined_func('require_once'))
+                    )){
+                    return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), 'call_func', array(new \PHPParser_Node_Arg(new \PHPParser_Node_Scalar_String($name)), new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
+                } else if($node instanceof \PHPParser_Node_Expr_Include && $this->sandbox->sandbox_includes){
+                    switch($node->type){
+                        case \PHPParser_Node_Expr_Include::TYPE_INCLUDE_ONCE:
+                            return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_include_once', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
+                            break;
+                        case \PHPParser_Node_Expr_Include::TYPE_REQUIRE:
+                            return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_require', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
+                            break;
+                        case \PHPParser_Node_Expr_Include::TYPE_REQUIRE_ONCE:
+                            return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_require_once', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
+                            break;
+
+                        case \PHPParser_Node_Expr_Include::TYPE_INCLUDE:
+                        default:
+                            return new \PHPParser_Node_Expr_MethodCall(new \PHPParser_Node_Expr_StaticCall(new \PHPParser_Node_Name_FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new \PHPParser_Node_Scalar_String($this->sandbox->name))), '_include', array(new \PHPParser_Node_Arg($node->expr)), $node->getAttributes());
+                            break;
+                    }
                 }
             } else if($name = $this->is_operator($node)){
                 if(!$this->sandbox->check_operator($name)){

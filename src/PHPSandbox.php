@@ -14,7 +14,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.10
+     * @version 1.3.11
      */
     class PHPSandbox implements \IteratorAggregate {
         /**
@@ -88,7 +88,8 @@
             'get_defined_constants',
             'get_declared_classes',
             'get_declared_interfaces',
-            'get_declared_traits'
+            'get_declared_traits',
+            'get_included_files'
         );
         /**
          * @static
@@ -172,7 +173,6 @@
             'traits' => array(),
             'keywords' => array(
                 'declare' => true,
-                'include' => true,
                 'eval' => true,
                 'exit' => true,
                 'halt' => true
@@ -201,6 +201,10 @@
             'primitive' => null,
             'type' => null
         );
+        /**
+         * @var     array       Array of sandboxed included files
+         */
+        protected $includes = array();
         /**
          * @var     PHPSandbox[]       Array of PHPSandboxes
          */
@@ -286,6 +290,16 @@
          * @default true
          */
         public $error_level                 = null;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should allow included files
+         * @default false
+         */
+        public $allow_includes            = false;
+        /**
+         * @var    bool       Flag to indicate whether the sandbox should automatically sandbox included files
+         * @default true
+         */
+        public $sandbox_includes            = true;
         /**
          * @var    bool       Flag to indicate whether the sandbox should return error_reporting to its previous level after execution
          * @default true
@@ -795,6 +809,7 @@
                 case 'validate_operators':
                 case 'validate_primitives':
                 case 'validate_types':
+                case 'sandbox_includes':
                 case 'restore_error_level':
                 case 'convert_errors':
                 case 'capture_output':
@@ -899,6 +914,7 @@
                 case 'validate_primitives':
                 case 'validate_types':
                 case 'error_level':
+                case 'sandbox_includes':
                 case 'restore_error_level':
                 case 'convert_errors':
                 case 'capture_output':
@@ -2114,6 +2130,97 @@
                 $value = strval($value);
             }
             return is_callable($value);
+        }
+        /** Return get_included_files() and sandboxed included files
+         *
+         * @return  array           Returns array of get_included_files() and sandboxed included files
+         */
+        public function _get_included_files(){
+            return array_merge(get_included_files(), $this->includes);
+        }
+        /** Sandbox included file
+         *
+         * @param   string          $file      Included file to sandbox
+         *
+         * @return  mixed           Returns value passed from included file
+         */
+        public function _include($file){
+            if($file instanceof SandboxedString){
+                $file = strval($file);
+            }
+            $code = @file_get_contents($file, true);
+            if($code === false){
+                trigger_error("include('" . $file . "') [function.include]: failed to open stream. No such file or directory", E_USER_WARNING);
+                return false;
+            }
+            if(!in_array($file, $this->_get_included_files())){
+                $this->includes[] = $file;
+            }
+            return $this->execute($code);
+        }
+        /** Sandbox included once file
+         *
+         * @param   string          $file      Included once file to sandbox
+         *
+         * @return  mixed           Returns value passed from included once file
+         */
+        public function _include_once($file){
+            if($file instanceof SandboxedString){
+                $file = strval($file);
+            }
+            if(!in_array($file, $this->_get_included_files())){
+                $code = @file_get_contents($file, true);
+                if($code === false){
+                    trigger_error("include_once('" . $file . "') [function.include-once]: failed to open stream. No such file or directory", E_USER_WARNING);
+                    return false;
+                }
+                $this->includes[] = $file;
+                return $this->execute($code);
+            }
+            return null;
+        }
+        /** Sandbox required file
+         *
+         * @param   string          $file      Required file to sandbox
+         *
+         * @return  mixed           Returns value passed from required file
+         */
+        public function _require($file){
+            if($file instanceof SandboxedString){
+                $file = strval($file);
+            }
+            $code = @file_get_contents($file, true);
+            if($code === false){
+                trigger_error("require('" . $file . "') [function.require]: failed to open stream. No such file or directory", E_USER_WARNING);
+                trigger_error("Failed opening required '" . $file . "' (include_path='" . get_include_path() . "')", E_USER_ERROR);
+                return false;
+            }
+            if(!in_array($file, $this->_get_included_files())){
+                $this->includes[] = $file;
+            }
+            return $this->execute($code);
+        }
+        /** Sandbox required once file
+         *
+         * @param   string          $file      Required once file to sandbox
+         *
+         * @return  mixed           Returns value passed from required once file
+         */
+        public function _require_once($file){
+            if($file instanceof SandboxedString){
+                $file = strval($file);
+            }
+            if(!in_array($file,  $this->_get_included_files())){
+                $code = @file_get_contents($file, true);
+                if($code === false){
+                    trigger_error("require_once('" . $file . "') [function.require-once]: failed to open stream. No such file or directory", E_USER_WARNING);
+                    trigger_error("Failed opening required '" . $file . "' (include_path='" . get_include_path() . "')", E_USER_ERROR);
+                    return false;
+                }
+                $this->includes[] = $file;
+                return $this->execute($code);
+            }
+            return null;
         }
         /** Get PHPSandbox redefined function. This is an internal PHPSandbox function but requires public access to work.
          *
@@ -6802,8 +6909,13 @@
         public function get_time($round = null){
             return $round ? round($this->prepare_time + $this->execution_time, $round) : ($this->prepare_time + $this->execution_time);
         }
-        /**
-         * Validates passed callable for execution
+        /** Validate passed callable for execution
+         *
+         * @example $sandbox->validate('<?php echo "Hello World!"; ?>');
+         *
+         * @param   callable|string $code      The callable or string of code to validate
+         *
+         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
          */
         public function validate($code){
             $this->preparsed_code = $this->disassemble($code);
@@ -6839,6 +6951,8 @@
             $this->prepared_ast = $traverser->traverse($this->parsed_ast);
 
             $this->prepared_code = $prettyPrinter->prettyPrint($this->prepared_ast);
+
+            return $this;
         }
         /** Prepare passed callable for execution
          *

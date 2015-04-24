@@ -11,7 +11,7 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.10
+     * @version 1.3.11
      */
     class Error extends \Exception {
         /* START ERROR CODES */
@@ -29,6 +29,7 @@
         const ERROR_SUPPRESS_ERROR      =       11;
         const BACKTICKS_ERROR           =       12;
         const IMPORT_ERROR              =       13;
+        const INCLUDE_ERROR             =       14;
 
         const DYNAMIC_STATIC_VAR_ERROR  =       20;
         const DYNAMIC_CONST_ERROR       =       21;
