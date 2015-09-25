@@ -4,9 +4,9 @@
 
 It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) to disassemble callables passed to the sandbox, so that PHP callables can also be run in sandboxes without first converting them into strings.
 
-**Manual:** [http://manual.phpsandbox.org](http://manual.phpsandbox.org)
+**Manual:** [http://manual.phpsandbox.org](http://manual.phpsandbox.org/index.html)
 
-**Online API Documentation:** [http://docs.phpsandbox.org](http://docs.phpsandbox.org)
+**Online API Documentation:** [http://docs.phpsandbox.org](http://docs.phpsandbox.org/index.html)
 
 [![Build Status](https://travis-ci.org/fieryprophet/php-sandbox.png?branch=master)](https://travis-ci.org/fieryprophet/php-sandbox) [![Latest Stable Version](https://poser.pugx.org/fieryprophet/php-sandbox/v/stable.png)](https://packagist.org/packages/fieryprophet/php-sandbox) [![Total Downloads](https://poser.pugx.org/fieryprophet/php-sandbox/downloads.png)](https://packagist.org/packages/fieryprophet/php-sandbox) [![Latest Unstable Version](https://poser.pugx.org/fieryprophet/php-sandbox/v/unstable.png)](https://packagist.org/packages/fieryprophet/php-sandbox) [![License](https://poser.pugx.org/fieryprophet/php-sandbox/license.png)](https://packagist.org/packages/fieryprophet/php-sandbox)
 [![Dependency Status](https://www.versioneye.com/php/fieryprophet:php-sandbox/1.3.10/badge.svg)](https://www.versioneye.com/php/fieryprophet:php-sandbox/1.3.10)
