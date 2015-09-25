@@ -1,12 +1,12 @@
-![PHPSandbox](http://www.fieryprophet.com/frontend/files/userfiles/images/phpsandbox-logo.png)
+![PHPSandbox](http://www.phpsandbox.org/wp-content/uploads/2015/07/logo.png)
 
 ##A full-scale PHP 5.3.2+ sandbox class that utilizes [PHP-Parser](https://github.com/nikic/PHP-Parser) to prevent sandboxed code from running unsafe code.
 
 It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) to disassemble callables passed to the sandbox, so that PHP callables can also be run in sandboxes without first converting them into strings.
 
-**Manual:** [http://fieryprophet.com/phpsandbox-docs/MANUAL.html](http://fieryprophet.com/phpsandbox-docs/MANUAL.html)
+**Manual:** [http://manual.phpsandbox.org](http://manual.phpsandbox.org)
 
-**Online API Documentation:** [http://fieryprophet.com/phpsandbox-docs/](http://fieryprophet.com/phpsandbox-docs/)
+**Online API Documentation:** [http://docs.phpsandbox.org](http://docs.phpsandbox.org)
 
 [![Build Status](https://travis-ci.org/fieryprophet/php-sandbox.png?branch=master)](https://travis-ci.org/fieryprophet/php-sandbox) [![Latest Stable Version](https://poser.pugx.org/fieryprophet/php-sandbox/v/stable.png)](https://packagist.org/packages/fieryprophet/php-sandbox) [![Total Downloads](https://poser.pugx.org/fieryprophet/php-sandbox/downloads.png)](https://packagist.org/packages/fieryprophet/php-sandbox) [![Latest Unstable Version](https://poser.pugx.org/fieryprophet/php-sandbox/v/unstable.png)](https://packagist.org/packages/fieryprophet/php-sandbox) [![License](https://poser.pugx.org/fieryprophet/php-sandbox/license.png)](https://packagist.org/packages/fieryprophet/php-sandbox)
 [![Dependency Status](https://www.versioneye.com/php/fieryprophet:php-sandbox/1.3.10/badge.svg)](https://www.versioneye.com/php/fieryprophet:php-sandbox/1.3.10)
@@ -102,7 +102,7 @@ Then run *composer install --dry-run* to check for any potential problems, and *
 
 ##LICENSE
 
-    Copyright (c) 2013-2014 by Elijah Horton (fieryprophet [at] yahoo.com)
+    Copyright (c) 2013-2015 by Elijah Horton (fieryprophet [at] yahoo.com)
 
     Some rights reserved.
 

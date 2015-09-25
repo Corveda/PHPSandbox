@@ -3,7 +3,7 @@
     "description": "A PHP library that can be used to run PHP code in a sandboxed environment",
     "keywords": ["php", "sandbox", "parser", "whitelist", "blacklist"],
     "type": "library",
-    "homepage": "http://www.fieryprophet.com/phpsandbox",
+    "homepage": "http://www.phpsandbox.org",
     "license": "BSD-3-Clause",
     "authors": [
         {
