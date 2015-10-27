@@ -40,8 +40,10 @@
      */
     function &wrapByRef(&$value, $sandbox){
         if(!($value instanceof SandboxedString) && is_object($value) && method_exists($value, '__toString')){
-            $strval = $value->__toString();
-            return is_callable($strval) ? ($_ = new SandboxedString($strval, $sandbox)) : $value;
+            $strVal = $value->__toString();
+	        if (is_callable($strVal)) {
+		        $value = new SandboxedString($strVal, $sandbox);
+	        }
         } else if(is_array($value) && count($value)){
             //save current array pointer
             $current_key = key($value);
@@ -54,9 +56,8 @@
             while(key($value) !== $current_key){
                 next($value);
             }
-            return $value;
         } else if(is_string($value) && is_callable($value)){
-            return ($_ = new SandboxedString($value, $sandbox));
+            $value = new SandboxedString($value, $sandbox);
         }
         return $value;
     }
