@@ -1,6 +1,6 @@
 ![PHPSandbox](http://www.phpsandbox.org/wp-content/uploads/2015/07/logo.png)
 
-##A full-scale PHP 5.3.2+ sandbox class that utilizes [PHP-Parser](https://github.com/nikic/PHP-Parser) to prevent sandboxed code from running unsafe code.
+##A full-scale PHP 5.4+ sandbox class that utilizes [PHP-Parser](https://github.com/nikic/PHP-Parser) to prevent sandboxed code from running unsafe code.
 
 It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) to disassemble callables passed to the sandbox, so that PHP callables can also be run in sandboxes without first converting them into strings.
 
@@ -8,8 +8,8 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 
 **Online API Documentation:** [http://docs.phpsandbox.org](http://docs.phpsandbox.org/index.html)
 
-[![Build Status](https://travis-ci.org/fieryprophet/php-sandbox.png?branch=master)](https://travis-ci.org/fieryprophet/php-sandbox) [![Latest Stable Version](https://poser.pugx.org/fieryprophet/php-sandbox/v/stable.png)](https://packagist.org/packages/fieryprophet/php-sandbox) [![Total Downloads](https://poser.pugx.org/fieryprophet/php-sandbox/downloads.png)](https://packagist.org/packages/fieryprophet/php-sandbox) [![Latest Unstable Version](https://poser.pugx.org/fieryprophet/php-sandbox/v/unstable.png)](https://packagist.org/packages/fieryprophet/php-sandbox) [![License](https://poser.pugx.org/fieryprophet/php-sandbox/license.png)](https://packagist.org/packages/fieryprophet/php-sandbox)
-[![Dependency Status](https://www.versioneye.com/php/fieryprophet:php-sandbox/1.3.10/badge.svg)](https://www.versioneye.com/php/fieryprophet:php-sandbox/1.3.10)
+[![Build Status](https://travis-ci.org/Corveda/PHPSandbox.png?branch=master)](https://travis-ci.org/Corveda/PHPSandbox) [![Latest Stable Version](https://poser.pugx.org/Corveda/PHPSandbox/v/stable.png)](https://packagist.org/packages/Corveda/PHPSandbox) [![Total Downloads](https://poser.pugx.org/Corveda/PHPSandbox/downloads.png)](https://packagist.org/packages/Corveda/PHPSandbox) [![Latest Unstable Version](https://poser.pugx.org/Corveda/PHPSandbox/v/unstable.png)](https://packagist.org/packages/Corveda/PHPSandbox) [![License](https://poser.pugx.org/Corveda/PHPSandbox/license.png)](https://packagist.org/packages/Corveda/PHPSandbox)
+[![Dependency Status](https://www.versioneye.com/php/Corveda:PHPSandbox/2.0/badge.svg)](https://www.versioneye.com/php/Corveda:PHPSandbox/2.0)
 
 ##Features:
 
