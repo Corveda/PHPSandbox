@@ -16,6 +16,14 @@
             $this->sandbox = new PHPSandbox;
         }
 
+        public function expectExpection($exception){    //future-proofed expectException method
+            if(method_exists(get_parent_class(), 'expectException')){
+                parent::expectException($exception);
+            } else {
+                $this->setExpectedException($exception);
+            }
+        }
+
         public function testSettingAndUnsettingOptions(){
             $this->sandbox->setOption('error_level', 1);
             $this->assertEquals(1, $this->sandbox->getOption('error_level'));
