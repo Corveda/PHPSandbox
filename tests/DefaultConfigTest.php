@@ -16,7 +16,7 @@
             $this->sandbox = new PHPSandbox;
         }
 
-        public function expectExpection($exception){    //future-proofed expectException method
+        public function expectException($exception){    //future-proofed expectException method
             if(method_exists(get_parent_class(), 'expectException')){
                 parent::expectException($exception);
             } else {
