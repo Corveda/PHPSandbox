@@ -3,6 +3,9 @@
      * @package PHPSandbox
      */
     namespace PHPSandbox;
+
+    use \PhpParser\Node;
+
     /**
      * Error class for PHP Sandboxes.
      *
@@ -10,8 +13,8 @@
      *
      * @namespace PHPSandbox
      *
-     * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.11
+     * @author  Elijah Horton <elijah@corveda.com>
+     * @version 2.0
      */
     class Error extends \Exception {
         /* START ERROR CODES */
@@ -103,7 +106,7 @@
         const BLACKLIST_PRIMITIVE_ERROR     =       414;
         /* END ERROR CODES */
         /**
-         * @var \PHPParser_Node|null      The node of the Error
+         * @var Node|null      The node of the Error
          */
         protected $node;
         /**
@@ -113,23 +116,14 @@
         /** Constructs the Error
          * @param string                $message        The message to pass to the Error
          * @param int                   $code           The error code to pass to the Error
-         * @param \PHPParser_node       $node           The parser node to pass to the Error
+         * @param Node       $node           The parser node to pass to the Error
          * @param mixed                 $data           The error data to pass to the Error
          * @param \Exception            $previous       The previous exception to pass to the Error
          */
-        public function __construct($message = '', $code = 0, \PHPParser_Node $node = null, $data = null, \Exception $previous = null){
+        public function __construct($message = '', $code = 0, Node $node = null, $data = null, \Exception $previous = null){
             $this->node = $node;
             $this->data = $data;
             parent::__construct($message, $code, $previous);
-        }
-        /** Returns data of the Error
-         *
-         * @alias getData();
-         *
-         * @return  mixed  The data of the error to return
-         */
-        public function get_data(){
-            return $this->data;
         }
         /** Returns data of the Error
          *
@@ -142,18 +136,9 @@
         }
         /** Returns parser node of the Error
          *
-         * @alias getNode();
-         *
-         * @return  \PHPParser_Node|null  The parser node of the error to return
-         */
-        public function get_node(){
-            return $this->node;
-        }
-        /** Returns parser node of the Error
-         *
          * @alias get_node();
          *
-         * @return  \PHPParser_Node|null  The parser node of the error to return
+         * @return  Node|null  The parser node of the error to return
          */
         public function getNode(){
             return $this->node;

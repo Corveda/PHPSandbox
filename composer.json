@@ -1,26 +1,33 @@
 {
-    "name": "fieryprophet/php-sandbox",
-    "description": "A PHP library that can be used to run PHP code in a sandboxed environment",
-    "keywords": ["php", "sandbox", "parser", "whitelist", "blacklist"],
-    "type": "library",
-    "homepage": "http://www.phpsandbox.org",
-    "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Elijah Horton"
-        }
-    ],
-    "require": {
-        "php": ">=5.3.2",
-        "nikic/php-parser": "~0.9.5",
-        "jeremeamia/functionparser": "~1.0.0"
+  "name": "corveda/php-sandbox",
+  "description": "A PHP library that can be used to run PHP code in a sandboxed environment",
+  "keywords": ["php", "sandbox", "parser", "whitelist", "blacklist"],
+  "type": "library",
+  "homepage": "https://phpsandbox.org/",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Elijah Horton",
+      "email": "elijah@corveda.com"
     },
-    "require-dev": {
-        "phpunit/phpunit": "3.7.*",
-        "phpdocumentor/phpdocumentor": "v2.3.2"
-    },
-    "autoload": {
-        "files": [ "src/functions.php" ],
-        "psr-4": { "PHPSandbox\\": "src/" }
+    {
+      "name": "Corveda, LLC."
     }
+  ],
+  "require": {
+    "php": ">=5.3.2",
+    "nikic/php-parser": "*",
+    "jeremeamia/FunctionParser": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.*"
+  },
+  "autoload": {
+    "files": [
+      "src/functions.php"
+    ],
+    "psr-4": {
+      "PHPSandbox\\": "src/"
+    }
+  }
 }

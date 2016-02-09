@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <meta charset="utf-8"/>
-    <title>API Documentation</title>
+    <title>PHPSandbox</title>
     <meta name="author" content=""/>
     <meta name="description" content=""/>
 
@@ -83,7 +83,7 @@
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <i class="icon-ellipsis-vertical"></i>
             </a>
-            <a class="brand" href="../index.html">API Documentation</a>
+            <a class="brand" href="../index.html">PHPSandbox</a>
 
             <div class="nav-collapse">
                 <ul class="nav pull-right">
@@ -114,7 +114,7 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="../reports/errors.html">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">9</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">3</span>
                                 </a>
                             </li>
                             <li>
@@ -144,19 +144,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1851375276"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1658411684"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1851375276" class="accordion-body collapse in">
+            <div id="namespace-1658411684" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-190178149"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-406327335"></a>
                                 <a href="../namespaces/PHPSandbox.html" style="margin-left: 30px; padding-left: 0">PHPSandbox</a>
             </div>
-            <div id="namespace-190178149" class="accordion-body collapse ">
+            <div id="namespace-406327335" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -225,10 +225,10 @@ configuration for errors, and throws exceptions if they are found</p>
                         </section>
                         <section class="row-fluid protected">
                             <section class="span4">
-                                                                    <a href="../classes/PHPSandbox.ValidatorVisitor.html#method_is_magic_const" class="">is_magic_const()</a><br />
-                                                                    <a href="../classes/PHPSandbox.ValidatorVisitor.html#method_is_keyword" class="">is_keyword()</a><br />
-                                                                    <a href="../classes/PHPSandbox.ValidatorVisitor.html#method_is_operator" class="">is_operator()</a><br />
-                                                                    <a href="../classes/PHPSandbox.ValidatorVisitor.html#method_is_primitive" class="">is_primitive()</a><br />
+                                                                    <a href="../classes/PHPSandbox.ValidatorVisitor.html#method_isMagicConst" class="">isMagicConst()</a><br />
+                                                                    <a href="../classes/PHPSandbox.ValidatorVisitor.html#method_isKeyword" class="">isKeyword()</a><br />
+                                                                    <a href="../classes/PHPSandbox.ValidatorVisitor.html#method_isOperator" class="">isOperator()</a><br />
+                                                                    <a href="../classes/PHPSandbox.ValidatorVisitor.html#method_isPrimitive" class="">isPrimitive()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <a href="../classes/PHPSandbox.ValidatorVisitor.html#property_sandbox" class="">$sandbox</a><br />
@@ -261,7 +261,7 @@ configuration for errors, and throws exceptions if they are found</p>
                                                 <dt>Class hierarchy</dt>
                             <dd class="hierarchy">
                                                                                                                                                                                                                                                                                                 
-                                        <div class="namespace-wrapper">\PHPParser_NodeVisitorAbstract</div>
+                                        <div class="namespace-wrapper">\PhpParser\NodeVisitorAbstract</div>
                                                                                                     <div class="namespace-wrapper">\PHPSandbox\ValidatorVisitor</div>
                             </dd>
 
@@ -285,7 +285,7 @@ configuration for errors, and throws exceptions if they are found</p>
                                 author
                             </th>
                             <td>
-                                                                    <p>Elijah Horton <a href="mailto:fieryprophet@yahoo.com">fieryprophet@yahoo.com</a></p>
+                                                                    <p>Elijah Horton <a href="mailto:elijah@corveda.com">elijah@corveda.com</a></p>
                                                             </td>
                         </tr>
                                             <tr>
@@ -380,14 +380,14 @@ configuration for errors, and throws exceptions if they are found</p>
             <article class="method">
                 <h3 class="public ">leaveNode()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">leaveNode(\PHPParser_Node  <span class="argument">$node</span>) : \PHPParser_Node|boolean|null</pre>
-                <p><em>Examine the current PHPParser_Node node against the PHPSandbox configuration for validating sandboxed code</em></p>
+                <pre class="signature" style="margin-right: 54px;">leaveNode(\PhpParser\Node  <span class="argument">$node</span>) : \PhpParser\Node|boolean|null</pre>
+                <p><em>Examine the current PhpParser_Node node against the PHPSandbox configuration for validating sandboxed code</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\PHPParser_Node</td>
+                                <td>\PhpParser\Node</td>
                                 <td>$node </td>
                                 <td><p>The sandboxed $node to validate</p></td>
                             </tr>
@@ -400,7 +400,7 @@ configuration for errors, and throws exceptions if they are found</p>
                                                                     </dl>
                 
                                     <h4>Returns</h4>
-                    \PHPParser_Node|boolean|null
+                    \PhpParser\Node|boolean|null
                                             &mdash; <p>Return rewritten node, false if node must be removed, or null if no changes to the node are made</p>
                                     				
                             </article>
@@ -418,18 +418,18 @@ configuration for errors, and throws exceptions if they are found</p>
 
                                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_is_magic_const" name="method_is_magic_const" class="anchor"></a>
+            <a id="method_isMagicConst" name="method_isMagicConst" class="anchor"></a>
             <article class="method">
-                <h3 class="protected ">is_magic_const()</h3>
+                <h3 class="protected ">isMagicConst()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">is_magic_const(\PHPParser_Node  <span class="argument">$node</span>) : string|null</pre>
-                <p><em>Test the current PHPParser_Node node to see if it is a magic constant, and return the name if it is and null if it is not</em></p>
+                <pre class="signature" style="margin-right: 54px;">isMagicConst(\PhpParser\Node  <span class="argument">$node</span>) : string|null</pre>
+                <p><em>Test the current PhpParser_Node node to see if it is a magic constant, and return the name if it is and null if it is not</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\PHPParser_Node</td>
+                                <td>\PhpParser\Node</td>
                                 <td>$node </td>
                                 <td><p>The sandboxed $node to test</p></td>
                             </tr>
@@ -455,18 +455,18 @@ configuration for errors, and throws exceptions if they are found</p>
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_is_keyword" name="method_is_keyword" class="anchor"></a>
+            <a id="method_isKeyword" name="method_isKeyword" class="anchor"></a>
             <article class="method">
-                <h3 class="protected ">is_keyword()</h3>
+                <h3 class="protected ">isKeyword()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">is_keyword(\PHPParser_Node  <span class="argument">$node</span>) : string|null</pre>
-                <p><em>Test the current PHPParser_Node node to see if it is a keyword, and return the name if it is and null if it is not</em></p>
+                <pre class="signature" style="margin-right: 54px;">isKeyword(\PhpParser\Node  <span class="argument">$node</span>) : string|null</pre>
+                <p><em>Test the current PhpParser_Node node to see if it is a keyword, and return the name if it is and null if it is not</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\PHPParser_Node</td>
+                                <td>\PhpParser\Node</td>
                                 <td>$node </td>
                                 <td><p>The sandboxed $node to test</p></td>
                             </tr>
@@ -492,18 +492,18 @@ configuration for errors, and throws exceptions if they are found</p>
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_is_operator" name="method_is_operator" class="anchor"></a>
+            <a id="method_isOperator" name="method_isOperator" class="anchor"></a>
             <article class="method">
-                <h3 class="protected ">is_operator()</h3>
+                <h3 class="protected ">isOperator()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">is_operator(\PHPParser_Node  <span class="argument">$node</span>) : string|null</pre>
-                <p><em>Test the current PHPParser_Node node to see if it is an operator, and return the name if it is and null if it is not</em></p>
+                <pre class="signature" style="margin-right: 54px;">isOperator(\PhpParser\Node  <span class="argument">$node</span>) : string|null</pre>
+                <p><em>Test the current PhpParser_Node node to see if it is an operator, and return the name if it is and null if it is not</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\PHPParser_Node</td>
+                                <td>\PhpParser\Node</td>
                                 <td>$node </td>
                                 <td><p>The sandboxed $node to test</p></td>
                             </tr>
@@ -529,18 +529,18 @@ configuration for errors, and throws exceptions if they are found</p>
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_is_primitive" name="method_is_primitive" class="anchor"></a>
+            <a id="method_isPrimitive" name="method_isPrimitive" class="anchor"></a>
             <article class="method">
-                <h3 class="protected ">is_primitive()</h3>
+                <h3 class="protected ">isPrimitive()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">is_primitive(\PHPParser_Node  <span class="argument">$node</span>) : string|null</pre>
-                <p><em>Test the current PHPParser_Node node to see if it is a primitive, and return the name if it is and null if it is not</em></p>
+                <pre class="signature" style="margin-right: 54px;">isPrimitive(\PhpParser\Node  <span class="argument">$node</span>) : string|null</pre>
+                <p><em>Test the current PhpParser_Node node to see if it is a primitive, and return the name if it is and null if it is not</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\PHPParser_Node</td>
+                                <td>\PhpParser\Node</td>
                                 <td>$node </td>
                                 <td><p>The sandboxed $node to test</p></td>
                             </tr>
@@ -614,7 +614,7 @@ configuration for errors, and throws exceptions if they are found</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on April 24th, 2015 at 23:17.
+                    on February 9th, 2016 at 18:43.
                 </section>
             </section>
         </section>

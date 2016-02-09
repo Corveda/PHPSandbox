@@ -3,7 +3,13 @@
      * @package PHPSandbox
      */
     namespace PHPSandbox;
-    use FunctionParser\FunctionParser;
+
+    use FunctionParser\FunctionParser,
+        PhpParser\Node,
+        PhpParser\NodeTraverser,
+        PhpParser\ParserFactory,
+        PhpParser\PrettyPrinter\Standard,
+        PhpParser\Error as ParserError;
 
     /**
      * PHPSandbox class for PHP Sandboxes.
@@ -13,8 +19,8 @@
      *
      * @namespace PHPSandbox
      *
-     * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.11
+     * @author  Elijah Horton <elijah@corveda.com>
+     * @version 2.0
      */
     class PHPSandbox implements \IteratorAggregate {
         /**
@@ -83,7 +89,7 @@
          * @var    array          A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values
          */
         public static $defined_funcs = array(
-            'get_defined_functions',
+            'get_define_functions',
             'get_defined_vars',
             'get_defined_constants',
             'get_declared_classes',
@@ -356,7 +362,7 @@
          */
         public $auto_define_vars            = true;
         /**
-         * @var    bool       Should PHPSandbox overwrite get_defined_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?
+         * @var    bool       Should PHPSandbox overwrite get_define_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?
          * @default true
          */
         public $overwrite_defined_funcs     = true;
@@ -411,12 +417,12 @@
          */
         public $allow_globals               = false;
         /**
-         * @var    bool       Should PHPSandbox allow sandboxed code to declare namespaces (utilizing the define_namespace function?)
+         * @var    bool       Should PHPSandbox allow sandboxed code to declare namespaces (utilizing the defineNamespace function?)
          * @default false
          */
         public $allow_namespaces            = false;
         /**
-         * @var    bool       Should PHPSandbox allow sandboxed code to use namespaces and declare namespace aliases (utilizing the define_alias function?)
+         * @var    bool       Should PHPSandbox allow sandboxed code to use namespaces and declare namespace aliases (utilizing the defineAlias function?)
          * @default false
          */
         public $allow_aliases               = false;
@@ -474,40 +480,40 @@
         /**
          * @var    string     String of prepended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true
          */
-        public $prepended_code = '';
+        protected $prepended_code = '';
         /**
          * @var    string     String of appended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true
          */
-        public $appended_code = '';
+        protected $appended_code = '';
         /* OUTPUT */
         /**
          * @var float|null    Float of the number of microseconds it took to prepare the sandbox
          */
-        public $prepare_time = null;
+        protected $prepare_time = null;
         /**
          * @var float|null    Float of the number of microseconds it took to execute the sandbox
          */
-        public $execution_time = null;
+        protected $execution_time = null;
         /**
          * @var    string     String of preparsed code, for debugging and serialization purposes
          */
-        public $preparsed_code = '';
+        protected $preparsed_code = '';
         /**
          * @var    array      Array of parsed code broken down into AST tokens, for debugging and serialization purposes
          */
-        public $parsed_ast = array();
+        protected $parsed_ast = array();
         /**
          * @var    string     String of prepared code, for debugging and serialization purposes
          */
-        public $prepared_code = '';
+        protected $prepared_code = '';
         /**
          * @var    array      Array of prepared code broken down into AST tokens, for debugging and serialization purposes
          */
-        public $prepared_ast = array();
+        protected $prepared_ast = array();
         /**
          * @var    string     String of generated code, for debugging and serialization purposes
          */
-        public $generated_code = '';
+        protected $generated_code = '';
         /**
          * @var    null|callable       Callable that handles any errors when set
          */
@@ -536,6 +542,7 @@
          * @var    \Exception|Error    The last validation error thrown by the sandbox
          */
         protected $last_validation_error;
+
         /** PHPSandbox class constructor
          *
          * @example $sandbox = new PHPSandbox\PHPSandbox;
@@ -553,7 +560,6 @@
          * @param   array   $classes            Optional array of classes to define for the sandbox
          * @param   array   $interfaces         Optional array of interfaces to define for the sandbox
          * @param   array   $traits             Optional array of traits to define for the sandbox
-         * @return  PHPSandbox                       The returned PHPSandbox variable
          */
         public function __construct(array $options = array(),
                                     array $functions = array(),
@@ -567,19 +573,19 @@
                                     array $interfaces = array(),
                                     array $traits = array()){
             $this->name = static::SANDBOX_PREFIX . md5(uniqid());
-            $this->set_options($options)
-                ->define_funcs($functions)
-                ->define_vars($variables)
-                ->define_consts($constants)
-                ->define_namespaces($namespaces)
-                ->define_aliases($aliases)
-                ->define_superglobals($superglobals)
-                ->define_magic_consts($magic_constants)
-                ->define_classes($classes)
-                ->define_interfaces($interfaces)
-                ->define_traits($traits);
-            return $this;
+            $this->setOptions($options)
+                ->defineFuncs($functions)
+                ->defineVars($variables)
+                ->defineConsts($constants)
+                ->defineNamespaces($namespaces)
+                ->defineAliases($aliases)
+                ->defineSuperGlobals($superglobals)
+                ->defineMagicConsts($magic_constants)
+                ->defineClasses($classes)
+                ->defineInterfaces($interfaces)
+                ->defineTraits($traits);
         }
+
         /** PHPSandbox static factory method
          *
          * You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor
@@ -598,7 +604,7 @@
          * @param   array   $interfaces         Optional array of interfaces to define for the sandbox
          * @param   array   $traits             Optional array of traits to define for the sandbox
          *
-         * @return  PHPSandbox                  The returned PHPSandbox variable
+         * @return  $this                  The returned PHPSandbox variable
          */
         public static function create(array $options = array(),
                                       array $functions = array(),
@@ -613,6 +619,7 @@
                                       array $traits = array()){
             return new static($options, $functions, $variables, $constants, $namespaces, $aliases, $superglobals, $magic_constants, $classes, $interfaces, $traits);
         }
+
         /** PHPSandbox __invoke magic method
          *
          * Besides the code or closure to be executed, you can also pass additional arguments that will overwrite the default values of their respective arguments defined in the code
@@ -626,6 +633,7 @@
         public function __invoke($code){
             return call_user_func(array($this, 'execute'), $code);
         }
+
         /** PHPSandbox __sleep magic method
          *
          * @example $sandbox = new PHPSandbox\PHPSandbox; serialize($sandbox);
@@ -635,11 +643,13 @@
         public function __sleep(){
             return array_keys(get_object_vars($this));
         }
+
         /** PHPSandbox __wakeup magic method
          *
          * @example $sandbox = unserialize($sandbox_string);
          */
         public function __wakeup(){}
+
         /** Import JSON template into sandbox
          *
          * @example $sandbox->import(array('code' => 'echo "Hello World!";'));
@@ -650,66 +660,67 @@
          *
          * @throws  Error           Throws exception if JSON template could not be imported
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
         public function import($template, $import_flag = 0){
             if(is_string($template)){
                 $template = json_decode($template);
             }
             if(!is_array($template)){
-                $this->validation_error("Sandbox could not import malformed JSON template!", Error::IMPORT_ERROR, null, $template);
+                $this->validationError("Sandbox could not import malformed JSON template!", Error::IMPORT_ERROR, null, $template);
             }
             if(isset($template['options']) && is_array($template['options']) && (!$import_flag || ($import_flag & static::IMPORT_OPTIONS))){
-                $this->set_options($template['options']);
+                $this->setOptions($template['options']);
             }
             if(isset($template['definitions']) && is_array($template['definitions']) && (!$import_flag || ($import_flag & static::IMPORT_DEFINITIONS))){
                 foreach($template['definitions'] as $type => $data){
-                    if(method_exists($this, 'define_' . $type)){
+                    $method = 'define' . str_replace('_', '', ucwords($type, '_'));
+                    if(method_exists($this, $method)){
                         switch($type){
                             case 'func':
                                 foreach($data as $key => $value){
                                     $function = function(){};
                                     @eval('$function = ' . $value["fullcode"] .';');
                                     if(!is_callable($function)){
-                                        $this->validation_error("Could not import function $key! Please check your code for errors!", Error::IMPORT_ERROR, null, $function);
+                                        $this->validationError("Could not import function $key! Please check your code for errors!", Error::IMPORT_ERROR, null, $function);
                                     }
-                                    $this->define_func($key, $function, $value["pass"]);
+                                    $this->defineFunc($key, $function, $value["pass"]);
                                 }
                                 break;
                             case 'superglobal':
                                 foreach($data as $key => $value){
-                                    $this->define_superglobal($key, $value["key"], $value["value"]);
+                                    $this->defineSuperGlobal($key, $value["key"], $value["value"]);
                                 }
                                 break;
                             case 'namespace':
                                 foreach($data as $key => $value){
-                                    $this->define_namespace($key);
+                                    $this->defineNamespace($key);
                                 }
                                 break;
                             case 'alias':
                                 foreach($data as $key => $value){
-                                    $this->define_alias($key, $value ? $value : null);
+                                    $this->defineAlias($key, $value ? $value : null);
                                 }
                                 break;
                             case 'class':
                                 foreach($data as $key => $value){
-                                    $this->define_class($key, $value);
+                                    $this->defineClass($key, $value);
                                 }
                                 break;
                             case 'interface':
                                 foreach($data as $key => $value){
-                                    $this->define_interface($key, $value);
+                                    $this->defineInterface($key, $value);
                                 }
                                 break;
                             case 'trait':
                                 foreach($data as $key => $value){
-                                    $this->define_trait($key, $value);
+                                    $this->defineTrait($key, $value);
                                 }
                                 break;
 
                             default:
                                 foreach($data as $key => $value){
-                                    call_user_func_array(array($this, 'define_' . $type), array($key, $value["value"]));
+                                    call_user_func_array(array($this, $method), array($key, $value["value"]));
                                 }
                                 break;
                         }
@@ -718,20 +729,22 @@
             }
             if(isset($template['whitelist']) && is_array($template['whitelist']) && (!$import_flag || ($import_flag & static::IMPORT_WHITELIST))){
                 foreach($template['whitelist'] as $type => $data){
-                    if(method_exists($this, 'whitelist_' . $type)){
-                        call_user_func_array(array($this, 'whitelist_' . $type), array($data));
+                    $method = 'whitelist' . str_replace('_', '', ucwords($type, '_'));
+                    if(method_exists($this, $method)){
+                        call_user_func_array(array($this, $method), array($data));
                     }
                 }
             }
             if(isset($template['blacklist']) && is_array($template['blacklist']) && (!$import_flag || ($import_flag & static::IMPORT_BLACKLIST))){
                 foreach($template['blacklist'] as $type => $data){
-                    if(method_exists($this, 'blacklist_' . $type)){
-                        call_user_func_array(array($this, 'blacklist_' . $type), array($data));
+                    $method = 'blacklist' . str_replace('_', '', ucwords($type, '_'));
+                    if(method_exists($this, $method)){
+                        call_user_func_array(array($this, $method), array($data));
                     }
                 }
             }
             if(!$import_flag || ($import_flag & static::IMPORT_TRUSTED_CODE)){
-                $this->clear_trusted_code();
+                $this->clearTrustedCode();
                 if(isset($template['prepend_code']) && $template['prepend_code']){
                     $this->prepend($template['prepend_code']);
                 }
@@ -740,13 +753,14 @@
                 }
             }
             if(!$import_flag || ($import_flag & static::IMPORT_CODE)){
-                $this->clear_code();
+                $this->clearCode();
                 if(isset($template['code']) && $template['code']){
                     $this->prepare($template['code']);
                 }
             }
             return $this;
         }
+
         /** Import JSON template into sandbox
          *
          * @alias   import();
@@ -759,35 +773,37 @@
          *
          * @throws  Error           Throws exception if JSON template could not be imported
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
         public function importJSON($template, $import_flag = 0){
             return $this->import($template, $import_flag);
         }
+
         /** Get name of PHPSandbox variable
          * @return  string                     The name of the PHPSandbox variable
          */
-        public function get_name(){
+        public function getName(){
             return $this->name;
         }
+
         /** Set PHPSandbox option
          *
          * You can pass an $option name to set to $value, an array of $option names to set to $value, or an associative array of $option names and their values to set.
          *
-         * @example $sandbox->set_option(array('allow_functions' => true));
+         * @example $sandbox->setOption(array('allow_functions' => true));
          *
-         * @example $sandbox->set_option(array('allow_functions', 'allow_classes'), true);
+         * @example $sandbox->setOption(array('allow_functions', 'allow_classes'), true);
          *
-         * @example $sandbox->set_option('allow_functions', true);
+         * @example $sandbox->setOption('allow_functions', true);
          *
          * @param   string|array    $option     String or array of strings or associative array of keys of option names to set $value to
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_option($option, $value = null){
+        public function setOption($option, $value = null){
             if(is_array($option)){
-                return $this->set_options($option, $value);
+                return $this->setOptions($option, $value);
             }
             $option = strtolower($option); //normalize option names
             switch($option){
@@ -849,53 +865,56 @@
             }
             return $this;
         }
+
         /** Set PHPSandbox options by array
          *
          * You can pass an array of option names to set to $value, or an associative array of option names and their values to set.
          *
-         * @example $sandbox->set_option(array('allow_functions' => true));
+         * @example $sandbox->setOption(array('allow_functions' => true));
          *
-         * @example $sandbox->set_option(array('allow_functions', 'allow_classes'), true);
+         * @example $sandbox->setOption(array('allow_functions', 'allow_classes'), true);
          *
          * @param   array|string    $options    Array of strings or associative array of keys of option names to set $value to, or JSON array or string template to import
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_options($options, $value = null){
+        public function setOptions($options, $value = null){
             if(is_string($options) || (is_array($options) && isset($options["options"]))){
                 return $this->import($options);
             }
             foreach($options as $name => $_value){
-                $this->set_option(is_int($name) ? $_value : $name, is_int($name) ? $value : $_value);
+                $this->setOption(is_int($name) ? $_value : $name, is_int($name) ? $value : $_value);
             }
             return $this;
         }
+
         /** Reset PHPSandbox options to their default values
          *
-         * @example $sandbox->reset_options();
+         * @example $sandbox->resetOptions();
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function reset_options(){
+        public function resetOptions(){
             foreach(get_class_vars(__CLASS__) as $option => $value){
                 if($option == 'error_level' || is_bool($value)){
-                    $this->set_option($option, $value);
+                    $this->setOption($option, $value);
                 }
             }
             return $this;
         }
+
         /** Get PHPSandbox option
          *
          * You pass a string $option name to get its associated value
          *
-         * @example $sandbox->get_option('allow_functions');
+         * @example $sandbox->getOption('allow_functions');
          *
          * @param   string          $option     String of $option name to get
          *
          * @return  boolean|int|null            Returns the value of the requested option
          */
-        public function get_option($option){
+        public function getOption($option){
             $option = strtolower($option);  //normalize option names
             switch($option){
                 case 'validate_functions':
@@ -953,731 +972,799 @@
             }
             return null;
         }
+
         /** Set validation callable for specified $type
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_validator('function', function($function, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setValidator('function', function($function, PHPSandbox $sandbox){ return true; });
          *
          * @param   string          $type       String of $type name to set validator for
          * @param   callable        $callable   Callable that validates the passed element
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_validator($type, $callable){
+        public function setValidator($type, $callable){
             $type = strtolower($type);  //normalize type
             if(array_key_exists($type, $this->validation)){
                 $this->validation[$type] = $callable;
             }
             return $this;
         }
+
         /** Get validation callable for specified $type
          *
-         * @example $sandbox->get_validator('function'); //return callable
+         * @example $sandbox->getValidator('function'); //return callable
          *
          * @param   string          $type       String of $type to return
          *
          * @return  callable|null
          */
-        public function get_validator($type){
+        public function getValidator($type){
             $type = strtolower($type);  //normalize type
             return isset($this->validation[$type]) ? $this->validation[$type] : null;
         }
+
         /** Unset validation callable for specified $type
          *
-         * @example $sandbox->unset_validator('function'); //clear custom validation
+         * @example $sandbox->unsetValidator('function'); //clear custom validation
          *
          * @param   string          $type       String of $type to unset
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_validator($type){
+        public function unsetValidator($type){
             $type = strtolower($type);  //normalize type
             if(isset($this->validation[$type])){
                 $this->validation[$type] = null;
             }
             return $this;
         }
+
         /** Set validation callable for functions
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized function names include the namespace and are lowercase!
          *
-         * @example $sandbox->set_func_validator(function($function, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setFuncValidator(function($function, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the normalized passed function name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_func_validator($callable){
+        public function setFuncValidator($callable){
             $this->validation['function'] = $callable;
             return $this;
         }
+
         /** Get validation for functions
          *
-         * @example $sandbox->get_func_validator(); //return callable
+         * @example $sandbox->getFuncValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_func_validator(){
+        public function getFuncValidator(){
             return isset($this->validation['function']) ? $this->validation['function'] : null;
         }
+
         /** Unset validation callable for functions
          *
-         * @example $sandbox->unset_func_validator(); //clear custom validation
+         * @example $sandbox->unsetFuncValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_func_validator(){
+        public function unsetFuncValidator(){
             $this->validation['function'] = null;
             return $this;
         }
+
         /** Set validation callable for variables
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_var_validator(function($variable, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setVarValidator(function($variable, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed variable name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_var_validator($callable){
+        public function setVarValidator($callable){
             $this->validation['variable'] = $callable;
             return $this;
         }
+
         /** Get validation callable for variables
          *
-         * @example $sandbox->get_var_validator(); //return callable
+         * @example $sandbox->getVarValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_var_validator(){
+        public function getVarValidator(){
             return isset($this->validation['variable']) ? $this->validation['variable'] : null;
         }
+
         /** Unset validation callable for variables
          *
-         * @example $sandbox->unset_var_validator(); //clear custom validation
+         * @example $sandbox->unsetVarValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_var_validator(){
+        public function unsetVarValidator(){
             $this->validation['variable'] = null;
             return $this;
         }
+
         /** Set validation callable for globals
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_global_validator(function($global, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setGlobalValidator(function($global, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed global name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_global_validator($callable){
+        public function setGlobalValidator($callable){
             $this->validation['global'] = $callable;
             return $this;
         }
+
         /** Get validation callable for globals
          *
-         * @example $sandbox->get_global_validator(); //return callable
+         * @example $sandbox->getGlobalValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_global_validator(){
+        public function getGlobalValidator(){
             return isset($this->validation['global']) ? $this->validation['global'] : null;
         }
+
         /** Unset validation callable for globals
          *
-         * @example $sandbox->unset_global_validator(); //clear custom validation
+         * @example $sandbox->unsetGlobalValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_global_validator(){
+        public function unsetGlobalValidator(){
             $this->validation['global'] = null;
             return $this;
         }
+
         /** Set validation callable for superglobals
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized superglobal names are uppercase and without a leading _
          *
-         * @example $sandbox->set_superglobal_validator(function($superglobal, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setSuperglobalValidator(function($superglobal, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed superglobal name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_superglobal_validator($callable){
+        public function setSuperglobalValidator($callable){
             $this->validation['superglobal'] = $callable;
             return $this;
         }
+
         /** Get validation callable for superglobals
          *
-         * @example $sandbox->get_superglobal_validator(); //return callable
+         * @example $sandbox->getSuperglobalValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_superglobal_validator(){
+        public function getSuperglobalValidator(){
             return isset($this->validation['superglobal']) ? $this->validation['superglobal'] : null;
         }
+
         /** Unset validation callable for superglobals
          *
-         * @example $sandbox->unset_superglobal_validator(); //clear custom validation
+         * @example $sandbox->unsetSuperglobalValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_superglobal_validator(){
+        public function unsetSuperglobalValidator(){
             $this->validation['superglobal'] = null;
             return $this;
         }
+
         /** Set validation callable for constants
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_const_validator(function($constant, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setConstValidator(function($constant, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed constant name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_const_validator($callable){
+        public function setConstValidator($callable){
             $this->validation['constant'] = $callable;
             return $this;
         }
+
         /** Get validation callable for constants
          *
-         * @example $sandbox->get_const_validator(); //return callable
+         * @example $sandbox->getConstValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_const_validator(){
+        public function getConstValidator(){
             return isset($this->validation['constant']) ? $this->validation['constant'] : null;
         }
+
         /** Unset validation callable for constants
          *
-         * @example $sandbox->unset_const_validator(); //clear custom validation
+         * @example $sandbox->unsetConstValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_const_validator(){
+        public function unsetConstValidator(){
             $this->validation['constant'] = null;
             return $this;
         }
+
         /** Set validation callable for magic constants
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized magic constant names are upper case and trimmed of __
          *
-         * @example $sandbox->set_magic_const_validator(function($magic_constant, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setMagicConstValidator(function($magic_constant, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed magic constant name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_magic_const_validator($callable){
+        public function setMagicConstValidator($callable){
             $this->validation['magic_constant'] = $callable;
             return $this;
         }
+
         /** Get validation callable for magic constants
          *
-         * @example $sandbox->get_magic_const_validator(); //return callable
+         * @example $sandbox->getMagicConstValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_magic_const_validator(){
+        public function getMagicConstValidator(){
             return isset($this->validation['magic_constant']) ? $this->validation['magic_constant'] : null;
         }
+
         /** Unset validation callable for magic constants
          *
-         * @example $sandbox->unset_magic_const_validator(); //clear custom validation
+         * @example $sandbox->unsetMagicConstValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_magic_const_validator(){
+        public function unsetMagicConstValidator(){
             $this->validation['magic_constant'] = null;
             return $this;
         }
+
         /** Set validation callable for namespaces
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_namespace_validator(function($namespace, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setNamespaceValidator(function($namespace, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed namespace name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_namespace_validator($callable){
+        public function setNamespaceValidator($callable){
             $this->validation['namespace'] = $callable;
             return $this;
         }
+
         /** Get validation callable for namespaces
          *
-         * @example $sandbox->get_namespace_validator(); //return callable
+         * @example $sandbox->getNamespaceValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_namespace_validator(){
+        public function getNamespaceValidator(){
             return isset($this->validation['namespace']) ? $this->validation['namespace'] : null;
         }
+
         /** Unset validation callable for namespaces
          *
-         * @example $sandbox->unset_namespace_validator(); //clear custom validation
+         * @example $sandbox->unsetNamespaceValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_namespace_validator(){
+        public function unsetNamespaceValidator(){
             $this->validation['namespace'] = null;
             return $this;
         }
+
         /** Set validation callable for aliases
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_alias_validator(function($alias, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setAliasValidator(function($alias, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed alias name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_alias_validator($callable){
+        public function setAliasValidator($callable){
             $this->validation['alias'] = $callable;
             return $this;
         }
+
         /** Get validation callable for aliases
          *
-         * @example $sandbox->get_alias_validator(); //return callable
+         * @example $sandbox->getAliasValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_alias_validator(){
+        public function getAliasValidator(){
             return isset($this->validation['alias']) ? $this->validation['alias'] : null;
         }
+
         /** Unset validation callable for aliases
          *
-         * @example $sandbox->unset_alias_validator(); //clear custom validation
+         * @example $sandbox->unsetAliasValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_alias_validator(){
+        public function unsetAliasValidator(){
             $this->validation['alias'] = null;
             return $this;
         }
+
         /** Set validation callable for uses (aka aliases)
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @alias set_alias_validator();
+         * @alias setAliasValidator();
          *
-         * @example $sandbox->set_use_validator(function($use, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setUseValidator(function($use, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed use (aka alias) name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_use_validator($callable){
-            return $this->set_alias_validator($callable);
+        public function setUseValidator($callable){
+            return $this->setAliasValidator($callable);
         }
+
         /** Get validation callable for uses (aka aliases)
          *
-         * @alias get_alias_validator();
+         * @alias getAliasValidator();
          *
-         * @example $sandbox->get_use_validator(); //return callable
+         * @example $sandbox->getUseValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_use_validator(){
-            return $this->get_alias_validator();
+        public function getUseValidator(){
+            return $this->getAliasValidator();
         }
+
         /** Unset validation callable for uses (aka aliases)
          *
-         * @alias unset_alias_validator();
+         * @alias unsetAliasValidator();
          *
-         * @example $sandbox->unset_use_validator(); //clear custom validation
+         * @example $sandbox->unsetUseValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_use_validator(){
-            return $this->unset_alias_validator();
+        public function unsetUseValidator(){
+            return $this->unsetAliasValidator();
         }
+
         /** Set validation callable for classes
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized class names are lowercase
          *
-         * @example $sandbox->set_class_validator(function($class, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setClassValidator(function($class, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed class name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_class_validator($callable){
+        public function setClassValidator($callable){
             $this->validation['class'] = $callable;
             return $this;
         }
+
         /** Get validation callable for classes
          *
-         * @example $sandbox->get_class_validator(); //return callable
+         * @example $sandbox->getClassValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_class_validator(){
+        public function getClassValidator(){
             return isset($this->validation['class']) ? $this->validation['class'] : null;
         }
+
         /** Unset validation callable for classes
          *
-         * @example $sandbox->unset_class_validator(); //clear custom validation
+         * @example $sandbox->unsetClassValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_class_validator(){
+        public function unsetClassValidator(){
             $this->validation['class'] = null;
             return $this;
         }
+
         /** Set validation callable for interfaces
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized interface names are lowercase
          *
-         * @example $sandbox->set_interface_validator(function($interface, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setInterfaceValidator(function($interface, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed interface name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_interface_validator($callable){
+        public function setInterfaceValidator($callable){
             $this->validation['interface'] = $callable;
             return $this;
         }
+
         /** Get validation callable for interfaces
          *
-         * @example $sandbox->get_interface_validator(); //return callable
+         * @example $sandbox->getInterfaceValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_interface_validator(){
+        public function getInterfaceValidator(){
             return isset($this->validation['interface']) ? $this->validation['interface'] : null;
         }
+
         /** Unset validation callable for interfaces
          *
-         * @example $sandbox->unset_interface_validator(); //clear custom validation
+         * @example $sandbox->unsetInterfaceValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_interface_validator(){
+        public function unsetInterfaceValidator(){
             $this->validation['interface'] = null;
             return $this;
         }
+
         /** Set validation callable for traits
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized trait names are lowercase
          *
-         * @example $sandbox->set_trait_validator(function($trait, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setTraitValidator(function($trait, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed trait name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_trait_validator($callable){
+        public function setTraitValidator($callable){
             $this->validation['trait'] = $callable;
             return $this;
         }
+
         /** Get validation callable for traits
          *
-         * @example $sandbox->get_trait_validator(); //return callable
+         * @example $sandbox->getTraitValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_trait_validator(){
+        public function getTraitValidator(){
             return isset($this->validation['trait']) ? $this->validation['trait'] : null;
         }
+
         /** Unset validation callable for traits
          *
-         * @example $sandbox->unset_trait_validator(); //clear custom validation
+         * @example $sandbox->unsetTraitValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_trait_validator(){
+        public function unsetTraitValidator(){
             $this->validation['trait'] = null;
             return $this;
         }
+
         /** Set validation callable for keywords
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_keyword_validator(function($keyword, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setKeywordValidator(function($keyword, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed keyword name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_keyword_validator($callable){
+        public function setKeywordValidator($callable){
             $this->validation['keyword'] = $callable;
             return $this;
         }
+
         /** Get validation callable for keywords
          *
-         * @example $sandbox->get_keyword_validator(); //return callable
+         * @example $sandbox->getKeywordValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_keyword_validator(){
+        public function getKeywordValidator(){
             return isset($this->validation['keyword']) ? $this->validation['keyword'] : null;
         }
+
         /** Unset validation callable for keywords
          *
-         * @example $sandbox->unset_keyword_validator(); //clear custom validation
+         * @example $sandbox->unsetKeywordValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_keyword_validator(){
+        public function unsetKeywordValidator(){
             $this->validation['keyword'] = null;
             return $this;
         }
+
         /** Set validation callable for operators
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_operator_validator(function($operator, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setOperatorValidator(function($operator, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed operator name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_operator_validator($callable){
+        public function setOperatorValidator($callable){
             $this->validation['operator'] = $callable;
             return $this;
         }
+
         /** Get validation callable for operators
          *
-         * @example $sandbox->get_operator_validator(); //return callable
+         * @example $sandbox->getOperatorValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_operator_validator(){
+        public function getOperatorValidator(){
             return isset($this->validation['operator']) ? $this->validation['operator'] : null;
         }
+
         /** Unset validation callable for operators
          *
-         * @example $sandbox->unset_operator_validator(); //clear custom validation
+         * @example $sandbox->unsetOperatorValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_operator_validator(){
+        public function unsetOperatorValidator(){
             $this->validation['operator'] = null;
             return $this;
         }
+
         /** Set validation callable for primitives
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_primitive_validator(function($primitive, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setPrimitiveValidator(function($primitive, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed primitive name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_primitive_validator($callable){
+        public function setPrimitiveValidator($callable){
             $this->validation['primitive'] = $callable;
             return $this;
         }
+
         /** Get validation callable for primitives
          *
-         * @example $sandbox->get_primitive_validator(); //return callable
+         * @example $sandbox->getPrimitiveValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_primitive_validator(){
+        public function getPrimitiveValidator(){
             return isset($this->validation['primitive']) ? $this->validation['primitive'] : null;
         }
+
         /** Unset validation callable for primitives
          *
-         * @example $sandbox->unset_primitive_validator(); //clear custom validation
+         * @example $sandbox->unsetPrimitiveValidator(); //clear custom validation
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_primitive_validator(){
+        public function unsetPrimitiveValidator(){
             $this->validation['primitive'] = null;
             return $this;
         }
+
         /** Set validation callable for types
          *
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->set_type_validator(function($type, PHPSandbox $sandbox){ return true; });
+         * @example $sandbox->setTypeValidator(function($type, PHPSandbox $sandbox){ return true; });
          *
          * @param   callable        $callable   Callable that validates the passed type name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
-        public function set_type_validator($callable){
+        public function setTypeValidator($callable){
             $this->validation['type'] = $callable;
             return $this;
         }
+
         /** Get validation callable for types
          *
-         * @example $sandbox->get_type_validator(); //return callable
+         * @example $sandbox->getTypeValidator(); //return callable
          *
          * @return  callable|null
          */
-        public function get_type_validator(){
+        public function getTypeValidator(){
             return isset($this->validation['type']) ? $this->validation['type'] : null;
         }
+
         /** Unset validation callable for types
          *
-         * @example $sandbox->unset_type_validator(); //clear custom validation
+         * @example $sandbox->unsetTypeValidator(); //clear custom validation
          *
-         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_type_validator(){
+        public function unsetTypeValidator(){
             $this->validation['type'] = null;
             return $this;
         }
+
         /** Set PHPSandbox prepended code
          *
          * @param   string         $prepended_code      Sets a string of the prepended code
          *
-         * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+         * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function set_prepended_code($prepended_code = ''){
+        public function setPrependedCode($prepended_code = ''){
             $this->prepended_code = $prepended_code;
             return $this;
         }
+
         /** Set PHPSandbox appended code
          *
          * @param   string         $appended_code       Sets a string of the appended code
          *
-         * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+         * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function set_appended_code($appended_code = ''){
+        public function setAppendedCode($appended_code = ''){
             $this->appended_code = $appended_code;
             return $this;
         }
+
         /** Set PHPSandbox preparsed code
          *
          * @param   string         $preparsed_code       Sets a string of the preparsed code
          *
-         * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+         * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function set_preparsed_code($preparsed_code = ''){
+        public function setPreparsedCode($preparsed_code = ''){
             $this->preparsed_code = $preparsed_code;
             return $this;
         }
+
         /** Set PHPSandbox parsed AST array
          *
          * @param   array          $parsed_ast          Sets an array of the parsed AST code
          *
-         * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+         * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function set_parsed_ast(array $parsed_ast = array()){
+        public function setParsedAST(array $parsed_ast = array()){
             $this->parsed_ast = $parsed_ast;
             return $this;
         }
+
         /** Set PHPSandbox prepared code
          *
          * @param   string         $prepared_code       Sets a string of the prepared code
          *
-         * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+         * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function set_prepared_code($prepared_code = ''){
+        public function setPreparedCode($prepared_code = ''){
             $this->prepared_code = $prepared_code;
             return $this;
         }
+
         /** Set PHPSandbox prepared AST array
          *
          * @param   array          $prepared_ast        Sets an array of the prepared AST code
          *
-         * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+         * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function set_prepared_ast(array $prepared_ast = array()){
+        public function setPreparedAST(array $prepared_ast = array()){
             $this->prepared_ast = $prepared_ast;
             return $this;
         }
+
         /** Set PHPSandbox generated code
          *
          * @param   string         $generated_code      Sets a string of the generated code
          *
-         * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+         * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function set_generated_code($generated_code = ''){
+        public function setGeneratedCode($generated_code = ''){
             $this->generated_code = $generated_code;
             return $this;
         }
+
         /** Set PHPSandbox generated code
          *
-         * @alias   set_generated_code();
+         * @alias   setGeneratedCode();
          *
          * @param  string          $generated_code      Sets a string of the generated code
          *
-         * @return  PHPSandbox     Returns the PHPSandbox instance for chainability
+         * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function set_code($generated_code = ''){
+        public function setCode($generated_code = ''){
             $this->generated_code = $generated_code;
             return $this;
         }
+
         /** Get PHPSandbox prepended code
          * @return  string          Returns a string of the prepended code
          */
-        public function get_prepended_code(){
+        public function getPrependedCode(){
             return $this->prepended_code;
         }
+
         /** Get PHPSandbox appended code
          * @return  string          Returns a string of the appended code
          */
-        public function get_appended_code(){
+        public function getAppendedCode(){
             return $this->appended_code;
         }
+
         /** Get PHPSandbox preparsed code
          * @return  string          Returns a string of the preparsed code
          */
-        public function get_preparsed_code(){
+        public function getPreparsedCode(){
             return $this->preparsed_code;
         }
+
         /** Get PHPSandbox parsed AST array
          * @return  array           Returns an array of the parsed AST code
          */
-        public function get_parsed_ast(){
+        public function getParsedAST(){
             return $this->parsed_ast;
         }
+
         /** Get PHPSandbox prepared code
          * @return  string          Returns a string of the prepared code
          */
-        public function get_prepared_code(){
+        public function getPreparedCode(){
             return $this->prepared_code;
         }
+
         /** Get PHPSandbox prepared AST array
          * @return  array           Returns an array of the prepared AST code
          */
-        public function get_prepared_ast(){
+        public function getPreparedAST(){
             return $this->prepared_ast;
         }
+
         /** Get PHPSandbox generated code
          * @return  string          Returns a string of the generated code
          */
-        public function get_generated_code(){
+        public function getGeneratedCode(){
             return $this->generated_code;
         }
+
         /** Get PHPSandbox generated code
-         * @alias   get_generated_code();
+         * @alias   getGeneratedCode();
          * @return  string          Returns a string of the generated code
          */
-        public function get_code(){
+        public function getCode(){
             return $this->generated_code;
         }
+
         /** Get PHPSandbox redefined functions in place of get_defined_functions(). This is an internal PHPSandbox function but requires public access to work.
          *
          * @param   array           $functions      Array result from get_defined_functions() is passed here
@@ -1711,6 +1798,7 @@
             }
             return array();
         }
+
         /** Get PHPSandbox redefined variables in place of get_defined_vars(). This is an internal PHPSandbox function but requires public access to work.
          *
          * @param   array           $variables      Array result from get_defined_vars() is passed here
@@ -1723,6 +1811,7 @@
             }
             return $variables;
         }
+
         /** Get PHPSandbox redefined superglobal. This is an internal PHPSandbox function but requires public access to work.
          *
          * @param   string          $name      Requested superglobal name (e.g. _GET, _POST, etc.)
@@ -1731,7 +1820,7 @@
          */
         public function _get_superglobal($name){
             $original_name = strtoupper($name);
-            $name = $this->normalize_superglobal($name);
+            $name = $this->normalizeSuperglobal($name);
             if(isset($this->definitions['superglobals'][$name])){
                 $superglobal = $this->definitions['superglobals'][$name];
                 if(is_callable($superglobal)){
@@ -1767,6 +1856,7 @@
             }
             return array();
         }
+
         /** Get PHPSandbox redefined magic constant. This is an internal PHPSandbox function but requires public access to work.
          *
          * @param   string          $name      Requested magic constant name (e.g. __FILE__, __LINE__, etc.)
@@ -1774,7 +1864,7 @@
          * @return  array           Returns the redefined magic constant
          */
         public function _get_magic_const($name){
-            $name = $this->normalize_magic_const($name);
+            $name = $this->normalizeMagicConst($name);
             if(isset($this->definitions['magic_constants'][$name])){
                 $magic_constant = $this->definitions['magic_constants'][$name];
                 if(is_callable($magic_constant)){
@@ -1784,6 +1874,7 @@
             }
             return null;
         }
+
         /** Get PHPSandbox redefined constants in place of get_defined_constants(). This is an internal PHPSandbox function but requires public access to work.
          *
          * @param   array           $constants      Array result from get_defined_constants() is passed here
@@ -1815,6 +1906,7 @@
             }
             return array();
         }
+
         /** Get PHPSandbox redefined classes in place of get_declared_classes(). This is an internal PHPSandbox function but requires public access to work.
          *
          * @param   array           $classes      Array result from get_declared_classes() is passed here
@@ -1838,15 +1930,15 @@
             } else if(count($this->blacklist['classes'])){
                 $valid_classes = array();
                 foreach($classes as $class){
-                    $valid_classes[$this->normalize_class($class)] = $class;
+                    $valid_classes[$this->normalizeClass($class)] = $class;
                 }
                 foreach($this->definitions['classes'] as $name => $value){
                     if(class_exists($value)){
-                        $valid_classes[$this->normalize_class($name)] = $value;
+                        $valid_classes[$this->normalizeClass($name)] = $value;
                     }
                 }
                 foreach($valid_classes as $index => $name){
-                    if(isset($this->blacklist['classes'][$this->normalize_class($name)])){
+                    if(isset($this->blacklist['classes'][$this->normalizeClass($name)])){
                         unset($valid_classes[$index]);
                     }
                 }
@@ -1860,6 +1952,7 @@
             }
             return array_values($classes);
         }
+
         /** Get PHPSandbox redefined interfaces in place of get_declared_interfaces(). This is an internal PHPSandbox function but requires public access to work.
          *
          * @param   array           $interfaces      Array result from get_declared_interfaces() is passed here
@@ -1883,15 +1976,15 @@
             } else if(count($this->blacklist['interfaces'])){
                 $valid_interfaces = array();
                 foreach($interfaces as $interface){
-                    $valid_interfaces[$this->normalize_interface($interface)] = $interface;
+                    $valid_interfaces[$this->normalizeInterface($interface)] = $interface;
                 }
                 foreach($this->definitions['interfaces'] as $name => $value){
                     if(interface_exists($value)){
-                        $valid_interfaces[$this->normalize_interface($name)] = $value;
+                        $valid_interfaces[$this->normalizeInterface($name)] = $value;
                     }
                 }
                 foreach($valid_interfaces as $index => $name){
-                    if(isset($this->blacklist['interfaces'][$this->normalize_interface($name)])){
+                    if(isset($this->blacklist['interfaces'][$this->normalizeInterface($name)])){
                         unset($valid_interfaces[$index]);
                     }
                 }
@@ -1905,6 +1998,7 @@
             }
             return array_values($interfaces);
         }
+
         /** Get PHPSandbox redefined traits in place of get_declared_traits(). This is an internal PHPSandbox function but requires public access to work.
          *
          * @param   array           $traits      Array result from get_declared_traits() is passed here
@@ -1928,15 +2022,15 @@
             } else if(count($this->blacklist['traits'])){
                 $valid_traits = array();
                 foreach($traits as $trait){
-                    $valid_traits[$this->normalize_trait($trait)] = $trait;
+                    $valid_traits[$this->normalizeTrait($trait)] = $trait;
                 }
                 foreach($this->definitions['traits'] as $name => $value){
                     if(trait_exists($value)){
-                        $valid_traits[$this->normalize_trait($name)] = $value;
+                        $valid_traits[$this->normalizeTrait($name)] = $value;
                     }
                 }
                 foreach($valid_traits as $index => $name){
-                    if(isset($this->blacklist['traits'][$this->normalize_trait($name)])){
+                    if(isset($this->blacklist['traits'][$this->normalizeTrait($name)])){
                         unset($valid_traits[$index]);
                     }
                 }
@@ -1950,6 +2044,7 @@
             }
             return array_values($traits);
         }
+
         /** Get PHPSandbox redefined function arguments array
          *
          * @param   array           $arguments      Array result from func_get_args() is passed here
@@ -1964,6 +2059,7 @@
             }
             return $arguments;
         }
+
         /** Get PHPSandbox redefined function argument
          *
          * @param   array           $arguments      Array result from func_get_args() is passed here
@@ -1978,6 +2074,7 @@
             }
             return isset($arguments[$index]) && !($arguments[$index] instanceof self) ? $arguments[$index] : null;
         }
+
         /** Get PHPSandbox redefined number of function arguments
          *
          * @param   array           $arguments      Array result from func_get_args() is passed here
@@ -1993,6 +2090,7 @@
             }
             return $count > 0 ? $count : 0;
         }
+
         /** Get PHPSandbox redefined var_dump
          *
          * @return  array           Returns the redefined var_dump
@@ -2008,6 +2106,7 @@
             }
             return call_user_func_array('var_dump', $arguments);
         }
+
         /** Get PHPSandbox redefined print_r
          *
          * @return  array           Returns the redefined print_r
@@ -2023,6 +2122,7 @@
             }
             return call_user_func_array('print_r', $arguments);
         }
+
         /** Get PHPSandbox redefined var_export
          *
          * @return  array           Returns the redefined var_export
@@ -2038,6 +2138,7 @@
             }
             return call_user_func_array('var_export', $arguments);
         }
+
         /** Return integer value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to return as integer
@@ -2047,6 +2148,7 @@
         public function _intval($value){
             return intval($value instanceof SandboxedString ? strval($value) : $value);
         }
+
         /** Return float value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to return as float
@@ -2056,6 +2158,7 @@
         public function _floatval($value){
             return floatval($value instanceof SandboxedString ? strval($value) : $value);
         }
+
         /** Return boolean value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to return as boolean
@@ -2068,6 +2171,7 @@
             }
             return is_bool($value) ? $value : (bool)$value;
         }
+
         /** Return array value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to return as array
@@ -2080,6 +2184,7 @@
             }
             return is_array($value) ? $value : (array)$value;
         }
+
         /** Return object value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to return as object
@@ -2092,6 +2197,7 @@
             }
             return is_object($value) ? $value : (object)$value;
         }
+
         /** Return is_string value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to check if is_string
@@ -2101,6 +2207,7 @@
         public function _is_string($value){
             return ($value instanceof SandboxedString) ? true : is_string($value);
         }
+
         /** Return is_object value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to check if is_object
@@ -2110,6 +2217,7 @@
         public function _is_object($value){
             return ($value instanceof SandboxedString) ? false : is_object($value);
         }
+
         /** Return is_scalar value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to check if is_scalar
@@ -2119,6 +2227,7 @@
         public function _is_scalar($value){
             return ($value instanceof SandboxedString) ? true : is_scalar($value);
         }
+
         /** Return is_callable value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to check if is_callable
@@ -2131,6 +2240,7 @@
             }
             return is_callable($value);
         }
+
         /** Return get_included_files() and sandboxed included files
          *
          * @return  array           Returns array of get_included_files() and sandboxed included files
@@ -2138,6 +2248,7 @@
         public function _get_included_files(){
             return array_merge(get_included_files(), $this->includes);
         }
+
         /** Sandbox included file
          *
          * @param   string          $file      Included file to sandbox
@@ -2158,6 +2269,7 @@
             }
             return $this->execute($code);
         }
+
         /** Sandbox included once file
          *
          * @param   string          $file      Included once file to sandbox
@@ -2179,6 +2291,7 @@
             }
             return null;
         }
+
         /** Sandbox required file
          *
          * @param   string          $file      Required file to sandbox
@@ -2200,6 +2313,7 @@
             }
             return $this->execute($code);
         }
+
         /** Sandbox required once file
          *
          * @param   string          $file      Required once file to sandbox
@@ -2222,6 +2336,7 @@
             }
             return null;
         }
+
         /** Get PHPSandbox redefined function. This is an internal PHPSandbox function but requires public access to work.
          *
          * @throws  Error           Will throw exception if invalid function requested
@@ -2232,7 +2347,7 @@
             $arguments = func_get_args();
             $name = array_shift($arguments);
             $original_name = $name;
-            $name = $this->normalize_func($name);
+            $name = $this->normalizeFunc($name);
             if(isset($this->definitions['functions'][$name]) && is_callable($this->definitions['functions'][$name]['function'])){
                 $function = $this->definitions['functions'][$name]['function'];
                 if($this->definitions['functions'][$name]['pass_sandbox']){            //pass the PHPSandbox instance to the defined function?
@@ -2243,8 +2358,9 @@
             if(is_callable($name)){
                 return call_user_func_array($name, $arguments);
             }
-            return $this->validation_error("Sandboxed code attempted to call invalid function: $original_name", Error::VALID_FUNC_ERROR, null, $original_name);
+            return $this->validationError("Sandboxed code attempted to call invalid function: $original_name", Error::VALID_FUNC_ERROR, null, $original_name);
         }
+
         /** Define PHPSandbox definitions, such as functions, constants, namespaces, etc.
          *
          * You can pass a string of the $type, $name and $value, or pass an associative array of definitions types and
@@ -2258,7 +2374,7 @@
          * @param   string|array|null   $name       Associative array or string of definition name to define
          * @param   mixed|null          $value      Value of definition to define
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
         public function define($type, $name = null, $value = null){
             if(is_array($type)){
@@ -2276,25 +2392,25 @@
             } else if($type && $name){
                 switch($type){
                     case 'functions':
-                        return $this->define_func($name, $value);
+                        return $this->defineFunc($name, $value);
                     case 'variables':
-                        return $this->define_var($name, $value);
+                        return $this->defineVar($name, $value);
                     case 'superglobals':
-                        return $this->define_superglobal($name, $value);
+                        return $this->defineSuperGlobal($name, $value);
                     case 'constants':
-                        return $this->define_const($name, $value);
+                        return $this->defineConst($name, $value);
                     case 'magic_constants':
-                        return $this->define_magic_const($name, $value);
+                        return $this->defineMagicConst($name, $value);
                     case 'namespaces':
-                        return $this->define_namespace($name);
+                        return $this->defineNamespace($name);
                     case 'aliases':
-                        return $this->define_alias($name, $value);
+                        return $this->defineAlias($name, $value);
                     case 'classes':
-                        return $this->define_class($name, $value);
+                        return $this->defineClass($name, $value);
                     case 'interfaces':
-                        return $this->define_interface($name, $value);
+                        return $this->defineInterface($name, $value);
                     case 'traits':
-                        return $this->define_trait($name, $value);
+                        return $this->defineTrait($name, $value);
                 }
             }
             return $this;
@@ -2311,7 +2427,7 @@
          * @param   string|array    $type       Associative array or string of definition type to undefine
          * @param   string|array    $name       Associative array or string of definition name to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
         public function undefine($type, $name = null){
             if(is_array($type)){
@@ -2333,39 +2449,40 @@
             } else if($type && $name){
                 switch($type){
                     case 'functions':
-                        return $this->undefine_func($name);
+                        return $this->undefineFunc($name);
                     case 'variables':
-                        return $this->undefine_var($name);
+                        return $this->undefineVar($name);
                     case 'superglobals':
-                        return $this->undefine_superglobal($name);
+                        return $this->undefineSuperGlobal($name);
                     case 'constants':
-                        return $this->undefine_const($name);
+                        return $this->undefineConst($name);
                     case 'magic_constants':
-                        return $this->undefine_magic_const($name);
+                        return $this->undefineMagicConst($name);
                     case 'namespaces':
-                        return $this->undefine_namespace($name);
+                        return $this->undefineNamespace($name);
                     case 'aliases':
-                        return $this->undefine_alias($name);
+                        return $this->undefineAlias($name);
                     case 'classes':
-                        return $this->undefine_class($name);
+                        return $this->undefineClass($name);
                     case 'interfaces':
-                        return $this->undefine_interface($name);
+                        return $this->undefineInterface($name);
                     case 'traits':
-                        return $this->undefine_trait($name);
+                        return $this->undefineTrait($name);
                 }
             }
             return $this;
         }
+
         /** Define PHPSandbox function
          *
          * You can pass the function $name and $function closure or callable to define, or an associative array of
          * functions to define, which can have callable values or arrays of the function callable and $pass_sandbox flag
          *
-         * @example $sandbox->define_func('test', function(){ echo 'test'; });
+         * @example $sandbox->defineFunc('test', function(){ echo 'test'; });
          *
-         * @example $sandbox->define_func(array('test' => function(){ echo 'test'; }));
+         * @example $sandbox->defineFunc(array('test' => function(){ echo 'test'; }));
          *
-         * @example $sandbox->define_func(array('test' => array(function(){ echo 'test'; }, true)));
+         * @example $sandbox->defineFunc(array('test' => array(function(){ echo 'test'; }, true)));
          *
          * @param   string|array    $name           Associative array or string of function $name to define
          * @param   callable        $function       Callable to define $function to
@@ -2373,23 +2490,23 @@
          *
          * @throws  Error           Throws exception if unnamed or uncallable $function is defined
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_func($name, $function, $pass_sandbox = false){
+        public function defineFunc($name, $function, $pass_sandbox = false){
             if(is_array($name)){
-                return $this->define_funcs($name);
+                return $this->defineFuncs($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed function!", Error::DEFINE_FUNC_ERROR, null, '');
+                $this->validationError("Cannot define unnamed function!", Error::DEFINE_FUNC_ERROR, null, '');
             }
             if(is_array($function) && count($function)){    //so you can pass array of function names and array of function and pass_sandbox flag
                 $pass_sandbox = isset($function[1]) ? $function[1] : false;
                 $function = $function[0];
             }
             $original_name = $name;
-            $name = $this->normalize_func($name);
+            $name = $this->normalizeFunc($name);
             if(!is_callable($function)){
-                $this->validation_error("Cannot define uncallable function : $original_name", Error::DEFINE_FUNC_ERROR, null, $original_name);
+                $this->validationError("Cannot define uncallable function : $original_name", Error::DEFINE_FUNC_ERROR, null, $original_name);
             }
             $this->definitions['functions'][$name] = array(
                 'function' => $function,
@@ -2397,216 +2514,228 @@
             );
             return $this;
         }
+
         /** Define PHPSandbox functions by array
          *
          * You can pass an associative array of functions to define
          *
-         * @example $sandbox->define_funcs(array('test' => function(){ echo 'test'; }));
+         * @example $sandbox->defineFuncs(array('test' => function(){ echo 'test'; }));
          *
          * @param   array           $functions       Associative array of $functions to define
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_funcs(array $functions = array()){
+        public function defineFuncs(array $functions = array()){
             foreach($functions as $name => $function){
-                $this->define_func($name, $function);
+                $this->defineFunc($name, $function);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined functions
          *
-         * @example $sandbox->has_defined_funcs(); //returns number of defined functions, or zero if none defined
+         * @example $sandbox->hasDefinedFuncs(); //returns number of defined functions, or zero if none defined
          *
          * @return  int           Returns the number of functions this instance has defined
          */
-        public function has_defined_funcs(){
+        public function hasDefinedFuncs(){
             return count($this->definitions['functions']);
         }
+
         /** Check if PHPSandbox instance has $name function defined
          *
-         * @example $sandbox->is_defined_func('test');
+         * @example $sandbox->isDefinedFunc('test');
          *
          * @param   string          $name       String of function $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined function, false otherwise
          */
-        public function is_defined_func($name){
-            $name = $this->normalize_func($name);
+        public function isDefinedFunc($name){
+            $name = $this->normalizeFunc($name);
             return isset($this->definitions['functions'][$name]);
         }
+
         /** Undefine PHPSandbox function
          *
          * You can pass a string of function $name to undefine, or pass an array of function names to undefine
          *
-         * @example $sandbox->undefine_func('test');
+         * @example $sandbox->undefineFunc('test');
          *
-         * @example $sandbox->undefine_func(array('test', 'test2'));
+         * @example $sandbox->undefineFunc(array('test', 'test2'));
          *
          * @param   string|array          $name       String of function name or array of function names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_func($name){
+        public function undefineFunc($name){
             if(is_array($name)){
-                return $this->undefine_funcs($name);
+                return $this->undefineFuncs($name);
             }
-            $name = $this->normalize_func($name);
+            $name = $this->normalizeFunc($name);
             if(isset($this->definitions['functions'][$name])){
                 unset($this->definitions['functions'][$name]);
             }
             return $this;
         }
+
         /** Undefine PHPSandbox functions by array
          *
          * You can pass an array of function names to undefine, or an empty array or null argument to undefine all functions
          *
-         * @example $sandbox->undefine_funcs(array('test', 'test2'));
+         * @example $sandbox->undefineFuncs(array('test', 'test2'));
          *
-         * @example $sandbox->undefine_funcs(); //WILL UNDEFINE ALL FUNCTIONS!
+         * @example $sandbox->undefineFuncs(); //WILL UNDEFINE ALL FUNCTIONS!
          *
          * @param   array           $functions       Array of function names to undefine. Passing an empty array or no argument will result in undefining all functions
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_funcs($functions = array()){
+        public function undefineFuncs($functions = array()){
             if(count($functions)){
                 foreach($functions as $function){
-                    $this->undefine_func($function);
+                    $this->undefineFunc($function);
                 }
             } else {
                 $this->definitions['functions'] = array();
             }
             return $this;
         }
+
         /** Define PHPSandbox variable
          *
          * You can pass the variable $name and $value to define, or an associative array of variables to define
          *
-         * @example $sandbox->define_var('test', 1);
+         * @example $sandbox->defineVar('test', 1);
          *
-         * @example $sandbox->define_var(array('test' => 1));
+         * @example $sandbox->defineVar(array('test' => 1));
          *
          * @param   string|array    $name       String of variable $name or associative array to define
          * @param   mixed           $value      Value to define variable to
          *
          * @throws  Error           Throws exception if unnamed variable is defined
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_var($name, $value){
+        public function defineVar($name, $value){
             if(is_array($name)){
-                return $this->define_vars($name);
+                return $this->defineVars($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed variable!", Error::DEFINE_VAR_ERROR, null, '');
+                $this->validationError("Cannot define unnamed variable!", Error::DEFINE_VAR_ERROR, null, '');
             }
             $this->definitions['variables'][$name] = $value;
             return $this;
         }
+
         /** Define PHPSandbox variables by array
          *
          * You can pass an associative array of variables to define
          *
-         * @example $sandbox->define_vars(array('test' => 1));
+         * @example $sandbox->defineVars(array('test' => 1));
          *
          * @param   array           $variables  Associative array of $variables to define
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_vars(array $variables = array()){
+        public function defineVars(array $variables = array()){
             foreach($variables as $name => $value){
-                $this->define_var($name, $value);
+                $this->defineVar($name, $value);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined variables
          *
-         * @example $sandbox->has_defined_vars(); //returns number of defined variables, or zero if none defined
+         * @example $sandbox->hasDefinedVars(); //returns number of defined variables, or zero if none defined
          *
          * @return  int           Returns the number of variables this instance has defined
          */
-        public function has_defined_vars(){
+        public function hasDefinedVars(){
             return count($this->definitions['variables']);
         }
+
         /** Check if PHPSandbox instance has $name variable defined
          *
-         * @example $sandbox->is_defined_var('test');
+         * @example $sandbox->isDefinedVar('test');
          *
          * @param   string          $name       String of variable $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined variable, false otherwise
          */
-        public function is_defined_var($name){
+        public function isDefinedVar($name){
             return isset($this->definitions['variables'][$name]);
         }
+
         /** Undefine PHPSandbox variable
          *
          * You can pass a string of variable $name to undefine, or an array of variable names to undefine
          *
-         * @example $sandbox->undefine_var('test');
+         * @example $sandbox->undefineVar('test');
          *
-         * @example $sandbox->undefine_var(array('test', 'test2'));
+         * @example $sandbox->undefineVar(array('test', 'test2'));
          *
          * @param   string|array          $name       String of variable name or an array of variable names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_var($name){
+        public function undefineVar($name){
             if(is_array($name)){
-                return $this->undefine_vars($name);
+                return $this->undefineVars($name);
             }
             if(isset($this->definitions['variables'][$name])){
                 unset($this->definitions['variables'][$name]);
             }
             return $this;
         }
+
         /** Undefine PHPSandbox variables by array
          *
          * You can pass an array of variable names to undefine, or an empty array or null argument to undefine all variables
          *
-         * @example $sandbox->undefine_vars(array('test', 'test2'));
+         * @example $sandbox->undefineVars(array('test', 'test2'));
          *
-         * @example $sandbox->undefine_vars(); //WILL UNDEFINE ALL VARIABLES!
+         * @example $sandbox->undefineVars(); //WILL UNDEFINE ALL VARIABLES!
          *
          * @param   array           $variables       Array of variable names to undefine. Passing an empty array or no argument will result in undefining all variables
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_vars(array $variables = array()){
+        public function undefineVars(array $variables = array()){
             if(count($variables)){
                 foreach($variables as $variable){
-                    $this->undefine_var($variable);
+                    $this->undefineVar($variable);
                 }
             } else {
                 $this->definitions['variables'] = array();
             }
             return $this;
         }
+
         /** Define PHPSandbox superglobal
          *
          * You can pass the superglobal $name and $value to define, or an associative array of superglobals to define, or a third variable to define the $key
          *
-         * @example $sandbox->define_superglobal('_GET',  array('page' => 1));
+         * @example $sandbox->defineSuperGlobal('_GET',  array('page' => 1));
          *
-         * @example $sandbox->define_superglobal(array('_GET' => array('page' => 1)));
+         * @example $sandbox->defineSuperGlobal(array('_GET' => array('page' => 1)));
          *
-         * @example $sandbox->define_superglobal('_GET', 'page', 1);
+         * @example $sandbox->defineSuperGlobal('_GET', 'page', 1);
          *
          * @param   string|array    $name       String of superglobal $name or associative array of superglobal names to define
          * @param   mixed           $value      Value to define superglobal to, can be callable
          *
          * @throws  Error           Throws exception if unnamed superglobal is defined
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_superglobal($name, $value){
+        public function defineSuperGlobal($name, $value){
             if(is_array($name)){
-                return $this->define_superglobals($name);
+                return $this->defineSuperGlobals($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed superglobal!", Error::DEFINE_SUPERGLOBAL_ERROR, null, '');
+                $this->validationError("Cannot define unnamed superglobal!", Error::DEFINE_SUPERGLOBAL_ERROR, null, '');
             }
-            $name = $this->normalize_superglobal($name);
+            $name = $this->normalizeSuperglobal($name);
             if(func_num_args() > 2){
                 $key = $value;
                 $value = func_get_arg(2);
@@ -2616,72 +2745,76 @@
             }
             return $this;
         }
+
         /** Define PHPSandbox superglobals by array
          *
          * You can pass an associative array of superglobals to define
          *
-         * @example $sandbox->define_superglobals(array('_GET' => array('page' => 1)));
+         * @example $sandbox->defineSuperGlobals(array('_GET' => array('page' => 1)));
          *
          * @param   array           $superglobals  Associative array of $superglobals to define
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_superglobals(array $superglobals = array()){
+        public function defineSuperGlobals(array $superglobals = array()){
             foreach($superglobals as $name => $value){
-                $this->define_superglobal($name, $value);
+                $this->defineSuperGlobal($name, $value);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined superglobals, or if superglobal $name has defined keys
          *
-         * @example $sandbox->has_defined_superglobals(); //returns number of defined superglobals, or zero if none defined
+         * @example $sandbox->hasDefinedSuperglobals(); //returns number of defined superglobals, or zero if none defined
          *
-         * @example $sandbox->has_defined_superglobals('_GET'); //returns number of defined superglobal _GET keys, or zero if none defined
+         * @example $sandbox->hasDefinedSuperglobals('_GET'); //returns number of defined superglobal _GET keys, or zero if none defined
          *
          * @param   string|null     $name       String of superglobal $name to check for keys
          *
          * @return  int|bool        Returns the number of superglobals or superglobal keys this instance has defined, or false if invalid superglobal name specified
          */
-        public function has_defined_superglobals($name = null){
-            $name = $name ? $this->normalize_superglobal($name) : null;
+        public function hasDefinedSuperglobals($name = null){
+            $name = $name ? $this->normalizeSuperglobal($name) : null;
             return $name ? (isset($this->definitions['superglobals'][$name]) ? count($this->definitions['superglobals'][$name]) : false) : count($this->definitions['superglobals']);
         }
+
         /** Check if PHPSandbox instance has $name superglobal defined, or if superglobal $name key is defined
          *
-         * @example $sandbox->is_defined_superglobal('_GET');
+         * @example $sandbox->isDefinedSuperglobal('_GET');
          *
-         * @example $sandbox->is_defined_superglobal('_GET', 'page');
+         * @example $sandbox->isDefinedSuperglobal('_GET', 'page');
          *
          * @param   string          $name       String of superglobal $name to query
          * @param   string|null     $key        String of key to to query in superglobal
          *
          * @return  bool            Returns true if PHPSandbox instance has defined superglobal, false otherwise
          */
-        public function is_defined_superglobal($name, $key = null){
-            $name = $this->normalize_superglobal($name);
+        public function isDefinedSuperglobal($name, $key = null){
+            $name = $this->normalizeSuperglobal($name);
             return $key !== null ? isset($this->definitions['superglobals'][$name][$key]) : isset($this->definitions['superglobals'][$name]);
         }
+
         /** Undefine PHPSandbox superglobal or superglobal key
          *
          * You can pass a string of superglobal $name to undefine, or a superglobal $key to undefine, or an array of
          * superglobal names to undefine, or an an associative array of superglobal names and keys to undefine
          *
-         * @example $sandbox->undefine_superglobal('_GET');
+         * @example $sandbox->undefineSuperGlobal('_GET');
          *
-         * @example $sandbox->undefine_superglobal('_GET', 'page');
+         * @example $sandbox->undefineSuperGlobal('_GET', 'page');
          *
-         * @example $sandbox->undefine_superglobal(array('_GET', '_POST'));
+         * @example $sandbox->undefineSuperGlobal(array('_GET', '_POST'));
          *
          * @param   string|array          $name       String of superglobal $name, or array of superglobal names, or associative array of superglobal names and keys to undefine
          * @param   string|null           $key        String of superglobal $key to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_superglobal($name, $key = null){
+        public function undefineSuperGlobal($name, $key = null){
             if(is_array($name)){
-                return $this->undefine_superglobals($name);
+                return $this->undefineSuperGlobals($name);
             }
-            $name = $this->normalize_superglobal($name);
+            $name = $this->normalizeSuperglobal($name);
             if($key !== null && is_array($this->definitions['superglobals'][$name])){
                 if(isset($this->definitions['superglobals'][$name][$key])){
                     unset($this->definitions['superglobals'][$name][$key]);
@@ -2691,308 +2824,326 @@
             }
             return $this;
         }
+
         /** Undefine PHPSandbox superglobals by array
          *
          * You can pass an array of superglobal names to undefine, or an associative array of superglobals names and key
          * to undefine, or an empty array or null to undefine all superglobals
          *
-         * @example $sandbox->undefine_superglobals(array('_GET', '_POST'));
+         * @example $sandbox->undefineSuperGlobals(array('_GET', '_POST'));
          *
-         * @example $sandbox->undefine_superglobals(array('_GET' => 'page', '_POST' => 'page'));
+         * @example $sandbox->undefineSuperGlobals(array('_GET' => 'page', '_POST' => 'page'));
          *
-         * @example $sandbox->undefine_superglobals(); //WILL UNDEFINE ALL SUPERGLOBALS!
+         * @example $sandbox->undefineSuperGlobals(); //WILL UNDEFINE ALL SUPERGLOBALS!
          *
          * @param   array          $superglobals       Associative array of superglobal names and keys or array of superglobal names to undefine
          *
-         * @return  PHPSandbox          Returns the PHPSandbox instance for chainability
+         * @return  $this          Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_superglobals(array $superglobals = array()){
+        public function undefineSuperGlobals(array $superglobals = array()){
             if(count($superglobals)){
                 foreach($superglobals as $superglobal => $name){
-                    $name = $this->normalize_superglobal($name);
-                    $this->undefine_superglobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) || !is_string($name) ? null : $name);
+                    $name = $this->normalizeSuperglobal($name);
+                    $this->undefineSuperGlobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) || !is_string($name) ? null : $name);
                 }
             } else {
                 $this->definitions['superglobals'] = array();
             }
             return $this;
         }
+
         /** Define PHPSandbox constant
          *
          * You can pass the constant $name and $value to define, or an associative array of constants to define
          *
-         * @example $sandbox->define_const('TEST', 1);
+         * @example $sandbox->defineConst('TEST', 1);
          *
-         * @example $sandbox->define_const(array('TEST' => 1));
+         * @example $sandbox->defineConst(array('TEST' => 1));
          *
          * @param   string|array    $name       String of constant $name or associative array to define
          * @param   mixed           $value      Value to define constant to
          *
          * @throws  Error           Throws exception if unnamed constant is defined
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_const($name, $value){
+        public function defineConst($name, $value){
             if(is_array($name)){
-                return $this->define_consts($name);
+                return $this->defineConsts($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed constant!", Error::DEFINE_CONST_ERROR, null, '');
+                $this->validationError("Cannot define unnamed constant!", Error::DEFINE_CONST_ERROR, null, '');
             }
             $this->definitions['constants'][$name] = $value;
             return $this;
         }
+
         /** Define PHPSandbox constants by array
          *
          * You can pass an associative array of constants to define
          *
-         * @example $sandbox->define_consts(array('test' => 1));
+         * @example $sandbox->defineConsts(array('test' => 1));
          *
          * @param   array           $constants  Associative array of $constants to define
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_consts(array $constants = array()){
+        public function defineConsts(array $constants = array()){
             foreach($constants as $name => $value){
-                $this->define_const($name, $value);
+                $this->defineConst($name, $value);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined constants
          *
-         * @example $sandbox->has_defined_consts(); //returns number of defined constants, or zero if none defined
+         * @example $sandbox->hasDefinedConsts(); //returns number of defined constants, or zero if none defined
          *
          * @return  int           Returns the number of constants this instance has defined
          */
-        public function has_defined_consts(){
+        public function hasDefinedConsts(){
             return count($this->definitions['constants']);
         }
+
         /** Check if PHPSandbox instance has $name constant defined
          *
-         * @example $sandbox->is_defined_const('test');
+         * @example $sandbox->isDefinedConst('test');
          *
          * @param   string          $name       String of constant $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined constant, false otherwise
          */
-        public function is_defined_const($name){
+        public function isDefinedConst($name){
             return isset($this->definitions['constants'][$name]);
         }
+
         /** Undefine PHPSandbox constant
          *
          * You can pass a string of constant $name to undefine, or an array of constant names to undefine
          *
-         * @example $sandbox->undefine_const('test');
+         * @example $sandbox->undefineConst('test');
          *
-         * @example $sandbox->undefine_const(array('test', 'test2'));
+         * @example $sandbox->undefineConst(array('test', 'test2'));
          *
          * @param   string|array          $name       String of constant name or array of constant names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_const($name){
+        public function undefineConst($name){
             if(is_array($name)){
-                return $this->undefine_consts($name);
+                return $this->undefineConsts($name);
             }
             if(isset($this->definitions['constants'][$name])){
                 unset($this->definitions['constants'][$name]);
             }
             return $this;
         }
+
         /** Undefine PHPSandbox constants by array
          *
          * You can pass an array of constant names to undefine, or an empty array or null argument to undefine all constants
          *
-         * @example $sandbox->undefine_consts(array('test', 'test2'));
+         * @example $sandbox->undefineConsts(array('test', 'test2'));
          *
-         * @example $sandbox->undefine_consts(); //WILL UNDEFINE ALL CONSTANTS!
+         * @example $sandbox->undefineConsts(); //WILL UNDEFINE ALL CONSTANTS!
          *
          * @param   array           $constants       Array of constant names to undefine. Passing an empty array or no argument will result in undefining all constants
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_consts(array $constants = array()){
+        public function undefineConsts(array $constants = array()){
             if(count($constants)){
                 foreach($constants as $constant){
-                    $this->undefine_const($constant);
+                    $this->undefineConst($constant);
                 }
             } else {
                 $this->definitions['constants'] = array();
             }
             return $this;
         }
+
         /** Define PHPSandbox magic constant
          *
          * You can pass the magic constant $name and $value to define, or an associative array of magic constants to define
          *
-         * @example $sandbox->define_magic_const('__LINE__', 1);
+         * @example $sandbox->defineMagicConst('__LINE__', 1);
          *
-         * @example $sandbox->define_magic_const(array('__LINE__' => 1));
+         * @example $sandbox->defineMagicConst(array('__LINE__' => 1));
          *
          * @param   string|array    $name       String of magic constant $name or associative array to define
          * @param   mixed           $value      Value to define magic constant to, can be callable
          *
          * @throws  Error           Throws exception if unnamed magic constant is defined
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_magic_const($name, $value){
+        public function defineMagicConst($name, $value){
             if(is_array($name)){
-                return $this->define_magic_consts($name);
+                return $this->defineMagicConsts($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed magic constant!", Error::DEFINE_MAGIC_CONST_ERROR, null, '');
+                $this->validationError("Cannot define unnamed magic constant!", Error::DEFINE_MAGIC_CONST_ERROR, null, '');
             }
-            $name = $this->normalize_magic_const($name);
+            $name = $this->normalizeMagicConst($name);
             $this->definitions['magic_constants'][$name] = $value;
             return $this;
         }
+
         /** Define PHPSandbox magic constants by array
          *
          * You can pass an associative array of magic constants to define
          *
-         * @example $sandbox->define_magic_consts(array('__LINE__' => 1));
+         * @example $sandbox->defineMagicConsts(array('__LINE__' => 1));
          *
          * @param   array           $magic_constants  Associative array of $magic_constants to define
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_magic_consts(array $magic_constants = array()){
+        public function defineMagicConsts(array $magic_constants = array()){
             foreach($magic_constants as $name => $value){
-                $this->define_magic_const($name, $value);
+                $this->defineMagicConst($name, $value);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined magic constants
          *
-         * @example $sandbox->has_defined_magic_consts(); //returns number of defined magic constants, or zero if none defined
+         * @example $sandbox->hasDefinedMagicConsts(); //returns number of defined magic constants, or zero if none defined
          *
          * @return  int           Returns the number of magic constants this instance has defined
          */
-        public function has_defined_magic_consts(){
+        public function hasDefinedMagicConsts(){
             return count($this->definitions['magic_constants']);
         }
+
         /** Check if PHPSandbox instance has $name magic constant defined
          *
-         * @example $sandbox->is_defined_magic_const('__LINE__');
+         * @example $sandbox->isDefinedMagicConst('__LINE__');
          *
          * @param   string          $name       String of magic constant $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined magic constant, false otherwise
          */
-        public function is_defined_magic_const($name){
-            $name = $this->normalize_magic_const($name);
+        public function isDefinedMagicConst($name){
+            $name = $this->normalizeMagicConst($name);
             return isset($this->definitions['magic_constants'][$name]);
         }
+
         /** Undefine PHPSandbox magic constant
          *
          * You can pass an a string of magic constant $name to undefine, or array of magic constant names to undefine
          *
-         * @example $sandbox->undefine_magic_const('__LINE__');
+         * @example $sandbox->undefineMagicConst('__LINE__');
          *
-         * @example $sandbox->undefine_magic_const(array('__LINE__', '__FILE__'));
+         * @example $sandbox->undefineMagicConst(array('__LINE__', '__FILE__'));
          *
          * @param   string|array          $name       String of magic constant name, or array of magic constant names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_magic_const($name){
+        public function undefineMagicConst($name){
             if(is_array($name)){
-                return $this->undefine_magic_consts($name);
+                return $this->undefineMagicConsts($name);
             }
-            $name = $this->normalize_magic_const($name);
+            $name = $this->normalizeMagicConst($name);
             if(isset($this->definitions['magic_constants'][$name])){
                 unset($this->definitions['magic_constants'][$name]);
             }
             return $this;
         }
+
         /** Undefine PHPSandbox magic constants by array
          *
          * You can pass an array of magic constant names to undefine, or an empty array or null argument to undefine all magic constants
          *
-         * @example $sandbox->undefine_magic_consts(array('__LINE__', '__FILE__'));
+         * @example $sandbox->undefineMagicConsts(array('__LINE__', '__FILE__'));
          *
-         * @example $sandbox->undefine_magic_consts(); //WILL UNDEFINE ALL MAGIC CONSTANTS!
+         * @example $sandbox->undefineMagicConsts(); //WILL UNDEFINE ALL MAGIC CONSTANTS!
          *
          * @param   array           $magic_constants       Array of magic constant names to undefine. Passing an empty array or no argument will result in undefining all magic constants
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_magic_consts(array $magic_constants = array()){
+        public function undefineMagicConsts(array $magic_constants = array()){
             if(count($magic_constants)){
                 foreach($magic_constants as $magic_constant){
-                    $this->undefine_magic_const($magic_constant);
+                    $this->undefineMagicConst($magic_constant);
                 }
             } else {
                 $this->definitions['magic_constants'] = array();
             }
             return $this;
         }
+
         /** Define PHPSandbox namespace
          *
          * You can pass the namespace $name and $value to define, or an array of namespaces to define
          *
-         * @example $sandbox->define_namespace('Foo');
+         * @example $sandbox->defineNamespace('Foo');
          *
-         * @example $sandbox->define_namespace(array('Foo', 'Bar'));
+         * @example $sandbox->defineNamespace(array('Foo', 'Bar'));
          *
          * @param   string|array    $name       String of namespace $name, or an array of namespace names to define
          *
          * @throws  Error           Throws exception if unnamed namespace is defined
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_namespace($name){
+        public function defineNamespace($name){
             if(is_array($name)){
-                return $this->define_namespaces($name);
+                return $this->defineNamespaces($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed namespace!", Error::DEFINE_NAMESPACE_ERROR, null, '');
+                $this->validationError("Cannot define unnamed namespace!", Error::DEFINE_NAMESPACE_ERROR, null, '');
             }
-            $normalized_name = $this->normalize_namespace($name);
+            $normalized_name = $this->normalizeNamespace($name);
             $this->definitions['namespaces'][$normalized_name] = $name;
             return $this;
         }
+
         /** Define PHPSandbox namespaces by array
          *
          * You can pass an array of namespaces to define
          *
-         * @example $sandbox->define_namespaces(array('Foo', 'Bar'));
+         * @example $sandbox->defineNamespaces(array('Foo', 'Bar'));
          *
          * @param   array           $namespaces  Array of $namespaces to define
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_namespaces(array $namespaces = array()){
+        public function defineNamespaces(array $namespaces = array()){
             foreach($namespaces as $name){
-                $this->define_namespace($name);
+                $this->defineNamespace($name);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined namespaces
          *
-         * @example $sandbox->has_defined_namespaces(); //returns number of defined namespaces, or zero if none defined
+         * @example $sandbox->hasDefinedNamespaces(); //returns number of defined namespaces, or zero if none defined
          *
          * @return  int           Returns the number of namespaces this instance has defined
          */
-        public function has_defined_namespaces(){
+        public function hasDefinedNamespaces(){
             return count($this->definitions['namespaces']);
         }
+
         /** Check if PHPSandbox instance has $name namespace defined
          *
-         * @example $sandbox->is_defined_namespace('Foo');
+         * @example $sandbox->isDefinedNamespace('Foo');
          *
          * @param   string          $name       String of namespace $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined namespace, false otherwise
          */
-        public function is_defined_namespace($name){
-            $name = $this->normalize_namespace($name);
+        public function isDefinedNamespace($name){
+            $name = $this->normalizeNamespace($name);
             return isset($this->definitions['namespaces'][$name]);
         }
+
         /** Get defined namespace of $name
          *
-         * @example $sandbox->get_defined_namespace('Test');
+         * @example $sandbox->getDefinedNamespace('Test');
          *
          * @param   string          $name       String of namespace $name to get
          *
@@ -3000,338 +3151,356 @@
          *
          * @return  string          Returns string of defined namespace value
          */
-        public function get_defined_namespace($name){
-            $name = $this->normalize_namespace($name);
+        public function getDefinedNamespace($name){
+            $name = $this->normalizeNamespace($name);
             if(!isset($this->definitions['namespaces'][$name])){
-                $this->validation_error("Could not get undefined namespace: $name", Error::VALID_NAMESPACE_ERROR, null, $name);
+                $this->validationError("Could not get undefined namespace: $name", Error::VALID_NAMESPACE_ERROR, null, $name);
             }
             return $this->definitions['namespaces'][$name];
         }
+
         /** Undefine PHPSandbox namespace
          *
          * You can pass a string of namespace $name to undefine, or an array of namespace names to undefine
          *
-         * @example $sandbox->undefine_namespace('Foo');
+         * @example $sandbox->undefineNamespace('Foo');
          *
-         * @example $sandbox->undefine_namespace(array('Foo', 'Bar'));
+         * @example $sandbox->undefineNamespace(array('Foo', 'Bar'));
          *
          * @param   string|array          $name       String of namespace $name, or an array of namespace names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_namespace($name){
+        public function undefineNamespace($name){
             if(is_array($name)){
-                return $this->undefine_namespaces($name);
+                return $this->undefineNamespaces($name);
             }
-            $name = $this->normalize_namespace($name);
+            $name = $this->normalizeNamespace($name);
             if(isset($this->definitions['namespaces'][$name])){
                 unset($this->definitions['namespaces'][$name]);
             }
             return $this;
         }
+
         /** Undefine PHPSandbox namespaces by array
          *
          * You can pass an array of namespace names to undefine, or an empty array or null argument to undefine all namespaces
          *
-         * @example $sandbox->undefine_namespaces(array('Foo', 'Bar'));
+         * @example $sandbox->undefineNamespaces(array('Foo', 'Bar'));
          *
-         * @example $sandbox->undefine_namespaces(); //WILL UNDEFINE ALL NAMESPACES!
+         * @example $sandbox->undefineNamespaces(); //WILL UNDEFINE ALL NAMESPACES!
          *
          * @param   array           $namespaces       Array of namespace names to undefine. Passing an empty array or no argument will result in undefining all namespaces
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_namespaces(array $namespaces = array()){
+        public function undefineNamespaces(array $namespaces = array()){
             if(count($namespaces)){
                 foreach($namespaces as $namespace){
-                    $this->undefine_namespace($namespace);
+                    $this->undefineNamespace($namespace);
                 }
             } else {
                 $this->definitions['namespaces'] = array();
             }
             return $this;
         }
+
         /** Define PHPSandbox alias
          *
          * You can pass the namespace $name and $alias to use, an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
-         * @example $sandbox->define_alias('Foo');  //use Foo;
+         * @example $sandbox->defineAlias('Foo');  //use Foo;
          *
-         * @example $sandbox->define_alias('Foo', 'Bar');  //use Foo as Bar;
+         * @example $sandbox->defineAlias('Foo', 'Bar');  //use Foo as Bar;
          *
-         * @example $sandbox->define_alias(array('Foo', 'Bar')); //use Foo; use Bar;
+         * @example $sandbox->defineAlias(array('Foo', 'Bar')); //use Foo; use Bar;
          *
-         * @example $sandbox->define_alias(array('Foo' => 'Bar')); //use Foo as Bar;
+         * @example $sandbox->defineAlias(array('Foo' => 'Bar')); //use Foo as Bar;
          *
          * @param   string|array    $name       String of namespace $name to use, or  or an array of namespaces to use, or an associative array of namespaces and their aliases to use
          * @param   string|null     $alias      String of $alias to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_alias($name, $alias = null){
+        public function defineAlias($name, $alias = null){
             if(is_array($name)){
-                return $this->define_aliases($name);
+                return $this->defineAliases($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed namespace alias!", Error::DEFINE_ALIAS_ERROR, null, '');
+                $this->validationError("Cannot define unnamed namespace alias!", Error::DEFINE_ALIAS_ERROR, null, '');
             }
             $original_name = $name;
-            $name = $this->normalize_alias($name);
+            $name = $this->normalizeAlias($name);
             $this->definitions['aliases'][$name] = array('original' => $original_name, 'alias' => $alias);
             return $this;
         }
+
         /** Define PHPSandbox aliases by array
          *
          * You can pass an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
-         * @example $sandbox->define_aliases(array('Foo', 'Bar')); //use Foo; use Bar;
+         * @example $sandbox->defineAliases(array('Foo', 'Bar')); //use Foo; use Bar;
          *
-         * @example $sandbox->define_aliases(array('Foo' => 'Bar')); //use Foo as Bar;
+         * @example $sandbox->defineAliases(array('Foo' => 'Bar')); //use Foo as Bar;
          *
          * @param   array           $aliases       Array of namespaces to use, or an associative array of namespaces and their aliases to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_aliases(array $aliases = array()){
+        public function defineAliases(array $aliases = array()){
             foreach($aliases as $name => $alias){
-                $this->define_alias($name, $alias);
+                $this->defineAlias($name, $alias);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined aliases
          *
-         * @example $sandbox->has_defined_aliases(); //returns number of defined aliases, or zero if none defined
+         * @example $sandbox->hasDefinedAliases(); //returns number of defined aliases, or zero if none defined
          *
          * @return  int           Returns the number of aliases this instance has defined
          */
-        public function has_defined_aliases(){
+        public function hasDefinedAliases(){
             return count($this->definitions['aliases']);
         }
+
         /** Check if PHPSandbox instance has $name alias defined
          *
-         * @example $sandbox->is_defined_alias('Foo');
+         * @example $sandbox->isDefinedAlias('Foo');
          *
          * @param   string          $name       String of alias $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined aliases, false otherwise
          */
-        public function is_defined_alias($name){
-            $name = $this->normalize_alias($name);
+        public function isDefinedAlias($name){
+            $name = $this->normalizeAlias($name);
             return isset($this->definitions['aliases'][$name]);
         }
+
         /** Undefine PHPSandbox alias
          *
          * You can pass a string of alias $name to undefine, or an array of alias names to undefine
          *
-         * @example $sandbox->undefine_alias('Foo');
+         * @example $sandbox->undefineAlias('Foo');
          *
-         * @example $sandbox->undefine_alias(array('Foo', 'Bar'));
+         * @example $sandbox->undefineAlias(array('Foo', 'Bar'));
          *
          * @param   string|array          $name       String of alias name, or array of alias names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_alias($name){
+        public function undefineAlias($name){
             if(is_array($name)){
-                return $this->undefine_aliases($name);
+                return $this->undefineAliases($name);
             }
-            $name = $this->normalize_alias($name);
+            $name = $this->normalizeAlias($name);
             if(isset($this->definitions['aliases'][$name])){
                 unset($this->definitions['aliases'][$name]);
             }
             return $this;
         }
+
         /** Undefine PHPSandbox aliases by array
          *
          * You can pass an array of alias names to undefine, or an empty array or null argument to undefine all aliases
          *
-         * @example $sandbox->undefine_aliases(array('Foo', 'Bar'));
+         * @example $sandbox->undefineAliases(array('Foo', 'Bar'));
          *
-         * @example $sandbox->undefine_aliases(); //WILL UNDEFINE ALL ALIASES!
+         * @example $sandbox->undefineAliases(); //WILL UNDEFINE ALL ALIASES!
          *
          * @param   array           $aliases       Array of alias names to undefine. Passing an empty array or no argument will result in undefining all aliases
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_aliases(array $aliases = array()){
+        public function undefineAliases(array $aliases = array()){
             if(count($aliases)){
                 foreach($aliases as $alias){
-                    $this->undefine_alias($alias);
+                    $this->undefineAlias($alias);
                 }
             } else {
                 $this->definitions['aliases'] = array();
             }
             return $this;
         }
+
         /** Define PHPSandbox use (or alias)
          *
-         * @alias   define_alias();
+         * @alias   defineAlias();
          *
          * You can pass the namespace $name and $alias to use, an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
-         * @example $sandbox->define_use('Foo');  //use Foo;
+         * @example $sandbox->defineUse('Foo');  //use Foo;
          *
-         * @example $sandbox->define_use('Foo', 'Bar');  //use Foo as Bar;
+         * @example $sandbox->defineUse('Foo', 'Bar');  //use Foo as Bar;
          *
-         * @example $sandbox->define_use(array('Foo', 'Bar')); //use Foo; use Bar;
+         * @example $sandbox->defineUse(array('Foo', 'Bar')); //use Foo; use Bar;
          *
-         * @example $sandbox->define_use(array('Foo' => 'Bar')); //use Foo as Bar;
+         * @example $sandbox->defineUse(array('Foo' => 'Bar')); //use Foo as Bar;
          *
          * @param   string|array    $name       String of namespace $name to use, or  or an array of namespaces to use, or an associative array of namespaces and their aliases to use
          * @param   string|null     $alias      String of $alias to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_use($name, $alias = null){
-            return $this->define_alias($name, $alias);
+        public function defineUse($name, $alias = null){
+            return $this->defineAlias($name, $alias);
         }
+
         /** Define PHPSandbox uses (or aliases) by array
          *
-         * @alias   define_aliases();
+         * @alias   defineAliases();
          *
          * You can pass an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
-         * @example $sandbox->define_uses(array('Foo', 'Bar')); //use Foo; use Bar;
+         * @example $sandbox->defineUses(array('Foo', 'Bar')); //use Foo; use Bar;
          *
-         * @example $sandbox->define_uses(array('Foo' => 'Bar')); //use Foo as Bar;
+         * @example $sandbox->defineUses(array('Foo' => 'Bar')); //use Foo as Bar;
          *
          * @param   array           $uses       Array of namespaces to use, or an associative array of namespaces and their aliases to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_uses(array $uses = array()){
-            return $this->define_aliases($uses);
+        public function defineUses(array $uses = array()){
+            return $this->defineAliases($uses);
         }
+
         /** Query whether PHPSandbox instance has defined uses (or aliases)
          *
-         * @alias   has_defined_aliases();
+         * @alias   hasDefinedAliases();
          *
-         * @example $sandbox->has_defined_uses(); //returns number of defined uses (or aliases) or zero if none defined
+         * @example $sandbox->hasDefinedUses(); //returns number of defined uses (or aliases) or zero if none defined
          *
          * @return  int           Returns the number of uses (or aliases) this instance has defined
          */
-        public function has_defined_uses(){
-            return $this->has_defined_aliases();
+        public function hasDefinedUses(){
+            return $this->hasDefinedAliases();
         }
+
         /** Check if PHPSandbox instance has $name uses (or alias) defined
          *
-         * @alias   is_defined_alias();
+         * @alias   isDefinedAlias();
          *
-         * @example $sandbox->is_defined_use('Foo');
+         * @example $sandbox->isDefinedUse('Foo');
          *
          * @param   string          $name       String of use (or alias) $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined uses (or aliases) and false otherwise
          */
-        public function is_defined_use($name){
-            return $this->is_defined_alias($name);
+        public function isDefinedUse($name){
+            return $this->isDefinedAlias($name);
         }
+
         /** Undefine PHPSandbox use (or alias)
          *
          * You can pass a string of use (or alias) $name to undefine, or an array of use (or alias) names to undefine
          *
-         * @example $sandbox->undefine_use('Foo');
+         * @example $sandbox->undefineUse('Foo');
          *
-         * @example $sandbox->undefine_use(array('Foo', 'Bar'));
+         * @example $sandbox->undefineUse(array('Foo', 'Bar'));
          *
          * @param   string|array          $name       String of use (or alias) name, or array of use (or alias) names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_use($name){
-            return $this->undefine_alias($name);
+        public function undefineUse($name){
+            return $this->undefineAlias($name);
         }
+
         /** Undefine PHPSandbox uses (or aliases) by array
          *
-         * @alias   undefine_aliases();
+         * @alias   undefineAliases();
          *
          * You can pass an array of use (or alias) names to undefine, or an empty array or null argument to undefine all uses (or aliases)
          *
-         * @example $sandbox->undefine_uses(array('Foo', 'Bar'));
+         * @example $sandbox->undefineUses(array('Foo', 'Bar'));
          *
-         * @example $sandbox->undefine_uses(); //WILL UNDEFINE ALL USES (OR ALIASES!)
+         * @example $sandbox->undefineUses(); //WILL UNDEFINE ALL USES (OR ALIASES!)
          *
          * @param   array           $uses       Array of use (or alias) names to undefine. Passing an empty array or no argument will result in undefining all uses (or aliases)
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_uses(array $uses = array()){
-            return $this->undefine_aliases($uses);
+        public function undefineUses(array $uses = array()){
+            return $this->undefineAliases($uses);
         }
+
         /** Define PHPSandbox class
          *
          * You can pass the class $name and $value to define, or an associative array of classes to define
          *
-         * @example $sandbox->define_class('Test', 'Test2');
+         * @example $sandbox->defineClass('Test', 'Test2');
          *
-         * @example $sandbox->define_class(array('Test' => 'Test2'));
+         * @example $sandbox->defineClass(array('Test' => 'Test2'));
          *
          * @param   string|array    $name       String of class $name or associative array to define
          * @param   mixed           $value      Value to define class to
          *
          * @throws  Error           Throws exception if unnamed class is defined
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_class($name, $value){
+        public function defineClass($name, $value){
             if(is_array($name)){
-                return $this->define_classes($name);
+                return $this->defineClasses($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed class!", Error::DEFINE_CLASS_ERROR, null, '');
+                $this->validationError("Cannot define unnamed class!", Error::DEFINE_CLASS_ERROR, null, '');
             }
-            $name = $this->normalize_class($name);
+            $name = $this->normalizeClass($name);
             $this->definitions['classes'][$name] = $value;
             return $this;
         }
+
         /** Define PHPSandbox classes by array
          *
          * You can pass an associative array of classes to define
          *
-         * @example $sandbox->define_classes(array('Test' => 'Test2'));
+         * @example $sandbox->defineClasses(array('Test' => 'Test2'));
          *
          * @param   array           $classes  Associative array of $classes to define
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_classes(array $classes = array()){
+        public function defineClasses(array $classes = array()){
             foreach($classes as $name => $value){
-                $this->define_class($name, $value);
+                $this->defineClass($name, $value);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined classes
          *
-         * @example $sandbox->has_defined_classes(); //returns number of defined classes, or zero if none defined
+         * @example $sandbox->hasDefinedClasses(); //returns number of defined classes, or zero if none defined
          *
          * @return  int           Returns the number of classes this instance has defined
          */
-        public function has_defined_classes(){
+        public function hasDefinedClasses(){
             return count($this->definitions['classes']);
         }
         /** Check if PHPSandbox instance has $name class defined
          *
-         * @example $sandbox->is_defined_class('Test');
+         * @example $sandbox->isDefinedClass('Test');
          *
          * @param   string          $name       String of class $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined class, false otherwise
          */
-        public function is_defined_class($name){
-            $name = $this->normalize_class($name);
+        public function isDefinedClass($name){
+            $name = $this->normalizeClass($name);
             return isset($this->definitions['classes'][$name]);
         }
+
         /** Get defined class of $name
          *
-         * @example $sandbox->get_defined_class('Test');
+         * @example $sandbox->getDefinedClass('Test');
          *
          * @param   string          $name       String of class $name to get
          *
@@ -3339,123 +3508,130 @@
          *
          * @return  string          Returns string of defined class value
          */
-        public function get_defined_class($name){
-            $name = $this->normalize_class($name);
+        public function getDefinedClass($name){
+            $name = $this->normalizeClass($name);
             if(!isset($this->definitions['classes'][$name])){
-                $this->validation_error("Could not get undefined class: $name", Error::VALID_CLASS_ERROR, null, $name);
+                $this->validationError("Could not get undefined class: $name", Error::VALID_CLASS_ERROR, null, $name);
             }
             return $this->definitions['classes'][$name];
         }
+
         /** Undefine PHPSandbox class
          *
          * You can pass a string of class $name to undefine, or an array of class names to undefine
          *
-         * @example $sandbox->undefine_class('Test');
+         * @example $sandbox->undefineClass('Test');
          *
-         * @example $sandbox->undefine_class(array('Test', 'Test2'));
+         * @example $sandbox->undefineClass(array('Test', 'Test2'));
          *
          * @param   string|array          $name       String of class name or an array of class names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_class($name){
+        public function undefineClass($name){
             if(is_array($name)){
-                return $this->undefine_classes($name);
+                return $this->undefineClasses($name);
             }
-            $name = $this->normalize_class($name);
+            $name = $this->normalizeClass($name);
             if(isset($this->definitions['classes'][$name])){
                 unset($this->definitions['classes'][$name]);
             }
             return $this;
         }
+
         /** Undefine PHPSandbox classes by array
          *
          * You can pass an array of class names to undefine, or an empty array or null argument to undefine all classes
          *
-         * @example $sandbox->undefine_classes(array('Test', 'Test2'));
+         * @example $sandbox->undefineClasses(array('Test', 'Test2'));
          *
-         * @example $sandbox->undefine_classes(); //WILL UNDEFINE ALL CLASSES!
+         * @example $sandbox->undefineClasses(); //WILL UNDEFINE ALL CLASSES!
          *
          * @param   array           $classes       Array of class names to undefine. Passing an empty array or no argument will result in undefining all classes
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_classes(array $classes = array()){
+        public function undefineClasses(array $classes = array()){
             if(count($classes)){
                 foreach($classes as $class){
-                    $this->undefine_class($class);
+                    $this->undefineClass($class);
                 }
             } else {
                 $this->definitions['classes'] = array();
             }
             return $this;
         }
+
         /** Define PHPSandbox interface
          *
          * You can pass the interface $name and $value to define, or an associative array of interfaces to define
          *
-         * @example $sandbox->define_interface('Test', 'Test2');
+         * @example $sandbox->defineInterface('Test', 'Test2');
          *
-         * @example $sandbox->define_interface(array('Test' => 'Test2'));
+         * @example $sandbox->defineInterface(array('Test' => 'Test2'));
          *
          * @param   string|array    $name       String of interface $name or associative array to define
          * @param   mixed           $value      Value to define interface to
          *
          * @throws  Error           Throws exception if unnamed interface is defined
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_interface($name, $value){
+        public function defineInterface($name, $value){
             if(is_array($name)){
-                return $this->define_interfaces($name);
+                return $this->defineInterfaces($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed interface!", Error::DEFINE_INTERFACE_ERROR, null, '');
+                $this->validationError("Cannot define unnamed interface!", Error::DEFINE_INTERFACE_ERROR, null, '');
             }
-            $name = $this->normalize_interface($name);
+            $name = $this->normalizeInterface($name);
             $this->definitions['interfaces'][$name] = $value;
             return $this;
         }
+
         /** Define PHPSandbox interfaces by array
          *
          * You can pass an associative array of interfaces to define
          *
-         * @example $sandbox->define_interfaces(array('Test' => 'Test2'));
+         * @example $sandbox->defineInterfaces(array('Test' => 'Test2'));
          *
          * @param   array           $interfaces  Associative array of $interfaces to define
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_interfaces(array $interfaces = array()){
+        public function defineInterfaces(array $interfaces = array()){
             foreach($interfaces as $name => $value){
-                $this->define_interface($name, $value);
+                $this->defineInterface($name, $value);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined interfaces
          *
-         * @example $sandbox->has_defined_interfaces(); //returns number of defined interfaces, or zero if none defined
+         * @example $sandbox->hasDefinedInterfaces(); //returns number of defined interfaces, or zero if none defined
          *
          * @return  int           Returns the number of interfaces this instance has defined
          */
-        public function has_defined_interfaces(){
+        public function hasDefinedInterfaces(){
             return count($this->definitions['interfaces']);
         }
+
         /** Check if PHPSandbox instance has $name interface defined
          *
-         * @example $sandbox->is_defined_interface('Test');
+         * @example $sandbox->isDefinedInterface('Test');
          *
          * @param   string          $name       String of interface $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined interface, false otherwise
          */
-        public function is_defined_interface($name){
-            $name = $this->normalize_interface($name);
+        public function isDefinedInterface($name){
+            $name = $this->normalizeInterface($name);
             return isset($this->definitions['interfaces'][$name]);
         }
+
         /** Get defined interface of $name
          *
-         * @example $sandbox->get_defined_interface('Test');
+         * @example $sandbox->getDefinedInterface('Test');
          *
          * @param   string          $name       String of interface $name to get
          *
@@ -3463,123 +3639,130 @@
          *
          * @return  string          Returns string of defined interface value
          */
-        public function get_defined_interface($name){
-            $name = $this->normalize_interface($name);
+        public function getDefinedInterface($name){
+            $name = $this->normalizeInterface($name);
             if(!isset($this->definitions['interfaces'][$name])){
-                $this->validation_error("Could not get undefined interface: $name", Error::VALID_INTERFACE_ERROR, null, $name);
+                $this->validationError("Could not get undefined interface: $name", Error::VALID_INTERFACE_ERROR, null, $name);
             }
             return $this->definitions['interfaces'][$name];
         }
+
         /** Undefine PHPSandbox interface
          *
          * You can pass a string of interface $name to undefine, or an array of interface names to undefine
          *
-         * @example $sandbox->undefine_interface('Test');
+         * @example $sandbox->undefineInterface('Test');
          *
-         * @example $sandbox->undefine_interface(array('Test', 'Test2'));
+         * @example $sandbox->undefineInterface(array('Test', 'Test2'));
          *
          * @param   string|array          $name       String of interface name or an array of interface names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_interface($name){
+        public function undefineInterface($name){
             if(is_array($name)){
-                return $this->undefine_interfaces($name);
+                return $this->undefineInterfaces($name);
             }
-            $name = $this->normalize_interface($name);
+            $name = $this->normalizeInterface($name);
             if(isset($this->definitions['interfaces'][$name])){
                 unset($this->definitions['interfaces'][$name]);
             }
             return $this;
         }
+
         /** Undefine PHPSandbox interfaces by array
          *
          * You can pass an array of interface names to undefine, or an empty array or null argument to undefine all interfaces
          *
-         * @example $sandbox->undefine_interfaces(array('Test', 'Test2'));
+         * @example $sandbox->undefineInterfaces(array('Test', 'Test2'));
          *
-         * @example $sandbox->undefine_interfaces(); //WILL UNDEFINE ALL INTERFACES!
+         * @example $sandbox->undefineInterfaces(); //WILL UNDEFINE ALL INTERFACES!
          *
          * @param   array           $interfaces       Array of interface names to undefine. Passing an empty array or no argument will result in undefining all interfaces
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_interfaces(array $interfaces = array()){
+        public function undefineInterfaces(array $interfaces = array()){
             if(count($interfaces)){
                 foreach($interfaces as $interface){
-                    $this->undefine_interface($interface);
+                    $this->undefineInterface($interface);
                 }
             } else {
                 $this->definitions['interfaces'] = array();
             }
             return $this;
         }
+
         /** Define PHPSandbox trait
          *
          * You can pass the trait $name and $value to define, or an associative array of traits to define
          *
-         * @example $sandbox->define_trait('Test', 'Test2');
+         * @example $sandbox->defineTrait('Test', 'Test2');
          *
-         * @example $sandbox->define_trait(array('Test' => 'Test2'));
+         * @example $sandbox->defineTrait(array('Test' => 'Test2'));
          *
          * @param   string|array    $name       String of trait $name or associative array to define
          * @param   mixed           $value      Value to define trait to
          *
          * @throws  Error           Throws exception if unnamed trait is defined
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_trait($name, $value){
+        public function defineTrait($name, $value){
             if(is_array($name)){
-                return $this->define_traits($name);
+                return $this->defineTraits($name);
             }
             if(!$name){
-                $this->validation_error("Cannot define unnamed trait!", Error::DEFINE_TRAIT_ERROR, null, '');
+                $this->validationError("Cannot define unnamed trait!", Error::DEFINE_TRAIT_ERROR, null, '');
             }
-            $name = $this->normalize_trait($name);
+            $name = $this->normalizeTrait($name);
             $this->definitions['traits'][$name] = $value;
             return $this;
         }
+
         /** Define PHPSandbox traits by array
          *
          * You can pass an associative array of traits to define
          *
-         * @example $sandbox->define_traits(array('Test' => 'Test2'));
+         * @example $sandbox->defineTraits(array('Test' => 'Test2'));
          *
          * @param   array           $traits  Associative array of $traits to define
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function define_traits(array $traits = array()){
+        public function defineTraits(array $traits = array()){
             foreach($traits as $name => $value){
-                $this->define_trait($name, $value);
+                $this->defineTrait($name, $value);
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has defined traits
          *
-         * @example $sandbox->has_defined_traits(); //returns number of defined traits, or zero if none defined
+         * @example $sandbox->hasDefinedTraits(); //returns number of defined traits, or zero if none defined
          *
          * @return  int           Returns the number of traits this instance has defined
          */
-        public function has_defined_traits(){
+        public function hasDefinedTraits(){
             return count($this->definitions['traits']);
         }
+
         /** Check if PHPSandbox instance has $name trait defined
          *
-         * @example $sandbox->is_defined_trait('Test');
+         * @example $sandbox->isDefinedTrait('Test');
          *
          * @param   string          $name       String of trait $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has defined trait, false otherwise
          */
-        public function is_defined_trait($name){
-            $name = $this->normalize_trait($name);
+        public function isDefinedTrait($name){
+            $name = $this->normalizeTrait($name);
             return isset($this->definitions['traits'][$name]);
         }
+
         /** Get defined trait of $name
          *
-         * @example $sandbox->get_defined_trait('Test');
+         * @example $sandbox->getDefinedTrait('Test');
          *
          * @param   string          $name       String of trait $name to get
          *
@@ -3587,198 +3770,210 @@
          *
          * @return  string          Returns string of defined trait value
          */
-        public function get_defined_trait($name){
-            $name = $this->normalize_trait($name);
+        public function getDefinedTrait($name){
+            $name = $this->normalizeTrait($name);
             if(!isset($this->definitions['traits'][$name])){
-                $this->validation_error("Could not get undefined trait: $name", Error::VALID_TRAIT_ERROR, null, $name);
+                $this->validationError("Could not get undefined trait: $name", Error::VALID_TRAIT_ERROR, null, $name);
             }
             return $this->definitions['traits'][$name];
         }
+
         /** Undefine PHPSandbox trait
          *
          * You can pass a string of trait $name to undefine, or an array of trait names to undefine
          *
-         * @example $sandbox->undefine_trait('Test');
+         * @example $sandbox->undefineTrait('Test');
          *
-         * @example $sandbox->undefine_trait(array('Test', 'Test2'));
+         * @example $sandbox->undefineTrait(array('Test', 'Test2'));
          *
          * @param   string|array          $name       String of trait name or an array of trait names to undefine
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_trait($name){
+        public function undefineTrait($name){
             if(is_array($name)){
-                return $this->undefine_traits($name);
+                return $this->undefineTraits($name);
             }
-            $name = $this->normalize_trait($name);
+            $name = $this->normalizeTrait($name);
             if(isset($this->definitions['traits'][$name])){
                 unset($this->definitions['traits'][$name]);
             }
             return $this;
         }
+
         /** Undefine PHPSandbox traits by array
          *
          * You can pass an array of trait names to undefine, or an empty array or null argument to undefine all traits
          *
-         * @example $sandbox->undefine_traits(array('Test', 'Test2'));
+         * @example $sandbox->undefineTraits(array('Test', 'Test2'));
          *
-         * @example $sandbox->undefine_traits(); //WILL UNDEFINE ALL TRAITS!
+         * @example $sandbox->undefineTraits(); //WILL UNDEFINE ALL TRAITS!
          *
          * @param   array           $traits       Array of trait names to undefine. Passing an empty array or no argument will result in undefining all traits
          *
-         * @return  PHPSandbox           Returns the PHPSandbox instance for chainability
+         * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefine_traits(array $traits = array()){
+        public function undefineTraits(array $traits = array()){
             if(count($traits)){
                 foreach($traits as $trait){
-                    $this->undefine_trait($trait);
+                    $this->undefineTrait($trait);
                 }
             } else {
                 $this->definitions['traits'] = array();
             }
             return $this;
         }
+
         /** Normalize function name.  This is an internal PHPSandbox function.
          *
          * @param   string|array          $name       String of the function $name, or array of strings to normalize
          *
          * @return  string|array          Returns the normalized function string or an array of normalized strings
          */
-        protected function normalize_func($name){
+        protected function normalizeFunc($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_func($value);
+                    $value = $this->normalizeFunc($value);
                 }
                 return $name;
             }
             return strtolower($name);
         }
+
         /** Normalize superglobal name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the superglobal $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized superglobal string or an array of normalized strings
          */
-        protected function normalize_superglobal($name){
+        protected function normalizeSuperglobal($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_superglobal($value);
+                    $value = $this->normalizeSuperglobal($value);
                 }
                 return $name;
             }
             return strtoupper(ltrim($name, '_'));
         }
+
         /** Normalize magic constant name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the magic constant $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized magic constant string or an array of normalized strings
          */
-        protected function normalize_magic_const($name){
+        protected function normalizeMagicConst($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_magic_const($value);
+                    $value = $this->normalizeMagicConst($value);
                 }
                 return $name;
             }
             return strtoupper(trim($name, '_'));
         }
+
         /** Normalize namespace name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the namespace $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized namespace string or an array of normalized strings
          */
-        protected function normalize_namespace($name){
+        protected function normalizeNamespace($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_namespace($value);
+                    $value = $this->normalizeNamespace($value);
                 }
                 return $name;
             }
             return strtolower($name);
         }
+
         /** Normalize alias name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the alias $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized alias string or an array of normalized strings
          */
-        protected function normalize_alias($name){
+        protected function normalizeAlias($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_alias($value);
+                    $value = $this->normalizeAlias($value);
                 }
                 return $name;
             }
             return strtolower($name);
         }
+
         /** Normalize use (or alias) name.  This is an internal PHPSandbox function.
          *
-         * @alias   normalize_alias();
+         * @alias   normalizeAlias();
          *
          * @param   string|array           $name       String of the use (or alias) $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized use (or alias) string or an array of normalized strings
          */
-        protected function normalize_use($name){
-            return $this->normalize_alias($name);
+        protected function normalizeUse($name){
+            return $this->normalizeAlias($name);
         }
+
         /** Normalize class name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the class $name to normalize
          *
          * @return  string|array           Returns the normalized class string or an array of normalized strings
          */
-        protected function normalize_class($name){
+        protected function normalizeClass($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_class($value);
+                    $value = $this->normalizeClass($value);
                 }
                 return $name;
             }
             return strtolower($name);
         }
+
         /** Normalize interface name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the interface $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized interface string or an array of normalized strings
          */
-        protected function normalize_interface($name){
+        protected function normalizeInterface($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_interface($value);
+                    $value = $this->normalizeInterface($value);
                 }
                 return $name;
             }
             return strtolower($name);
         }
+
         /** Normalize trait name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the trait $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized trait string or an array of normalized strings
          */
-        protected function normalize_trait($name){
+        protected function normalizeTrait($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_trait($value);
+                    $value = $this->normalizeTrait($value);
                 }
                 return $name;
             }
             return strtolower($name);
         }
+
         /** Normalize keyword name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the keyword $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized keyword string or an array of normalized strings
          */
-        protected function normalize_keyword($name){
+        protected function normalizeKeyword($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_keyword($value);
+                    $value = $this->normalizeKeyword($value);
                 }
                 return $name;
             }
@@ -3813,16 +4008,17 @@
             }
             return $name;
         }
+
         /** Normalize operator name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the operator $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized operator string or an array of normalized strings
          */
-        protected function normalize_operator($name){
+        protected function normalizeOperator($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_operator($value);
+                    $value = $this->normalizeOperator($value);
                 }
                 return $name;
             }
@@ -3838,16 +4034,17 @@
             }
             return $name;
         }
+
         /** Normalize primitive name.  This is an internal PHPSandbox function.
          *
          * @param   string|array           $name       String of the primitive $name, or array of strings to normalize
          *
          * @return  string|array           Returns the normalized primitive string or an array of normalized strings
          */
-        protected function normalize_primitive($name){
+        protected function normalizePrimitive($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_primitive($value);
+                    $value = $this->normalizePrimitive($value);
                 }
                 return $name;
             }
@@ -3859,21 +4056,23 @@
             }
             return $name;
         }
+
         /** Normalize type name.  This is an internal PHPSandbox function.
          *
          * @param   string|array          $name       String of the type $name, or array of strings to normalize
          *
          * @return  string|array          Returns the normalized type string or an array of normalized strings
          */
-        protected function normalize_type($name){
+        protected function normalizeType($name){
             if(is_array($name)){
                 foreach($name as &$value){
-                    $value = $this->normalize_type($value);
+                    $value = $this->normalizeType($value);
                 }
                 return $name;
             }
             return strtolower($name);
         }
+
         /** Whitelist PHPSandbox definitions, such as functions, constants, classes, etc. to set
          *
          * You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name
@@ -3887,7 +4086,7 @@
          * @param   string|array        $type       Associative array or string of whitelist type to set
          * @param   string|array|null   $name       Array or string of whitelist name to set
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
         public function whitelist($type, $name = null){
             if(is_array($type)){
@@ -3913,6 +4112,7 @@
             }
             return $this;
         }
+
         /** Blacklist PHPSandbox definitions, such as functions, constants, classes, etc. to set
          *
          * You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name
@@ -3926,7 +4126,7 @@
          * @param   string|array        $type       Associative array or string of blacklist type to set
          * @param   string|array|null   $name       Array or string of blacklist name to set
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
         public function blacklist($type, $name = null){
             if(is_array($type)){
@@ -3952,6 +4152,7 @@
             }
             return $this;
         }
+
         /** Remove PHPSandbox definitions, such as functions, constants, classes, etc. from whitelist
          *
          * You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset
@@ -3965,7 +4166,7 @@
          * @param   string|array        $type       Associative array or string of whitelist type to unset
          * @param   string|array|null   $name       Array or string of whitelist name to unset
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
         public function dewhitelist($type, $name){
             if(is_array($type)){
@@ -3985,6 +4186,7 @@
             }
             return $this;
         }
+
         /** Remove PHPSandbox definitions, such as functions, constants, classes, etc. from blacklist
          *
          * You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset
@@ -3998,7 +4200,7 @@
          * @param   string|array        $type       Associative array or string of blacklist type to unset
          * @param   string|array|null   $name       Array or string of blacklist name to unset
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
         public function deblacklist($type, $name){
             if(is_array($type)){
@@ -4018,983 +4220,1064 @@
             }
             return $this;
         }
+
         /** Query whether PHPSandbox instance has whitelist type
          *
-         * @example $sandbox->has_whitelist('functions'); //returns number of whitelisted functions, or zero if none whitelisted
+         * @example $sandbox->hasWhitelist('functions'); //returns number of whitelisted functions, or zero if none whitelisted
          *
          * @param   string        $type     The whitelist type to query
          *
          * @return  int           Returns the number of whitelists this instance has defined
          */
-        public function has_whitelist($type){
+        public function hasWhitelist($type){
             return count($this->whitelist[$type]);
         }
+
         /** Query whether PHPSandbox instance has blacklist type.
          *
-         * @example $sandbox->has_blacklist('functions'); //returns number of blacklisted functions, or zero if none blacklisted
+         * @example $sandbox->hasBlacklist('functions'); //returns number of blacklisted functions, or zero if none blacklisted
          *
          * @param   string        $type     The blacklist type to query
          *
          * @return  int           Returns the number of blacklists this instance has defined
          */
-        public function has_blacklist($type){
+        public function hasBlacklist($type){
             return count($this->blacklist[$type]);
         }
+
         /** Check if PHPSandbox instance has whitelist type and name set
          *
-         * @example $sandbox->is_whitelisted('functions', 'test');
+         * @example $sandbox->isWhitelisted('functions', 'test');
          *
          * @param   string          $type       String of whitelist $type to query
          * @param   string          $name       String of whitelist $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted $type and $name, false otherwise
          */
-        public function is_whitelisted($type, $name){
+        public function isWhitelisted($type, $name){
             return isset($this->whitelist[$type][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklist type and name set
          *
-         * @example $sandbox->is_blacklisted('functions', 'test');
+         * @example $sandbox->isBlacklisted('functions', 'test');
          *
          * @param   string          $type       String of blacklist $type to query
          * @param   string          $name       String of blacklist $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted $type and $name, false otherwise
          */
-        public function is_blacklisted($type, $name){
+        public function isBlacklisted($type, $name){
             return isset($this->blacklist[$type][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted functions.
          *
-         * @example $sandbox->has_whitelist_funcs(); //returns number of whitelisted functions, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedFuncs(); //returns number of whitelisted functions, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted functions this instance has defined
          */
-        public function has_whitelist_funcs(){
+        public function hasWhitelistedFuncs(){
             return count($this->whitelist['functions']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted functions.
          *
-         * @example $sandbox->has_blacklist_funcs(); //returns number of blacklisted functions, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedFuncs(); //returns number of blacklisted functions, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted functions this instance has defined
          */
-        public function has_blacklist_funcs(){
+        public function hasBlacklistedFuncs(){
             return count($this->blacklist['functions']);
         }
+
         /** Check if PHPSandbox instance has whitelisted function name set
          *
-         * @example $sandbox->is_whitelisted_func('test');
+         * @example $sandbox->isWhitelistedFunc('test');
          *
          * @param   string          $name       String of function $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted function $name, false otherwise
          */
-        public function is_whitelisted_func($name){
-            $name = $this->normalize_func($name);
+        public function isWhitelistedFunc($name){
+            $name = $this->normalizeFunc($name);
             return isset($this->whitelist['functions'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted function name set
          *
-         * @example $sandbox->is_blacklisted_func('test');
+         * @example $sandbox->isBlacklistedFunc('test');
          *
          * @param   string          $name       String of function $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted function $name, false otherwise
          */
-        public function is_blacklisted_func($name){
-            $name = $this->normalize_func($name);
+        public function isBlacklistedFunc($name){
+            $name = $this->normalizeFunc($name);
             return isset($this->blacklist['functions'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted variables.
          *
-         * @example $sandbox->has_whitelist_vars(); //returns number of whitelisted variables, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedVars(); //returns number of whitelisted variables, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted variables this instance has defined
          */
-        public function has_whitelist_vars(){
+        public function hasWhitelistedVars(){
             return count($this->whitelist['variables']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted variables.
          *
-         * @example $sandbox->has_blacklist_vars(); //returns number of blacklisted variables, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedVars(); //returns number of blacklisted variables, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted variables this instance has defined
          */
-        public function has_blacklist_vars(){
+        public function hasBlacklistedVars(){
             return count($this->blacklist['variables']);
         }
+
         /** Check if PHPSandbox instance has whitelisted variable name set
          *
-         * @example $sandbox->is_whitelisted_var('test');
+         * @example $sandbox->isWhitelistedVar('test');
          *
          * @param   string          $name       String of variable $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted variable $name, false otherwise
          */
-        public function is_whitelisted_var($name){
+        public function isWhitelistedVar($name){
             return isset($this->whitelist['variables'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted variable name set
          *
-         * @example $sandbox->is_blacklisted_var('test');
+         * @example $sandbox->isBlacklistedVar('test');
          *
          * @param   string          $name       String of variable $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted variable $name, false otherwise
          */
-        public function is_blacklisted_var($name){
+        public function isBlacklistedVar($name){
             return isset($this->blacklist['variables'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted globals.
          *
-         * @example $sandbox->has_whitelist_globals(); //returns number of whitelisted globals, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedGlobals(); //returns number of whitelisted globals, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted globals this instance has defined
          */
-        public function has_whitelist_globals(){
+        public function hasWhitelistedGlobals(){
             return count($this->whitelist['globals']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted globals.
          *
-         * @example $sandbox->has_blacklist_globals(); //returns number of blacklisted globals, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedGlobals(); //returns number of blacklisted globals, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted globals this instance has defined
          */
-        public function has_blacklist_globals(){
+        public function hasBlacklistedGlobals(){
             return count($this->blacklist['globals']);
         }
+
         /** Check if PHPSandbox instance has whitelisted global name set
          *
-         * @example $sandbox->is_whitelisted_global('test');
+         * @example $sandbox->isWhitelistedGlobal('test');
          *
          * @param   string          $name       String of global $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted global $name, false otherwise
          */
-        public function is_whitelisted_global($name){
+        public function isWhitelistedGlobal($name){
             return isset($this->whitelist['globals'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted global name set
          *
-         * @example $sandbox->is_blacklisted_global('test');
+         * @example $sandbox->isBlacklistedGlobal('test');
          *
          * @param   string          $name       String of global $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted global $name, false otherwise
          */
-        public function is_blacklisted_global($name){
+        public function isBlacklistedGlobal($name){
             return isset($this->blacklist['globals'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted superglobals, or superglobal keys
          *
-         * @example $sandbox->has_whitelist_superglobals(); //returns number of whitelisted superglobals, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedSuperglobals(); //returns number of whitelisted superglobals, or zero if none whitelisted
          *
-         * @example $sandbox->has_whitelist_superglobals('_GET'); //returns number of whitelisted superglobal keys, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedSuperglobals('_GET'); //returns number of whitelisted superglobal keys, or zero if none whitelisted
          *
          * @param   string        $name     The whitelist superglobal key to query
          *
          * @return  int           Returns the number of whitelisted superglobals or superglobal keys this instance has defined
          */
-        public function has_whitelist_superglobals($name = null){
-            $name = $this->normalize_superglobal($name);
+        public function hasWhitelistedSuperglobals($name = null){
+            $name = $this->normalizeSuperglobal($name);
             return $name !== null ? (isset($this->whitelist['superglobals'][$name]) ? count($this->whitelist['superglobals'][$name]) : 0) : count($this->whitelist['superglobals']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted superglobals, or superglobal keys
          *
-         * @example $sandbox->has_blacklist_superglobals(); //returns number of blacklisted superglobals, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedSuperglobals(); //returns number of blacklisted superglobals, or zero if none blacklisted
          *
-         * @example $sandbox->has_blacklist_superglobals('_GET'); //returns number of blacklisted superglobal keys, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedSuperglobals('_GET'); //returns number of blacklisted superglobal keys, or zero if none blacklisted
          *
          * @param   string        $name     The blacklist superglobal key to query
          *
          * @return  int           Returns the number of blacklisted superglobals or superglobal keys this instance has defined
          */
-        public function has_blacklist_superglobals($name = null){
-            $name = $this->normalize_superglobal($name);
+        public function hasBlacklistedSuperglobals($name = null){
+            $name = $this->normalizeSuperglobal($name);
             return $name !== null ? (isset($this->blacklist['superglobals'][$name]) ? count($this->blacklist['superglobals'][$name]) : 0) : count($this->blacklist['superglobals']);
         }
+
         /** Check if PHPSandbox instance has whitelisted superglobal or superglobal key set
          *
-         * @example $sandbox->is_whitelisted_superglobal('_GET');
+         * @example $sandbox->isWhitelistedSuperglobal('_GET');
          *
-         * @example $sandbox->is_whitelisted_superglobal('_GET', 'page');
+         * @example $sandbox->isWhitelistedSuperglobal('_GET', 'page');
          *
          * @param   string          $name       String of whitelisted superglobal $name to query
          * @param   string          $key        String of whitelisted superglobal $key to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted superglobal key or superglobal, false otherwise
          */
-        public function is_whitelisted_superglobal($name, $key = null){
-            $name = $this->normalize_superglobal($name);
+        public function isWhitelistedSuperglobal($name, $key = null){
+            $name = $this->normalizeSuperglobal($name);
             return $key !== null ? isset($this->whitelist['superglobals'][$name][$key]) : isset($this->whitelist['superglobals'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted superglobal or superglobal key set
          *
-         * @example $sandbox->is_blacklisted_superglobal('_GET');
+         * @example $sandbox->isBlacklistedSuperglobal('_GET');
          *
-         * @example $sandbox->is_blacklisted_superglobal('_GET', 'page');
+         * @example $sandbox->isBlacklistedSuperglobal('_GET', 'page');
          *
          * @param   string          $name       String of blacklisted superglobal $name to query
          * @param   string          $key        String of blacklisted superglobal $key to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted superglobal key or superglobal, false otherwise
          */
-        public function is_blacklisted_superglobal($name, $key = null){
-            $name = $this->normalize_superglobal($name);
+        public function isBlacklistedSuperglobal($name, $key = null){
+            $name = $this->normalizeSuperglobal($name);
             return $key !== null ? isset($this->blacklist['superglobals'][$name][$key]) : isset($this->blacklist['superglobals'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted constants.
          *
-         * @example $sandbox->has_whitelist_consts(); //returns number of whitelisted constants, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedConsts(); //returns number of whitelisted constants, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted constants this instance has defined
          */
-        public function has_whitelist_consts(){
+        public function hasWhitelistedConsts(){
             return count($this->whitelist['constants']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted constants.
          *
-         * @example $sandbox->has_blacklist_consts(); //returns number of blacklisted constants, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedConsts(); //returns number of blacklisted constants, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted constants this instance has defined
          */
-        public function has_blacklist_consts(){
+        public function hasBlacklistedConsts(){
             return count($this->blacklist['constants']);
         }
+
         /** Check if PHPSandbox instance has whitelisted constant name set
          *
-         * @example $sandbox->is_whitelisted_const('TEST');
+         * @example $sandbox->isWhitelistedConst('TEST');
          *
          * @param   string          $name       String of constant $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted constant $name, false otherwise
          */
-        public function is_whitelisted_const($name){
+        public function isWhitelistedConst($name){
             return isset($this->whitelist['constants'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted constant name set
          *
-         * @example $sandbox->is_blacklisted_const('TEST');
+         * @example $sandbox->isBlacklistedConst('TEST');
          *
          * @param   string          $name       String of constant $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted constant $name, false otherwise
          */
-        public function is_blacklisted_const($name){
+        public function isBlacklistedConst($name){
             return isset($this->blacklist['constants'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted magic constants.
          *
-         * @example $sandbox->has_whitelist_magic_consts(); //returns number of whitelisted magic constants, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedMagicConsts(); //returns number of whitelisted magic constants, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted magic constants this instance has defined
          */
-        public function has_whitelist_magic_consts(){
+        public function hasWhitelistedMagicConsts(){
             return count($this->whitelist['magic_constants']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted magic constants.
          *
-         * @example $sandbox->has_blacklist_magic_consts(); //returns number of blacklisted magic constants, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedMagicConsts(); //returns number of blacklisted magic constants, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted magic constants this instance has defined
          */
-        public function has_blacklist_magic_consts(){
+        public function hasBlacklistedMagicConsts(){
             return count($this->blacklist['magic_constants']);
         }
+
         /** Check if PHPSandbox instance has whitelisted magic constant name set
          *
-         * @example $sandbox->is_whitelisted_magic_const('__LINE__');
+         * @example $sandbox->isWhitelistedMagicConst('__LINE__');
          *
          * @param   string          $name       String of magic constant $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted magic constant $name, false otherwise
          */
-        public function is_whitelisted_magic_const($name){
-            $name = $this->normalize_magic_const($name);
+        public function isWhitelistedMagicConst($name){
+            $name = $this->normalizeMagicConst($name);
             return isset($this->whitelist['magic_constants'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted magic constant name set
          *
-         * @example $sandbox->is_blacklisted_magic_const('__LINE__');
+         * @example $sandbox->isBlacklistedMagicConst('__LINE__');
          *
          * @param   string          $name       String of magic constant $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted magic constant $name, false otherwise
          */
-        public function is_blacklisted_magic_const($name){
-            $name = $this->normalize_magic_const($name);
+        public function isBlacklistedMagicConst($name){
+            $name = $this->normalizeMagicConst($name);
             return isset($this->blacklist['magic_constants'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted namespaces.
          *
-         * @example $sandbox->has_whitelist_namespaces(); //returns number of whitelisted namespaces, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedNamespaces(); //returns number of whitelisted namespaces, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted namespaces this instance has defined
          */
-        public function has_whitelist_namespaces(){
+        public function hasWhitelistedNamespaces(){
             return count($this->whitelist['namespaces']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted namespaces.
          *
-         * @example $sandbox->has_blacklist_namespaces(); //returns number of blacklisted namespaces, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedNamespaces(); //returns number of blacklisted namespaces, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted namespaces this instance has defined
          */
-        public function has_blacklist_namespaces(){
+        public function hasBlacklistedNamespaces(){
             return count($this->blacklist['namespaces']);
         }
+
         /** Check if PHPSandbox instance has whitelisted namespace name set
          *
-         * @example $sandbox->is_whitelisted_namespace('Test');
+         * @example $sandbox->isWhitelistedNamespace('Test');
          *
          * @param   string          $name       String of namespace $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted namespace $name, false otherwise
          */
-        public function is_whitelisted_namespace($name){
-            $name = $this->normalize_namespace($name);
+        public function isWhitelistedNamespace($name){
+            $name = $this->normalizeNamespace($name);
             return isset($this->whitelist['namespaces'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted namespace name set
          *
-         * @example $sandbox->is_blacklisted_namespace('Test');
+         * @example $sandbox->isBlacklistedNamespace('Test');
          *
          * @param   string          $name       String of namespace $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted namespace $name, false otherwise
          */
-        public function is_blacklisted_namespace($name){
-            $name = $this->normalize_namespace($name);
+        public function isBlacklistedNamespace($name){
+            $name = $this->normalizeNamespace($name);
             return isset($this->blacklist['namespaces'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted aliases.
          *
-         * @example $sandbox->has_whitelist_aliases(); //returns number of whitelisted aliases, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedAliases(); //returns number of whitelisted aliases, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted aliases this instance has defined
          */
-        public function has_whitelist_aliases(){
+        public function hasWhitelistedAliases(){
             return count($this->whitelist['aliases']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted aliases.
          *
-         * @example $sandbox->has_blacklist_aliases(); //returns number of blacklisted aliases, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedAliases(); //returns number of blacklisted aliases, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted aliases this instance has defined
          */
-        public function has_blacklist_aliases(){
+        public function hasBlacklistedAliases(){
             return count($this->blacklist['aliases']);
         }
+
         /** Check if PHPSandbox instance has whitelisted alias name set
          *
-         * @example $sandbox->is_whitelisted_alias('Test');
+         * @example $sandbox->isWhitelistedAlias('Test');
          *
          * @param   string          $name       String of alias $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted alias $name, false otherwise
          */
-        public function is_whitelisted_alias($name){
-            $name = $this->normalize_alias($name);
+        public function isWhitelistedAlias($name){
+            $name = $this->normalizeAlias($name);
             return isset($this->whitelist['aliases'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted alias name set
          *
-         * @example $sandbox->is_blacklisted_alias('Test');
+         * @example $sandbox->isBlacklistedAlias('Test');
          *
          * @param   string          $name       String of alias $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted alias $name, false otherwise
          */
-        public function is_blacklisted_alias($name){
-            $name = $this->normalize_alias($name);
+        public function isBlacklistedAlias($name){
+            $name = $this->normalizeAlias($name);
             return isset($this->blacklist['aliases'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted uses (or aliases.)
          *
-         * @alias   has_whitelist_aliases();
+         * @alias   hasWhitelistedAliases();
          *
-         * @example $sandbox->has_whitelist_uses(); //returns number of whitelisted uses (or aliases) or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedUses(); //returns number of whitelisted uses (or aliases) or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted uses (or aliases) this instance has defined
          */
-        public function has_whitelist_uses(){
-            return $this->has_whitelist_aliases();
+        public function hasWhitelistedUses(){
+            return $this->hasWhitelistedAliases();
         }
+
         /** Query whether PHPSandbox instance has blacklisted uses (or aliases.)
          *
-         * @alias   has_blacklist_aliases();
+         * @alias   hasBlacklistedAliases();
          *
-         * @example $sandbox->has_blacklist_uses(); //returns number of blacklisted uses (or aliases) or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedUses(); //returns number of blacklisted uses (or aliases) or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted uses (or aliases) this instance has defined
          */
-        public function has_blacklist_uses(){
-            return $this->has_blacklist_aliases();
+        public function hasBlacklistedUses(){
+            return $this->hasBlacklistedAliases();
         }
+
         /** Check if PHPSandbox instance has whitelisted use (or alias) name set
          *
-         * @alias   is_whitelisted_alias();
+         * @alias   isWhitelistedAlias();
          *
-         * @example $sandbox->is_whitelisted_use('Test');
+         * @example $sandbox->isWhitelistedUse('Test');
          *
          * @param   string          $name       String of use (or alias) $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted use (or alias) $name, false otherwise
          */
-        public function is_whitelisted_use($name){
-            return $this->is_whitelisted_alias($name);
+        public function isWhitelistedUse($name){
+            return $this->isWhitelistedAlias($name);
         }
+
         /** Check if PHPSandbox instance has blacklisted use (or alias) name set
          *
-         * @alias   is_blacklisted_alias();
+         * @alias   isBlacklistedAlias();
          *
-         * @example $sandbox->is_blacklisted_use('Test');
+         * @example $sandbox->isBlacklistedUse('Test');
          *
          * @param   string          $name       String of use (or alias) $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted use (or alias) $name, false otherwise
          */
-        public function is_blacklisted_use($name){
-            return $this->is_blacklisted_alias($name);
+        public function isBlacklistedUse($name){
+            return $this->isBlacklistedAlias($name);
         }
+
         /** Query whether PHPSandbox instance has whitelisted classes.
          *
-         * @example $sandbox->has_whitelist_classes(); //returns number of whitelisted classes, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistClasses(); //returns number of whitelisted classes, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted classes this instance has defined
          */
-        public function has_whitelist_classes(){
+        public function hasWhitelistedClasses(){
             return count($this->whitelist['classes']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted classes.
          *
-         * @example $sandbox->has_blacklist_classes(); //returns number of blacklisted classes, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedClasses(); //returns number of blacklisted classes, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted classes this instance has defined
          */
-        public function has_blacklist_classes(){
+        public function hasBlacklistedClasses(){
             return count($this->blacklist['classes']);
         }
+
         /** Check if PHPSandbox instance has whitelisted class name set
          *
-         * @example $sandbox->is_whitelisted_class('Test');
+         * @example $sandbox->isWhitelistedClass('Test');
          *
          * @param   string          $name       String of class $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted class $name, false otherwise
          */
-        public function is_whitelisted_class($name){
-            $name = $this->normalize_class($name);
+        public function isWhitelistedClass($name){
+            $name = $this->normalizeClass($name);
             return isset($this->whitelist['classes'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted class name set
          *
-         * @example $sandbox->is_blacklisted_class('Test');
+         * @example $sandbox->isBlacklistedClass('Test');
          *
          * @param   string          $name       String of class $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted class $name, false otherwise
          */
-        public function is_blacklisted_class($name){
-            $name = $this->normalize_class($name);
+        public function isBlacklistedClass($name){
+            $name = $this->normalizeClass($name);
             return isset($this->blacklist['classes'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted interfaces.
          *
-         * @example $sandbox->has_whitelist_interfaces(); //returns number of whitelisted interfaces, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedInterfaces(); //returns number of whitelisted interfaces, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted interfaces this instance has defined
          */
-        public function has_whitelist_interfaces(){
+        public function hasWhitelistedInterfaces(){
             return count($this->whitelist['interfaces']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted interfaces.
          *
-         * @example $sandbox->has_blacklist_interfaces(); //returns number of blacklisted interfaces, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedInterfaces(); //returns number of blacklisted interfaces, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted interfaces this instance has defined
          */
-        public function has_blacklist_interfaces(){
+        public function hasBlacklistedInterfaces(){
             return count($this->blacklist['interfaces']);
         }
+
         /** Check if PHPSandbox instance has whitelisted interface name set
          *
-         * @example $sandbox->is_whitelisted_interface('Test');
+         * @example $sandbox->isWhitelistedInterface('Test');
          *
          * @param   string          $name       String of interface $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted interface $name, false otherwise
          */
-        public function is_whitelisted_interface($name){
-            $name = $this->normalize_interface($name);
+        public function isWhitelistedInterface($name){
+            $name = $this->normalizeInterface($name);
             return isset($this->whitelist['interfaces'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted interface name set
          *
-         * @example $sandbox->is_blacklisted_interface('Test');
+         * @example $sandbox->isBlacklistedInterface('Test');
          *
          * @param   string          $name       String of interface $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted interface $name, false otherwise
          */
-        public function is_blacklisted_interface($name){
-            $name = $this->normalize_interface($name);
+        public function isBlacklistedInterface($name){
+            $name = $this->normalizeInterface($name);
             return isset($this->blacklist['interfaces'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted traits.
          *
-         * @example $sandbox->has_whitelist_traits(); //returns number of whitelisted traits, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedTraits(); //returns number of whitelisted traits, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted traits this instance has defined
          */
-        public function has_whitelist_traits(){
+        public function hasWhitelistedTraits(){
             return count($this->whitelist['traits']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted traits.
          *
-         * @example $sandbox->has_blacklist_traits(); //returns number of blacklisted traits, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedTraits(); //returns number of blacklisted traits, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted traits this instance has defined
          */
-        public function has_blacklist_traits(){
+        public function hasBlacklistedTraits(){
             return count($this->blacklist['traits']);
         }
+
         /** Check if PHPSandbox instance has whitelisted trait name set
          *
-         * @example $sandbox->is_whitelisted_trait('Test');
+         * @example $sandbox->isWhitelistedTrait('Test');
          *
          * @param   string          $name       String of trait $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted trait $name, false otherwise
          */
-        public function is_whitelisted_trait($name){
-            $name = $this->normalize_trait($name);
+        public function isWhitelistedTrait($name){
+            $name = $this->normalizeTrait($name);
             return isset($this->whitelist['traits'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted trait name set
          *
-         * @example $sandbox->is_blacklisted_trait('Test');
+         * @example $sandbox->isBlacklistedTrait('Test');
          *
          * @param   string          $name       String of trait $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted trait $name, false otherwise
          */
-        public function is_blacklisted_trait($name){
-            $name = $this->normalize_trait($name);
+        public function isBlacklistedTrait($name){
+            $name = $this->normalizeTrait($name);
             return isset($this->blacklist['traits'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted keywords.
          *
-         * @example $sandbox->has_whitelist_keywords(); //returns number of whitelisted keywords, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistKeywords(); //returns number of whitelisted keywords, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted keywords this instance has defined
          */
-        public function has_whitelist_keywords(){
+        public function hasWhitelistKeywords(){
             return count($this->whitelist['keywords']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted keywords.
          *
-         * @example $sandbox->has_blacklist_keywords(); //returns number of blacklisted keywords, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedKeywords(); //returns number of blacklisted keywords, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted keywords this instance has defined
          */
-        public function has_blacklist_keywords(){
+        public function hasBlacklistedKeywords(){
             return count($this->blacklist['keywords']);
         }
+
         /** Check if PHPSandbox instance has whitelisted keyword name set
          *
-         * @example $sandbox->is_whitelisted_keyword('echo');
+         * @example $sandbox->isWhitelistedKeyword('echo');
          *
          * @param   string          $name       String of keyword $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted keyword $name, false otherwise
          */
-        public function is_whitelisted_keyword($name){
-            $name = $this->normalize_keyword($name);
+        public function isWhitelistedKeyword($name){
+            $name = $this->normalizeKeyword($name);
             return isset($this->whitelist['keywords'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted keyword name set
          *
-         * @example $sandbox->is_blacklisted_keyword('echo');
+         * @example $sandbox->isBlacklistedKeyword('echo');
          *
          * @param   string          $name       String of keyword $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted keyword $name, false otherwise
          */
-        public function is_blacklisted_keyword($name){
-            $name = $this->normalize_keyword($name);
+        public function isBlacklistedKeyword($name){
+            $name = $this->normalizeKeyword($name);
             return isset($this->blacklist['keywords'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted operators.
          *
-         * @example $sandbox->has_whitelist_operators(); //returns number of whitelisted operators, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistOperators(); //returns number of whitelisted operators, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted operators this instance has defined
          */
-        public function has_whitelist_operators(){
+        public function hasWhitelistedOperators(){
             return count($this->whitelist['operators']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted operators.
          *
-         * @example $sandbox->has_blacklist_operators(); //returns number of blacklisted operators, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistOperators(); //returns number of blacklisted operators, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted operators this instance has defined
          */
-        public function has_blacklist_operators(){
+        public function hasBlacklistedOperators(){
             return count($this->blacklist['operators']);
         }
+
         /** Check if PHPSandbox instance has whitelisted operator name set
          *
-         * @example $sandbox->is_whitelisted_operator('+');
+         * @example $sandbox->isWhitelistedOperator('+');
          *
          * @param   string          $name       String of operator $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted operator $name, false otherwise
          */
-        public function is_whitelisted_operator($name){
-            $name = $this->normalize_operator($name);
+        public function isWhitelistedOperator($name){
+            $name = $this->normalizeOperator($name);
             return isset($this->whitelist['operators'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted operator name set
          *
-         * @example $sandbox->is_blacklisted_operator('+');
+         * @example $sandbox->isBlacklistedOperator('+');
          *
          * @param   string          $name       String of operator $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted operator $name, false otherwise
          */
-        public function is_blacklisted_operator($name){
-            $name = $this->normalize_operator($name);
+        public function isBlacklistedOperator($name){
+            $name = $this->normalizeOperator($name);
             return isset($this->blacklist['operators'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted primitives.
          *
-         * @example $sandbox->has_whitelist_primitives(); //returns number of whitelisted primitives, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedPrimitives(); //returns number of whitelisted primitives, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted primitives this instance has defined
          */
-        public function has_whitelist_primitives(){
+        public function hasWhitelistedPrimitives(){
             return count($this->whitelist['primitives']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted primitives.
          *
-         * @example $sandbox->has_blacklist_primitives(); //returns number of blacklisted primitives, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedPrimitives(); //returns number of blacklisted primitives, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted primitives this instance has defined
          */
-        public function has_blacklist_primitives(){
+        public function hasBlacklistedPrimitives(){
             return count($this->blacklist['primitives']);
         }
+
         /** Check if PHPSandbox instance has whitelisted primitive name set
          *
-         * @example $sandbox->is_whitelisted_primitive('array');
+         * @example $sandbox->isWhitelistedPrimitive('array');
          *
          * @param   string          $name       String of primitive $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted primitive $name, false otherwise
          */
-        public function is_whitelisted_primitive($name){
-            $name = $this->normalize_primitive($name);
+        public function isWhitelistedPrimitive($name){
+            $name = $this->normalizePrimitive($name);
             return isset($this->whitelist['primitives'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted primitive name set
          *
-         * @example $sandbox->is_blacklisted_primitive('array');
+         * @example $sandbox->isBlacklistedPrimitive('array');
          *
          * @param   string          $name       String of primitive $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted primitive $name, false otherwise
          */
-        public function is_blacklisted_primitive($name){
-            $name = $this->normalize_primitive($name);
+        public function isBlacklistedPrimitive($name){
+            $name = $this->normalizePrimitive($name);
             return isset($this->blacklist['primitives'][$name]);
         }
+
         /** Query whether PHPSandbox instance has whitelisted types.
          *
-         * @example $sandbox->has_whitelist_types(); //returns number of whitelisted types, or zero if none whitelisted
+         * @example $sandbox->hasWhitelistedTypes(); //returns number of whitelisted types, or zero if none whitelisted
          *
          * @return  int           Returns the number of whitelisted types this instance has defined
          */
-        public function has_whitelist_types(){
+        public function hasWhitelistedTypes(){
             return count($this->whitelist['types']);
         }
+
         /** Query whether PHPSandbox instance has blacklisted types.
          *
-         * @example $sandbox->has_blacklist_types(); //returns number of blacklisted types, or zero if none blacklisted
+         * @example $sandbox->hasBlacklistedTypes(); //returns number of blacklisted types, or zero if none blacklisted
          *
          * @return  int           Returns the number of blacklisted types this instance has defined
          */
-        public function has_blacklist_types(){
+        public function hasBlacklistedTypes(){
             return count($this->blacklist['types']);
         }
+
         /** Check if PHPSandbox instance has whitelisted type name set
          *
-         * @example $sandbox->is_whitelisted_type('array');
+         * @example $sandbox->isWhitelistedType('array');
          *
          * @param   string          $name       String of type $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has whitelisted type $name, false otherwise
          */
-        public function is_whitelisted_type($name){
-            $name = $this->normalize_type($name);
+        public function isWhitelistedType($name){
+            $name = $this->normalizeType($name);
             return isset($this->whitelist['types'][$name]);
         }
+
         /** Check if PHPSandbox instance has blacklisted type name set
          *
-         * @example $sandbox->is_blacklisted_type('array');
+         * @example $sandbox->isBlacklistedType('array');
          *
          * @param   string          $name       String of type $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted type $name, false otherwise
          */
-        public function is_blacklisted_type($name){
-            $name = $this->normalize_type($name);
+        public function isBlacklistedType($name){
+            $name = $this->normalizeType($name);
             return isset($this->blacklist['types'][$name]);
         }
+
         /** Whitelist function
          *
          * You can pass a string of the function name, or pass an array of function names to whitelist
          *
-         * @example $sandbox->whitelist_func('var_dump');
+         * @example $sandbox->whitelistFunc('var_dump');
          *
-         * @example $sandbox->whitelist_func('var_dump', 'print_r');
+         * @example $sandbox->whitelistFunc('var_dump', 'print_r');
          *
-         * @example $sandbox->whitelist_func(array('var_dump', 'print_r'));
+         * @example $sandbox->whitelistFunc(array('var_dump', 'print_r'));
          *
          * @param   string|array        $name       String of function name, or array of function names to whitelist
          *
-         * @return  PHPSandbox          Returns the PHPSandbox instance for chainability
+         * @return  $this          Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_func($name){
+        public function whitelistFunc($name){
             if(func_num_args() > 1){
-                return $this->whitelist_func(func_get_args());
+                return $this->whitelistFunc(func_get_args());
             }
-            $name = $this->normalize_func($name);
+            $name = $this->normalizeFunc($name);
             return $this->whitelist('functions', $name);
         }
+
         /** Blacklist function
          *
          * You can pass a string of the function name, or pass an array of function names to blacklist
          *
-         * @example $sandbox->blacklist_func('var_dump');
+         * @example $sandbox->blacklistFunc('var_dump');
          *
-         * @example $sandbox->blacklist_func(array('var_dump', 'print_r'));
+         * @example $sandbox->blacklistFunc(array('var_dump', 'print_r'));
          *
          * @param   string|array        $name       String of function name, or array of function names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_func($name){
+        public function blacklistFunc($name){
             if(func_num_args() > 1){
-                return $this->blacklist_func(func_get_args());
+                return $this->blacklistFunc(func_get_args());
             }
-            $name = $this->normalize_func($name);
+            $name = $this->normalizeFunc($name);
             return $this->blacklist('functions', $name);
         }
+
         /** Remove function from whitelist
          *
          * You can pass a string of the function name, or pass an array of function names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_func('var_dump');
+         * @example $sandbox->dewhitelistFunc('var_dump');
          *
-         * @example $sandbox->dewhitelist_func(array('var_dump', 'print_r'));
+         * @example $sandbox->dewhitelistFunc(array('var_dump', 'print_r'));
          *
          * @param   string|array        $name       String of function name or array of function names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_func($name){
+        public function dewhitelistFunc($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_func(func_get_args());
+                return $this->dewhitelistFunc(func_get_args());
             }
-            $name = $this->normalize_func($name);
+            $name = $this->normalizeFunc($name);
             return $this->dewhitelist('functions', $name);
         }
+
         /** Remove function from blacklist
          *
          * You can pass a string of the function name, or pass an array of function names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_func('var_dump');
+         * @example $sandbox->deblacklistFunc('var_dump');
          *
-         * @example $sandbox->deblacklist_func(array('var_dump', 'print_r'));
+         * @example $sandbox->deblacklistFunc(array('var_dump', 'print_r'));
          *
          * @param   string|array        $name       String of function name or array of function names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_func($name){
+        public function deblacklistFunc($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_func(func_get_args());
+                return $this->deblacklistFunc(func_get_args());
             }
-            $name = $this->normalize_func($name);
+            $name = $this->normalizeFunc($name);
             return $this->deblacklist('functions', $name);
         }
+
         /** Whitelist variable
          *
          * You can pass a string of variable name, or pass an array of the variable names to whitelist
          *
-         * @example $sandbox->whitelist_var('a');
+         * @example $sandbox->whitelistVar('a');
          *
-         * @example $sandbox->whitelist_var(array('a', 'b'));
+         * @example $sandbox->whitelistVar(array('a', 'b'));
          *
          * @param   string|array        $name       String of variable name or array of variable names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_var($name){
+        public function whitelistVar($name){
             if(func_num_args() > 1){
-                return $this->whitelist_var(func_get_args());
+                return $this->whitelistVar(func_get_args());
             }
             return $this->whitelist('variables', $name);
         }
+
         /** Blacklist variable
          *
          * You can pass a string of variable name, or pass an array of the variable names to blacklist
          *
-         * @example $sandbox->blacklist_var('a');
+         * @example $sandbox->blacklistVar('a');
          *
-         * @example $sandbox->blacklist_var(array('a', 'b'));
+         * @example $sandbox->blacklistVar(array('a', 'b'));
          *
          * @param   string|array        $name       String of variable name or array of variable names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_var($name){
+        public function blacklistVar($name){
             if(func_num_args() > 1){
-                return $this->blacklist_var(func_get_args());
+                return $this->blacklistVar(func_get_args());
             }
             return $this->blacklist('variables', $name);
         }
+
         /** Remove variable from whitelist
          *
          * You can pass a string of variable name, or pass an array of the variable names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_var('a');
+         * @example $sandbox->dewhitelistVar('a');
          *
-         * @example $sandbox->dewhitelist_var(array('a', 'b'));
+         * @example $sandbox->dewhitelistVar(array('a', 'b'));
          *
          * @param   string|array        $name       String of variable name or array of variable names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_var($name){
+        public function dewhitelistVar($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_var(func_get_args());
+                return $this->dewhitelistVar(func_get_args());
             }
             return $this->dewhitelist('variables', $name);
         }
+
         /** Remove function from blacklist
          *
          * You can pass a string of variable name, or pass an array of the variable names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_var('a');
+         * @example $sandbox->deblacklistVar('a');
          *
-         * @example $sandbox->deblacklist_var(array('a', 'b'));
+         * @example $sandbox->deblacklistVar(array('a', 'b'));
          *
          * @param   string|array        $name       String of variable name or array of variable names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_var($name){
+        public function deblacklistVar($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_var(func_get_args());
+                return $this->deblacklistVar(func_get_args());
             }
             return $this->deblacklist('variables', $name);
         }
+
         /** Whitelist global
          *
          * You can pass a string of global name, or pass an array of the global names to whitelist
          *
-         * @example $sandbox->whitelist_global('a');
+         * @example $sandbox->whitelistGlobal('a');
          *
-         * @example $sandbox->whitelist_global(array('a', 'b'));
+         * @example $sandbox->whitelistGlobal(array('a', 'b'));
          *
          * @param   string|array        $name       String of global name or array of global names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_global($name){
+        public function whitelistGlobal($name){
             if(func_num_args() > 1){
-                return $this->whitelist_global(func_get_args());
+                return $this->whitelistGlobal(func_get_args());
             }
             return $this->whitelist('globals', $name);
         }
+
         /** Blacklist global
          *
          * You can pass a string of global name, or pass an array of the global names to blacklist
          *
-         * @example $sandbox->blacklist_global('a');
+         * @example $sandbox->blacklistGlobal('a');
          *
-         * @example $sandbox->blacklist_global(array('a', 'b'));
+         * @example $sandbox->blacklistGlobal(array('a', 'b'));
          *
          * @param   string|array        $name       String of global name or array of global names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_global($name){
+        public function blacklistGlobal($name){
             if(func_num_args() > 1){
-                return $this->blacklist_global(func_get_args());
+                return $this->blacklistGlobal(func_get_args());
             }
             return $this->blacklist('globals', $name);
         }
+
         /** Remove global from whitelist
          *
          * You can pass a string of global name, or pass an array of the global names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_global('a');
+         * @example $sandbox->dewhitelistGlobal('a');
          *
-         * @example $sandbox->dewhitelist_global(array('a', 'b'));
+         * @example $sandbox->dewhitelistGlobal(array('a', 'b'));
          *
          * @param   string|array        $name       String of global name or array of global names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_global($name){
+        public function dewhitelistGlobal($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_global(func_get_args());
+                return $this->dewhitelistGlobal(func_get_args());
             }
             return $this->dewhitelist('globals', $name);
         }
+
         /** Remove global from blacklist
          *
          * You can pass a string of global name, or pass an array of the global names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_global('a');
+         * @example $sandbox->deblacklistGlobal('a');
          *
-         * @example $sandbox->deblacklist_global(array('a', 'b'));
+         * @example $sandbox->deblacklistGlobal(array('a', 'b'));
          *
          * @param   string|array        $name       String of global name or array of global names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_global($name){
+        public function deblacklistGlobal($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_global(func_get_args());
+                return $this->deblacklistGlobal(func_get_args());
             }
             return $this->deblacklist('globals', $name);
         }
+
         /** Whitelist superglobal or superglobal key
          *
          * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
          * or pass an array of superglobal names, or an associative array of superglobal names and their keys to whitelist
          *
-         * @example $sandbox->whitelist_superglobal('_GET');
+         * @example $sandbox->whitelistSuperglobal('_GET');
          *
-         * @example $sandbox->whitelist_superglobal('_GET', 'page');
+         * @example $sandbox->whitelistSuperglobal('_GET', 'page');
          *
-         * @example $sandbox->whitelist_superglobal(array('_GET', '_POST'));
+         * @example $sandbox->whitelistSuperglobal(array('_GET', '_POST'));
          *
-         * @example $sandbox->whitelist_superglobal(array('_GET' => 'page'));
+         * @example $sandbox->whitelistSuperglobal(array('_GET' => 'page'));
          *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to whitelist
          * @param   string              $key        String of superglobal key to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_superglobal($name, $key = null){
+        public function whitelistSuperglobal($name, $key = null){
             if(is_string($name)){
-                $name = $this->normalize_superglobal($name);
+                $name = $this->normalizeSuperglobal($name);
             }
             if(is_string($name) && $name && !isset($this->whitelist['superglobals'][$name])){
                 $this->whitelist['superglobals'][$name] = array();
@@ -5006,7 +5289,7 @@
                             $this->whitelist['superglobals'][$key] = array();
                         }
                     } else {
-                        $_name = $this->normalize_superglobal($_name);
+                        $_name = $this->normalizeSuperglobal($_name);
                         if(is_string($_name) && $_name && !isset($this->whitelist['superglobals'][$_name])){
                             $this->whitelist['superglobals'][$_name] = array();
                         }
@@ -5032,27 +5315,28 @@
             }
             return $this;
         }
+
         /** Blacklist superglobal or superglobal key
          **
          * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
          * or pass an array of superglobal names, or an associative array of superglobal names and their keys to blacklist
          *
-         * @example $sandbox->blacklist_superglobal('_GET');
+         * @example $sandbox->blacklistSuperglobal('_GET');
          *
-         * @example $sandbox->blacklist_superglobal('_GET', 'page');
+         * @example $sandbox->blacklistSuperglobal('_GET', 'page');
          *
-         * @example $sandbox->blacklist_superglobal(array('_GET', '_POST'));
+         * @example $sandbox->blacklistSuperglobal(array('_GET', '_POST'));
          *
-         * @example $sandbox->blacklist_superglobal(array('_GET' => 'page'));
+         * @example $sandbox->blacklistSuperglobal(array('_GET' => 'page'));
          *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to blacklist
          * @param   string              $key        String of superglobal key to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_superglobal($name, $key = null){
+        public function blacklistSuperglobal($name, $key = null){
             if(is_string($name)){
-                $name = $this->normalize_superglobal($name);
+                $name = $this->normalizeSuperglobal($name);
             }
             if(is_string($name) && $name && !isset($this->blacklist['superglobals'][$name])){
                 $this->blacklist['superglobals'][$name] = array();
@@ -5064,7 +5348,7 @@
                             $this->blacklist['superglobals'][$key] = array();
                         }
                     } else {
-                        $_name = $this->normalize_superglobal($_name);
+                        $_name = $this->normalizeSuperglobal($_name);
                         if(is_string($_name) && $_name && !isset($this->blacklist['superglobals'][$_name])){
                             $this->blacklist['superglobals'][$_name] = array();
                         }
@@ -5090,27 +5374,28 @@
             }
             return $this;
         }
+
         /** Remove superglobal or superglobal key from whitelist
          **
          * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
          * or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_superglobal('_GET');
+         * @example $sandbox->dewhitelistSuperglobal('_GET');
          *
-         * @example $sandbox->dewhitelist_superglobal('_GET', 'page');
+         * @example $sandbox->dewhitelistSuperglobal('_GET', 'page');
          *
-         * @example $sandbox->dewhitelist_superglobal(array('_GET', '_POST'));
+         * @example $sandbox->dewhitelistSuperglobal(array('_GET', '_POST'));
          *
-         * @example $sandbox->dewhitelist_superglobal(array('_GET' => 'page'));
+         * @example $sandbox->dewhitelistSuperglobal(array('_GET' => 'page'));
          *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist
          * @param   string              $key        String of superglobal key to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_superglobal($name, $key = null){
+        public function dewhitelistSuperglobal($name, $key = null){
             if(is_string($name)){
-                $name = $this->normalize_superglobal($name);
+                $name = $this->normalizeSuperglobal($name);
             }
             if(is_array($name)){
                 foreach($name as $_name => $key){
@@ -5141,27 +5426,28 @@
             }
             return $this;
         }
+
         /** Remove superglobal or superglobal key from blacklist
          **
          * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
          * or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist
          *
-         * @example $sandbox->deblacklist_superglobal('_GET');
+         * @example $sandbox->deblacklistSuperglobal('_GET');
          *
-         * @example $sandbox->deblacklist_superglobal('_GET', 'page');
+         * @example $sandbox->deblacklistSuperglobal('_GET', 'page');
          *
-         * @example $sandbox->deblacklist_superglobal(array('_GET', '_POST'));
+         * @example $sandbox->deblacklistSuperglobal(array('_GET', '_POST'));
          *
-         * @example $sandbox->deblacklist_superglobal(array('_GET' => 'page'));
+         * @example $sandbox->deblacklistSuperglobal(array('_GET' => 'page'));
          *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist
          * @param   string              $key        String of superglobal key to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_superglobal($name, $key = null){
+        public function deblacklistSuperglobal($name, $key = null){
             if(is_string($name)){
-                $name = $this->normalize_superglobal($name);
+                $name = $this->normalizeSuperglobal($name);
             }
             if(is_array($name)){
                 foreach($name as $_name => $key){
@@ -5192,966 +5478,1016 @@
             }
             return $this;
         }
+
         /** Whitelist constant
          *
          * You can pass a string of constant name, or pass an array of the constant names to whitelist
          *
-         * @example $sandbox->whitelist_const('FOO');
+         * @example $sandbox->whitelistConst('FOO');
          *
-         * @example $sandbox->whitelist_const(array('FOO', 'BAR'));
+         * @example $sandbox->whitelistConst(array('FOO', 'BAR'));
          *
          * @param   string|array        $name       String of constant name or array of constant names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_const($name){
+        public function whitelistConst($name){
             if(func_num_args() > 1){
-                return $this->whitelist_const(func_get_args());
+                return $this->whitelistConst(func_get_args());
             }
             return $this->whitelist('constants', $name);
         }
+
         /** Blacklist constant
          *
          * You can pass a string of constant name, or pass an array of the constant names to blacklist
          *
-         * @example $sandbox->blacklist_const('FOO');
+         * @example $sandbox->blacklistConst('FOO');
          *
-         * @example $sandbox->blacklist_const(array('FOO', 'BAR'));
+         * @example $sandbox->blacklistConst(array('FOO', 'BAR'));
          *
          * @param   string|array        $name       String of constant name or array of constant names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_const($name){
+        public function blacklistConst($name){
             if(func_num_args() > 1){
-                return $this->blacklist_const(func_get_args());
+                return $this->blacklistConst(func_get_args());
             }
             return $this->blacklist('constants', $name);
         }
+
         /** Remove constant from whitelist
          *
          * You can pass a string of constant name, or pass an array of the constant names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_const('FOO');
+         * @example $sandbox->dewhitelistConst('FOO');
          *
-         * @example $sandbox->dewhitelist_const(array('FOO', 'BAR'));
+         * @example $sandbox->dewhitelistConst(array('FOO', 'BAR'));
          *
          * @param   string|array        $name       String of constant name or array of constant names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_const($name){
+        public function dewhitelistConst($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_const(func_get_args());
+                return $this->dewhitelistConst(func_get_args());
             }
             return $this->dewhitelist('constants', $name);
         }
+
         /** Remove constant from blacklist
          *
          * You can pass a string of constant name, or pass an array of the constant names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_const('FOO');
+         * @example $sandbox->deblacklistConst('FOO');
          *
-         * @example $sandbox->deblacklist_const(array('FOO', 'BAR'));
+         * @example $sandbox->deblacklistConst(array('FOO', 'BAR'));
          *
          * @param   string|array        $name       String of constant name or array of constant names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_const($name){
+        public function deblacklistConst($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_const(func_get_args());
+                return $this->deblacklistConst(func_get_args());
             }
             return $this->deblacklist('constants', $name);
         }
+
         /** Whitelist magic constant
          *
          * You can pass a string of magic constant name, or pass an array of the magic constant names to whitelist
          *
-         * @example $sandbox->whitelist_magic_const('__LINE__');
+         * @example $sandbox->whitelistMagicConst('__LINE__');
          *
-         * @example $sandbox->whitelist_magic_const(array('__LINE__', '__FILE__'));
+         * @example $sandbox->whitelistMagicConst(array('__LINE__', '__FILE__'));
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_magic_const($name){
+        public function whitelistMagicConst($name){
             if(func_num_args() > 1){
-                return $this->whitelist_magic_const(func_get_args());
+                return $this->whitelistMagicConst(func_get_args());
             }
-            $name = $this->normalize_magic_const($name);
+            $name = $this->normalizeMagicConst($name);
             return $this->whitelist('magic_constants', $name);
         }
+
         /** Blacklist magic constant
          *
          * You can pass a string of magic constant name, or pass an array of the magic constant names to blacklist
          *
-         * @example $sandbox->blacklist_magic_const('__LINE__');
+         * @example $sandbox->blacklistMagicConst('__LINE__');
          *
-         * @example $sandbox->blacklist_magic_const(array('__LINE__', '__FILE__'));
+         * @example $sandbox->blacklistMagicConst(array('__LINE__', '__FILE__'));
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_magic_const($name){
+        public function blacklistMagicConst($name){
             if(func_num_args() > 1){
-                return $this->blacklist_magic_const(func_get_args());
+                return $this->blacklistMagicConst(func_get_args());
             }
-            $name = $this->normalize_magic_const($name);
+            $name = $this->normalizeMagicConst($name);
             return $this->blacklist('magic_constants', $name);
         }
+
         /** Remove magic constant from whitelist
          *
          * You can pass a string of magic constant name, or pass an array of the magic constant names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_magic_const('__LINE__');
+         * @example $sandbox->dewhitelistMagicConst('__LINE__');
          *
-         * @example $sandbox->dewhitelist_magic_const(array('__LINE__', '__FILE__'));
+         * @example $sandbox->dewhitelistMagicConst(array('__LINE__', '__FILE__'));
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_magic_const($name){
+        public function dewhitelistMagicConst($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_magic_const(func_get_args());
+                return $this->dewhitelistMagicConst(func_get_args());
             }
-            $name = $this->normalize_magic_const($name);
+            $name = $this->normalizeMagicConst($name);
             return $this->dewhitelist('magic_constants', $name);
         }
+
         /** Remove magic constant from blacklist
          *
          * You can pass a string of magic constant name, or pass an array of the magic constant names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_magic_const('__LINE__');
+         * @example $sandbox->deblacklistMagicConst('__LINE__');
          *
-         * @example $sandbox->deblacklist_magic_const(array('__LINE__', '__FILE__'));
+         * @example $sandbox->deblacklistMagicConst(array('__LINE__', '__FILE__'));
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_magic_const($name){
+        public function deblacklistMagicConst($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_magic_const(func_get_args());
+                return $this->deblacklistMagicConst(func_get_args());
             }
-            $name = $this->normalize_magic_const($name);
+            $name = $this->normalizeMagicConst($name);
             return $this->deblacklist('magic_constants', $name);
         }
+
         /** Whitelist namespace
          *
          * You can pass a string of namespace name, or pass an array of the namespace names to whitelist
          *
-         * @example $sandbox->whitelist_namespace('Foo');
+         * @example $sandbox->whitelistNamespace('Foo');
          *
-         * @example $sandbox->whitelist_namespace(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistNamespace(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_namespace($name){
+        public function whitelistNamespace($name){
             if(func_num_args() > 1){
-                return $this->whitelist_namespace(func_get_args());
+                return $this->whitelistNamespace(func_get_args());
             }
-            $name = $this->normalize_namespace($name);
+            $name = $this->normalizeNamespace($name);
             return $this->whitelist('namespaces', $name);
         }
+
         /** Blacklist namespace
          *
          * You can pass a string of namespace name, or pass an array of the namespace names to blacklist
          *
-         * @example $sandbox->blacklist_namespace('Foo');
+         * @example $sandbox->blacklistNamespace('Foo');
          *
-         * @example $sandbox->blacklist_namespace(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistNamespace(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_namespace($name){
+        public function blacklistNamespace($name){
             if(func_num_args() > 1){
-                return $this->blacklist_namespace(func_get_args());
+                return $this->blacklistNamespace(func_get_args());
             }
-            $name = $this->normalize_namespace($name);
+            $name = $this->normalizeNamespace($name);
             return $this->blacklist('namespaces', $name);
         }
+
         /** Remove namespace from whitelist
          *
          * You can pass a string of namespace name, or pass an array of the namespace names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_namespace('Foo');
+         * @example $sandbox->dewhitelistNamespace('Foo');
          *
-         * @example $sandbox->dewhitelist_namespace(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistNamespace(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_namespace($name){
+        public function dewhitelistNamespace($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_namespace(func_get_args());
+                return $this->dewhitelistNamespace(func_get_args());
             }
-            $name = $this->normalize_namespace($name);
+            $name = $this->normalizeNamespace($name);
             return $this->dewhitelist('namespaces', $name);
         }
+
         /** Remove namespace from blacklist
          *
          * You can pass a string of namespace name, or pass an array of the namespace names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_namespace('Foo');
+         * @example $sandbox->deblacklistNamespace('Foo');
          *
-         * @example $sandbox->deblacklist_namespace(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistNamespace(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_namespace($name){
+        public function deblacklistNamespace($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_namespace(func_get_args());
+                return $this->deblacklistNamespace(func_get_args());
             }
-            $name = $this->normalize_namespace($name);
+            $name = $this->normalizeNamespace($name);
             return $this->deblacklist('namespaces', $name);
         }
+
         /** Whitelist alias
          *
          * You can pass a string of alias name, or pass an array of the alias names to whitelist
          *
-         * @example $sandbox->whitelist_alias('Foo');
+         * @example $sandbox->whitelistAlias('Foo');
          *
-         * @example $sandbox->whitelist_alias(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistAlias(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of alias names  or array of alias names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_alias($name){
+        public function whitelistAlias($name){
             if(func_num_args() > 1){
-                return $this->whitelist_alias(func_get_args());
+                return $this->whitelistAlias(func_get_args());
             }
-            $name = $this->normalize_alias($name);
+            $name = $this->normalizeAlias($name);
             return $this->whitelist('aliases', $name);
         }
+
         /** Blacklist alias
          *
          * You can pass a string of alias name, or pass an array of the alias names to blacklist
          *
-         * @example $sandbox->blacklist_alias('Foo');
+         * @example $sandbox->blacklistAlias('Foo');
          *
-         * @example $sandbox->blacklist_alias(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistAlias(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of alias name or array of alias names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_alias($name){
+        public function blacklistAlias($name){
             if(func_num_args() > 1){
-                return $this->blacklist_alias(func_get_args());
+                return $this->blacklistAlias(func_get_args());
             }
-            $name = $this->normalize_alias($name);
+            $name = $this->normalizeAlias($name);
             return $this->blacklist('aliases', $name);
         }
+
         /** Remove alias from whitelist
          *
          * You can pass a string of alias name, or pass an array of the alias names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_alias('Foo');
+         * @example $sandbox->dewhitelistAlias('Foo');
          *
-         * @example $sandbox->dewhitelist_alias(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistAlias(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of alias name or array of alias names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_alias($name){
+        public function dewhitelistAlias($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_alias(func_get_args());
+                return $this->dewhitelistAlias(func_get_args());
             }
-            $name = $this->normalize_alias($name);
+            $name = $this->normalizeAlias($name);
             return $this->dewhitelist('aliases', $name);
         }
+
         /** Remove alias from blacklist
          *
          * You can pass a string of alias name, or pass an array of the alias names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_alias('Foo');
+         * @example $sandbox->deblacklistAlias('Foo');
          *
-         * @example $sandbox->deblacklist_alias(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistAlias(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of alias name or array of alias names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_alias($name){
+        public function deblacklistAlias($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_alias(func_get_args());
+                return $this->deblacklistAlias(func_get_args());
             }
-            $name = $this->normalize_alias($name);
+            $name = $this->normalizeAlias($name);
             return $this->deblacklist('aliases', $name);
         }
+
         /** Whitelist use (or alias)
          *
          * You can pass a string of use (or alias) name, or pass an array of the use (or alias) names to whitelist
          *
-         * @alias   whitelist_alias();
+         * @alias   whitelistAlias();
          *
-         * @example $sandbox->whitelist_use('Foo');
+         * @example $sandbox->whitelistUse('Foo');
          *
-         * @example $sandbox->whitelist_use(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistUse(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_use($name){
+        public function whitelistUse($name){
             if(func_num_args() > 1){
-                return $this->whitelist_alias(func_get_args());
+                return $this->whitelistAlias(func_get_args());
             }
-            return $this->whitelist_alias($name);
+            return $this->whitelistAlias($name);
         }
+
         /** Blacklist use (or alias)
          *
          * You can pass a string of use (or alias) name, or pass an array of the use (or alias) names to blacklist
          *
-         * @alias   blacklist_alias();
+         * @alias   blacklistAlias();
          *
-         * @example $sandbox->blacklist_use('Foo');
+         * @example $sandbox->blacklistUse('Foo');
          *
-         * @example $sandbox->blacklist_use(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistUse(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_use($name){
+        public function blacklistUse($name){
             if(func_num_args() > 1){
-                return $this->blacklist_alias(func_get_args());
+                return $this->blacklistAlias(func_get_args());
             }
-            return $this->blacklist_alias($name);
+            return $this->blacklistAlias($name);
         }
+
         /** Remove use (or alias) from whitelist
          *
          * You can pass a string of use (or alias name, or pass an array of the use (or alias) names to remove from whitelist
          *
-         * @alias   dewhitelist_alias();
+         * @alias   dewhitelistAlias();
          *
-         * @example $sandbox->dewhitelist_use('Foo');
+         * @example $sandbox->dewhitelistUse('Foo');
          *
-         * @example $sandbox->dewhitelist_use(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistUse(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_use($name){
+        public function dewhitelistUse($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_alias(func_get_args());
+                return $this->dewhitelistAlias(func_get_args());
             }
-            return $this->dewhitelist_alias($name);
+            return $this->dewhitelistAlias($name);
         }
+
         /** Remove use (or alias) from blacklist
          *
          * You can pass a string of use (or alias name, or pass an array of the use (or alias) names to remove from blacklist
          *
-         * @alias   deblacklist_alias();
+         * @alias   deblacklistAlias();
          *
-         * @example $sandbox->deblacklist_use('Foo');
+         * @example $sandbox->deblacklistUse('Foo');
          *
-         * @example $sandbox->deblacklist_use(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistUse(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_use($name){
+        public function deblacklistUse($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_alias(func_get_args());
+                return $this->deblacklistAlias(func_get_args());
             }
-            return $this->deblacklist_alias($name);
+            return $this->deblacklistAlias($name);
         }
+
         /** Whitelist class
          *
          * You can pass a string of class name, or pass an array of the class names to whitelist
          *
-         * @example $sandbox->whitelist_class('Foo');
+         * @example $sandbox->whitelistClass('Foo');
          *
-         * @example $sandbox->whitelist_class(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistClass(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of class name or array of class names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_class($name){
+        public function whitelistClass($name){
             if(func_num_args() > 1){
-                return $this->whitelist_class(func_get_args());
+                return $this->whitelistClass(func_get_args());
             }
-            $name = $this->normalize_class($name);
+            $name = $this->normalizeClass($name);
             return $this->whitelist('classes', $name);
         }
+
         /** Blacklist class
          *
          * You can pass a string of class name, or pass an array of the class names to blacklist
          *
-         * @example $sandbox->blacklist_class('Foo');
+         * @example $sandbox->blacklistClass('Foo');
          *
-         * @example $sandbox->blacklist_class(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistClass(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of class name or array of class names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_class($name){
+        public function blacklistClass($name){
             if(func_num_args() > 1){
-                return $this->blacklist_class(func_get_args());
+                return $this->blacklistClass(func_get_args());
             }
-            $name = $this->normalize_class($name);
+            $name = $this->normalizeClass($name);
             return $this->blacklist('classes', $name);
         }
+
         /** Remove class from whitelist
          *
          * You can pass a string of class name, or pass an array of the class names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_class('Foo');
+         * @example $sandbox->dewhitelistClass('Foo');
          *
-         * @example $sandbox->dewhitelist_class(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistClass(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of class name or array of class names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_class($name){
+        public function dewhitelistClass($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_class(func_get_args());
+                return $this->dewhitelistClass(func_get_args());
             }
-            $name = $this->normalize_class($name);
+            $name = $this->normalizeClass($name);
             return $this->dewhitelist('classes', $name);
         }
+
         /** Remove class from blacklist
          *
          * You can pass a string of class name, or pass an array of the class names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_class('Foo');
+         * @example $sandbox->deblacklistClass('Foo');
          *
-         * @example $sandbox->deblacklist_class(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistClass(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of class name or array of class names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_class($name){
+        public function deblacklistClass($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_class(func_get_args());
+                return $this->deblacklistClass(func_get_args());
             }
-            $name = $this->normalize_class($name);
+            $name = $this->normalizeClass($name);
             return $this->deblacklist('classes', $name);
         }
+
         /** Whitelist interface
          *
          * You can pass a string of interface name, or pass an array of the interface names to whitelist
          *
-         * @example $sandbox->whitelist_interface('Foo');
+         * @example $sandbox->whitelistInterface('Foo');
          *
-         * @example $sandbox->whitelist_interface(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistInterface(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of interface name or array of interface names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_interface($name){
+        public function whitelistInterface($name){
             if(func_num_args() > 1){
-                return $this->whitelist_interface(func_get_args());
+                return $this->whitelistInterface(func_get_args());
             }
-            $name = $this->normalize_interface($name);
+            $name = $this->normalizeInterface($name);
             return $this->whitelist('interfaces', $name);
         }
+
         /** Blacklist interface
          *
          * You can pass a string of interface name, or pass an array of the interface names to blacklist
          *
-         * @example $sandbox->blacklist_interface('Foo');
+         * @example $sandbox->blacklistInterface('Foo');
          *
-         * @example $sandbox->blacklist_interface(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistInterface(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of interface name or array of interface names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_interface($name){
+        public function blacklistInterface($name){
             if(func_num_args() > 1){
-                return $this->blacklist_interface(func_get_args());
+                return $this->blacklistInterface(func_get_args());
             }
-            $name = $this->normalize_interface($name);
+            $name = $this->normalizeInterface($name);
             return $this->blacklist('interfaces', $name);
         }
+
         /** Remove interface from whitelist
          *
          * You can pass a string of interface name, or pass an array of the interface names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_interface('Foo');
+         * @example $sandbox->dewhitelistInterface('Foo');
          *
-         * @example $sandbox->dewhitelist_interface(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistInterface(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of interface name or array of interface names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_interface($name){
+        public function dewhitelistInterface($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_interface(func_get_args());
+                return $this->dewhitelistInterface(func_get_args());
             }
-            $name = $this->normalize_interface($name);
+            $name = $this->normalizeInterface($name);
             return $this->dewhitelist('interfaces', $name);
         }
+
         /** Remove interface from blacklist
          *
          * You can pass a string of interface name, or pass an array of the interface names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_interface('Foo');
+         * @example $sandbox->deblacklistInterface('Foo');
          *
-         * @example $sandbox->deblacklist_interface(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistInterface(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of interface name or array of interface names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_interface($name){
+        public function deblacklistInterface($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_interface(func_get_args());
+                return $this->deblacklistInterface(func_get_args());
             }
-            $name = $this->normalize_interface($name);
+            $name = $this->normalizeInterface($name);
             return $this->deblacklist('interfaces', $name);
         }
+
         /** Whitelist trait
          *
          * You can pass a string of trait name, or pass an array of the trait names to whitelist
          *
-         * @example $sandbox->whitelist_trait('Foo');
+         * @example $sandbox->whitelistTrait('Foo');
          *
-         * @example $sandbox->whitelist_trait(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistTrait(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of trait name or array of trait names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_trait($name){
+        public function whitelistTrait($name){
             if(func_num_args() > 1){
-                return $this->whitelist_trait(func_get_args());
+                return $this->whitelistTrait(func_get_args());
             }
-            $name = $this->normalize_trait($name);
+            $name = $this->normalizeTrait($name);
             return $this->whitelist('traits', $name);
         }
+
         /** Blacklist trait
          *
          * You can pass a string of trait name, or pass an array of the trait names to blacklist
          *
-         * @example $sandbox->blacklist_trait('Foo');
+         * @example $sandbox->blacklistTrait('Foo');
          *
-         * @example $sandbox->blacklist_trait(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistTrait(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of trait name or array of trait names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_trait($name){
+        public function blacklistTrait($name){
             if(func_num_args() > 1){
-                return $this->blacklist_trait(func_get_args());
+                return $this->blacklistTrait(func_get_args());
             }
-            $name = $this->normalize_trait($name);
+            $name = $this->normalizeTrait($name);
             return $this->blacklist('traits', $name);
         }
+
         /** Remove trait from whitelist
          *
          * You can pass a string of trait name, or pass an array of the trait names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_trait('Foo');
+         * @example $sandbox->dewhitelistTrait('Foo');
          *
-         * @example $sandbox->dewhitelist_trait(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistTrait(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of trait name or array of trait names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_trait($name){
+        public function dewhitelistTrait($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_trait(func_get_args());
+                return $this->dewhitelistTrait(func_get_args());
             }
-            $name = $this->normalize_trait($name);
+            $name = $this->normalizeTrait($name);
             return $this->dewhitelist('traits', $name);
         }
+
         /** Remove trait from blacklist
          *
          * You can pass a string of trait name, or pass an array of the trait names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_trait('Foo');
+         * @example $sandbox->deblacklistTrait('Foo');
          *
-         * @example $sandbox->deblacklist_trait(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistTrait(array('Foo', 'Bar'));
          *
          * @param   string|array        $name       String of trait name or array of trait names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_trait($name){
+        public function deblacklistTrait($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_trait(func_get_args());
+                return $this->deblacklistTrait(func_get_args());
             }
-            $name = $this->normalize_trait($name);
+            $name = $this->normalizeTrait($name);
             return $this->deblacklist('traits', $name);
         }
+
         /** Whitelist keyword
          *
          * You can pass a string of keyword name, or pass an array of the keyword names to whitelist
          *
-         * @example $sandbox->whitelist_keyword('echo');
+         * @example $sandbox->whitelistKeyword('echo');
          *
-         * @example $sandbox->whitelist_keyword(array('echo', 'eval'));
+         * @example $sandbox->whitelistKeyword(array('echo', 'eval'));
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_keyword($name){
+        public function whitelistKeyword($name){
             if(func_num_args() > 1){
-                return $this->whitelist_keyword(func_get_args());
+                return $this->whitelistKeyword(func_get_args());
             }
-            $name = $this->normalize_keyword($name);
+            $name = $this->normalizeKeyword($name);
             return $this->whitelist('keywords', $name);
         }
+
         /** Blacklist keyword
          *
          * You can pass a string of keyword name, or pass an array of the keyword names to blacklist
          *
-         * @example $sandbox->blacklist_keyword('echo');
+         * @example $sandbox->blacklistKeyword('echo');
          *
-         * @example $sandbox->blacklist_keyword(array('echo', 'eval'));
+         * @example $sandbox->blacklistKeyword(array('echo', 'eval'));
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_keyword($name){
+        public function blacklistKeyword($name){
             if(func_num_args() > 1){
-                return $this->blacklist_keyword(func_get_args());
+                return $this->blacklistKeyword(func_get_args());
             }
-            $name = $this->normalize_keyword($name);
+            $name = $this->normalizeKeyword($name);
             return $this->blacklist('keywords', $name);
         }
+
         /** Remove keyword from whitelist
          *
          * You can pass a string of keyword name, or pass an array of the keyword names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_keyword('echo');
+         * @example $sandbox->dewhitelistKeyword('echo');
          *
-         * @example $sandbox->dewhitelist_keyword(array('echo', 'eval'));
+         * @example $sandbox->dewhitelistKeyword(array('echo', 'eval'));
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_keyword($name){
+        public function dewhitelistKeyword($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_keyword(func_get_args());
+                return $this->dewhitelistKeyword(func_get_args());
             }
-            $name = $this->normalize_keyword($name);
+            $name = $this->normalizeKeyword($name);
             return $this->dewhitelist('keywords', $name);
         }
+
         /** Remove keyword from blacklist
          *
          * You can pass a string of keyword name, or pass an array of the keyword names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_keyword('echo');
+         * @example $sandbox->deblacklistKeyword('echo');
          *
-         * @example $sandbox->deblacklist_keyword(array('echo', 'eval'));
+         * @example $sandbox->deblacklistKeyword(array('echo', 'eval'));
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_keyword($name){
+        public function deblacklistKeyword($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_keyword(func_get_args());
+                return $this->deblacklistKeyword(func_get_args());
             }
-            $name = $this->normalize_keyword($name);
+            $name = $this->normalizeKeyword($name);
             return $this->deblacklist('keywords', $name);
         }
+
         /** Whitelist operator
          *
          * You can pass a string of operator name, or pass an array of the operator names to whitelist
          *
-         * @example $sandbox->whitelist_operator('+');
+         * @example $sandbox->whitelistOperator('+');
          *
-         * @example $sandbox->whitelist_operator(array('+', '-'));
+         * @example $sandbox->whitelistOperator(array('+', '-'));
          *
          * @param   string|array        $name       String of operator name or array of operator names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_operator($name){
+        public function whitelistOperator($name){
             if(func_num_args() > 1){
-                return $this->whitelist_operator(func_get_args());
+                return $this->whitelistOperator(func_get_args());
             }
-            $name = $this->normalize_operator($name);
+            $name = $this->normalizeOperator($name);
             return $this->whitelist('operators', $name);
         }
+
         /** Blacklist operator
          *
          * You can pass a string of operator name, or pass an array of the operator names to blacklist
          *
-         * @example $sandbox->blacklist_operator('+');
+         * @example $sandbox->blacklistOperator('+');
          *
-         * @example $sandbox->blacklist_operator(array('+', '-'));
+         * @example $sandbox->blacklistOperator(array('+', '-'));
          *
          * @param   string|array        $name       String of operator name or array of operator names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_operator($name){
+        public function blacklistOperator($name){
             if(func_num_args() > 1){
-                return $this->blacklist_operator(func_get_args());
+                return $this->blacklistOperator(func_get_args());
             }
-            $name = $this->normalize_operator($name);
+            $name = $this->normalizeOperator($name);
             return $this->blacklist('operators', $name);
         }
+
         /** Remove operator from whitelist
          *
          * You can pass a string of operator name, or pass an array of the operator names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_operator('+');
+         * @example $sandbox->dewhitelistOperator('+');
          *
-         * @example $sandbox->dewhitelist_operator(array('+', '-'));
+         * @example $sandbox->dewhitelistOperator(array('+', '-'));
          *
          * @param   string|array        $name       String of operator name or array of operator names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_operator($name){
+        public function dewhitelistOperator($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_operator(func_get_args());
+                return $this->dewhitelistOperator(func_get_args());
             }
-            $name = $this->normalize_operator($name);
+            $name = $this->normalizeOperator($name);
             return $this->dewhitelist('operators', $name);
         }
+
         /** Remove operator from blacklist
          *
          * You can pass a string of operator name, or pass an array of the operator names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_operator('+');
+         * @example $sandbox->deblacklistOperator('+');
          *
-         * @example $sandbox->deblacklist_operator(array('+', '-'));
+         * @example $sandbox->deblacklistOperator(array('+', '-'));
          *
          * @param   string|array        $name       String of operator name or array of operator names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_operator($name){
+        public function deblacklistOperator($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_operator(func_get_args());
+                return $this->deblacklistOperator(func_get_args());
             }
-            $name = $this->normalize_operator($name);
+            $name = $this->normalizeOperator($name);
             return $this->deblacklist('operators', $name);
         }
+
         /** Whitelist primitive
          *
          * You can pass a string of primitive name, or pass an array of the primitive names to whitelist
          *
-         * @example $sandbox->whitelist_primitive('int');
+         * @example $sandbox->whitelistPrimitive('int');
          *
-         * @example $sandbox->whitelist_primitive(array('int', 'float'));
+         * @example $sandbox->whitelistPrimitive(array('int', 'float'));
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_primitive($name){
+        public function whitelistPrimitive($name){
             if(func_num_args() > 1){
-                return $this->whitelist_primitive(func_get_args());
+                return $this->whitelistPrimitive(func_get_args());
             }
-            $name = $this->normalize_primitive($name);
+            $name = $this->normalizePrimitive($name);
             return $this->whitelist('primitives', $name);
         }
+
         /** Blacklist primitive
          *
          * You can pass a string of primitive name, or pass an array of the primitive names to blacklist
          *
-         * @example $sandbox->blacklist_primitive('int');
+         * @example $sandbox->blacklistPrimitive('int');
          *
-         * @example $sandbox->blacklist_primitive(array('int', 'float'));
+         * @example $sandbox->blacklistPrimitive(array('int', 'float'));
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_primitive($name){
+        public function blacklistPrimitive($name){
             if(func_num_args() > 1){
-                return $this->blacklist_primitive(func_get_args());
+                return $this->blacklistPrimitive(func_get_args());
             }
-            $name = $this->normalize_primitive($name);
+            $name = $this->normalizePrimitive($name);
             return $this->blacklist('primitives', $name);
         }
+
         /** Remove primitive from whitelist
          *
          * You can pass a string of primitive name, or pass an array of the primitive names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_primitive('int');
+         * @example $sandbox->dewhitelistPrimitive('int');
          *
-         * @example $sandbox->dewhitelist_primitive(array('int', 'float'));
+         * @example $sandbox->dewhitelistPrimitive(array('int', 'float'));
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_primitive($name){
+        public function dewhitelistPrimitive($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_primitive(func_get_args());
+                return $this->dewhitelistPrimitive(func_get_args());
             }
-            $name = $this->normalize_primitive($name);
+            $name = $this->normalizePrimitive($name);
             return $this->dewhitelist('primitives', $name);
         }
+
         /** Remove primitive from blacklist
          *
          * You can pass a string of primitive name, or pass an array of the primitive names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_primitive('int');
+         * @example $sandbox->deblacklistPrimitive('int');
          *
-         * @example $sandbox->deblacklist_primitive(array('int', 'float'));
+         * @example $sandbox->deblacklistPrimitive(array('int', 'float'));
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_primitive($name){
+        public function deblacklistPrimitive($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_primitive(func_get_args());
+                return $this->deblacklistPrimitive(func_get_args());
             }
-            $name = $this->normalize_primitive($name);
+            $name = $this->normalizePrimitive($name);
             return $this->deblacklist('primitives', $name);
         }
+
         /** Whitelist type
          *
          * You can pass a string of type name, or pass an array of the type names to whitelist
          *
-         * @example $sandbox->whitelist_type('PHPSandbox');
+         * @example $sandbox->whitelistType('PHPSandbox');
          *
-         * @example $sandbox->whitelist_type(array('PHPSandbox', 'PHPParser'));
+         * @example $sandbox->whitelistType(array('PHPSandbox', 'PhpParser'));
          *
          * @param   string|array        $name       String of type name or array of type names to whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function whitelist_type($name){
+        public function whitelistType($name){
             if(func_num_args() > 1){
-                return $this->whitelist_type(func_get_args());
+                return $this->whitelistType(func_get_args());
             }
-            $name = $this->normalize_type($name);
+            $name = $this->normalizeType($name);
             return $this->whitelist('types', $name);
         }
+
         /** Blacklist type
          *
          * You can pass a string of type name, or pass an array of the type names to blacklist
          *
-         * @example $sandbox->blacklist_type('PHPSandbox');
+         * @example $sandbox->blacklistType('PHPSandbox');
          *
-         * @example $sandbox->blacklist_type(array('PHPSandbox', 'PHPParser'));
+         * @example $sandbox->blacklistType(array('PHPSandbox', 'PhpParser'));
          *
          * @param   string|array        $name       String of type name or array of type names to blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function blacklist_type($name){
+        public function blacklistType($name){
             if(func_num_args() > 1){
-                return $this->blacklist_type(func_get_args());
+                return $this->blacklistType(func_get_args());
             }
-            $name = $this->normalize_type($name);
+            $name = $this->normalizeType($name);
             return $this->blacklist('types', $name);
         }
+
         /** Remove type from whitelist
          *
          * You can pass a string of type name, or pass an array of the type names to remove from whitelist
          *
-         * @example $sandbox->dewhitelist_type('PHPSandbox');
+         * @example $sandbox->dewhitelistType('PHPSandbox');
          *
-         * @example $sandbox->dewhitelist_type(array('PHPSandbox', 'PHPParser'));
+         * @example $sandbox->dewhitelistType(array('PHPSandbox', 'PhpParser'));
          *
          * @param   string|array        $name       String of type name or array of type names to remove from whitelist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function dewhitelist_type($name){
+        public function dewhitelistType($name){
             if(func_num_args() > 1){
-                return $this->dewhitelist_type(func_get_args());
+                return $this->dewhitelistType(func_get_args());
             }
-            $name = $this->normalize_type($name);
+            $name = $this->normalizeType($name);
             return $this->dewhitelist('types', $name);
         }
+
         /** Remove type from blacklist
          *
          * You can pass a string of type name, or pass an array of the type names to remove from blacklist
          *
-         * @example $sandbox->deblacklist_type('PHPSandbox');
+         * @example $sandbox->deblacklistType('PHPSandbox');
          *
-         * @example $sandbox->deblacklist_type(array('PHPSandbox', 'PHPParser'));
+         * @example $sandbox->deblacklistType(array('PHPSandbox', 'PhpParser'));
          *
          * @param   string|array        $name       String of type name or array of type names to remove from blacklist
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function deblacklist_type($name){
+        public function deblacklistType($name){
             if(func_num_args() > 1){
-                return $this->deblacklist_type(func_get_args());
+                return $this->deblacklistType(func_get_args());
             }
-            $name = $this->normalize_type($name);
+            $name = $this->normalizeType($name);
             return $this->deblacklist('types', $name);
         }
+
         /** Check function name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the function name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if function is valid, this is also used for testing closures
          */
-        public function check_func($name){
+        public function checkFunc($name){
             if(!$this->validate_functions){
                 return true;
             }
             $original_name = $name;
             if($name instanceof \Closure){
                 if(!$this->allow_closures){
-                    $this->validation_error("Sandboxed code attempted to call closure!", Error::CLOSURE_ERROR);
+                    $this->validationError("Sandboxed code attempted to call closure!", Error::CLOSURE_ERROR);
                 }
                 return true;
             } else if($name instanceof SandboxedString){
                 $name = strval($name);
             }
             if(!$name || !is_string($name)){
-                $this->validation_error("Sandboxed code attempted to call unnamed function!", Error::VALID_FUNC_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed function!", Error::VALID_FUNC_ERROR, null, '');
             }
-            $name = $this->normalize_func($name);
+            $name = $this->normalizeFunc($name);
             if(is_callable($this->validation['function'])){
                 return call_user_func_array($this->validation['function'], array($name, $this));
             }
             if(!isset($this->definitions['functions'][$name]) || !is_callable($this->definitions['functions'][$name]['function'])){
                 if(count($this->whitelist['functions'])){
                     if(!isset($this->whitelist['functions'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call non-whitelisted function: $original_name", Error::WHITELIST_FUNC_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call non-whitelisted function: $original_name", Error::WHITELIST_FUNC_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['functions'])){
                     if(isset($this->blacklist['functions'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call blacklisted function: $original_name", Error::BLACKLIST_FUNC_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call blacklisted function: $original_name", Error::BLACKLIST_FUNC_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->validation_error("Sandboxed code attempted to call invalid function: $original_name", Error::VALID_FUNC_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalid function: $original_name", Error::VALID_FUNC_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check variable name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the variable name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if variable is valid
          */
-        public function check_var($name){
+        public function checkVar($name){
             if(!$this->validate_variables){
                 return true;
             }
@@ -6160,7 +6496,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed variable!", Error::VALID_VAR_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed variable!", Error::VALID_VAR_ERROR, null, '');
             }
             if(is_callable($this->validation['variable'])){
                 return call_user_func_array($this->validation['variable'], array($name, $this));
@@ -6168,25 +6504,26 @@
             if(!isset($this->definitions['variables'][$name])){
                 if(count($this->whitelist['variables'])){
                     if(!isset($this->whitelist['variables'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call non-whitelisted variable: $original_name", Error::WHITELIST_VAR_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call non-whitelisted variable: $original_name", Error::WHITELIST_VAR_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['variables'])){
                     if(isset($this->blacklist['variables'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call blacklisted variable: $original_name", Error::BLACKLIST_VAR_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call blacklisted variable: $original_name", Error::BLACKLIST_VAR_ERROR, null, $original_name);
                     }
                 } else if(!$this->allow_variables){
-                    $this->validation_error("Sandboxed code attempted to call invalid variable: $original_name", Error::VALID_VAR_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalid variable: $original_name", Error::VALID_VAR_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check global name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the global name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if global is valid
          */
-        public function check_global($name){
+        public function checkGlobal($name){
             if(!$this->validate_globals){
                 return true;
             }
@@ -6195,31 +6532,32 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed global!", Error::VALID_GLOBAL_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed global!", Error::VALID_GLOBAL_ERROR, null, '');
             }
             if(is_callable($this->validation['global'])){
                 return call_user_func_array($this->validation['global'], array($name, $this));
             }
             if(count($this->whitelist['globals'])){
                 if(!isset($this->whitelist['globals'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call non-whitelisted global: $original_name", Error::WHITELIST_GLOBAL_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call non-whitelisted global: $original_name", Error::WHITELIST_GLOBAL_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['globals'])){
                 if(isset($this->blacklist['globals'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call blacklisted global: $original_name", Error::BLACKLIST_GLOBAL_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call blacklisted global: $original_name", Error::BLACKLIST_GLOBAL_ERROR, null, $original_name);
                 }
             } else {
-                $this->validation_error("Sandboxed code attempted to call invalid global: $original_name", Error::VALID_GLOBAL_ERROR, null, $original_name);
+                $this->validationError("Sandboxed code attempted to call invalid global: $original_name", Error::VALID_GLOBAL_ERROR, null, $original_name);
             }
             return true;
         }
+
         /** Check superglobal name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the superglobal name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if superglobal is valid
          */
-        public function check_superglobal($name){
+        public function checkSuperglobal($name){
             if(!$this->validate_superglobals){
                 return true;
             }
@@ -6228,34 +6566,35 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed superglobal!", Error::VALID_SUPERGLOBAL_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed superglobal!", Error::VALID_SUPERGLOBAL_ERROR, null, '');
             }
-            $name = $this->normalize_superglobal($name);
+            $name = $this->normalizeSuperglobal($name);
             if(is_callable($this->validation['superglobal'])){
                 return call_user_func_array($this->validation['superglobal'], array($name, $this));
             }
             if(!isset($this->definitions['superglobals'][$name])){
                 if(count($this->whitelist['superglobals'])){
                     if(!isset($this->whitelist['superglobals'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call non-whitelisted superglobal: $original_name", Error::WHITELIST_SUPERGLOBAL_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call non-whitelisted superglobal: $original_name", Error::WHITELIST_SUPERGLOBAL_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['superglobals'])){
                     if(isset($this->blacklist['superglobals'][$name]) && !count($this->blacklist['superglobals'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call blacklisted superglobal: $original_name", Error::BLACKLIST_SUPERGLOBAL_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call blacklisted superglobal: $original_name", Error::BLACKLIST_SUPERGLOBAL_ERROR, null, $original_name);
                     }
                 } else if(!$this->overwrite_superglobals){
-                    $this->validation_error("Sandboxed code attempted to call invalid superglobal: $original_name", Error::VALID_SUPERGLOBAL_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalid superglobal: $original_name", Error::VALID_SUPERGLOBAL_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check constant name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the constant name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if constant is valid
          */
-        public function check_const($name){
+        public function checkConst($name){
             if(!$this->validate_constants){
                 return true;
             }
@@ -6264,13 +6603,13 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed constant!", Error::VALID_CONST_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed constant!", Error::VALID_CONST_ERROR, null, '');
             }
             if(strtolower($name) == 'true' || strtolower($name) == 'false'){
-                return $this->check_primitive('bool');
+                return $this->checkPrimitive('bool');
             }
             if(strtolower($name) == 'null'){
-                return $this->check_primitive('null');
+                return $this->checkPrimitive('null');
             }
             if(is_callable($this->validation['constant'])){
                 return call_user_func_array($this->validation['constant'], array($name, $this));
@@ -6278,25 +6617,26 @@
             if(!isset($this->definitions['constants'][$name])){
                 if(count($this->whitelist['constants'])){
                     if(!isset($this->whitelist['constants'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call non-whitelisted constant: $original_name", Error::WHITELIST_CONST_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call non-whitelisted constant: $original_name", Error::WHITELIST_CONST_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['constants'])){
                     if(isset($this->blacklist['constants'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call blacklisted constant: $original_name", Error::BLACKLIST_CONST_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call blacklisted constant: $original_name", Error::BLACKLIST_CONST_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->validation_error("Sandboxed code attempted to call invalid constant: $original_name", Error::VALID_CONST_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalid constant: $original_name", Error::VALID_CONST_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check magic constant name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the magic constant name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if magic constant is valid
          */
-        public function check_magic_const($name){
+        public function checkMagicConst($name){
             if(!$this->validate_magic_constants){
                 return true;
             }
@@ -6305,34 +6645,35 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed magic constant!", Error::VALID_MAGIC_CONST_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed magic constant!", Error::VALID_MAGIC_CONST_ERROR, null, '');
             }
-            $name = $this->normalize_magic_const($name);
+            $name = $this->normalizeMagicConst($name);
             if(is_callable($this->validation['magic_constant'])){
                 return call_user_func_array($this->validation['magic_constant'], array($name, $this));
             }
             if(!isset($this->definitions['magic_constants'][$name])){
                 if(count($this->whitelist['magic_constants'])){
                     if(!isset($this->whitelist['magic_constants'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call non-whitelisted magic constant: $original_name", Error::WHITELIST_MAGIC_CONST_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call non-whitelisted magic constant: $original_name", Error::WHITELIST_MAGIC_CONST_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['magic_constants'])){
                     if(isset($this->blacklist['magic_constants'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call blacklisted magic constant: $original_name", Error::BLACKLIST_MAGIC_CONST_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call blacklisted magic constant: $original_name", Error::BLACKLIST_MAGIC_CONST_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->validation_error("Sandboxed code attempted to call invalid magic constant: $original_name", Error::VALID_MAGIC_CONST_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalid magic constant: $original_name", Error::VALID_MAGIC_CONST_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check namespace name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the namespace name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if namespace is valid
          */
-        public function check_namespace($name){
+        public function checkNamespace($name){
             if(!$this->validate_namespaces){
                 return true;
             }
@@ -6341,34 +6682,35 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed namespace!", Error::VALID_NAMESPACE_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed namespace!", Error::VALID_NAMESPACE_ERROR, null, '');
             }
-            $name = $this->normalize_namespace($name);
+            $name = $this->normalizeNamespace($name);
             if(is_callable($this->validation['namespace'])){
                 return call_user_func_array($this->validation['namespace'], array($name, $this));
             }
             if(!isset($this->definitions['namespaces'][$name])){
                 if(count($this->whitelist['namespaces'])){
                     if(!isset($this->whitelist['namespaces'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call non-whitelisted namespace: $original_name", Error::WHITELIST_NAMESPACE_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call non-whitelisted namespace: $original_name", Error::WHITELIST_NAMESPACE_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['namespaces'])){
                     if(isset($this->blacklist['namespaces'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call blacklisted namespace: $original_name", Error::BLACKLIST_NAMESPACE_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call blacklisted namespace: $original_name", Error::BLACKLIST_NAMESPACE_ERROR, null, $original_name);
                     }
                 } else if(!$this->allow_namespaces){
-                    $this->validation_error("Sandboxed code attempted to call invalid namespace: $original_name", Error::VALID_NAMESPACE_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalid namespace: $original_name", Error::VALID_NAMESPACE_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check alias name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the alias name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if alias is valid
          */
-        public function check_alias($name){
+        public function checkAlias($name){
             if(!$this->validate_aliases){
                 return true;
             }
@@ -6377,37 +6719,39 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed alias!", Error::VALID_ALIAS_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed alias!", Error::VALID_ALIAS_ERROR, null, '');
             }
-            $name = $this->normalize_alias($name);
+            $name = $this->normalizeAlias($name);
             if(is_callable($this->validation['alias'])){
                 return call_user_func_array($this->validation['alias'], array($name, $this));
             }
             if(count($this->whitelist['aliases'])){
                 if(!isset($this->whitelist['aliases'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call non-whitelisted alias: $original_name", Error::WHITELIST_ALIAS_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call non-whitelisted alias: $original_name", Error::WHITELIST_ALIAS_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['aliases'])){
                 if(isset($this->blacklist['aliases'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call blacklisted alias: $original_name", Error::BLACKLIST_ALIAS_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call blacklisted alias: $original_name", Error::BLACKLIST_ALIAS_ERROR, null, $original_name);
                 }
             } else if(!$this->allow_aliases){
-                $this->validation_error("Sandboxed code attempted to call invalid alias: $original_name", Error::VALID_ALIAS_ERROR, null, $original_name);
+                $this->validationError("Sandboxed code attempted to call invalid alias: $original_name", Error::VALID_ALIAS_ERROR, null, $original_name);
             }
             return true;
         }
+
         /** Check use (or alias) name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          *
-         * @alias check_alias();
+         * @alias checkAlias();
          *
          * @param   string   $name      String of the use (or alias) name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if use (or alias) is valid
          */
-        public function check_use($name){
-            return $this->check_alias($name);
+        public function checkUse($name){
+            return $this->checkAlias($name);
         }
+
         /** Check class name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the class name to check
          * @param   bool     $extends   Flag whether this is an extended class
@@ -6415,7 +6759,7 @@
          *
          * @return  bool     Returns true if class is valid
          */
-        public function check_class($name, $extends = false){
+        public function checkClass($name, $extends = false){
             if(!$this->validate_classes){
                 return true;
             }
@@ -6425,9 +6769,9 @@
             }
             $action = $extends ? 'extend' : 'call';
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to $action unnamed class!", Error::VALID_CLASS_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to $action unnamed class!", Error::VALID_CLASS_ERROR, null, '');
             }
-            $name = $this->normalize_class($name);
+            $name = $this->normalizeClass($name);
             if($name == 'self' || $name == 'static' || $name == 'parent'){
                 return true;
             }
@@ -6437,25 +6781,26 @@
             if(!isset($this->definitions['classes'][$name])){
                 if(count($this->whitelist['classes'])){
                     if(!isset($this->whitelist['classes'][$name])){
-                        $this->validation_error("Sandboxed code attempted to $action non-whitelisted class: $original_name", Error::WHITELIST_CLASS_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to $action non-whitelisted class: $original_name", Error::WHITELIST_CLASS_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['classes'])){
                     if(isset($this->blacklist['classes'][$name])){
-                        $this->validation_error("Sandboxed code attempted to $action blacklisted class: $original_name", Error::BLACKLIST_CLASS_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to $action blacklisted class: $original_name", Error::BLACKLIST_CLASS_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->validation_error("Sandboxed code attempted to $action invalid class: $original_name", Error::VALID_CLASS_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to $action invalid class: $original_name", Error::VALID_CLASS_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check interface name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the interface name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if interface is valid
          */
-        public function check_interface($name){
+        public function checkInterface($name){
             if(!$this->validate_interfaces){
                 return true;
             }
@@ -6464,34 +6809,35 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed interface!", Error::VALID_INTERFACE_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed interface!", Error::VALID_INTERFACE_ERROR, null, '');
             }
-            $name = $this->normalize_interface($name);
+            $name = $this->normalizeInterface($name);
             if(is_callable($this->validation['interface'])){
                 return call_user_func_array($this->validation['interface'], array($name, $this));
             }
             if(!isset($this->definitions['interfaces'][$name])){
                 if(count($this->whitelist['interfaces'])){
                     if(!isset($this->whitelist['interfaces'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call non-whitelisted interface: $original_name", Error::WHITELIST_INTERFACE_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call non-whitelisted interface: $original_name", Error::WHITELIST_INTERFACE_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['interfaces'])){
                     if(isset($this->blacklist['interfaces'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call blacklisted interface: $original_name", Error::BLACKLIST_INTERFACE_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call blacklisted interface: $original_name", Error::BLACKLIST_INTERFACE_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->validation_error("Sandboxed code attempted to call invalidnterface: $original_name", Error::VALID_INTERFACE_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalidnterface: $original_name", Error::VALID_INTERFACE_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check trait name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the trait name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if trait is valid
          */
-        public function check_trait($name){
+        public function checkTrait($name){
             if(!$this->validate_traits){
                 return true;
             }
@@ -6500,34 +6846,35 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed trait!", Error::VALID_TRAIT_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed trait!", Error::VALID_TRAIT_ERROR, null, '');
             }
-            $name = $this->normalize_trait($name);
+            $name = $this->normalizeTrait($name);
             if(is_callable($this->validation['trait'])){
                 return call_user_func_array($this->validation['trait'], array($name, $this));
             }
             if(!isset($this->definitions['traits'][$name])){
                 if(count($this->whitelist['traits'])){
                     if(!isset($this->whitelist['traits'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call non-whitelisted trait: $original_name", Error::WHITELIST_TRAIT_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call non-whitelisted trait: $original_name", Error::WHITELIST_TRAIT_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['traits'])){
                     if(isset($this->blacklist['traits'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call blacklisted trait: $original_name", Error::BLACKLIST_TRAIT_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call blacklisted trait: $original_name", Error::BLACKLIST_TRAIT_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->validation_error("Sandboxed code attempted to call invalid trait: $original_name", Error::VALID_TRAIT_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalid trait: $original_name", Error::VALID_TRAIT_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check keyword name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the keyword name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if keyword is valid
          */
-        public function check_keyword($name){
+        public function checkKeyword($name){
             if(!$this->validate_keywords){
                 return true;
             }
@@ -6536,30 +6883,31 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed keyword!", Error::VALID_KEYWORD_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed keyword!", Error::VALID_KEYWORD_ERROR, null, '');
             }
-            $name = $this->normalize_keyword($name);
+            $name = $this->normalizeKeyword($name);
             if(is_callable($this->validation['keyword'])){
                 return call_user_func_array($this->validation['keyword'], array($name, $this));
             }
             if(count($this->whitelist['keywords'])){
                 if(!isset($this->whitelist['keywords'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call non-whitelisted keyword: $original_name", Error::WHITELIST_KEYWORD_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call non-whitelisted keyword: $original_name", Error::WHITELIST_KEYWORD_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['keywords'])){
                 if(isset($this->blacklist['keywords'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call blacklisted keyword: $original_name", Error::BLACKLIST_KEYWORD_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call blacklisted keyword: $original_name", Error::BLACKLIST_KEYWORD_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check operator name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the type operator to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if operator is valid
          */
-        public function check_operator($name){
+        public function checkOperator($name){
             if(!$this->validate_operators){
                 return true;
             }
@@ -6568,30 +6916,31 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed operator!", Error::VALID_OPERATOR_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed operator!", Error::VALID_OPERATOR_ERROR, null, '');
             }
-            $name = $this->normalize_operator($name);
+            $name = $this->normalizeOperator($name);
             if(is_callable($this->validation['operator'])){
                 return call_user_func_array($this->validation['operator'], array($name, $this));
             }
             if(count($this->whitelist['operators'])){
                 if(!isset($this->whitelist['operators'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call non-whitelisted operator: $original_name", Error::WHITELIST_OPERATOR_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call non-whitelisted operator: $original_name", Error::WHITELIST_OPERATOR_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['operators'])){
                 if(isset($this->blacklist['operators'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call blacklisted operator: $original_name", Error::BLACKLIST_OPERATOR_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call blacklisted operator: $original_name", Error::BLACKLIST_OPERATOR_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check primitive name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the primitive name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if primitive is valid
          */
-        public function check_primitive($name){
+        public function checkPrimitive($name){
             if(!$this->validate_primitives){
                 return true;
             }
@@ -6600,30 +6949,31 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed primitive!", Error::VALID_PRIMITIVE_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed primitive!", Error::VALID_PRIMITIVE_ERROR, null, '');
             }
-            $name = $this->normalize_primitive($name);
+            $name = $this->normalizePrimitive($name);
             if(is_callable($this->validation['primitive'])){
                 return call_user_func_array($this->validation['primitive'], array($name, $this));
             }
             if(count($this->whitelist['primitives'])){
                 if(!isset($this->whitelist['primitives'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call non-whitelisted primitive: $original_name", Error::WHITELIST_PRIMITIVE_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call non-whitelisted primitive: $original_name", Error::WHITELIST_PRIMITIVE_ERROR, null, $original_name);
                 }
             } else if(count($this->blacklist['primitives'])){
                 if(isset($this->blacklist['primitives'][$name])){
-                    $this->validation_error("Sandboxed code attempted to call blacklisted primitive: $original_name", Error::BLACKLIST_PRIMITIVE_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call blacklisted primitive: $original_name", Error::BLACKLIST_PRIMITIVE_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Check type name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
          * @param   string   $name      String of the type name to check
          * @throws  Error    Throws exception if validation error occurs
          *
          * @return  bool     Returns true if type is valid
          */
-        public function check_type($name){
+        public function checkType($name){
             if(!$this->validate_types){
                 return true;
             }
@@ -6632,37 +6982,38 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validation_error("Sandboxed code attempted to call unnamed type!", Error::VALID_TYPE_ERROR, null, '');
+                $this->validationError("Sandboxed code attempted to call unnamed type!", Error::VALID_TYPE_ERROR, null, '');
             }
-            $name = $this->normalize_type($name);
+            $name = $this->normalizeType($name);
             if(is_callable($this->validation['type'])){
                 return call_user_func_array($this->validation['type'], array($name, $this));
             }
             if(!isset($this->definitions['classes'][$name])){
                 if(count($this->whitelist['types'])){
                     if(!isset($this->whitelist['types'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call non-whitelisted type: $original_name", Error::WHITELIST_TYPE_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call non-whitelisted type: $original_name", Error::WHITELIST_TYPE_ERROR, null, $original_name);
                     }
                 } else if(count($this->blacklist['types'])){
                     if(isset($this->blacklist['types'][$name])){
-                        $this->validation_error("Sandboxed code attempted to call blacklisted type: $original_name", Error::BLACKLIST_TYPE_ERROR, null, $original_name);
+                        $this->validationError("Sandboxed code attempted to call blacklisted type: $original_name", Error::BLACKLIST_TYPE_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->validation_error("Sandboxed code attempted to call invalid type: $original_name", Error::VALID_TYPE_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalid type: $original_name", Error::VALID_TYPE_ERROR, null, $original_name);
                 }
             }
             return true;
         }
+
         /** Prepare defined variables for execution
          *
          * @throws  Error       Throws exception if variable preparation error occurs
          * @return  string      Prepared string of variable output
          */
-        protected function prepare_vars(){
+        protected function prepareVars(){
             $output = array();
             foreach($this->definitions['variables'] as $name => $value){
                 if(is_int($name)){  //can't define numeric variable names
-                    $this->validation_error("Cannot define variable name that begins with an integer!", Error::DEFINE_VAR_ERROR, null, $name);
+                    $this->validationError("Cannot define variable name that begins with an integer!", Error::DEFINE_VAR_ERROR, null, $name);
                 }
                 if(is_scalar($value) || is_null($value)){
                     if(is_bool($value)){
@@ -6682,9 +7033,10 @@
             }
             return count($output) ? "\r\n" . implode(";\r\n", $output) . ";\r\n" : '';
         }
+
         /** Prepare defined constants for execution
          */
-        protected function prepare_consts(){
+        protected function prepareConsts(){
             $output = array();
             foreach($this->definitions['constants'] as $name => $value){
                 if(is_scalar($value) || is_null($value)){
@@ -6700,43 +7052,47 @@
                         $output[] = '\define(' . "'" . $name . "', null);";
                     }
                 } else {
-                    $this->validation_error("Sandboxed code attempted to define non-scalar constant value: $name", Error::DEFINE_CONST_ERROR, null, $name);
+                    $this->validationError("Sandboxed code attempted to define non-scalar constant value: $name", Error::DEFINE_CONST_ERROR, null, $name);
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
         }
+
         /** Prepare defined namespaces for execution
          */
-        protected function prepare_namespaces(){
+        protected function prepareNamespaces(){
             $output = array();
             foreach($this->definitions['namespaces'] as $name){
                 if(is_string($name) && $name){
                     $output[] = 'namespace ' . $name . ';';
                 } else {
-                    $this->validation_error("Sandboxed code attempted to create invalid namespace: $name", Error::DEFINE_NAMESPACE_ERROR, null, $name);
+                    $this->validationError("Sandboxed code attempted to create invalid namespace: $name", Error::DEFINE_NAMESPACE_ERROR, null, $name);
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
         }
+
         /** Prepare defined aliases for execution
          */
-        protected function prepare_aliases(){
+        protected function prepareAliases(){
             $output = array();
             foreach($this->definitions['aliases'] as $alias){
                 if(is_array($alias) && isset($alias['original']) && is_string($alias['original']) && $alias['original']){
                     $output[] = 'use ' . $alias['original'] . ((isset($alias['alias']) && is_string($alias['alias']) && $alias['alias']) ? ' as ' . $alias['alias'] : '') . ';';
                 } else {
-                    $this->validation_error("Sandboxed code attempted to use invalid namespace alias: " . $alias['original'], Error::DEFINE_ALIAS_ERROR, null, $alias['original']);
+                    $this->validationError("Sandboxed code attempted to use invalid namespace alias: " . $alias['original'], Error::DEFINE_ALIAS_ERROR, null, $alias['original']);
                 }
             }
             return count($output) ? implode("\r\n", $output) ."\r\n" : '';
         }
+
         /** Prepare defined uses (or aliases) for execution
-         * @alias   prepare_aliases();
+         * @alias   prepareAliases();
          */
-        protected function prepare_uses(){
-            return $this->prepare_aliases();
+        protected function prepareUses(){
+            return $this->prepareAliases();
         }
+
         /** Disassemble callable to string
          *
          * @param   callable    $closure                The callable to disassemble
@@ -6751,10 +7107,11 @@
             }
             $disassembled_closure = FunctionParser::fromCallable($closure);
             if($this->auto_define_vars){
-                $this->auto_define($disassembled_closure);
+                $this->autoDefine($disassembled_closure);
             }
             return '<?php' . $disassembled_closure->getBody();
         }
+
         /** Automatically whitelisted trusted code
          *
          * @param   string    $code         String of trusted $code to automatically whitelist
@@ -6764,35 +7121,38 @@
          *
          * @throws  Error     Throw exception if code cannot be parsed for whitelisting
          */
-        protected function auto_whitelist($code, $appended = false){
-            $parser = new \PHPParser_Parser(new \PHPParser_Lexer);
+        protected function autoWhitelist($code, $appended = false){
+            $factory = new ParserFactory;
+            $parser = $factory->create(ParserFactory::PREFER_PHP5);
             try {
                 $statements = $parser->parse($code);
-            } catch (\PHPParser_Error $error) {
-                return $this->validation_error('Error parsing ' . ($appended ? 'appended' : 'prepended') . ' sandboxed code for auto-whitelisting!', Error::PARSER_ERROR, null, $code, $error);
+            } catch (ParserError $error) {
+                return $this->validationError('Error parsing ' . ($appended ? 'appended' : 'prepended') . ' sandboxed code for auto-whitelisting!', Error::PARSER_ERROR, null, $code, $error);
             }
-            $traverser = new \PHPParser_NodeTraverser;
+            $traverser = new NodeTraverser;
             $whitelister = new WhitelistVisitor($this);
             $traverser->addVisitor($whitelister);
             $traverser->traverse($statements);
             return true;
         }
+
         /** Automatically define variables passed to disassembled closure
          * @param FunctionParser    $disassembled_closure
          */
-        protected function auto_define(FunctionParser $disassembled_closure){
+        protected function autoDefine(FunctionParser $disassembled_closure){
             $parameters = $disassembled_closure->getReflection()->getParameters();
             foreach($parameters as $param){
                 /**
                  * @var \ReflectionParameter $param
                  */
-                $this->define_var($param->getName(), $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null);
+                $this->defineVar($param->getName(), $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null);
             }
         }
+
         /** Prepend trusted code
          * @param   string|callable     $code         String or callable of trusted $code to prepend to generated code
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
         public function prepend($code){
             if(!$code){
@@ -6800,15 +7160,16 @@
             }
             $code = $this->disassemble($code);
             if($this->auto_whitelist_trusted_code){
-                $this->auto_whitelist($code);
+                $this->autoWhitelist($code);
             }
             $this->prepended_code .= substr($code, 6) . "\r\n"; //remove opening php tag
             return $this;
         }
+
         /** Append trusted code
          * @param   string|callable     $code         String or callable of trusted $code to append to generated code
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
         public function append($code){
             if(!$code){
@@ -6816,14 +7177,15 @@
             }
             $code = $this->disassemble($code);
             if($this->auto_whitelist_trusted_code){
-                $this->auto_whitelist($code, true);
+                $this->autoWhitelist($code, true);
             }
             $this->appended_code .= "\r\n" . substr($code, 6) . "\r\n"; //remove opening php tag
             return $this;
         }
+
         /** Clear all trusted and sandboxed code
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
         public function clear(){
             $this->prepended_code = '';
@@ -6831,103 +7193,112 @@
             $this->appended_code = '';
             return $this;
         }
+
         /** Clear all trusted code
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function clear_trusted_code(){
+        public function clearTrustedCode(){
             $this->prepended_code = '';
             $this->appended_code = '';
             return $this;
         }
+
         /** Clear all prepended trusted code
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function clear_prepend(){
+        public function clearPrependedCode(){
             $this->prepended_code = '';
             return $this;
         }
+
         /** Clear all appended trusted code
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function clear_append(){
+        public function clearAppendedCode(){
             $this->appended_code = '';
             return $this;
         }
+
         /** Clear generated code
          *
-         * @return  PHPSandbox               Returns the PHPSandbox instance for chainability
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
-        public function clear_code(){
+        public function clearCode(){
             $this->generated_code = null;
             return $this;
         }
+
         /** Return the amount of time the sandbox spent preparing the sandboxed code
          *
          * You can pass the number of digits you wish to round the return value
          *
-         * @example $sandbox->get_prepared_time();
+         * @example $sandbox->getPreparedTime();
          *
-         * @example $sandbox->get_prepared_time(3);
+         * @example $sandbox->getPreparedTime(3);
          *
          * @param   int|null        $round      The number of digits to round the return value
          *
          * @return  float           The amount of time in microseconds it took to prepare the sandboxed code
          */
-        public function get_prepared_time($round = null){
+        public function getPreparedTime($round = 0){
             return $round ? round($this->prepare_time, $round) : $this->prepare_time;
         }
+
         /** Return the amount of time the sandbox spent executing the sandboxed code
          *
          * You can pass the number of digits you wish to round the return value
          *
-         * @example $sandbox->get_execution_time();
+         * @example $sandbox->getExecutionTime();
          *
-         * @example $sandbox->get_execution_time(3);
+         * @example $sandbox->getExecutionTime(3);
          *
          * @param   int|null        $round      The number of digits to round the return value
          *
          * @return  float           The amount of time in microseconds it took to execute the sandboxed code
          */
-        public function get_execution_time($round = null){
+        public function getExecutionTime($round = 0){
             return $round ? round($this->execution_time, $round) : $this->execution_time;
         }
+
         /** Return the amount of time the sandbox spent preparing and executing the sandboxed code
          *
          * You can pass the number of digits you wish to round the return value
          *
-         * @example $sandbox->get_time();
+         * @example $sandbox->getTime();
          *
-         * @example $sandbox->get_time(3);
+         * @example $sandbox->getTime(3);
          *
          * @param   int|null        $round      The number of digits to round the return value
          *
          * @return  float           The amount of time in microseconds it took to prepare and execute the sandboxed code
          */
-        public function get_time($round = null){
+        public function getTime($round = 0){
             return $round ? round($this->prepare_time + $this->execution_time, $round) : ($this->prepare_time + $this->execution_time);
         }
+
         /** Validate passed callable for execution
          *
          * @example $sandbox->validate('<?php echo "Hello World!"; ?>');
          *
          * @param   callable|string $code      The callable or string of code to validate
          *
-         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
         public function validate($code){
             $this->preparsed_code = $this->disassemble($code);
-            $parser = new \PHPParser_Parser(new \PHPParser_Lexer_Emulative);
+            $factory = new ParserFactory;
+            $parser = $factory->create(ParserFactory::PREFER_PHP5);
 
             try {
                 $this->parsed_ast = $parser->parse($this->preparsed_code);
-            } catch (\PHPParser_Error $error) {
-                $this->validation_error("Could not parse sandboxed code!", Error::PARSER_ERROR, null, $this->preparsed_code, $error);
+            } catch (ParserError $error) {
+                $this->validationError("Could not parse sandboxed code!", Error::PARSER_ERROR, null, $this->preparsed_code, $error);
             }
 
-            $prettyPrinter = new \PHPParser_PrettyPrinter_Default;
+            $prettyPrinter = new Standard();
 
             if(($this->allow_functions && $this->auto_whitelist_functions) ||
                 ($this->allow_constants && $this->auto_whitelist_constants) ||
@@ -6936,13 +7307,13 @@
                 ($this->allow_traits && $this->auto_whitelist_traits) ||
                 ($this->allow_globals && $this->auto_whitelist_globals)){
 
-                $traverser = new \PHPParser_NodeTraverser;
+                $traverser = new NodeTraverser;
                 $whitelister = new SandboxWhitelistVisitor($this);
                 $traverser->addVisitor($whitelister);
                 $traverser->traverse($this->parsed_ast);
             }
 
-            $traverser = new \PHPParser_NodeTraverser;
+            $traverser = new NodeTraverser;
 
             $validator = new ValidatorVisitor($this);
 
@@ -6954,6 +7325,7 @@
 
             return $this;
         }
+
         /** Prepare passed callable for execution
          *
          * This function validates your code and automatically whitelists it according to your specified configuration
@@ -6970,8 +7342,8 @@
         public function prepare($code, $skip_validation = false){
             $this->prepare_time = microtime(true);
 
-            if($this->allow_constants && !$this->is_defined_func('define') && ($this->has_whitelist_funcs() || !$this->has_blacklist_funcs())){
-                $this->whitelist_func('define');    //makes no sense to allow constants if you can't define them!
+            if($this->allow_constants && !$this->isDefinedFunc('define') && ($this->hasWhitelistedFuncs() || !$this->hasBlacklistedFuncs())){
+                $this->whitelistFunc('define');    //makes no sense to allow constants if you can't define them!
             }
 
             if(!$skip_validation){
@@ -6980,11 +7352,11 @@
 
             static::$sandboxes[$this->name] = $this;
 
-            $this->generated_code = $this->prepare_namespaces() .
-                $this->prepare_aliases() .
-                $this->prepare_consts() .
+            $this->generated_code = $this->prepareNamespaces() .
+                $this->prepareAliases() .
+                $this->prepareConsts() .
                 "\r\n" . '$closure = function(){' . "\r\n" .
-                $this->prepare_vars() .
+                $this->prepareVars() .
                 $this->prepended_code .
                 ($skip_validation ? $code : $this->prepared_code) .
                 $this->appended_code .
@@ -6996,6 +7368,7 @@
             $this->prepare_time = (microtime(true) - $this->prepare_time);
             return $this->generated_code;
         }
+
         /** Prepare and execute callable and return output
          *
          * This function validates your code and automatically whitelists it according to your specified configuration, then executes it.
@@ -7045,55 +7418,60 @@
             }
             return $exception instanceof \Exception ? $this->exception($exception) : $result;
         }
+
         /** Set callable to handle errors
          *
          * This function sets the sandbox error handler and the handled error types. The handler accepts the error number,
          * the error message, the error file, the error line, the error context and the sandbox instance as arguments.
          * If the error handler does not handle errors correctly then the sandbox's security may become compromised!
          *
-         * @example $sandbox->set_error_handler(function($errno, $errstr, $errfile, $errline, $errcontext, PHPSandbox $s){
+         * @example $sandbox->setErrorHandler(function($errno, $errstr, $errfile, $errline, $errcontext, PHPSandbox $s){
          *  return false;
          * }, E_ALL);  //ignore all errors, INSECURE
          *
          * @param   callable        $handler       Callable to handle thrown Errors
          * @param   int             $error_types   Integer flag of the error types to handle (default is E_ALL)
          *
-         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
-        public function set_error_handler($handler, $error_types = E_ALL){
+        public function setErrorHandler($handler, $error_types = E_ALL){
             $this->error_handler = $handler;
             $this->error_handler_types = $error_types;
             return $this;
         }
+
         /** Get error handler
          *
          * This function returns the sandbox error handler.
          *
-         * @example $sandbox->get_error_handler();  //callable
+         * @example $sandbox->getErrorHandler();  //callable
          *
          * @return null|callable
          */
-        public function get_error_handler(){
+        public function getErrorHandler(){
             return $this->error_handler;
         }
+
         /** Unset error handler
          *
          * This function unsets the sandbox error handler.
          *
-         * @example $sandbox->unset_error_handler();
+         * @example $sandbox->unsetErrorHandler();
          *
-         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_error_handler(){
+        public function unsetErrorHandler(){
             $this->error_handler = null;
             return $this;
         }
+
         /** Gets the last sandbox error
          * @return array
          */
-        public function get_last_error(){
+        public function getLastError(){
             return $this->last_error;
         }
+
         /** Invoke sandbox error handler
          *
          * @example $sandbox->error(0, "Unknown error");
@@ -7112,51 +7490,56 @@
             }
             return is_callable($this->error_handler) ? call_user_func_array($this->error_handler, array($errno, $errstr, $errfile, $errline, $errcontext, $this)) : null;
         }
+
         /** Set callable to handle thrown exceptions
          *
          * This function sets the sandbox exception handler. The handler accepts the thrown exception and the sandbox instance
          * as arguments. If the exception handler does not handle exceptions correctly then the sandbox's security may
          * become compromised!
          *
-         * @example $sandbox->set_exception_handler(function(Exception $e, PHPSandbox $s){});  //ignore all thrown exceptions, INSECURE
+         * @example $sandbox->setExceptionHandler(function(Exception $e, PHPSandbox $s){});  //ignore all thrown exceptions, INSECURE
          *
          * @param   callable        $handler       Callable to handle thrown exceptions
          *
-         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
-        public function set_exception_handler($handler){
+        public function setExceptionHandler($handler){
             $this->exception_handler = $handler;
             return $this;
         }
+
         /** Get exception handler
          *
          * This function returns the sandbox exception handler.
          *
-         * @example $sandbox->get_exception_handler();  //callable
+         * @example $sandbox->getExceptionHandler();  //callable
          *
          * @return null|callable
          */
-        public function get_exception_handler(){
+        public function getExceptionHandler(){
             return $this->exception_handler;
         }
+
         /** Unset exception handler
          *
          * This function unsets the sandbox exception handler.
          *
-         * @example $sandbox->unset_exception_handler();
+         * @example $sandbox->unsetExceptionHandler();
          *
-         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_exception_handler(){
+        public function unsetExceptionHandler(){
             $this->exception_handler = null;
             return $this;
         }
+
         /** Gets the last exception thrown by the sandbox
          * @return \Exception|Error
          */
-        public function get_last_exception(){
+        public function getLastException(){
             return $this->last_exception;
         }
+
         /** Invoke sandbox exception handler
          *
          * @example $sandbox->exception(new Exception("Unknown error!", 0));
@@ -7173,42 +7556,45 @@
             }
             throw $exception;
         }
+
         /** Set callable to handle thrown validation Errors
          *
          * This function sets the sandbox validation Error handler. The handler accepts the thrown Error and the sandbox
          * instance as arguments. If the error handler does not handle validation errors correctly then the sandbox's
          * security may become compromised!
          *
-         * @example $sandbox->set_validation_error_handler(function(Error $e, PHPSandbox $s){});  //ignore all thrown Errors, INSECURE
+         * @example $sandbox->setValidationErrorHandler(function(Error $e, PHPSandbox $s){});  //ignore all thrown Errors, INSECURE
          *
          * @param   callable        $handler       Callable to handle thrown validation Errors
          *
-         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
-        public function set_validation_error_handler($handler){
+        public function setValidationErrorHandler($handler){
             $this->validation_error_handler = $handler;
             return $this;
         }
+
         /** Get validation error handler
          *
          * This function returns the sandbox validation error handler.
          *
-         * @example $sandbox->get_validation_error_handler();  //callable
+         * @example $sandbox->getValidationErrorHandler();  //callable
          *
          * @return null|callable
          */
-        public function get_validation_error_handler(){
+        public function getValidationErrorHandler(){
             return $this->validation_error_handler;
         }
+
         /** Unset validation error handler
          *
          * This function unsets the sandbox validation error handler.
          *
-         * @example $sandbox->unset_validation_error_handler();
+         * @example $sandbox->unsetValidationErrorHandler();
          *
-         * @return  PHPSandbox      Returns the PHPSandbox instance for chainability
+         * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
-        public function unset_validation_error_handler(){
+        public function unsetValidationErrorHandler(){
             $this->validation_error_handler = null;
             return $this;
         }
@@ -7216,23 +7602,24 @@
         /** Gets the last validation error thrown by the sandbox
          * @return \Exception|Error
          */
-        public function get_last_validation_error(){
+        public function getLastValidationError(){
             return $this->last_validation_error;
         }
+
         /** Invoke sandbox error validation handler if it exists, throw Error otherwise
          *
-         * @example $sandbox->validation_error("Error!", 10000);
+         * @example $sandbox->validationError("Error!", 10000);
          *
          * @param   \Exception|Error|string     $error      Error to throw if Error is not handled, or error message string
          * @param   int                         $code       The error code
-         * @param   \PHPParser_Node|null        $node       The error parser node
+         * @param   Node|null        $node       The error parser node
          * @param   mixed                       $data       The error data
          * @param   \Exception|Error|null       $previous   The previous Error thrown
          *
          * @throws  \Exception|Error
          * @return  mixed
          */
-        public function validation_error($error, $code = 0, \PHPParser_Node $node = null, $data = null, \Exception $previous = null){
+        public function validationError($error, $code = 0, Node $node = null, $data = null, \Exception $previous = null){
             $error = ($error instanceof \Exception)
                 ? (($error instanceof Error)
                     ? new Error($error->getMessage(), $error->getCode(), $error->getNode(), $error->getData(), $error->getPrevious() ?: $this->last_validation_error)
@@ -7249,6 +7636,7 @@
                 throw $error;
             }
         }
+
         /** Get a named PHPSandbox instance (used to retrieve the sandbox instance from within sandboxed code)
          * @param $name
          * @return null|PHPSandbox
@@ -7256,6 +7644,7 @@
         public static function getSandbox($name){
             return isset(static::$sandboxes[$name]) ? static::$sandboxes[$name] : null;
         }
+
         /** Get an iterator of all the public PHPSandbox properties
          * @return array
          */

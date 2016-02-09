@@ -76,7 +76,7 @@
         if(count($options)){
             $sandbox = new \PHPSandbox\PHPSandbox;
             foreach($options as $name => $value){
-                if(($name == 'error_level' && $value != error_reporting()) || ($name != 'error_level' && $sandbox->get_option($name) != $value)){ //save unique options only
+                if(($name == 'error_level' && $value != error_reporting()) || ($name != 'error_level' && $sandbox->getOption($name) != $value)){ //save unique options only
                     $data['options'][$name] = $value;
                 }
             }
@@ -119,9 +119,9 @@
             'blacklist' => $blacklist,
             'definitions' => $definitions
         ));
-        $sandbox->set_error_handler(function($errno, $errmsg, $errfile, $errline){ die('<h2 style="color: red;">Error: ' . $errmsg . ' on line ' . $errline . '</h2>'); });
-        $sandbox->set_exception_handler(function(\Exception $e){ die('<h2 style="color: red;">Exception: ' . $e->getMessage() . ' on line ' . $e->getLine() . '</h2>'); });
-        $sandbox->set_validation_error_handler(function(\PHPSandbox\Error $e){ die('<h2 style="color: red;">Validation Error: ' . $e->getMessage() . '</h2>'); });
+        $sandbox->setErrorHandler(function($errno, $errmsg, $errfile, $errline){ die('<h2 style="color: red;">Error: ' . $errmsg . ' on line ' . $errline . '</h2>'); });
+        $sandbox->setExceptionHandler(function(\Exception $e){ die('<h2 style="color: red;">Exception: ' . $e->getMessage() . ' on line ' . $e->getLine() . '</h2>'); });
+        $sandbox->setValidationErrorHandler(function(\PHPSandbox\Error $e){ die('<h2 style="color: red;">Validation Error: ' . $e->getMessage() . '</h2>'); });
         try {
             ob_start();
             if($setup_code){
@@ -132,10 +132,10 @@
                 echo (ob_get_contents() ? '<hr class="hr"/>' : '') . '<h3>The sandbox returned this value:</h3>';
                 var_dump($result);
             }
-            echo '<hr class="hr"/>Preparation time: ' . round($sandbox->get_prepared_time()*1000, 2) .
-                ' ms, execution time: ' . round($sandbox->get_execution_time()*1000, 2) .
-                ' ms, total time: ' . round($sandbox->get_prepared_time()*1000, 2) . ' ms' .
-                '<hr class="hr"/>Generated Code: <code>' . $sandbox->get_generated_code() . '</code>';
+            echo '<hr class="hr"/>Preparation time: ' . round($sandbox->getPreparedTime()*1000, 2) .
+                ' ms, execution time: ' . round($sandbox->getExecutionTime()*1000, 2) .
+                ' ms, total time: ' . round($sandbox->getPreparedTime()*1000, 2) . ' ms' .
+                '<hr class="hr"/>Generated Code: <code>' . $sandbox->getGeneratedCode() . '</code>';
             $buffer = ob_get_contents();
             ob_end_clean();
             die('<pre>' . $buffer . '</pre>');
@@ -163,9 +163,9 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>PHPSandbox - Toolkit</title>
-    <link href="http://code.jquery.com/ui/1.10.1/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet"/>
-    <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript" charset="utf-8"></script>
-    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+    <link href="//code.jquery.com/ui/1.11.4/themes/vader/jquery-ui.css" type="text/css" rel="stylesheet"/>
+    <script src="//code.jquery.com/jquery-1.12.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
         var JSON;JSON||(JSON={});
         (function(){function k(a){return a<10?"0"+a:a}function o(a){p.lastIndex=0;return p.test(a)?'"'+a.replace(p,function(a){var c=r[a];return typeof c==="string"?c:"\\u"+("0000"+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+a+'"'}function l(a,j){var c,d,h,m,g=e,f,b=j[a];b&&typeof b==="object"&&typeof b.toJSON==="function"&&(b=b.toJSON(a));typeof i==="function"&&(b=i.call(j,a,b));switch(typeof b){case "string":return o(b);case "number":return isFinite(b)?String(b):"null";case "boolean":case "null":return String(b);case "object":if(!b)return"null";
@@ -180,6 +180,7 @@
             margin: 0;
             font-family: "Trebuchet MS", sans, sans-serif;
             font-size: 14px;
+            background: #ccc;
         }
         #instructions {
             position: absolute;

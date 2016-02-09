@@ -36,7 +36,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
     }
 
     $sandbox = new PHPSandbox\PHPSandbox;
-    $sandbox->whitelist_func('test');
+    $sandbox->whitelistFunc('test');
     $result = $sandbox->execute(function(){
         return test('world');
     });
@@ -51,7 +51,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 
     $sandbox = new PHPSandbox\PHPSandbox;
     //this will mark any function valid that begins with "custom_"
-    $sandbox->set_func_validator(function($function_name, PHPSandbox\PHPSandbox $sandbox){
+    $sandbox->setFuncValidator(function($function_name, PHPSandbox\PHPSandbox $sandbox){
         return (substr($function_name, 0, 7) == 'custom_');  //return true if function is valid, false otherwise
     });
     $sandbox->execute(function(){
@@ -63,7 +63,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 
     $sandbox = new PHPSandbox\PHPSandbox;
     //this will intercept parser validation errors and quietly exit, otherwise it will throw the validation error
-    $sandbox->set_validation_error_handler(function(PHPSandbox\Error $error, PHPSandbox\PHPSandbox $sandbox){
+    $sandbox->setValidationErrorHandler(function(PHPSandbox\Error $error, PHPSandbox\PHPSandbox $sandbox){
         if($error->getCode() == PHPSandbox\Error::PARSER_ERROR){ //PARSER_ERROR == 1
             exit;
         }
@@ -76,7 +76,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 
     $sandbox = new PHPSandbox\PHPSandbox;
     //this will disable function validation
-    $sandbox->set_option('validate_functions', false); // or $sandbox->validate_functions = false;
+    $sandbox->setOption('validate_functions', false); // or $sandbox->validate_functions = false;
     $sandbox->execute('<?php echo system("ping google.com"); ?>');
     //Pinging google.com. . .
 
@@ -92,9 +92,8 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 To install using [composer](http://getcomposer.org/), simply add the following to your composer.json file in the root of your project:
 
     {
-        "minimum-stability": "dev",
         "require": {
-            "fieryprophet/php-sandbox": "1.3.*"
+            "corveda/php-sandbox": "2.*"
         }
     }
 
@@ -102,7 +101,7 @@ Then run *composer install --dry-run* to check for any potential problems, and *
 
 ##LICENSE
 
-    Copyright (c) 2013-2015 by Elijah Horton (fieryprophet [at] yahoo.com)
+    Copyright (c) 2013-2016 by Corveda, LLC.
 
     Some rights reserved.
 

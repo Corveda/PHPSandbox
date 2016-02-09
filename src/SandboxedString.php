@@ -10,8 +10,8 @@
      *
      * @namespace PHPSandbox
      *
-     * @author  Elijah Horton <fieryprophet@yahoo.com>
-     * @version 1.3.11
+     * @author  Elijah Horton <elijah@corveda.com>
+     * @version 2.0
      */
     class SandboxedString implements \ArrayAccess, \IteratorAggregate {
         /**
@@ -40,7 +40,7 @@
          * @return mixed|null
          */
         public function __invoke(){
-            if($this->sandbox->check_func($this->value)){
+            if($this->sandbox->checkFunc($this->value)){
                 $name = strtolower($this->value);
                 if((in_array($name, PHPSandbox::$defined_funcs) && $this->sandbox->overwrite_defined_funcs)
                     || (in_array($name, PHPSandbox::$sandboxed_string_funcs) && $this->sandbox->overwrite_sandboxed_string_funcs)

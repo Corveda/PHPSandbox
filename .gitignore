@@ -1,2 +1,4 @@
+.idea/*
+.git/*
 vendor/*
-.idea
+docs/cache/*
