@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b2dbc8f761119059fa90c1af759a4011",
-    "content-hash": "996778cfdddf077b6b61ca4e82616d52",
+    "hash": "de51243c028bcbe7cca8c25b6e7be5f3",
+    "content-hash": "e39e5ea8852a683d22b360f838e2285b",
     "packages": [
         {
             "name": "jeremeamia/FunctionParser",
@@ -1065,7 +1065,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.2"
+        "php": ">=5.4"
     },
     "platform-dev": []
 }
