@@ -59,7 +59,7 @@
          * @static
          * @var    array         A static array of superglobal names used for redefining superglobal values
          */
-        public static $superglobals = array(
+        public static $superglobals = [
             '_GET',
             '_POST',
             '_COOKIE',
@@ -69,12 +69,12 @@
             '_SERVER',
             '_SESSION',
             'GLOBALS'
-        );
+        ];
         /**
          * @static
          * @var    array        A static array of magic constant names used for redefining magic constant values
          */
-        public static $magic_constants = array(
+        public static $magic_constants = [
             '__LINE__',
             '__FILE__',
             '__DIR__',
@@ -83,12 +83,12 @@
             '__TRAIT__',
             '__METHOD__',
             '__NAMESPACE__'
-        );
+        ];
         /**
          * @static
          * @var    array          A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values
          */
-        public static $defined_funcs = array(
+        public static $defined_funcs = [
             'get_define_functions',
             'get_defined_vars',
             'get_defined_constants',
@@ -96,22 +96,22 @@
             'get_declared_interfaces',
             'get_declared_traits',
             'get_included_files'
-        );
+        ];
         /**
          * @static
          * @var    array          A static array of func_get_args, func_get_arg, and func_num_args used for redefining those functions
          */
-        public static $arg_funcs = array(
+        public static $arg_funcs = [
             'func_get_args',
             'func_get_arg',
             'func_num_args'
-        );
+        ];
         /**
          * @static
          * @var    array          A static array of var_dump, print_r and var_export, intval, floatval, is_string, is_object,
          *                          is_scalar and is_callable for redefining those functions
          */
-        public static $sandboxed_string_funcs = array(
+        public static $sandboxed_string_funcs = [
             'var_dump',
             'print_r',
             'var_export',
@@ -122,7 +122,7 @@
             'is_object',
             'is_scalar',
             'is_callable'
-        );
+        ];
         /**
          * @var    string       The randomly generated name of the PHPSandbox variable passed to the generated closure
          */
@@ -130,67 +130,67 @@
         /**
          * @var    array       Array of defined functions, superglobals, etc. If an array type contains elements, then it overwrites its external counterpart
          */
-        protected $definitions = array(
-            'functions' => array(),
-            'variables' => array(),
-            'superglobals' => array(),
-            'constants' => array(),
-            'magic_constants' => array(),
-            'namespaces' => array(),
-            'aliases' => array(),
-            'classes' => array(),
-            'interfaces' => array(),
-            'traits' => array()
-        );
+        protected $definitions = [
+            'functions' => [],
+            'variables' => [],
+            'superglobals' => [],
+            'constants' => [],
+            'magic_constants' => [],
+            'namespaces' => [],
+            'aliases' => [],
+            'classes' => [],
+            'interfaces' => [],
+            'traits' => []
+        ];
         /**
          * @var    array       Array of whitelisted functions, classes, etc. If an array type contains elements, then it overrides its blacklist counterpart
          */
-        protected $whitelist = array(
-            'functions' => array(),
-            'variables' => array(),
-            'globals' => array(),
-            'superglobals' => array(),
-            'constants' => array(),
-            'magic_constants' => array(),
-            'namespaces' => array(),
-            'aliases' => array(),
-            'classes' => array(),
-            'interfaces' => array(),
-            'traits' => array(),
-            'keywords' => array(),
-            'operators' => array(),
-            'primitives' => array(),
-            'types' => array()
-        );
+        protected $whitelist = [
+            'functions' => [],
+            'variables' => [],
+            'globals' => [],
+            'superglobals' => [],
+            'constants' => [],
+            'magic_constants' => [],
+            'namespaces' => [],
+            'aliases' => [],
+            'classes' => [],
+            'interfaces' => [],
+            'traits' => [],
+            'keywords' => [],
+            'operators' => [],
+            'primitives' => [],
+            'types' => []
+        ];
         /**
          * @var    array       Array of blacklisted functions, classes, etc. Any whitelisted array types override their counterpart in this array
          */
-        protected $blacklist = array(
-            'functions' => array(),
-            'variables' => array(),
-            'globals' => array(),
-            'superglobals' => array(),
-            'constants' => array(),
-            'magic_constants' => array(),
-            'namespaces' => array(),
-            'aliases' => array(),
-            'classes' => array(),
-            'interfaces' => array(),
-            'traits' => array(),
-            'keywords' => array(
+        protected $blacklist = [
+            'functions' => [],
+            'variables' => [],
+            'globals' => [],
+            'superglobals' => [],
+            'constants' => [],
+            'magic_constants' => [],
+            'namespaces' => [],
+            'aliases' => [],
+            'classes' => [],
+            'interfaces' => [],
+            'traits' => [],
+            'keywords' => [
                 'declare' => true,
                 'eval' => true,
                 'exit' => true,
                 'halt' => true
-            ),
-            'operators' => array(),
-            'primitives' => array(),
-            'types' => array()
-        );
+            ],
+            'operators' => [],
+            'primitives' => [],
+            'types' => []
+        ];
         /**
          * @var     array       Array of custom validation functions
          */
-        protected $validation = array(
+        protected $validation = [
             'function' => null,
             'variable' => null,
             'global' => null,
@@ -206,15 +206,15 @@
             'operator' => null,
             'primitive' => null,
             'type' => null
-        );
+        ];
         /**
          * @var     array       Array of sandboxed included files
          */
-        protected $includes = array();
+        protected $includes = [];
         /**
          * @var     PHPSandbox[]       Array of PHPSandboxes
          */
-        protected static $sandboxes = array();
+        protected static $sandboxes = [];
         /* CONFIGURATION OPTION FLAGS */
         /**
          * @var    bool       Flag to indicate whether the sandbox should validate functions
@@ -501,7 +501,7 @@
         /**
          * @var    array      Array of parsed code broken down into AST tokens, for debugging and serialization purposes
          */
-        protected $parsed_ast = array();
+        protected $parsed_ast = [];
         /**
          * @var    string     String of prepared code, for debugging and serialization purposes
          */
@@ -509,7 +509,7 @@
         /**
          * @var    array      Array of prepared code broken down into AST tokens, for debugging and serialization purposes
          */
-        protected $prepared_ast = array();
+        protected $prepared_ast = [];
         /**
          * @var    string     String of generated code, for debugging and serialization purposes
          */
@@ -561,17 +561,17 @@
          * @param   array   $interfaces         Optional array of interfaces to define for the sandbox
          * @param   array   $traits             Optional array of traits to define for the sandbox
          */
-        public function __construct(array $options = array(),
-                                    array $functions = array(),
-                                    array $variables = array(),
-                                    array $constants = array(),
-                                    array $namespaces = array(),
-                                    array $aliases = array(),
-                                    array $superglobals = array(),
-                                    array $magic_constants = array(),
-                                    array $classes = array(),
-                                    array $interfaces = array(),
-                                    array $traits = array()){
+        public function __construct(array $options = [],
+                                    array $functions = [],
+                                    array $variables = [],
+                                    array $constants = [],
+                                    array $namespaces = [],
+                                    array $aliases = [],
+                                    array $superglobals = [],
+                                    array $magic_constants = [],
+                                    array $classes = [],
+                                    array $interfaces = [],
+                                    array $traits = []){
             $this->name = static::SANDBOX_PREFIX . md5(uniqid());
             $this->setOptions($options)
                 ->defineFuncs($functions)
@@ -606,17 +606,17 @@
          *
          * @return  $this                  The returned PHPSandbox variable
          */
-        public static function create(array $options = array(),
-                                      array $functions = array(),
-                                      array $variables = array(),
-                                      array $constants = array(),
-                                      array $namespaces = array(),
-                                      array $aliases = array(),
-                                      array $superglobals = array(),
-                                      array $magic_constants = array(),
-                                      array $classes = array(),
-                                      array $interfaces = array(),
-                                      array $traits = array()){
+        public static function create(array $options = [],
+                                      array $functions = [],
+                                      array $variables = [],
+                                      array $constants = [],
+                                      array $namespaces = [],
+                                      array $aliases = [],
+                                      array $superglobals = [],
+                                      array $magic_constants = [],
+                                      array $classes = [],
+                                      array $interfaces = [],
+                                      array $traits = []){
             return new static($options, $functions, $variables, $constants, $namespaces, $aliases, $superglobals, $magic_constants, $classes, $interfaces, $traits);
         }
 
@@ -631,7 +631,7 @@
          * @return  mixed                      The output of the executed sandboxed code
          */
         public function __invoke($code){
-            return call_user_func(array($this, 'execute'), $code);
+            return call_user_func([$this, 'execute'], $code);
         }
 
         /** PHPSandbox __sleep magic method
@@ -652,7 +652,7 @@
 
         /** Import JSON template into sandbox
          *
-         * @example $sandbox->import(array('code' => 'echo "Hello World!";'));
+         * @example $sandbox->import(['code' => 'echo "Hello World!";']);
          * @example $sandbox->import(file_get_contents("template.json"));
          *
          * @param   array|string    $template          The JSON array or string template to import
@@ -720,7 +720,7 @@
 
                             default:
                                 foreach($data as $key => $value){
-                                    call_user_func_array(array($this, $method), array($key, $value["value"]));
+                                    call_user_func_array([$this, $method], [$key, $value["value"]]);
                                 }
                                 break;
                         }
@@ -731,7 +731,7 @@
                 foreach($template['whitelist'] as $type => $data){
                     $method = 'whitelist' . str_replace('_', '', ucwords($type, '_'));
                     if(method_exists($this, $method)){
-                        call_user_func_array(array($this, $method), array($data));
+                        call_user_func_array([$this, $method], [$data]);
                     }
                 }
             }
@@ -739,7 +739,7 @@
                 foreach($template['blacklist'] as $type => $data){
                     $method = 'blacklist' . str_replace('_', '', ucwords($type, '_'));
                     if(method_exists($this, $method)){
-                        call_user_func_array(array($this, $method), array($data));
+                        call_user_func_array([$this, $method], [$data]);
                     }
                 }
             }
@@ -765,7 +765,7 @@
          *
          * @alias   import();
          *
-         * @example $sandbox->importJSON(array('code' => 'echo "Hello World!";'));
+         * @example $sandbox->importJSON(['code' => 'echo "Hello World!";']);
          * @example $sandbox->importJSON(file_get_contents("template.json"));
          *
          * @param   array|string    $template          The JSON array or string template to import
@@ -790,9 +790,9 @@
          *
          * You can pass an $option name to set to $value, an array of $option names to set to $value, or an associative array of $option names and their values to set.
          *
-         * @example $sandbox->setOption(array('allow_functions' => true));
+         * @example $sandbox->setOption(['allow_functions' => true]);
          *
-         * @example $sandbox->setOption(array('allow_functions', 'allow_classes'), true);
+         * @example $sandbox->setOption(['allow_functions', 'allow_classes'], true);
          *
          * @example $sandbox->setOption('allow_functions', true);
          *
@@ -870,9 +870,9 @@
          *
          * You can pass an array of option names to set to $value, or an associative array of option names and their values to set.
          *
-         * @example $sandbox->setOption(array('allow_functions' => true));
+         * @example $sandbox->setOption(['allow_functions' => true]);
          *
-         * @example $sandbox->setOption(array('allow_functions', 'allow_classes'), true);
+         * @example $sandbox->setOption(['allow_functions', 'allow_classes'], true);
          *
          * @param   array|string    $options    Array of strings or associative array of keys of option names to set $value to, or JSON array or string template to import
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
@@ -1657,7 +1657,7 @@
          *
          * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function setParsedAST(array $parsed_ast = array()){
+        public function setParsedAST(array $parsed_ast = []){
             $this->parsed_ast = $parsed_ast;
             return $this;
         }
@@ -1679,7 +1679,7 @@
          *
          * @return  $this     Returns the PHPSandbox instance for fluent querying
          */
-        public function setPreparedAST(array $prepared_ast = array()){
+        public function setPreparedAST(array $prepared_ast = []){
             $this->prepared_ast = $prepared_ast;
             return $this;
         }
@@ -1771,9 +1771,9 @@
          *
          * @return  array           Returns the redefined functions array
          */
-        public function _get_defined_functions(array $functions = array()){
+        public function _get_defined_functions(array $functions = []){
             if(count($this->whitelist['functions'])){
-                $functions = array();
+                $functions = [];
                 foreach($this->whitelist['functions'] as $name => $value){
                     if(isset($this->definitions['functions'][$name]) && is_callable($this->definitions['functions'][$name])){
                         $functions[$name] = $name;
@@ -1796,7 +1796,7 @@
                 reset($functions);
                 return $functions;
             }
-            return array();
+            return [];
         }
 
         /** Get PHPSandbox redefined variables in place of get_defined_vars(). This is an internal PHPSandbox function but requires public access to work.
@@ -1805,7 +1805,7 @@
          *
          * @return  array           Returns the redefined variables array
          */
-        public function _get_defined_vars(array $variables = array()){
+        public function _get_defined_vars(array $variables = []){
             if(isset($variables[$this->name])){
                 unset($variables[$this->name]); //hide PHPSandbox variable
             }
@@ -1824,13 +1824,13 @@
             if(isset($this->definitions['superglobals'][$name])){
                 $superglobal = $this->definitions['superglobals'][$name];
                 if(is_callable($superglobal)){
-                    return call_user_func_array($superglobal, array($this));
+                    return call_user_func_array($superglobal, [$this]);
                 }
                 return $superglobal;
             } else if(isset($this->whitelist['superglobals'][$name])){
                 if(count($this->whitelist['superglobals'][$name])){
                     if(isset($GLOBALS[$original_name])){
-                        $whitelisted_superglobal = array();
+                        $whitelisted_superglobal = [];
                         foreach($this->whitelist['superglobals'][$name] as $key => $value){
                             if(isset($GLOBALS[$original_name][$key])){
                                 $whitelisted_superglobal[$key] = $GLOBALS[$original_name][$key];
@@ -1854,7 +1854,7 @@
                     }
                 }
             }
-            return array();
+            return [];
         }
 
         /** Get PHPSandbox redefined magic constant. This is an internal PHPSandbox function but requires public access to work.
@@ -1868,7 +1868,7 @@
             if(isset($this->definitions['magic_constants'][$name])){
                 $magic_constant = $this->definitions['magic_constants'][$name];
                 if(is_callable($magic_constant)){
-                    return call_user_func_array($magic_constant, array($this));
+                    return call_user_func_array($magic_constant, [$this]);
                 }
                 return $magic_constant;
             }
@@ -1881,9 +1881,9 @@
          *
          * @return  array           Returns the redefined constants
          */
-        public function _get_defined_constants(array $constants = array()){
+        public function _get_defined_constants(array $constants = []){
             if(count($this->whitelist['constants'])){
-                $constants = array();
+                $constants = [];
                 foreach($this->whitelist['constants'] as $name => $value){
                     if(defined($name)){
                         $constants[$name] = $name;
@@ -1904,7 +1904,7 @@
                 reset($constants);
                 return $constants;
             }
-            return array();
+            return [];
         }
 
         /** Get PHPSandbox redefined classes in place of get_declared_classes(). This is an internal PHPSandbox function but requires public access to work.
@@ -1913,9 +1913,9 @@
          *
          * @return  array           Returns the redefined classes
          */
-        public function _get_declared_classes(array $classes = array()){
+        public function _get_declared_classes(array $classes = []){
             if(count($this->whitelist['classes'])){
-                $classes = array();
+                $classes = [];
                 foreach($this->whitelist['classes'] as $name => $value){
                     if(class_exists($name)){
                         $classes[strtolower($name)] = $name;
@@ -1928,7 +1928,7 @@
                 }
                 return array_values($classes);
             } else if(count($this->blacklist['classes'])){
-                $valid_classes = array();
+                $valid_classes = [];
                 foreach($classes as $class){
                     $valid_classes[$this->normalizeClass($class)] = $class;
                 }
@@ -1944,7 +1944,7 @@
                 }
                 return array_values($classes);
             }
-            $classes = array();
+            $classes = [];
             foreach($this->definitions['classes'] as $value){
                 if(class_exists($value)){
                     $classes[strtolower($value)] = $value;
@@ -1959,9 +1959,9 @@
          *
          * @return  array           Returns the redefined interfaces
          */
-        public function _get_declared_interfaces(array $interfaces = array()){
+        public function _get_declared_interfaces(array $interfaces = []){
             if(count($this->whitelist['interfaces'])){
-                $interfaces = array();
+                $interfaces = [];
                 foreach($this->whitelist['interfaces'] as $name => $value){
                     if(interface_exists($name)){
                         $interfaces[strtolower($name)] = $name;
@@ -1974,7 +1974,7 @@
                 }
                 return array_values($interfaces);
             } else if(count($this->blacklist['interfaces'])){
-                $valid_interfaces = array();
+                $valid_interfaces = [];
                 foreach($interfaces as $interface){
                     $valid_interfaces[$this->normalizeInterface($interface)] = $interface;
                 }
@@ -1990,7 +1990,7 @@
                 }
                 return array_values($interfaces);
             }
-            $interfaces = array();
+            $interfaces = [];
             foreach($this->definitions['interfaces'] as $value){
                 if(interface_exists($value)){
                     $interfaces[strtolower($value)] = $value;
@@ -2005,9 +2005,9 @@
          *
          * @return  array           Returns the redefined traits
          */
-        public function _get_declared_traits(array $traits = array()){
+        public function _get_declared_traits(array $traits = []){
             if(count($this->whitelist['traits'])){
-                $traits = array();
+                $traits = [];
                 foreach($this->whitelist['traits'] as $name => $value){
                     if(trait_exists($name)){
                         $traits[strtolower($name)] = $name;
@@ -2020,7 +2020,7 @@
                 }
                 return array_values($traits);
             } else if(count($this->blacklist['traits'])){
-                $valid_traits = array();
+                $valid_traits = [];
                 foreach($traits as $trait){
                     $valid_traits[$this->normalizeTrait($trait)] = $trait;
                 }
@@ -2036,7 +2036,7 @@
                 }
                 return array_values($traits);
             }
-            $traits = array();
+            $traits = [];
             foreach($this->definitions['traits'] as $value){
                 if(trait_exists($value)){
                     $traits[strtolower($value)] = $value;
@@ -2051,7 +2051,7 @@
          *
          * @return  array           Returns the redefined arguments array
          */
-        public function _func_get_args(array $arguments = array()){
+        public function _func_get_args(array $arguments = []){
             foreach($arguments as $index => $value){
                 if($value instanceof self){
                     unset($arguments[$index]); //hide PHPSandbox variable
@@ -2068,7 +2068,7 @@
          *
          * @return  array           Returns the redefined argument
          */
-        public function _func_get_arg(array $arguments = array(), $index = 0){
+        public function _func_get_arg(array $arguments = [], $index = 0){
             if($arguments[$index] instanceof self){
                 $index++;   //get next argument instead
             }
@@ -2081,7 +2081,7 @@
          *
          * @return  int             Returns the redefined number of function arguments
          */
-        public function _func_num_args(array $arguments = array()){
+        public function _func_num_args(array $arguments = []){
             $count = count($arguments);
             foreach($arguments as $argument){
                 if($argument instanceof self){
@@ -2368,7 +2368,7 @@
          *
          * @example $sandbox->define('functions', 'test', function(){ echo 'test'; });
          *
-         * @example $sandbox->define(array('functions' => array('test' => function(){ echo 'test'; }));
+         * @example $sandbox->define(['functions' => ['test' => function(){ echo 'test'; }]]);
          *
          * @param   string|array        $type       Associative array or string of definition type to define
          * @param   string|array|null   $name       Associative array or string of definition name to define
@@ -2422,7 +2422,7 @@
          *
          * @example $sandbox->undefine('functions', 'test');
          *
-         * @example $sandbox->undefine(array('functions' => array('test'));
+         * @example $sandbox->undefine(['functions' => ['test']]);
          *
          * @param   string|array    $type       Associative array or string of definition type to undefine
          * @param   string|array    $name       Associative array or string of definition name to undefine
@@ -2480,9 +2480,9 @@
          *
          * @example $sandbox->defineFunc('test', function(){ echo 'test'; });
          *
-         * @example $sandbox->defineFunc(array('test' => function(){ echo 'test'; }));
+         * @example $sandbox->defineFunc(['test' => function(){ echo 'test'; }]]);
          *
-         * @example $sandbox->defineFunc(array('test' => array(function(){ echo 'test'; }, true)));
+         * @example $sandbox->defineFunc(['test' => [function(){ echo 'test'; }, true]]);
          *
          * @param   string|array    $name           Associative array or string of function $name to define
          * @param   callable        $function       Callable to define $function to
@@ -2508,10 +2508,10 @@
             if(!is_callable($function)){
                 $this->validationError("Cannot define uncallable function : $original_name", Error::DEFINE_FUNC_ERROR, null, $original_name);
             }
-            $this->definitions['functions'][$name] = array(
+            $this->definitions['functions'][$name] = [
                 'function' => $function,
                 'pass_sandbox' => $pass_sandbox
-            );
+            ];
             return $this;
         }
 
@@ -2519,13 +2519,13 @@
          *
          * You can pass an associative array of functions to define
          *
-         * @example $sandbox->defineFuncs(array('test' => function(){ echo 'test'; }));
+         * @example $sandbox->defineFuncs(['test' => function(){ echo 'test'; }]);
          *
          * @param   array           $functions       Associative array of $functions to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineFuncs(array $functions = array()){
+        public function defineFuncs(array $functions = []){
             foreach($functions as $name => $function){
                 $this->defineFunc($name, $function);
             }
@@ -2561,7 +2561,7 @@
          *
          * @example $sandbox->undefineFunc('test');
          *
-         * @example $sandbox->undefineFunc(array('test', 'test2'));
+         * @example $sandbox->undefineFunc(['test', 'test2']);
          *
          * @param   string|array          $name       String of function name or array of function names to undefine
          *
@@ -2582,7 +2582,7 @@
          *
          * You can pass an array of function names to undefine, or an empty array or null argument to undefine all functions
          *
-         * @example $sandbox->undefineFuncs(array('test', 'test2'));
+         * @example $sandbox->undefineFuncs(['test', 'test2']);
          *
          * @example $sandbox->undefineFuncs(); //WILL UNDEFINE ALL FUNCTIONS!
          *
@@ -2590,13 +2590,13 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineFuncs($functions = array()){
+        public function undefineFuncs($functions = []){
             if(count($functions)){
                 foreach($functions as $function){
                     $this->undefineFunc($function);
                 }
             } else {
-                $this->definitions['functions'] = array();
+                $this->definitions['functions'] = [];
             }
             return $this;
         }
@@ -2607,7 +2607,7 @@
          *
          * @example $sandbox->defineVar('test', 1);
          *
-         * @example $sandbox->defineVar(array('test' => 1));
+         * @example $sandbox->defineVar(['test' => 1]);
          *
          * @param   string|array    $name       String of variable $name or associative array to define
          * @param   mixed           $value      Value to define variable to
@@ -2631,13 +2631,13 @@
          *
          * You can pass an associative array of variables to define
          *
-         * @example $sandbox->defineVars(array('test' => 1));
+         * @example $sandbox->defineVars(['test' => 1]);
          *
          * @param   array           $variables  Associative array of $variables to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineVars(array $variables = array()){
+        public function defineVars(array $variables = []){
             foreach($variables as $name => $value){
                 $this->defineVar($name, $value);
             }
@@ -2672,7 +2672,7 @@
          *
          * @example $sandbox->undefineVar('test');
          *
-         * @example $sandbox->undefineVar(array('test', 'test2'));
+         * @example $sandbox->undefineVar(['test', 'test2']);
          *
          * @param   string|array          $name       String of variable name or an array of variable names to undefine
          *
@@ -2692,7 +2692,7 @@
          *
          * You can pass an array of variable names to undefine, or an empty array or null argument to undefine all variables
          *
-         * @example $sandbox->undefineVars(array('test', 'test2'));
+         * @example $sandbox->undefineVars(['test', 'test2']);
          *
          * @example $sandbox->undefineVars(); //WILL UNDEFINE ALL VARIABLES!
          *
@@ -2700,13 +2700,13 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineVars(array $variables = array()){
+        public function undefineVars(array $variables = []){
             if(count($variables)){
                 foreach($variables as $variable){
                     $this->undefineVar($variable);
                 }
             } else {
-                $this->definitions['variables'] = array();
+                $this->definitions['variables'] = [];
             }
             return $this;
         }
@@ -2715,9 +2715,9 @@
          *
          * You can pass the superglobal $name and $value to define, or an associative array of superglobals to define, or a third variable to define the $key
          *
-         * @example $sandbox->defineSuperGlobal('_GET',  array('page' => 1));
+         * @example $sandbox->defineSuperGlobal('_GET',  ['page' => 1]);
          *
-         * @example $sandbox->defineSuperGlobal(array('_GET' => array('page' => 1)));
+         * @example $sandbox->defineSuperGlobal(['_GET' => ['page' => 1]]);
          *
          * @example $sandbox->defineSuperGlobal('_GET', 'page', 1);
          *
@@ -2750,13 +2750,13 @@
          *
          * You can pass an associative array of superglobals to define
          *
-         * @example $sandbox->defineSuperGlobals(array('_GET' => array('page' => 1)));
+         * @example $sandbox->defineSuperGlobals(['_GET' => ['page' => 1]]);
          *
          * @param   array           $superglobals  Associative array of $superglobals to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineSuperGlobals(array $superglobals = array()){
+        public function defineSuperGlobals(array $superglobals = []){
             foreach($superglobals as $name => $value){
                 $this->defineSuperGlobal($name, $value);
             }
@@ -2803,7 +2803,7 @@
          *
          * @example $sandbox->undefineSuperGlobal('_GET', 'page');
          *
-         * @example $sandbox->undefineSuperGlobal(array('_GET', '_POST'));
+         * @example $sandbox->undefineSuperGlobal(['_GET', '_POST']);
          *
          * @param   string|array          $name       String of superglobal $name, or array of superglobal names, or associative array of superglobal names and keys to undefine
          * @param   string|null           $key        String of superglobal $key to undefine
@@ -2820,7 +2820,7 @@
                     unset($this->definitions['superglobals'][$name][$key]);
                 }
             } else if(isset($this->definitions['superglobals'][$name])){
-                $this->definitions['superglobals'][$name] = array();
+                $this->definitions['superglobals'][$name] = [];
             }
             return $this;
         }
@@ -2830,9 +2830,9 @@
          * You can pass an array of superglobal names to undefine, or an associative array of superglobals names and key
          * to undefine, or an empty array or null to undefine all superglobals
          *
-         * @example $sandbox->undefineSuperGlobals(array('_GET', '_POST'));
+         * @example $sandbox->undefineSuperGlobals(['_GET', '_POST']);
          *
-         * @example $sandbox->undefineSuperGlobals(array('_GET' => 'page', '_POST' => 'page'));
+         * @example $sandbox->undefineSuperGlobals(['_GET' => 'page', '_POST' => 'page']);
          *
          * @example $sandbox->undefineSuperGlobals(); //WILL UNDEFINE ALL SUPERGLOBALS!
          *
@@ -2840,14 +2840,14 @@
          *
          * @return  $this          Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineSuperGlobals(array $superglobals = array()){
+        public function undefineSuperGlobals(array $superglobals = []){
             if(count($superglobals)){
                 foreach($superglobals as $superglobal => $name){
                     $name = $this->normalizeSuperglobal($name);
                     $this->undefineSuperGlobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) || !is_string($name) ? null : $name);
                 }
             } else {
-                $this->definitions['superglobals'] = array();
+                $this->definitions['superglobals'] = [];
             }
             return $this;
         }
@@ -2858,7 +2858,7 @@
          *
          * @example $sandbox->defineConst('TEST', 1);
          *
-         * @example $sandbox->defineConst(array('TEST' => 1));
+         * @example $sandbox->defineConst(['TEST' => 1]);
          *
          * @param   string|array    $name       String of constant $name or associative array to define
          * @param   mixed           $value      Value to define constant to
@@ -2882,13 +2882,13 @@
          *
          * You can pass an associative array of constants to define
          *
-         * @example $sandbox->defineConsts(array('test' => 1));
+         * @example $sandbox->defineConsts(['test' => 1]);
          *
          * @param   array           $constants  Associative array of $constants to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineConsts(array $constants = array()){
+        public function defineConsts(array $constants = []){
             foreach($constants as $name => $value){
                 $this->defineConst($name, $value);
             }
@@ -2923,7 +2923,7 @@
          *
          * @example $sandbox->undefineConst('test');
          *
-         * @example $sandbox->undefineConst(array('test', 'test2'));
+         * @example $sandbox->undefineConst(['test', 'test2']);
          *
          * @param   string|array          $name       String of constant name or array of constant names to undefine
          *
@@ -2943,7 +2943,7 @@
          *
          * You can pass an array of constant names to undefine, or an empty array or null argument to undefine all constants
          *
-         * @example $sandbox->undefineConsts(array('test', 'test2'));
+         * @example $sandbox->undefineConsts(['test', 'test2']);
          *
          * @example $sandbox->undefineConsts(); //WILL UNDEFINE ALL CONSTANTS!
          *
@@ -2951,13 +2951,13 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineConsts(array $constants = array()){
+        public function undefineConsts(array $constants = []){
             if(count($constants)){
                 foreach($constants as $constant){
                     $this->undefineConst($constant);
                 }
             } else {
-                $this->definitions['constants'] = array();
+                $this->definitions['constants'] = [];
             }
             return $this;
         }
@@ -2968,7 +2968,7 @@
          *
          * @example $sandbox->defineMagicConst('__LINE__', 1);
          *
-         * @example $sandbox->defineMagicConst(array('__LINE__' => 1));
+         * @example $sandbox->defineMagicConst(['__LINE__' => 1]);
          *
          * @param   string|array    $name       String of magic constant $name or associative array to define
          * @param   mixed           $value      Value to define magic constant to, can be callable
@@ -2993,13 +2993,13 @@
          *
          * You can pass an associative array of magic constants to define
          *
-         * @example $sandbox->defineMagicConsts(array('__LINE__' => 1));
+         * @example $sandbox->defineMagicConsts(['__LINE__' => 1]);
          *
          * @param   array           $magic_constants  Associative array of $magic_constants to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineMagicConsts(array $magic_constants = array()){
+        public function defineMagicConsts(array $magic_constants = []){
             foreach($magic_constants as $name => $value){
                 $this->defineMagicConst($name, $value);
             }
@@ -3035,7 +3035,7 @@
          *
          * @example $sandbox->undefineMagicConst('__LINE__');
          *
-         * @example $sandbox->undefineMagicConst(array('__LINE__', '__FILE__'));
+         * @example $sandbox->undefineMagicConst(['__LINE__', '__FILE__']);
          *
          * @param   string|array          $name       String of magic constant name, or array of magic constant names to undefine
          *
@@ -3056,7 +3056,7 @@
          *
          * You can pass an array of magic constant names to undefine, or an empty array or null argument to undefine all magic constants
          *
-         * @example $sandbox->undefineMagicConsts(array('__LINE__', '__FILE__'));
+         * @example $sandbox->undefineMagicConsts(['__LINE__', '__FILE__']);
          *
          * @example $sandbox->undefineMagicConsts(); //WILL UNDEFINE ALL MAGIC CONSTANTS!
          *
@@ -3064,13 +3064,13 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineMagicConsts(array $magic_constants = array()){
+        public function undefineMagicConsts(array $magic_constants = []){
             if(count($magic_constants)){
                 foreach($magic_constants as $magic_constant){
                     $this->undefineMagicConst($magic_constant);
                 }
             } else {
-                $this->definitions['magic_constants'] = array();
+                $this->definitions['magic_constants'] = [];
             }
             return $this;
         }
@@ -3081,7 +3081,7 @@
          *
          * @example $sandbox->defineNamespace('Foo');
          *
-         * @example $sandbox->defineNamespace(array('Foo', 'Bar'));
+         * @example $sandbox->defineNamespace(['Foo', 'Bar']);
          *
          * @param   string|array    $name       String of namespace $name, or an array of namespace names to define
          *
@@ -3105,13 +3105,13 @@
          *
          * You can pass an array of namespaces to define
          *
-         * @example $sandbox->defineNamespaces(array('Foo', 'Bar'));
+         * @example $sandbox->defineNamespaces(['Foo', 'Bar']);
          *
          * @param   array           $namespaces  Array of $namespaces to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineNamespaces(array $namespaces = array()){
+        public function defineNamespaces(array $namespaces = []){
             foreach($namespaces as $name){
                 $this->defineNamespace($name);
             }
@@ -3165,7 +3165,7 @@
          *
          * @example $sandbox->undefineNamespace('Foo');
          *
-         * @example $sandbox->undefineNamespace(array('Foo', 'Bar'));
+         * @example $sandbox->undefineNamespace(['Foo', 'Bar']);
          *
          * @param   string|array          $name       String of namespace $name, or an array of namespace names to undefine
          *
@@ -3186,7 +3186,7 @@
          *
          * You can pass an array of namespace names to undefine, or an empty array or null argument to undefine all namespaces
          *
-         * @example $sandbox->undefineNamespaces(array('Foo', 'Bar'));
+         * @example $sandbox->undefineNamespaces(['Foo', 'Bar']);
          *
          * @example $sandbox->undefineNamespaces(); //WILL UNDEFINE ALL NAMESPACES!
          *
@@ -3194,13 +3194,13 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineNamespaces(array $namespaces = array()){
+        public function undefineNamespaces(array $namespaces = []){
             if(count($namespaces)){
                 foreach($namespaces as $namespace){
                     $this->undefineNamespace($namespace);
                 }
             } else {
-                $this->definitions['namespaces'] = array();
+                $this->definitions['namespaces'] = [];
             }
             return $this;
         }
@@ -3213,9 +3213,9 @@
          *
          * @example $sandbox->defineAlias('Foo', 'Bar');  //use Foo as Bar;
          *
-         * @example $sandbox->defineAlias(array('Foo', 'Bar')); //use Foo; use Bar;
+         * @example $sandbox->defineAlias(['Foo', 'Bar']); //use Foo; use Bar;
          *
-         * @example $sandbox->defineAlias(array('Foo' => 'Bar')); //use Foo as Bar;
+         * @example $sandbox->defineAlias(['Foo' => 'Bar']); //use Foo as Bar;
          *
          * @param   string|array    $name       String of namespace $name to use, or  or an array of namespaces to use, or an associative array of namespaces and their aliases to use
          * @param   string|null     $alias      String of $alias to use
@@ -3233,7 +3233,7 @@
             }
             $original_name = $name;
             $name = $this->normalizeAlias($name);
-            $this->definitions['aliases'][$name] = array('original' => $original_name, 'alias' => $alias);
+            $this->definitions['aliases'][$name] = ['original' => $original_name, 'alias' => $alias];
             return $this;
         }
 
@@ -3241,9 +3241,9 @@
          *
          * You can pass an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
-         * @example $sandbox->defineAliases(array('Foo', 'Bar')); //use Foo; use Bar;
+         * @example $sandbox->defineAliases(['Foo', 'Bar']); //use Foo; use Bar;
          *
-         * @example $sandbox->defineAliases(array('Foo' => 'Bar')); //use Foo as Bar;
+         * @example $sandbox->defineAliases(['Foo' => 'Bar']); //use Foo as Bar;
          *
          * @param   array           $aliases       Array of namespaces to use, or an associative array of namespaces and their aliases to use
          *
@@ -3251,7 +3251,7 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineAliases(array $aliases = array()){
+        public function defineAliases(array $aliases = []){
             foreach($aliases as $name => $alias){
                 $this->defineAlias($name, $alias);
             }
@@ -3287,7 +3287,7 @@
          *
          * @example $sandbox->undefineAlias('Foo');
          *
-         * @example $sandbox->undefineAlias(array('Foo', 'Bar'));
+         * @example $sandbox->undefineAlias(['Foo', 'Bar']);
          *
          * @param   string|array          $name       String of alias name, or array of alias names to undefine
          *
@@ -3308,7 +3308,7 @@
          *
          * You can pass an array of alias names to undefine, or an empty array or null argument to undefine all aliases
          *
-         * @example $sandbox->undefineAliases(array('Foo', 'Bar'));
+         * @example $sandbox->undefineAliases(['Foo', 'Bar']);
          *
          * @example $sandbox->undefineAliases(); //WILL UNDEFINE ALL ALIASES!
          *
@@ -3316,13 +3316,13 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineAliases(array $aliases = array()){
+        public function undefineAliases(array $aliases = []){
             if(count($aliases)){
                 foreach($aliases as $alias){
                     $this->undefineAlias($alias);
                 }
             } else {
-                $this->definitions['aliases'] = array();
+                $this->definitions['aliases'] = [];
             }
             return $this;
         }
@@ -3337,9 +3337,9 @@
          *
          * @example $sandbox->defineUse('Foo', 'Bar');  //use Foo as Bar;
          *
-         * @example $sandbox->defineUse(array('Foo', 'Bar')); //use Foo; use Bar;
+         * @example $sandbox->defineUse(['Foo', 'Bar']); //use Foo; use Bar;
          *
-         * @example $sandbox->defineUse(array('Foo' => 'Bar')); //use Foo as Bar;
+         * @example $sandbox->defineUse(['Foo' => 'Bar']); //use Foo as Bar;
          *
          * @param   string|array    $name       String of namespace $name to use, or  or an array of namespaces to use, or an associative array of namespaces and their aliases to use
          * @param   string|null     $alias      String of $alias to use
@@ -3358,9 +3358,9 @@
          *
          * You can pass an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
-         * @example $sandbox->defineUses(array('Foo', 'Bar')); //use Foo; use Bar;
+         * @example $sandbox->defineUses(['Foo', 'Bar']); //use Foo; use Bar;
          *
-         * @example $sandbox->defineUses(array('Foo' => 'Bar')); //use Foo as Bar;
+         * @example $sandbox->defineUses(['Foo' => 'Bar']); //use Foo as Bar;
          *
          * @param   array           $uses       Array of namespaces to use, or an associative array of namespaces and their aliases to use
          *
@@ -3368,7 +3368,7 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineUses(array $uses = array()){
+        public function defineUses(array $uses = []){
             return $this->defineAliases($uses);
         }
 
@@ -3404,7 +3404,7 @@
          *
          * @example $sandbox->undefineUse('Foo');
          *
-         * @example $sandbox->undefineUse(array('Foo', 'Bar'));
+         * @example $sandbox->undefineUse(['Foo', 'Bar']);
          *
          * @param   string|array          $name       String of use (or alias) name, or array of use (or alias) names to undefine
          *
@@ -3420,7 +3420,7 @@
          *
          * You can pass an array of use (or alias) names to undefine, or an empty array or null argument to undefine all uses (or aliases)
          *
-         * @example $sandbox->undefineUses(array('Foo', 'Bar'));
+         * @example $sandbox->undefineUses(['Foo', 'Bar']);
          *
          * @example $sandbox->undefineUses(); //WILL UNDEFINE ALL USES (OR ALIASES!)
          *
@@ -3428,7 +3428,7 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineUses(array $uses = array()){
+        public function undefineUses(array $uses = []){
             return $this->undefineAliases($uses);
         }
 
@@ -3438,7 +3438,7 @@
          *
          * @example $sandbox->defineClass('Test', 'Test2');
          *
-         * @example $sandbox->defineClass(array('Test' => 'Test2'));
+         * @example $sandbox->defineClass(['Test' => 'Test2']);
          *
          * @param   string|array    $name       String of class $name or associative array to define
          * @param   mixed           $value      Value to define class to
@@ -3463,13 +3463,13 @@
          *
          * You can pass an associative array of classes to define
          *
-         * @example $sandbox->defineClasses(array('Test' => 'Test2'));
+         * @example $sandbox->defineClasses(['Test' => 'Test2']);
          *
          * @param   array           $classes  Associative array of $classes to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineClasses(array $classes = array()){
+        public function defineClasses(array $classes = []){
             foreach($classes as $name => $value){
                 $this->defineClass($name, $value);
             }
@@ -3522,7 +3522,7 @@
          *
          * @example $sandbox->undefineClass('Test');
          *
-         * @example $sandbox->undefineClass(array('Test', 'Test2'));
+         * @example $sandbox->undefineClass(['Test', 'Test2']);
          *
          * @param   string|array          $name       String of class name or an array of class names to undefine
          *
@@ -3543,7 +3543,7 @@
          *
          * You can pass an array of class names to undefine, or an empty array or null argument to undefine all classes
          *
-         * @example $sandbox->undefineClasses(array('Test', 'Test2'));
+         * @example $sandbox->undefineClasses(['Test', 'Test2']);
          *
          * @example $sandbox->undefineClasses(); //WILL UNDEFINE ALL CLASSES!
          *
@@ -3551,13 +3551,13 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineClasses(array $classes = array()){
+        public function undefineClasses(array $classes = []){
             if(count($classes)){
                 foreach($classes as $class){
                     $this->undefineClass($class);
                 }
             } else {
-                $this->definitions['classes'] = array();
+                $this->definitions['classes'] = [];
             }
             return $this;
         }
@@ -3568,7 +3568,7 @@
          *
          * @example $sandbox->defineInterface('Test', 'Test2');
          *
-         * @example $sandbox->defineInterface(array('Test' => 'Test2'));
+         * @example $sandbox->defineInterface(['Test' => 'Test2']);
          *
          * @param   string|array    $name       String of interface $name or associative array to define
          * @param   mixed           $value      Value to define interface to
@@ -3593,13 +3593,13 @@
          *
          * You can pass an associative array of interfaces to define
          *
-         * @example $sandbox->defineInterfaces(array('Test' => 'Test2'));
+         * @example $sandbox->defineInterfaces(['Test' => 'Test2']);
          *
          * @param   array           $interfaces  Associative array of $interfaces to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineInterfaces(array $interfaces = array()){
+        public function defineInterfaces(array $interfaces = []){
             foreach($interfaces as $name => $value){
                 $this->defineInterface($name, $value);
             }
@@ -3653,7 +3653,7 @@
          *
          * @example $sandbox->undefineInterface('Test');
          *
-         * @example $sandbox->undefineInterface(array('Test', 'Test2'));
+         * @example $sandbox->undefineInterface(['Test', 'Test2']);
          *
          * @param   string|array          $name       String of interface name or an array of interface names to undefine
          *
@@ -3674,7 +3674,7 @@
          *
          * You can pass an array of interface names to undefine, or an empty array or null argument to undefine all interfaces
          *
-         * @example $sandbox->undefineInterfaces(array('Test', 'Test2'));
+         * @example $sandbox->undefineInterfaces(['Test', 'Test2']);
          *
          * @example $sandbox->undefineInterfaces(); //WILL UNDEFINE ALL INTERFACES!
          *
@@ -3682,13 +3682,13 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineInterfaces(array $interfaces = array()){
+        public function undefineInterfaces(array $interfaces = []){
             if(count($interfaces)){
                 foreach($interfaces as $interface){
                     $this->undefineInterface($interface);
                 }
             } else {
-                $this->definitions['interfaces'] = array();
+                $this->definitions['interfaces'] = [];
             }
             return $this;
         }
@@ -3699,7 +3699,7 @@
          *
          * @example $sandbox->defineTrait('Test', 'Test2');
          *
-         * @example $sandbox->defineTrait(array('Test' => 'Test2'));
+         * @example $sandbox->defineTrait(['Test' => 'Test2']);
          *
          * @param   string|array    $name       String of trait $name or associative array to define
          * @param   mixed           $value      Value to define trait to
@@ -3724,13 +3724,13 @@
          *
          * You can pass an associative array of traits to define
          *
-         * @example $sandbox->defineTraits(array('Test' => 'Test2'));
+         * @example $sandbox->defineTraits(['Test' => 'Test2']);
          *
          * @param   array           $traits  Associative array of $traits to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineTraits(array $traits = array()){
+        public function defineTraits(array $traits = []){
             foreach($traits as $name => $value){
                 $this->defineTrait($name, $value);
             }
@@ -3784,7 +3784,7 @@
          *
          * @example $sandbox->undefineTrait('Test');
          *
-         * @example $sandbox->undefineTrait(array('Test', 'Test2'));
+         * @example $sandbox->undefineTrait(['Test', 'Test2']);
          *
          * @param   string|array          $name       String of trait name or an array of trait names to undefine
          *
@@ -3805,7 +3805,7 @@
          *
          * You can pass an array of trait names to undefine, or an empty array or null argument to undefine all traits
          *
-         * @example $sandbox->undefineTraits(array('Test', 'Test2'));
+         * @example $sandbox->undefineTraits(['Test', 'Test2']);
          *
          * @example $sandbox->undefineTraits(); //WILL UNDEFINE ALL TRAITS!
          *
@@ -3813,13 +3813,13 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineTraits(array $traits = array()){
+        public function undefineTraits(array $traits = []){
             if(count($traits)){
                 foreach($traits as $trait){
                     $this->undefineTrait($trait);
                 }
             } else {
-                $this->definitions['traits'] = array();
+                $this->definitions['traits'] = [];
             }
             return $this;
         }
@@ -4077,9 +4077,9 @@
          *
          * You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name
          *
-         * @example $sandbox->whitelist(array('functions' => array('test')));
+         * @example $sandbox->whitelist(['functions' => ['test']]);
          *
-         * @example $sandbox->whitelist('functions', array('test'));
+         * @example $sandbox->whitelist('functions', ['test']);
          *
          * @example $sandbox->whitelist('functions', 'test');
          *
@@ -4117,9 +4117,9 @@
          *
          * You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name
          *
-         * @example $sandbox->blacklist(array('functions' => array('test')));
+         * @example $sandbox->blacklist(['functions' => ['test']]);
          *
-         * @example $sandbox->blacklist('functions', array('test'));
+         * @example $sandbox->blacklist('functions', ['test']);
          *
          * @example $sandbox->blacklist('functions', 'test');
          *
@@ -4157,9 +4157,9 @@
          *
          * You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset
          *
-         * @example $sandbox->dewhitelist(array('functions' => array('test')));
+         * @example $sandbox->dewhitelist(['functions' => ['test']]);
          *
-         * @example $sandbox->dewhitelist('functions', array('test'));
+         * @example $sandbox->dewhitelist('functions', ['test']);
          *
          * @example $sandbox->dewhitelist('functions', 'test');
          *
@@ -4191,9 +4191,9 @@
          *
          * You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset
          *
-         * @example $sandbox->deblacklist(array('functions' => array('test')));
+         * @example $sandbox->deblacklist(['functions' => ['test']]);
          *
-         * @example $sandbox->deblacklist('functions', array('test'));
+         * @example $sandbox->deblacklist('functions', ['test']);
          *
          * @example $sandbox->deblacklist('functions', 'test');
          *
@@ -5031,7 +5031,7 @@
          *
          * @example $sandbox->whitelistFunc('var_dump', 'print_r');
          *
-         * @example $sandbox->whitelistFunc(array('var_dump', 'print_r'));
+         * @example $sandbox->whitelistFunc(['var_dump', 'print_r']);
          *
          * @param   string|array        $name       String of function name, or array of function names to whitelist
          *
@@ -5051,7 +5051,7 @@
          *
          * @example $sandbox->blacklistFunc('var_dump');
          *
-         * @example $sandbox->blacklistFunc(array('var_dump', 'print_r'));
+         * @example $sandbox->blacklistFunc(['var_dump', 'print_r']);
          *
          * @param   string|array        $name       String of function name, or array of function names to blacklist
          *
@@ -5071,7 +5071,7 @@
          *
          * @example $sandbox->dewhitelistFunc('var_dump');
          *
-         * @example $sandbox->dewhitelistFunc(array('var_dump', 'print_r'));
+         * @example $sandbox->dewhitelistFunc(['var_dump', 'print_r']);
          *
          * @param   string|array        $name       String of function name or array of function names to remove from whitelist
          *
@@ -5091,7 +5091,7 @@
          *
          * @example $sandbox->deblacklistFunc('var_dump');
          *
-         * @example $sandbox->deblacklistFunc(array('var_dump', 'print_r'));
+         * @example $sandbox->deblacklistFunc(['var_dump', 'print_r']);
          *
          * @param   string|array        $name       String of function name or array of function names to remove from blacklist
          *
@@ -5111,7 +5111,7 @@
          *
          * @example $sandbox->whitelistVar('a');
          *
-         * @example $sandbox->whitelistVar(array('a', 'b'));
+         * @example $sandbox->whitelistVar(['a', 'b']);
          *
          * @param   string|array        $name       String of variable name or array of variable names to whitelist
          *
@@ -5130,7 +5130,7 @@
          *
          * @example $sandbox->blacklistVar('a');
          *
-         * @example $sandbox->blacklistVar(array('a', 'b'));
+         * @example $sandbox->blacklistVar(['a', 'b']);
          *
          * @param   string|array        $name       String of variable name or array of variable names to blacklist
          *
@@ -5149,7 +5149,7 @@
          *
          * @example $sandbox->dewhitelistVar('a');
          *
-         * @example $sandbox->dewhitelistVar(array('a', 'b'));
+         * @example $sandbox->dewhitelistVar(['a', 'b']);
          *
          * @param   string|array        $name       String of variable name or array of variable names to remove from whitelist
          *
@@ -5168,7 +5168,7 @@
          *
          * @example $sandbox->deblacklistVar('a');
          *
-         * @example $sandbox->deblacklistVar(array('a', 'b'));
+         * @example $sandbox->deblacklistVar(['a', 'b']);
          *
          * @param   string|array        $name       String of variable name or array of variable names to remove from blacklist
          *
@@ -5187,7 +5187,7 @@
          *
          * @example $sandbox->whitelistGlobal('a');
          *
-         * @example $sandbox->whitelistGlobal(array('a', 'b'));
+         * @example $sandbox->whitelistGlobal(['a', 'b']);
          *
          * @param   string|array        $name       String of global name or array of global names to whitelist
          *
@@ -5206,7 +5206,7 @@
          *
          * @example $sandbox->blacklistGlobal('a');
          *
-         * @example $sandbox->blacklistGlobal(array('a', 'b'));
+         * @example $sandbox->blacklistGlobal(['a', 'b']);
          *
          * @param   string|array        $name       String of global name or array of global names to blacklist
          *
@@ -5225,7 +5225,7 @@
          *
          * @example $sandbox->dewhitelistGlobal('a');
          *
-         * @example $sandbox->dewhitelistGlobal(array('a', 'b'));
+         * @example $sandbox->dewhitelistGlobal(['a', 'b']);
          *
          * @param   string|array        $name       String of global name or array of global names to remove from whitelist
          *
@@ -5244,7 +5244,7 @@
          *
          * @example $sandbox->deblacklistGlobal('a');
          *
-         * @example $sandbox->deblacklistGlobal(array('a', 'b'));
+         * @example $sandbox->deblacklistGlobal(['a', 'b']);
          *
          * @param   string|array        $name       String of global name or array of global names to remove from blacklist
          *
@@ -5266,9 +5266,9 @@
          *
          * @example $sandbox->whitelistSuperglobal('_GET', 'page');
          *
-         * @example $sandbox->whitelistSuperglobal(array('_GET', '_POST'));
+         * @example $sandbox->whitelistSuperglobal(['_GET', '_POST']);
          *
-         * @example $sandbox->whitelistSuperglobal(array('_GET' => 'page'));
+         * @example $sandbox->whitelistSuperglobal(['_GET' => 'page']);
          *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to whitelist
          * @param   string              $key        String of superglobal key to whitelist
@@ -5280,18 +5280,18 @@
                 $name = $this->normalizeSuperglobal($name);
             }
             if(is_string($name) && $name && !isset($this->whitelist['superglobals'][$name])){
-                $this->whitelist['superglobals'][$name] = array();
+                $this->whitelist['superglobals'][$name] = [];
             }
             if(is_array($name)){
                 foreach($name as $_name => $key){
                     if(is_int($_name)){
                         if(is_string($key) && $key){
-                            $this->whitelist['superglobals'][$key] = array();
+                            $this->whitelist['superglobals'][$key] = [];
                         }
                     } else {
                         $_name = $this->normalizeSuperglobal($_name);
                         if(is_string($_name) && $_name && !isset($this->whitelist['superglobals'][$_name])){
-                            $this->whitelist['superglobals'][$_name] = array();
+                            $this->whitelist['superglobals'][$_name] = [];
                         }
                         if(is_string($key) && $key && isset($this->whitelist['superglobals'][$_name])){
                             $this->whitelist['superglobals'][$_name][$key] = true;
@@ -5325,9 +5325,9 @@
          *
          * @example $sandbox->blacklistSuperglobal('_GET', 'page');
          *
-         * @example $sandbox->blacklistSuperglobal(array('_GET', '_POST'));
+         * @example $sandbox->blacklistSuperglobal(['_GET', '_POST']);
          *
-         * @example $sandbox->blacklistSuperglobal(array('_GET' => 'page'));
+         * @example $sandbox->blacklistSuperglobal(['_GET' => 'page']);
          *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to blacklist
          * @param   string              $key        String of superglobal key to blacklist
@@ -5339,18 +5339,18 @@
                 $name = $this->normalizeSuperglobal($name);
             }
             if(is_string($name) && $name && !isset($this->blacklist['superglobals'][$name])){
-                $this->blacklist['superglobals'][$name] = array();
+                $this->blacklist['superglobals'][$name] = [];
             }
             if(is_array($name)){
                 foreach($name as $_name => $key){
                     if(is_int($_name)){
                         if(is_string($key) && $key){
-                            $this->blacklist['superglobals'][$key] = array();
+                            $this->blacklist['superglobals'][$key] = [];
                         }
                     } else {
                         $_name = $this->normalizeSuperglobal($_name);
                         if(is_string($_name) && $_name && !isset($this->blacklist['superglobals'][$_name])){
-                            $this->blacklist['superglobals'][$_name] = array();
+                            $this->blacklist['superglobals'][$_name] = [];
                         }
                         if(is_string($key) && $key && isset($this->blacklist['superglobals'][$_name])){
                             $this->blacklist['superglobals'][$_name][$key] = true;
@@ -5384,9 +5384,9 @@
          *
          * @example $sandbox->dewhitelistSuperglobal('_GET', 'page');
          *
-         * @example $sandbox->dewhitelistSuperglobal(array('_GET', '_POST'));
+         * @example $sandbox->dewhitelistSuperglobal(['_GET', '_POST']);
          *
-         * @example $sandbox->dewhitelistSuperglobal(array('_GET' => 'page'));
+         * @example $sandbox->dewhitelistSuperglobal(['_GET' => 'page']);
          *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist
          * @param   string              $key        String of superglobal key to remove from whitelist
@@ -5401,7 +5401,7 @@
                 foreach($name as $_name => $key){
                     if(is_int($_name)){
                         if(isset($this->whitelist['superglobals'][$key])){
-                            $this->whitelist['superglobals'][$key] = array();
+                            $this->whitelist['superglobals'][$key] = [];
                         }
                     } else if(isset($this->whitelist['superglobals'][$_name]) && is_string($key) && $key && isset($this->whitelist['superglobals'][$_name][$key])){
                         unset($this->whitelist['superglobals'][$_name][$key]);
@@ -5436,9 +5436,9 @@
          *
          * @example $sandbox->deblacklistSuperglobal('_GET', 'page');
          *
-         * @example $sandbox->deblacklistSuperglobal(array('_GET', '_POST'));
+         * @example $sandbox->deblacklistSuperglobal(['_GET', '_POST']);
          *
-         * @example $sandbox->deblacklistSuperglobal(array('_GET' => 'page'));
+         * @example $sandbox->deblacklistSuperglobal(['_GET' => 'page']);
          *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist
          * @param   string              $key        String of superglobal key to remove from blacklist
@@ -5453,7 +5453,7 @@
                 foreach($name as $_name => $key){
                     if(is_int($_name)){
                         if(isset($this->blacklist['superglobals'][$key])){
-                            $this->blacklist['superglobals'][$key] = array();
+                            $this->blacklist['superglobals'][$key] = [];
                         }
                     } else if(isset($this->blacklist['superglobals'][$_name]) && is_string($key) && $key && isset($this->blacklist['superglobals'][$_name][$key])){
                         unset($this->blacklist['superglobals'][$_name][$key]);
@@ -5485,7 +5485,7 @@
          *
          * @example $sandbox->whitelistConst('FOO');
          *
-         * @example $sandbox->whitelistConst(array('FOO', 'BAR'));
+         * @example $sandbox->whitelistConst(['FOO', 'BAR']);
          *
          * @param   string|array        $name       String of constant name or array of constant names to whitelist
          *
@@ -5504,7 +5504,7 @@
          *
          * @example $sandbox->blacklistConst('FOO');
          *
-         * @example $sandbox->blacklistConst(array('FOO', 'BAR'));
+         * @example $sandbox->blacklistConst(['FOO', 'BAR']);
          *
          * @param   string|array        $name       String of constant name or array of constant names to blacklist
          *
@@ -5523,7 +5523,7 @@
          *
          * @example $sandbox->dewhitelistConst('FOO');
          *
-         * @example $sandbox->dewhitelistConst(array('FOO', 'BAR'));
+         * @example $sandbox->dewhitelistConst(['FOO', 'BAR']);
          *
          * @param   string|array        $name       String of constant name or array of constant names to remove from whitelist
          *
@@ -5542,7 +5542,7 @@
          *
          * @example $sandbox->deblacklistConst('FOO');
          *
-         * @example $sandbox->deblacklistConst(array('FOO', 'BAR'));
+         * @example $sandbox->deblacklistConst(['FOO', 'BAR']);
          *
          * @param   string|array        $name       String of constant name or array of constant names to remove from blacklist
          *
@@ -5561,7 +5561,7 @@
          *
          * @example $sandbox->whitelistMagicConst('__LINE__');
          *
-         * @example $sandbox->whitelistMagicConst(array('__LINE__', '__FILE__'));
+         * @example $sandbox->whitelistMagicConst(['__LINE__', '__FILE__']);
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to whitelist
          *
@@ -5581,7 +5581,7 @@
          *
          * @example $sandbox->blacklistMagicConst('__LINE__');
          *
-         * @example $sandbox->blacklistMagicConst(array('__LINE__', '__FILE__'));
+         * @example $sandbox->blacklistMagicConst(['__LINE__', '__FILE__']);
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to blacklist
          *
@@ -5601,7 +5601,7 @@
          *
          * @example $sandbox->dewhitelistMagicConst('__LINE__');
          *
-         * @example $sandbox->dewhitelistMagicConst(array('__LINE__', '__FILE__'));
+         * @example $sandbox->dewhitelistMagicConst(['__LINE__', '__FILE__']);
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from whitelist
          *
@@ -5621,7 +5621,7 @@
          *
          * @example $sandbox->deblacklistMagicConst('__LINE__');
          *
-         * @example $sandbox->deblacklistMagicConst(array('__LINE__', '__FILE__'));
+         * @example $sandbox->deblacklistMagicConst(['__LINE__', '__FILE__']);
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from blacklist
          *
@@ -5641,7 +5641,7 @@
          *
          * @example $sandbox->whitelistNamespace('Foo');
          *
-         * @example $sandbox->whitelistNamespace(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistNamespace(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to whitelist
          *
@@ -5661,7 +5661,7 @@
          *
          * @example $sandbox->blacklistNamespace('Foo');
          *
-         * @example $sandbox->blacklistNamespace(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistNamespace(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to blacklist
          *
@@ -5681,7 +5681,7 @@
          *
          * @example $sandbox->dewhitelistNamespace('Foo');
          *
-         * @example $sandbox->dewhitelistNamespace(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistNamespace(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to remove from whitelist
          *
@@ -5701,7 +5701,7 @@
          *
          * @example $sandbox->deblacklistNamespace('Foo');
          *
-         * @example $sandbox->deblacklistNamespace(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistNamespace(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to remove from blacklist
          *
@@ -5721,7 +5721,7 @@
          *
          * @example $sandbox->whitelistAlias('Foo');
          *
-         * @example $sandbox->whitelistAlias(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistAlias(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of alias names  or array of alias names to whitelist
          *
@@ -5741,7 +5741,7 @@
          *
          * @example $sandbox->blacklistAlias('Foo');
          *
-         * @example $sandbox->blacklistAlias(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistAlias(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of alias name or array of alias names to blacklist
          *
@@ -5761,7 +5761,7 @@
          *
          * @example $sandbox->dewhitelistAlias('Foo');
          *
-         * @example $sandbox->dewhitelistAlias(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistAlias(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of alias name or array of alias names to remove from whitelist
          *
@@ -5781,7 +5781,7 @@
          *
          * @example $sandbox->deblacklistAlias('Foo');
          *
-         * @example $sandbox->deblacklistAlias(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistAlias(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of alias name or array of alias names to remove from blacklist
          *
@@ -5803,7 +5803,7 @@
          *
          * @example $sandbox->whitelistUse('Foo');
          *
-         * @example $sandbox->whitelistUse(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistUse(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to whitelist
          *
@@ -5824,7 +5824,7 @@
          *
          * @example $sandbox->blacklistUse('Foo');
          *
-         * @example $sandbox->blacklistUse(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistUse(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to blacklist
          *
@@ -5845,7 +5845,7 @@
          *
          * @example $sandbox->dewhitelistUse('Foo');
          *
-         * @example $sandbox->dewhitelistUse(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistUse(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from whitelist
          *
@@ -5866,7 +5866,7 @@
          *
          * @example $sandbox->deblacklistUse('Foo');
          *
-         * @example $sandbox->deblacklistUse(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistUse(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from blacklist
          *
@@ -5885,7 +5885,7 @@
          *
          * @example $sandbox->whitelistClass('Foo');
          *
-         * @example $sandbox->whitelistClass(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistClass(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of class name or array of class names to whitelist
          *
@@ -5905,7 +5905,7 @@
          *
          * @example $sandbox->blacklistClass('Foo');
          *
-         * @example $sandbox->blacklistClass(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistClass(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of class name or array of class names to blacklist
          *
@@ -5925,7 +5925,7 @@
          *
          * @example $sandbox->dewhitelistClass('Foo');
          *
-         * @example $sandbox->dewhitelistClass(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistClass(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of class name or array of class names to remove from whitelist
          *
@@ -5945,7 +5945,7 @@
          *
          * @example $sandbox->deblacklistClass('Foo');
          *
-         * @example $sandbox->deblacklistClass(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistClass(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of class name or array of class names to remove from blacklist
          *
@@ -5965,7 +5965,7 @@
          *
          * @example $sandbox->whitelistInterface('Foo');
          *
-         * @example $sandbox->whitelistInterface(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistInterface(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of interface name or array of interface names to whitelist
          *
@@ -5985,7 +5985,7 @@
          *
          * @example $sandbox->blacklistInterface('Foo');
          *
-         * @example $sandbox->blacklistInterface(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistInterface(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of interface name or array of interface names to blacklist
          *
@@ -6005,7 +6005,7 @@
          *
          * @example $sandbox->dewhitelistInterface('Foo');
          *
-         * @example $sandbox->dewhitelistInterface(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistInterface(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of interface name or array of interface names to remove from whitelist
          *
@@ -6025,7 +6025,7 @@
          *
          * @example $sandbox->deblacklistInterface('Foo');
          *
-         * @example $sandbox->deblacklistInterface(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistInterface(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of interface name or array of interface names to remove from blacklist
          *
@@ -6045,7 +6045,7 @@
          *
          * @example $sandbox->whitelistTrait('Foo');
          *
-         * @example $sandbox->whitelistTrait(array('Foo', 'Bar'));
+         * @example $sandbox->whitelistTrait(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of trait name or array of trait names to whitelist
          *
@@ -6065,7 +6065,7 @@
          *
          * @example $sandbox->blacklistTrait('Foo');
          *
-         * @example $sandbox->blacklistTrait(array('Foo', 'Bar'));
+         * @example $sandbox->blacklistTrait(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of trait name or array of trait names to blacklist
          *
@@ -6085,7 +6085,7 @@
          *
          * @example $sandbox->dewhitelistTrait('Foo');
          *
-         * @example $sandbox->dewhitelistTrait(array('Foo', 'Bar'));
+         * @example $sandbox->dewhitelistTrait(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of trait name or array of trait names to remove from whitelist
          *
@@ -6105,7 +6105,7 @@
          *
          * @example $sandbox->deblacklistTrait('Foo');
          *
-         * @example $sandbox->deblacklistTrait(array('Foo', 'Bar'));
+         * @example $sandbox->deblacklistTrait(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of trait name or array of trait names to remove from blacklist
          *
@@ -6125,7 +6125,7 @@
          *
          * @example $sandbox->whitelistKeyword('echo');
          *
-         * @example $sandbox->whitelistKeyword(array('echo', 'eval'));
+         * @example $sandbox->whitelistKeyword(['echo', 'eval']);
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to whitelist
          *
@@ -6145,7 +6145,7 @@
          *
          * @example $sandbox->blacklistKeyword('echo');
          *
-         * @example $sandbox->blacklistKeyword(array('echo', 'eval'));
+         * @example $sandbox->blacklistKeyword(['echo', 'eval']);
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to blacklist
          *
@@ -6165,7 +6165,7 @@
          *
          * @example $sandbox->dewhitelistKeyword('echo');
          *
-         * @example $sandbox->dewhitelistKeyword(array('echo', 'eval'));
+         * @example $sandbox->dewhitelistKeyword(['echo', 'eval']);
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to remove from whitelist
          *
@@ -6185,7 +6185,7 @@
          *
          * @example $sandbox->deblacklistKeyword('echo');
          *
-         * @example $sandbox->deblacklistKeyword(array('echo', 'eval'));
+         * @example $sandbox->deblacklistKeyword(['echo', 'eval']);
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to remove from blacklist
          *
@@ -6205,7 +6205,7 @@
          *
          * @example $sandbox->whitelistOperator('+');
          *
-         * @example $sandbox->whitelistOperator(array('+', '-'));
+         * @example $sandbox->whitelistOperator(['+', '-']);
          *
          * @param   string|array        $name       String of operator name or array of operator names to whitelist
          *
@@ -6225,7 +6225,7 @@
          *
          * @example $sandbox->blacklistOperator('+');
          *
-         * @example $sandbox->blacklistOperator(array('+', '-'));
+         * @example $sandbox->blacklistOperator(['+', '-']);
          *
          * @param   string|array        $name       String of operator name or array of operator names to blacklist
          *
@@ -6245,7 +6245,7 @@
          *
          * @example $sandbox->dewhitelistOperator('+');
          *
-         * @example $sandbox->dewhitelistOperator(array('+', '-'));
+         * @example $sandbox->dewhitelistOperator(['+', '-']);
          *
          * @param   string|array        $name       String of operator name or array of operator names to remove from whitelist
          *
@@ -6265,7 +6265,7 @@
          *
          * @example $sandbox->deblacklistOperator('+');
          *
-         * @example $sandbox->deblacklistOperator(array('+', '-'));
+         * @example $sandbox->deblacklistOperator(['+', '-']);
          *
          * @param   string|array        $name       String of operator name or array of operator names to remove from blacklist
          *
@@ -6285,7 +6285,7 @@
          *
          * @example $sandbox->whitelistPrimitive('int');
          *
-         * @example $sandbox->whitelistPrimitive(array('int', 'float'));
+         * @example $sandbox->whitelistPrimitive(['int', 'float']);
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to whitelist
          *
@@ -6305,7 +6305,7 @@
          *
          * @example $sandbox->blacklistPrimitive('int');
          *
-         * @example $sandbox->blacklistPrimitive(array('int', 'float'));
+         * @example $sandbox->blacklistPrimitive(['int', 'float']);
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to blacklist
          *
@@ -6325,7 +6325,7 @@
          *
          * @example $sandbox->dewhitelistPrimitive('int');
          *
-         * @example $sandbox->dewhitelistPrimitive(array('int', 'float'));
+         * @example $sandbox->dewhitelistPrimitive(['int', 'float']);
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to remove from whitelist
          *
@@ -6345,7 +6345,7 @@
          *
          * @example $sandbox->deblacklistPrimitive('int');
          *
-         * @example $sandbox->deblacklistPrimitive(array('int', 'float'));
+         * @example $sandbox->deblacklistPrimitive(['int', 'float']);
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to remove from blacklist
          *
@@ -6365,7 +6365,7 @@
          *
          * @example $sandbox->whitelistType('PHPSandbox');
          *
-         * @example $sandbox->whitelistType(array('PHPSandbox', 'PhpParser'));
+         * @example $sandbox->whitelistType(['PHPSandbox', 'PhpParser']);
          *
          * @param   string|array        $name       String of type name or array of type names to whitelist
          *
@@ -6385,7 +6385,7 @@
          *
          * @example $sandbox->blacklistType('PHPSandbox');
          *
-         * @example $sandbox->blacklistType(array('PHPSandbox', 'PhpParser'));
+         * @example $sandbox->blacklistType(['PHPSandbox', 'PhpParser']);
          *
          * @param   string|array        $name       String of type name or array of type names to blacklist
          *
@@ -6405,7 +6405,7 @@
          *
          * @example $sandbox->dewhitelistType('PHPSandbox');
          *
-         * @example $sandbox->dewhitelistType(array('PHPSandbox', 'PhpParser'));
+         * @example $sandbox->dewhitelistType(['PHPSandbox', 'PhpParser']);
          *
          * @param   string|array        $name       String of type name or array of type names to remove from whitelist
          *
@@ -6425,7 +6425,7 @@
          *
          * @example $sandbox->deblacklistType('PHPSandbox');
          *
-         * @example $sandbox->deblacklistType(array('PHPSandbox', 'PhpParser'));
+         * @example $sandbox->deblacklistType(['PHPSandbox', 'PhpParser']);
          *
          * @param   string|array        $name       String of type name or array of type names to remove from blacklist
          *
@@ -6463,7 +6463,7 @@
             }
             $name = $this->normalizeFunc($name);
             if(is_callable($this->validation['function'])){
-                return call_user_func_array($this->validation['function'], array($name, $this));
+                return call_user_func_array($this->validation['function'], [$name, $this]);
             }
             if(!isset($this->definitions['functions'][$name]) || !is_callable($this->definitions['functions'][$name]['function'])){
                 if(count($this->whitelist['functions'])){
@@ -6499,7 +6499,7 @@
                 $this->validationError("Sandboxed code attempted to call unnamed variable!", Error::VALID_VAR_ERROR, null, '');
             }
             if(is_callable($this->validation['variable'])){
-                return call_user_func_array($this->validation['variable'], array($name, $this));
+                return call_user_func_array($this->validation['variable'], [$name, $this]);
             }
             if(!isset($this->definitions['variables'][$name])){
                 if(count($this->whitelist['variables'])){
@@ -6535,7 +6535,7 @@
                 $this->validationError("Sandboxed code attempted to call unnamed global!", Error::VALID_GLOBAL_ERROR, null, '');
             }
             if(is_callable($this->validation['global'])){
-                return call_user_func_array($this->validation['global'], array($name, $this));
+                return call_user_func_array($this->validation['global'], [$name, $this]);
             }
             if(count($this->whitelist['globals'])){
                 if(!isset($this->whitelist['globals'][$name])){
@@ -6570,7 +6570,7 @@
             }
             $name = $this->normalizeSuperglobal($name);
             if(is_callable($this->validation['superglobal'])){
-                return call_user_func_array($this->validation['superglobal'], array($name, $this));
+                return call_user_func_array($this->validation['superglobal'], [$name, $this]);
             }
             if(!isset($this->definitions['superglobals'][$name])){
                 if(count($this->whitelist['superglobals'])){
@@ -6612,7 +6612,7 @@
                 return $this->checkPrimitive('null');
             }
             if(is_callable($this->validation['constant'])){
-                return call_user_func_array($this->validation['constant'], array($name, $this));
+                return call_user_func_array($this->validation['constant'], [$name, $this]);
             }
             if(!isset($this->definitions['constants'][$name])){
                 if(count($this->whitelist['constants'])){
@@ -6649,7 +6649,7 @@
             }
             $name = $this->normalizeMagicConst($name);
             if(is_callable($this->validation['magic_constant'])){
-                return call_user_func_array($this->validation['magic_constant'], array($name, $this));
+                return call_user_func_array($this->validation['magic_constant'], [$name, $this]);
             }
             if(!isset($this->definitions['magic_constants'][$name])){
                 if(count($this->whitelist['magic_constants'])){
@@ -6686,7 +6686,7 @@
             }
             $name = $this->normalizeNamespace($name);
             if(is_callable($this->validation['namespace'])){
-                return call_user_func_array($this->validation['namespace'], array($name, $this));
+                return call_user_func_array($this->validation['namespace'], [$name, $this]);
             }
             if(!isset($this->definitions['namespaces'][$name])){
                 if(count($this->whitelist['namespaces'])){
@@ -6723,7 +6723,7 @@
             }
             $name = $this->normalizeAlias($name);
             if(is_callable($this->validation['alias'])){
-                return call_user_func_array($this->validation['alias'], array($name, $this));
+                return call_user_func_array($this->validation['alias'], [$name, $this]);
             }
             if(count($this->whitelist['aliases'])){
                 if(!isset($this->whitelist['aliases'][$name])){
@@ -6776,7 +6776,7 @@
                 return true;
             }
             if(is_callable($this->validation['class'])){
-                return call_user_func_array($this->validation['class'], array($name, $this));
+                return call_user_func_array($this->validation['class'], [$name, $this]);
             }
             if(!isset($this->definitions['classes'][$name])){
                 if(count($this->whitelist['classes'])){
@@ -6813,7 +6813,7 @@
             }
             $name = $this->normalizeInterface($name);
             if(is_callable($this->validation['interface'])){
-                return call_user_func_array($this->validation['interface'], array($name, $this));
+                return call_user_func_array($this->validation['interface'], [$name, $this]);
             }
             if(!isset($this->definitions['interfaces'][$name])){
                 if(count($this->whitelist['interfaces'])){
@@ -6850,7 +6850,7 @@
             }
             $name = $this->normalizeTrait($name);
             if(is_callable($this->validation['trait'])){
-                return call_user_func_array($this->validation['trait'], array($name, $this));
+                return call_user_func_array($this->validation['trait'], [$name, $this]);
             }
             if(!isset($this->definitions['traits'][$name])){
                 if(count($this->whitelist['traits'])){
@@ -6887,7 +6887,7 @@
             }
             $name = $this->normalizeKeyword($name);
             if(is_callable($this->validation['keyword'])){
-                return call_user_func_array($this->validation['keyword'], array($name, $this));
+                return call_user_func_array($this->validation['keyword'], [$name, $this]);
             }
             if(count($this->whitelist['keywords'])){
                 if(!isset($this->whitelist['keywords'][$name])){
@@ -6920,7 +6920,7 @@
             }
             $name = $this->normalizeOperator($name);
             if(is_callable($this->validation['operator'])){
-                return call_user_func_array($this->validation['operator'], array($name, $this));
+                return call_user_func_array($this->validation['operator'], [$name, $this]);
             }
             if(count($this->whitelist['operators'])){
                 if(!isset($this->whitelist['operators'][$name])){
@@ -6953,7 +6953,7 @@
             }
             $name = $this->normalizePrimitive($name);
             if(is_callable($this->validation['primitive'])){
-                return call_user_func_array($this->validation['primitive'], array($name, $this));
+                return call_user_func_array($this->validation['primitive'], [$name, $this]);
             }
             if(count($this->whitelist['primitives'])){
                 if(!isset($this->whitelist['primitives'][$name])){
@@ -6986,7 +6986,7 @@
             }
             $name = $this->normalizeType($name);
             if(is_callable($this->validation['type'])){
-                return call_user_func_array($this->validation['type'], array($name, $this));
+                return call_user_func_array($this->validation['type'], [$name, $this]);
             }
             if(!isset($this->definitions['classes'][$name])){
                 if(count($this->whitelist['types'])){
@@ -7010,7 +7010,7 @@
          * @return  string      Prepared string of variable output
          */
         protected function prepareVars(){
-            $output = array();
+            $output = [];
             foreach($this->definitions['variables'] as $name => $value){
                 if(is_int($name)){  //can't define numeric variable names
                     $this->validationError("Cannot define variable name that begins with an integer!", Error::DEFINE_VAR_ERROR, null, $name);
@@ -7037,7 +7037,7 @@
         /** Prepare defined constants for execution
          */
         protected function prepareConsts(){
-            $output = array();
+            $output = [];
             foreach($this->definitions['constants'] as $name => $value){
                 if(is_scalar($value) || is_null($value)){
                     if(is_bool($value)){
@@ -7061,7 +7061,7 @@
         /** Prepare defined namespaces for execution
          */
         protected function prepareNamespaces(){
-            $output = array();
+            $output = [];
             foreach($this->definitions['namespaces'] as $name){
                 if(is_string($name) && $name){
                     $output[] = 'namespace ' . $name . ';';
@@ -7075,7 +7075,7 @@
         /** Prepare defined aliases for execution
          */
         protected function prepareAliases(){
-            $output = array();
+            $output = [];
             foreach($this->definitions['aliases'] as $alias){
                 if(is_array($alias) && isset($alias['original']) && is_string($alias['original']) && $alias['original']){
                     $output[] = 'use ' . $alias['original'] . ((isset($alias['alias']) && is_string($alias['alias']) && $alias['alias']) ? ' as ' . $alias['alias'] : '') . ';';
@@ -7392,7 +7392,7 @@
                 error_reporting(intval($this->error_level));
             }
             if(is_callable($this->error_handler) || $this->convert_errors){
-                set_error_handler(array($this, 'error'), $this->error_handler_types);
+                set_error_handler([$this, 'error'], $this->error_handler_types);
             }
             $this->execution_time = microtime(true);
             $exception = null;
@@ -7488,7 +7488,7 @@
             if($this->convert_errors){
                 return $this->exception(new \ErrorException($errstr, 0, $errno, $errfile, $errline));
             }
-            return is_callable($this->error_handler) ? call_user_func_array($this->error_handler, array($errno, $errstr, $errfile, $errline, $errcontext, $this)) : null;
+            return is_callable($this->error_handler) ? call_user_func_array($this->error_handler, [$errno, $errstr, $errfile, $errline, $errcontext, $this]) : null;
         }
 
         /** Set callable to handle thrown exceptions
@@ -7552,7 +7552,7 @@
         public function exception(\Exception $exception){
             $this->last_exception = $exception;
             if(is_callable($this->exception_handler)){
-                return call_user_func_array($this->exception_handler, array($exception, $this));
+                return call_user_func_array($this->exception_handler, [$exception, $this]);
             }
             throw $exception;
         }
@@ -7627,7 +7627,7 @@
                 : new Error($error, $code, $node, $data, $previous ?: $this->last_validation_error);
             $this->last_validation_error = $error;
             if($this->validation_error_handler && is_callable($this->validation_error_handler)){
-                $result = call_user_func_array($this->validation_error_handler, array($error, $this));
+                $result = call_user_func_array($this->validation_error_handler, [$error, $this]);
                 if($result instanceof \Exception){
                     throw $result;
                 }

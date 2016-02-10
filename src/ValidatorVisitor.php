@@ -42,7 +42,7 @@
          */
         public function leaveNode(Node $node){
             if($node instanceof Node\Arg){
-                return new Node\Expr\FuncCall(new Node\Name\FullyQualified(($node->value instanceof Node\Expr\Variable) ? 'PHPSandbox\\wrapByRef' : 'PHPSandbox\\wrap'), array($node, new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name)))), $node->getAttributes());
+                return new Node\Expr\FuncCall(new Node\Name\FullyQualified(($node->value instanceof Node\Expr\Variable) ? 'PHPSandbox\\wrapByRef' : 'PHPSandbox\\wrap'), [$node, new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)])], $node->getAttributes());
             } else if($node instanceof Node\Stmt\InlineHTML){
                 if(!$this->sandbox->allow_escaping){
                     $this->sandbox->validationError("Sandboxed code attempted to escape to HTML!", Error::ESCAPE_ERROR, $node);
@@ -52,15 +52,15 @@
                     $this->sandbox->validationError("Sandboxed code attempted to cast!", Error::CAST_ERROR, $node);
                 }
                 if($node instanceof Node\Expr\Cast\Int_){
-                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_intval', array(new Node\Arg($node->expr)), $node->getAttributes());
+                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_intval', [new Node\Arg($node->expr)], $node->getAttributes());
                 } else if($node instanceof Node\Expr\Cast\Double){
-                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_floatval', array(new Node\Arg($node->expr)), $node->getAttributes());
+                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_floatval', [new Node\Arg($node->expr)], $node->getAttributes());
                 } else if($node instanceof Node\Expr\Cast\Bool_){
-                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_boolval', array(new Node\Arg($node->expr)), $node->getAttributes());
+                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_boolval', [new Node\Arg($node->expr)], $node->getAttributes());
                 } else if($node instanceof Node\Expr\Cast\Array_){
-                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_arrayval', array(new Node\Arg($node->expr)), $node->getAttributes());
+                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_arrayval', [new Node\Arg($node->expr)], $node->getAttributes());
                 } else if($node instanceof Node\Expr\Cast\Object_){
-                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_objectval', array(new Node\Arg($node->expr)), $node->getAttributes());
+                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_objectval', [new Node\Arg($node->expr)], $node->getAttributes());
                 }
             } else if($node instanceof Node\Expr\FuncCall){
                 if($node->name instanceof Node\Name){
@@ -71,14 +71,14 @@
                     if($this->sandbox->isDefinedFunc($name)){
                         $args = $node->args;
                         array_unshift($args, new Node\Arg(new Node\Scalar\String_($name)));
-                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), 'call_func', $args, $node->getAttributes());
+                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), 'call_func', $args, $node->getAttributes());
                     }
                     if($this->sandbox->overwrite_defined_funcs && in_array($name, PHPSandbox::$defined_funcs)){
-                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_' . $name, array(new Node\Arg(new Node\Expr\FuncCall(new Node\Name(array($name))))), $node->getAttributes());
+                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_' . $name, [new Node\Arg(new Node\Expr\FuncCall(new Node\Name([$name])))], $node->getAttributes());
                     }
                     if($this->sandbox->overwrite_sandboxed_string_funcs && in_array($name, PHPSandbox::$sandboxed_string_funcs)){
                         $args = $node->args;
-                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_' . $name, $args, $node->getAttributes());
+                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_' . $name, $args, $node->getAttributes());
                     }
                     if($this->sandbox->overwrite_func_get_args && in_array($name, PHPSandbox::$arg_funcs)){
                         if($name == 'func_get_arg'){
@@ -86,13 +86,13 @@
                             if(isset($node->args[0]) && $node->args[0] instanceof Node\Arg){
                                 $index = $node->args[0];
                             }
-                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_' . $name, array(new Node\Arg(new Node\Expr\FuncCall(new Node\Name(array('func_get_args')))), $index), $node->getAttributes());
+                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_' . $name, [new Node\Arg(new Node\Expr\FuncCall(new Node\Name(['func_get_args']))), $index], $node->getAttributes());
                         }
-                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_' . $name, array(new Node\Arg(new Node\Expr\FuncCall(new Node\Name(array('func_get_args'))))), $node->getAttributes());
+                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_' . $name, [new Node\Arg(new Node\Expr\FuncCall(new Node\Name(['func_get_args'])))], $node->getAttributes());
                     }
                 } else {
                     return new Node\Expr\Ternary(
-                        new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), 'check_func', array(new Node\Arg($node->name)), $node->getAttributes()),
+                        new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), 'check_func', [new Node\Arg($node->name)], $node->getAttributes()),
                         $node,
                         new Node\Expr\ConstFetch(new Node\Name('null'))
                     );
@@ -238,7 +238,7 @@
                         $this->sandbox->validationError("Superglobal failed custom validation!", Error::VALID_SUPERGLOBAL_ERROR, $node, $node->name);
                     }
                     if($this->sandbox->overwrite_superglobals){
-                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_get_superglobal', array(new Node\Arg(new Node\Scalar\String_($node->name))), $node->getAttributes());
+                        return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_get_superglobal', [new Node\Arg(new Node\Scalar\String_($node->name))], $node->getAttributes());
                     }
                 } else {
                     if(!$this->sandbox->checkVar($node->name)){
@@ -362,11 +362,11 @@
                 return false;
             } else if($node instanceof Node\Expr\ShellExec){
                 if($this->sandbox->isDefinedFunc('shell_exec')){
-                    $args = array(
+                    $args = [
                         new Node\Arg(new Node\Scalar\String_('shell_exec')),
                         new Node\Arg(new Node\Scalar\String_(implode('', $node->parts)))
-                    );
-                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), 'call_func', $args, $node->getAttributes());
+                    ];
+                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), 'call_func', $args, $node->getAttributes());
                 }
                 if($this->sandbox->hasWhitelistedFuncs()){
                     if(!$this->sandbox->isWhitelistedFunc('shell_exec')){
@@ -383,7 +383,7 @@
                     $this->sandbox->validationError("Magic constant failed custom validation!", Error::VALID_MAGIC_CONST_ERROR, $node, $name);
                 }
                 if($this->sandbox->isDefinedMagicConst($name)){
-                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_get_magic_const', array(new Node\Arg(new Node\Scalar\String_($name))), $node->getAttributes());
+                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_get_magic_const', [new Node\Arg(new Node\Scalar\String_($name))], $node->getAttributes());
                 }
             } else if($name = $this->isKeyword($node)){
                 if(!$this->sandbox->checkKeyword($name)){
@@ -398,22 +398,22 @@
                         || ($node->type == Node\Expr\Include_::TYPE_REQUIRE && $this->sandbox->isDefinedFunc('require'))
                         || ($node->type == Node\Expr\Include_::TYPE_REQUIRE_ONCE && $this->sandbox->isDefinedFunc('require_once'))
                     )){
-                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), 'call_func', array(new Node\Arg(new Node\Scalar\String_($name)), new Node\Arg($node->expr)), $node->getAttributes());
+                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), 'call_func', [new Node\Arg(new Node\Scalar\String_($name)), new Node\Arg($node->expr)], $node->getAttributes());
                 } else if($node instanceof Node\Expr\Include_ && $this->sandbox->sandbox_includes){
                     switch($node->type){
                         case Node\Expr\Include_::TYPE_INCLUDE_ONCE:
-                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_include_once', array(new Node\Arg($node->expr)), $node->getAttributes());
+                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_include_once', [new Node\Arg($node->expr)], $node->getAttributes());
                             break;
                         case Node\Expr\Include_::TYPE_REQUIRE:
-                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_require', array(new Node\Arg($node->expr)), $node->getAttributes());
+                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_require', [new Node\Arg($node->expr)], $node->getAttributes());
                             break;
                         case Node\Expr\Include_::TYPE_REQUIRE_ONCE:
-                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_require_once', array(new Node\Arg($node->expr)), $node->getAttributes());
+                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_require_once', [new Node\Arg($node->expr)], $node->getAttributes());
                             break;
 
                         case Node\Expr\Include_::TYPE_INCLUDE:
                         default:
-                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', array(new Node\Scalar\String_($this->sandbox->name))), '_include', array(new Node\Arg($node->expr)), $node->getAttributes());
+                            return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_include', [new Node\Arg($node->expr)], $node->getAttributes());
                             break;
                     }
                 }

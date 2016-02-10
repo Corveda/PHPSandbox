@@ -82,7 +82,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 
 ##Requirements
 
-- PHP 5.3.2+
+- PHP 5.4+
 - [PHP-Parser](https://github.com/nikic/PHP-Parser)
 - [FunctionParser](https://github.com/jeremeamia/FunctionParser) (if you wish to use closures)
 - PHP should be compiled with *--enable-tokenizer* option (it typically is)
