@@ -755,7 +755,7 @@
 <form action="./" id="download_form" target="download" method="post">
     <input type="hidden" id="download_data" name="download" value=""/>
 </form>
-<script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/github");
