@@ -297,6 +297,11 @@
          */
         public $error_level                 = null;
         /**
+         * @var    int        Integer value of maximum number of seconds the sandbox should be allowed to execute
+         * @default 0
+         */
+        public $time_limit                 = 0;
+        /**
          * @var    bool       Flag to indicate whether the sandbox should allow included files
          * @default false
          */
@@ -487,13 +492,17 @@
         protected $appended_code = '';
         /* OUTPUT */
         /**
-         * @var float|null    Float of the number of microseconds it took to prepare the sandbox
+         * @var float         Float of the number of microseconds it took to prepare the sandbox
          */
-        protected $prepare_time = null;
+        protected $prepare_time = 0.0;
         /**
-         * @var float|null    Float of the number of microseconds it took to execute the sandbox
+         * @var float         Float of the number of microseconds it took to execute the sandbox
          */
-        protected $execution_time = null;
+        protected $execution_time = 0.0;
+        /**
+         * @var int           Int of the number of bytes the sandbox allocates during execution
+         */
+        protected $memory_usage = 0;
         /**
          * @var    string     String of preparsed code, for debugging and serialization purposes
          */
@@ -810,6 +819,9 @@
                 case 'error_level':
                     $this->error_level = is_numeric($value) ? intval($value) : null;
                     break;
+                case 'time_limit':
+                    $this->time_limit = is_numeric($value) ? intval($value) : null;
+                    break;
                 case 'validate_functions':
                 case 'validate_variables':
                 case 'validate_globals':
@@ -933,6 +945,7 @@
                 case 'validate_primitives':
                 case 'validate_types':
                 case 'error_level':
+                case 'time_limit':
                 case 'sandbox_includes':
                 case 'restore_error_level':
                 case 'convert_errors':
@@ -7279,6 +7292,22 @@
             return $round ? round($this->prepare_time + $this->execution_time, $round) : ($this->prepare_time + $this->execution_time);
         }
 
+        /** Return the amount of bytes the sandbox allocated while preparing and executing the sandboxed code
+         *
+         * You can pass the number of digits you wish to round the return value
+         *
+         * @example $sandbox->getMemoryUsage();
+         *
+         * @example $sandbox->getMemoryUsage(3);
+         *
+         * @param   int|null        $round      The number of digits to round the return value
+         *
+         * @return  int             The amount of bytes in memory it took to prepare and execute the sandboxed code
+         */
+        public function getMemoryUsage($round = 0){
+            return $round ? round($this->memory_usage, $round) : $this->memory_usage;
+        }
+
         /** Validate passed callable for execution
          *
          * @example $sandbox->validate('<?php echo "Hello World!"; ?>');
@@ -7383,6 +7412,8 @@
          * @return  mixed       The output from the executed sandboxed code
          */
         public function execute($callable = null, $skip_validation = false){
+            $this->execution_time = microtime(true);
+            $this->memory_usage = memory_get_peak_usage();
             if($callable !== null){
                 $this->prepare($callable, $skip_validation);
             }
@@ -7394,7 +7425,9 @@
             if(is_callable($this->error_handler) || $this->convert_errors){
                 set_error_handler([$this, 'error'], $this->error_handler_types);
             }
-            $this->execution_time = microtime(true);
+            if($this->time_limit){
+                set_time_limit($this->time_limit);
+            }
             $exception = null;
             $result = null;
             try {
@@ -7412,6 +7445,7 @@
                 restore_error_handler();
             }
             usleep(1); //guarantee at least some time passes
+            $this->memory_usage = (memory_get_peak_usage() - $this->memory_usage);
             $this->execution_time = (microtime(true) - $this->execution_time);
             if($this->error_level !== null && $this->restore_error_level){
                 error_reporting($saved_error_level);

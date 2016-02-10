@@ -144,19 +144,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-610928511"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-608775030"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-610928511" class="accordion-body collapse in">
+            <div id="namespace-608775030" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1448378770"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1191407195"></a>
                                 <a href="../namespaces/PHPSandbox.html" style="margin-left: 30px; padding-left: 0">PHPSandbox</a>
             </div>
-            <div id="namespace-1448378770" class="accordion-body collapse ">
+            <div id="namespace-1191407195" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -555,6 +555,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_getPreparedTime" class="">getPreparedTime()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_getExecutionTime" class="">getExecutionTime()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_getTime" class="">getTime()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_getMemoryUsage" class="">getMemoryUsage()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_validate" class="">validate()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_prepare" class="">prepare()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_execute" class="">execute()</a><br />
@@ -599,6 +600,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_primitives" class="">$validate_primitives</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_validate_types" class="">$validate_types</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_error_level" class="">$error_level</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_time_limit" class="">$time_limit</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_allow_includes" class="">$allow_includes</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_sandbox_includes" class="">$sandbox_includes</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_restore_error_level" class="">$restore_error_level</a><br />
@@ -682,6 +684,7 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_appended_code" class="">$appended_code</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_prepare_time" class="">$prepare_time</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_execution_time" class="">$execution_time</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#property_memory_usage" class="">$memory_usage</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_preparsed_code" class="">$preparsed_code</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_parsed_ast" class="">$parsed_ast</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#property_prepared_code" class="">$prepared_code</a><br />
@@ -1673,6 +1676,37 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                         </th>
                         <td>
                                                             <p>true</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_time_limit" name="property_time_limit" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$time_limit</h3>
+                <pre class="signature">$time_limit : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; Integer value of maximum number of seconds the sandbox should be allowed to execute                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            default
+                        </th>
+                        <td>
+                                                            <p>0</p>
                                                     </td>
                     </tr>
                             </table>
@@ -2992,12 +3026,12 @@ only has to create a PHPSandbox instance, configure its options, and run their c
             <a id="property_prepare_time" name="property_prepare_time" class="anchor"></a>
             <article class="property">
                 <h3 class="protected ">$prepare_time</h3>
-                <pre class="signature">$prepare_time : float|null</pre>
+                <pre class="signature">$prepare_time : float</pre>
                 <p><em></em></p>
                 
 
                                 <h4>Type</h4>
-                float|null
+                float
                 &mdash; Float of the number of microseconds it took to prepare the sandbox                            </article>
         </div>
         <aside class="span4 detailsbar">
@@ -3016,13 +3050,37 @@ only has to create a PHPSandbox instance, configure its options, and run their c
             <a id="property_execution_time" name="property_execution_time" class="anchor"></a>
             <article class="property">
                 <h3 class="protected ">$execution_time</h3>
-                <pre class="signature">$execution_time : float|null</pre>
+                <pre class="signature">$execution_time : float</pre>
                 <p><em></em></p>
                 
 
                                 <h4>Type</h4>
-                float|null
+                float
                 &mdash; Float of the number of microseconds it took to execute the sandbox                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_memory_usage" name="property_memory_usage" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$memory_usage</h3>
+                <pre class="signature">$memory_usage : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; Int of the number of bytes the sandbox allocates during execution                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -16943,6 +17001,48 @@ or pass an array of superglobal names, or an associative array of superglobal na
 
                                     <div class="row-fluid">
         <div class="span8 content class">
+            <a id="method_getMemoryUsage" name="method_getMemoryUsage" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getMemoryUsage()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getMemoryUsage(integer|null  <span class="argument">$round</span>) : integer</pre>
+                <p><em>Return the amount of bytes the sandbox allocated while preparing and executing the sandboxed code</em></p>
+                <p>You can pass the number of digits you wish to round the return value</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$round </td>
+                                <td><p>The number of digits to round the return value</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>The amount of bytes in memory it took to prepare and execute the sandboxed code</p>
+                                    				
+                                                            <h4>Examples</h4>
+                                                                <h5></h5>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;getMemoryUsage(); **</pre>
+                                            <h5></h5>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;getMemoryUsage(3); **</pre>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
             <a id="method_validate" name="method_validate" class="anchor"></a>
             <article class="method">
                 <h3 class="public ">validate()</h3>
@@ -18525,7 +18625,7 @@ security may become compromised!</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on February 10th, 2016 at 05:49.
+                    on February 10th, 2016 at 23:51.
                 </section>
             </section>
         </section>
