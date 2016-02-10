@@ -144,19 +144,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1834078937"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1847049320"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1834078937" class="accordion-body collapse in">
+            <div id="namespace-1847049320" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-575597183"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1136298052"></a>
                                 <a href="../namespaces/PHPSandbox.html" style="margin-left: 30px; padding-left: 0">PHPSandbox</a>
             </div>
-            <div id="namespace-575597183" class="accordion-body collapse ">
+            <div id="namespace-1136298052" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -335,12 +335,12 @@ only has to create a PHPSandbox instance, configure its options, and run their c
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_isDefinedVar" class="">isDefinedVar()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_undefineVar" class="">undefineVar()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_undefineVars" class="">undefineVars()</a><br />
-                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_defineSuperGlobal" class="">defineSuperGlobal()</a><br />
-                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_defineSuperGlobals" class="">defineSuperGlobals()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_defineSuperglobal" class="">defineSuperglobal()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_defineSuperglobals" class="">defineSuperglobals()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_hasDefinedSuperglobals" class="">hasDefinedSuperglobals()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_isDefinedSuperglobal" class="">isDefinedSuperglobal()</a><br />
-                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_undefineSuperGlobal" class="">undefineSuperGlobal()</a><br />
-                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_undefineSuperGlobals" class="">undefineSuperGlobals()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_undefineSuperglobal" class="">undefineSuperglobal()</a><br />
+                                                                    <a href="../classes/PHPSandbox.PHPSandbox.html#method_undefineSuperglobals" class="">undefineSuperglobals()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_defineConst" class="">defineConst()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_defineConsts" class="">defineConsts()</a><br />
                                                                     <a href="../classes/PHPSandbox.PHPSandbox.html#method_hasDefinedConsts" class="">hasDefinedConsts()</a><br />
@@ -7921,11 +7921,11 @@ functions to define, which can have callable values or arrays of the function ca
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_defineSuperGlobal" name="method_defineSuperGlobal" class="anchor"></a>
+            <a id="method_defineSuperglobal" name="method_defineSuperglobal" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">defineSuperGlobal()</h3>
+                <h3 class="public ">defineSuperglobal()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">defineSuperGlobal(string|array  <span class="argument">$name</span>, mixed  <span class="argument">$value</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">defineSuperglobal(string|array  <span class="argument">$name</span>, mixed  <span class="argument">$value</span>) : $this</pre>
                 <p><em>Define PHPSandbox superglobal</em></p>
                 <p>You can pass the superglobal $name and $value to define, or an associative array of superglobals to define, or a third variable to define the $key</p>
 
@@ -7955,11 +7955,11 @@ functions to define, which can have callable values or arrays of the function ca
                                     				
                                                             <h4>Examples</h4>
                                                                 <h5>[&#039;page&#039; =&gt; 1]);</h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;defineSuperGlobal(&#039;_GET&#039;, **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;defineSuperglobal(&#039;_GET&#039;, **</pre>
                                             <h5>=&gt; [&#039;page&#039; =&gt; 1]]);</h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;defineSuperGlobal([&#039;_GET&#039; **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;defineSuperglobal([&#039;_GET&#039; **</pre>
                                             <h5>&#039;page&#039;, 1);</h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;defineSuperGlobal(&#039;_GET&#039;, **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;defineSuperglobal(&#039;_GET&#039;, **</pre>
                                                 </article>
         </div>
         <aside class="span4 detailsbar">
@@ -7975,11 +7975,11 @@ functions to define, which can have callable values or arrays of the function ca
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_defineSuperGlobals" name="method_defineSuperGlobals" class="anchor"></a>
+            <a id="method_defineSuperglobals" name="method_defineSuperglobals" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">defineSuperGlobals()</h3>
+                <h3 class="public ">defineSuperglobals()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">defineSuperGlobals(array  <span class="argument">$superglobals = array()</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">defineSuperglobals(array  <span class="argument">$superglobals = array()</span>) : $this</pre>
                 <p><em>Define PHPSandbox superglobals by array</em></p>
                 <p>You can pass an associative array of superglobals to define</p>
 
@@ -7999,7 +7999,7 @@ functions to define, which can have callable values or arrays of the function ca
                                     				
                                                             <h4>Examples</h4>
                                                                 <h5>=&gt; [&#039;page&#039; =&gt; 1]]);</h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;defineSuperGlobals([&#039;_GET&#039; **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;defineSuperglobals([&#039;_GET&#039; **</pre>
                                                 </article>
         </div>
         <aside class="span4 detailsbar">
@@ -8104,11 +8104,11 @@ functions to define, which can have callable values or arrays of the function ca
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_undefineSuperGlobal" name="method_undefineSuperGlobal" class="anchor"></a>
+            <a id="method_undefineSuperglobal" name="method_undefineSuperglobal" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">undefineSuperGlobal()</h3>
+                <h3 class="public ">undefineSuperglobal()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">undefineSuperGlobal(string|array  <span class="argument">$name</span>, string|null  <span class="argument">$key = null</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">undefineSuperglobal(string|array  <span class="argument">$name</span>, string|null  <span class="argument">$key = null</span>) : $this</pre>
                 <p><em>Undefine PHPSandbox superglobal or superglobal key</em></p>
                 <p>You can pass a string of superglobal $name to undefine, or a superglobal $key to undefine, or an array of
 superglobal names to undefine, or an an associative array of superglobal names and keys to undefine</p>
@@ -8134,11 +8134,11 @@ superglobal names to undefine, or an an associative array of superglobal names a
                                     				
                                                             <h4>Examples</h4>
                                                                 <h5></h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperGlobal(&#039;_GET&#039;); **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperglobal(&#039;_GET&#039;); **</pre>
                                             <h5>&#039;page&#039;);</h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperGlobal(&#039;_GET&#039;, **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperglobal(&#039;_GET&#039;, **</pre>
                                             <h5>&#039;_POST&#039;]);</h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperGlobal([&#039;_GET&#039;, **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperglobal([&#039;_GET&#039;, **</pre>
                                                 </article>
         </div>
         <aside class="span4 detailsbar">
@@ -8154,11 +8154,11 @@ superglobal names to undefine, or an an associative array of superglobal names a
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_undefineSuperGlobals" name="method_undefineSuperGlobals" class="anchor"></a>
+            <a id="method_undefineSuperglobals" name="method_undefineSuperglobals" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">undefineSuperGlobals()</h3>
+                <h3 class="public ">undefineSuperglobals()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">undefineSuperGlobals(array  <span class="argument">$superglobals = array()</span>) : $this</pre>
+                <pre class="signature" style="margin-right: 54px;">undefineSuperglobals(array  <span class="argument">$superglobals = array()</span>) : $this</pre>
                 <p><em>Undefine PHPSandbox superglobals by array</em></p>
                 <p>You can pass an array of superglobal names to undefine, or an associative array of superglobals names and key
 to undefine, or an empty array or null to undefine all superglobals</p>
@@ -8179,11 +8179,11 @@ to undefine, or an empty array or null to undefine all superglobals</p>
                                     				
                                                             <h4>Examples</h4>
                                                                 <h5>&#039;_POST&#039;]);</h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperGlobals([&#039;_GET&#039;, **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperglobals([&#039;_GET&#039;, **</pre>
                                             <h5>=&gt; &#039;page&#039;, &#039;_POST&#039; =&gt; &#039;page&#039;]);</h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperGlobals([&#039;_GET&#039; **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperglobals([&#039;_GET&#039; **</pre>
                                             <h5>//WILL UNDEFINE ALL SUPERGLOBALS!</h5>
-                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperGlobals(); **</pre>
+                        <pre class="pre-scrollable">** File not found : $sandbox-&gt;undefineSuperglobals(); **</pre>
                                                 </article>
         </div>
         <aside class="span4 detailsbar">
@@ -18525,7 +18525,7 @@ security may become compromised!</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on February 10th, 2016 at 05:07.
+                    on February 10th, 2016 at 05:37.
                 </section>
             </section>
         </section>

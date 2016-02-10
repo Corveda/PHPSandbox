@@ -579,7 +579,7 @@
                 ->defineConsts($constants)
                 ->defineNamespaces($namespaces)
                 ->defineAliases($aliases)
-                ->defineSuperGlobals($superglobals)
+                ->defineSuperglobals($superglobals)
                 ->defineMagicConsts($magic_constants)
                 ->defineClasses($classes)
                 ->defineInterfaces($interfaces)
@@ -689,7 +689,7 @@
                                 break;
                             case 'superglobal':
                                 foreach($data as $key => $value){
-                                    $this->defineSuperGlobal($key, $value["key"], $value["value"]);
+                                    $this->defineSuperglobal($key, $value["key"], $value["value"]);
                                 }
                                 break;
                             case 'namespace':
@@ -2396,7 +2396,7 @@
                     case 'variables':
                         return $this->defineVar($name, $value);
                     case 'superglobals':
-                        return $this->defineSuperGlobal($name, $value);
+                        return $this->defineSuperglobal($name, $value);
                     case 'constants':
                         return $this->defineConst($name, $value);
                     case 'magic_constants':
@@ -2453,7 +2453,7 @@
                     case 'variables':
                         return $this->undefineVar($name);
                     case 'superglobals':
-                        return $this->undefineSuperGlobal($name);
+                        return $this->undefineSuperglobal($name);
                     case 'constants':
                         return $this->undefineConst($name);
                     case 'magic_constants':
@@ -2715,11 +2715,11 @@
          *
          * You can pass the superglobal $name and $value to define, or an associative array of superglobals to define, or a third variable to define the $key
          *
-         * @example $sandbox->defineSuperGlobal('_GET',  ['page' => 1]);
+         * @example $sandbox->defineSuperglobal('_GET',  ['page' => 1]);
          *
-         * @example $sandbox->defineSuperGlobal(['_GET' => ['page' => 1]]);
+         * @example $sandbox->defineSuperglobal(['_GET' => ['page' => 1]]);
          *
-         * @example $sandbox->defineSuperGlobal('_GET', 'page', 1);
+         * @example $sandbox->defineSuperglobal('_GET', 'page', 1);
          *
          * @param   string|array    $name       String of superglobal $name or associative array of superglobal names to define
          * @param   mixed           $value      Value to define superglobal to, can be callable
@@ -2728,9 +2728,9 @@
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineSuperGlobal($name, $value){
+        public function defineSuperglobal($name, $value){
             if(is_array($name)){
-                return $this->defineSuperGlobals($name);
+                return $this->defineSuperglobals($name);
             }
             if(!$name){
                 $this->validationError("Cannot define unnamed superglobal!", Error::DEFINE_SUPERGLOBAL_ERROR, null, '');
@@ -2750,15 +2750,15 @@
          *
          * You can pass an associative array of superglobals to define
          *
-         * @example $sandbox->defineSuperGlobals(['_GET' => ['page' => 1]]);
+         * @example $sandbox->defineSuperglobals(['_GET' => ['page' => 1]]);
          *
          * @param   array           $superglobals  Associative array of $superglobals to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function defineSuperGlobals(array $superglobals = []){
+        public function defineSuperglobals(array $superglobals = []){
             foreach($superglobals as $name => $value){
-                $this->defineSuperGlobal($name, $value);
+                $this->defineSuperglobal($name, $value);
             }
             return $this;
         }
@@ -2799,20 +2799,20 @@
          * You can pass a string of superglobal $name to undefine, or a superglobal $key to undefine, or an array of
          * superglobal names to undefine, or an an associative array of superglobal names and keys to undefine
          *
-         * @example $sandbox->undefineSuperGlobal('_GET');
+         * @example $sandbox->undefineSuperglobal('_GET');
          *
-         * @example $sandbox->undefineSuperGlobal('_GET', 'page');
+         * @example $sandbox->undefineSuperglobal('_GET', 'page');
          *
-         * @example $sandbox->undefineSuperGlobal(['_GET', '_POST']);
+         * @example $sandbox->undefineSuperglobal(['_GET', '_POST']);
          *
          * @param   string|array          $name       String of superglobal $name, or array of superglobal names, or associative array of superglobal names and keys to undefine
          * @param   string|null           $key        String of superglobal $key to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineSuperGlobal($name, $key = null){
+        public function undefineSuperglobal($name, $key = null){
             if(is_array($name)){
-                return $this->undefineSuperGlobals($name);
+                return $this->undefineSuperglobals($name);
             }
             $name = $this->normalizeSuperglobal($name);
             if($key !== null && is_array($this->definitions['superglobals'][$name])){
@@ -2830,21 +2830,21 @@
          * You can pass an array of superglobal names to undefine, or an associative array of superglobals names and key
          * to undefine, or an empty array or null to undefine all superglobals
          *
-         * @example $sandbox->undefineSuperGlobals(['_GET', '_POST']);
+         * @example $sandbox->undefineSuperglobals(['_GET', '_POST']);
          *
-         * @example $sandbox->undefineSuperGlobals(['_GET' => 'page', '_POST' => 'page']);
+         * @example $sandbox->undefineSuperglobals(['_GET' => 'page', '_POST' => 'page']);
          *
-         * @example $sandbox->undefineSuperGlobals(); //WILL UNDEFINE ALL SUPERGLOBALS!
+         * @example $sandbox->undefineSuperglobals(); //WILL UNDEFINE ALL SUPERGLOBALS!
          *
          * @param   array          $superglobals       Associative array of superglobal names and keys or array of superglobal names to undefine
          *
          * @return  $this          Returns the PHPSandbox instance for fluent querying
          */
-        public function undefineSuperGlobals(array $superglobals = []){
+        public function undefineSuperglobals(array $superglobals = []){
             if(count($superglobals)){
                 foreach($superglobals as $superglobal => $name){
                     $name = $this->normalizeSuperglobal($name);
-                    $this->undefineSuperGlobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) || !is_string($name) ? null : $name);
+                    $this->undefineSuperglobal(is_int($superglobal) ? $name : $superglobal, is_int($superglobal) || !is_string($name) ? null : $name);
                 }
             } else {
                 $this->definitions['superglobals'] = [];
