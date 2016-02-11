@@ -21,6 +21,265 @@
      *
      * @author  Elijah Horton <elijah@corveda.com>
      * @version 2.0
+     *
+     * @method define_func()
+     * @method define_funcs()
+     * @method has_defined_funcs()
+     * @method is_defined_func()
+     * @method undefine_func()
+     * @method undefine_funcs()
+     * @method define_var()
+     * @method define_vars()
+     * @method has_defined_vars()
+     * @method is_defined_var()
+     * @method undefine_var()
+     * @method undefine_vars()
+     * @method define_superglobal()
+     * @method define_superglobals()
+     * @method has_defined_superglobals()
+     * @method is_defined_superglobal()
+     * @method undefine_superglobal()
+     * @method undefine_superglobals()
+     * @method define_const()
+     * @method define_consts()
+     * @method has_defined_consts()
+     * @method is_defined_const()
+     * @method undefine_const()
+     * @method undefine_consts()
+     * @method define_magic_const()
+     * @method define_magic_consts()
+     * @method has_defined_magic_consts()
+     * @method is_defined_magic_const()
+     * @method undefine_magic_const()
+     * @method undefine_magic_consts()
+     * @method define_namespace()
+     * @method define_namespaces()
+     * @method has_defined_namespaces()
+     * @method is_defined_namespace()
+     * @method get_defined_namespace()
+     * @method undefine_namespace()
+     * @method undefine_namespaces()
+     * @method define_alias()
+     * @method define_aliases()
+     * @method has_defined_aliases()
+     * @method is_defined_alias()
+     * @method undefine_alias()
+     * @method undefine_aliases()
+     * @method define_use()
+     * @method define_uses()
+     * @method has_defined_uses()
+     * @method is_defined_use()
+     * @method undefine_use()
+     * @method undefine_uses()
+     * @method define_class()
+     * @method define_classes()
+     * @method has_defined_classes()
+     * @method is_defined_class()
+     * @method get_defined_class()
+     * @method undefine_class()
+     * @method undefine_classes()
+     * @method define_interface()
+     * @method define_interfaces()
+     * @method has_defined_interfaces()
+     * @method is_defined_interface()
+     * @method get_defined_interface()
+     * @method undefine_interface()
+     * @method undefine_interfaces()
+     * @method define_trait()
+     * @method define_traits()
+     * @method has_defined_traits()
+     * @method is_defined_trait()
+     * @method get_defined_trait()
+     * @method undefine_trait()
+     * @method undefine_traits()
+     * @method has_whitelist()
+     * @method has_blacklist()
+     * @method is_whitelisted()
+     * @method is_blacklisted()
+     * @method has_whitelist_funcs()
+     * @method has_blacklist_funcs()
+     * @method is_whitelisted_func()
+     * @method is_blacklisted_func()
+     * @method has_whitelist_vars()
+     * @method has_blacklist_vars()
+     * @method is_whitelisted_var()
+     * @method is_blacklisted_var()
+     * @method has_whitelist_globals()
+     * @method has_blacklist_globals()
+     * @method is_whitelisted_global()
+     * @method is_blacklisted_global()
+     * @method has_whitelist_superglobals()
+     * @method has_blacklist_superglobals()
+     * @method is_whitelisted_superglobal()
+     * @method is_blacklisted_superglobal()
+     * @method has_whitelist_consts()
+     * @method has_blacklist_consts()
+     * @method is_whitelisted_const()
+     * @method is_blacklisted_const()
+     * @method has_whitelist_magic_consts()
+     * @method has_blacklist_magic_consts()
+     * @method is_whitelisted_magic_const()
+     * @method is_blacklisted_magic_const()
+     * @method has_whitelist_namespaces()
+     * @method has_blacklist_namespaces()
+     * @method is_whitelisted_namespace()
+     * @method is_blacklisted_namespace()
+     * @method has_whitelist_aliases()
+     * @method has_blacklist_aliases()
+     * @method is_whitelisted_alias()
+     * @method is_blacklisted_alias()
+     * @method has_whitelist_uses()
+     * @method has_blacklist_uses()
+     * @method is_whitelisted_use()
+     * @method is_blacklisted_use()
+     * @method has_whitelist_classes()
+     * @method has_blacklist_classes()
+     * @method is_whitelisted_class()
+     * @method is_blacklisted_class()
+     * @method has_whitelist_interfaces()
+     * @method has_blacklist_interfaces()
+     * @method is_whitelisted_interface()
+     * @method is_blacklisted_interface()
+     * @method has_whitelist_traits()
+     * @method has_blacklist_traits()
+     * @method is_whitelisted_trait()
+     * @method is_blacklisted_trait()
+     * @method has_whitelist_keywords()
+     * @method has_blacklist_keywords()
+     * @method is_whitelisted_keyword()
+     * @method is_blacklisted_keyword()
+     * @method has_whitelist_operators()
+     * @method has_blacklist_operators()
+     * @method is_whitelisted_operator()
+     * @method is_blacklisted_operator()
+     * @method has_whitelist_primitives()
+     * @method has_blacklist_primitives()
+     * @method is_whitelisted_primitive()
+     * @method is_blacklisted_primitive()
+     * @method has_whitelist_types()
+     * @method has_blacklist_types()
+     * @method is_whitelisted_type()
+     * @method is_blacklisted_type()
+     * @method whitelist_func()
+     * @method blacklist_func()
+     * @method dewhitelist_func()
+     * @method deblacklist_func()
+     * @method whitelist_var()
+     * @method blacklist_var()
+     * @method dewhitelist_var()
+     * @method deblacklist_var()
+     * @method whitelist_global()
+     * @method blacklist_global()
+     * @method dewhitelist_global()
+     * @method deblacklist_global()
+     * @method whitelist_superglobal()
+     * @method blacklist_superglobal()
+     * @method dewhitelist_superglobal()
+     * @method deblacklist_superglobal()
+     * @method whitelist_const()
+     * @method blacklist_const()
+     * @method dewhitelist_const()
+     * @method deblacklist_const()
+     * @method whitelist_magic_const()
+     * @method blacklist_magic_const()
+     * @method dewhitelist_magic_const()
+     * @method deblacklist_magic_const()
+     * @method whitelist_namespace()
+     * @method blacklist_namespace()
+     * @method dewhitelist_namespace()
+     * @method deblacklist_namespace()
+     * @method whitelist_alias()
+     * @method blacklist_alias()
+     * @method dewhitelist_alias()
+     * @method deblacklist_alias()
+     * @method whitelist_use()
+     * @method blacklist_use()
+     * @method dewhitelist_use()
+     * @method deblacklist_use()
+     * @method whitelist_class()
+     * @method blacklist_class()
+     * @method dewhitelist_class()
+     * @method deblacklist_class()
+     * @method whitelist_interface()
+     * @method blacklist_interface()
+     * @method dewhitelist_interface()
+     * @method deblacklist_interface()
+     * @method whitelist_trait()
+     * @method blacklist_trait()
+     * @method dewhitelist_trait()
+     * @method deblacklist_trait()
+     * @method whitelist_keyword()
+     * @method blacklist_keyword()
+     * @method dewhitelist_keyword()
+     * @method deblacklist_keyword()
+     * @method whitelist_operator()
+     * @method blacklist_operator()
+     * @method dewhitelist_operator()
+     * @method deblacklist_operator()
+     * @method whitelist_primitive()
+     * @method blacklist_primitive()
+     * @method dewhitelist_primitive()
+     * @method deblacklist_primitive()
+     * @method whitelist_type()
+     * @method blacklist_type()
+     * @method dewhitelist_type()
+     * @method deblacklist_type()
+     * @method check_func()
+     * @method check_var()
+     * @method check_global()
+     * @method check_superglobal()
+     * @method check_const()
+     * @method check_magic_const()
+     * @method check_namespace()
+     * @method check_alias()
+     * @method check_use()
+     * @method check_class()
+     * @method check_interface()
+     * @method check_trait()
+     * @method check_keyword()
+     * @method check_operator()
+     * @method check_primitive()
+     * @method check_type()
+     * @method clear_trusted_code()
+     * @method clear_prepend()
+     * @method clear_append()
+     * @method clear_code()
+     * @method get_prepared_time()
+     * @method get_execution_time()
+     * @method get_time()
+     * @method set_error_handler()
+     * @method get_error_handler()
+     * @method unset_error_handler()
+     * @method get_last_error()
+     * @method set_exception_handler()
+     * @method get_exception_handler()
+     * @method unset_exception_handler()
+     * @method get_last_exception()
+     * @method set_validation_error_handler()
+     * @method get_validation_error_handler()
+     * @method unset_validation_error_handler()
+     * @method get_last_validation_error()
+     * @method validation_error()
+     * @method normalize_func()
+     * @method normalize_superglobal()
+     * @method normalize_magic_const()
+     * @method normalize_namespace()
+     * @method normalize_alias()
+     * @method normalize_use()
+     * @method normalize_class()
+     * @method normalize_interface()
+     * @method normalize_trait()
+     * @method normalize_keyword()
+     * @method normalize_operator()
+     * @method normalize_primitive()
+     * @method normalize_type()
+     * @method prepare_vars()
+     * @method prepare_consts()
+     * @method prepare_namespaces()
+     * @method prepare_aliases()
+     * @method prepare_uses()
+     * @method auto_whitelist()
+     * @method auto_define()
      */
     class PHPSandbox implements \IteratorAggregate {
         /**
@@ -7221,12 +7480,34 @@
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
+        public function clearPrepended(){
+            $this->prepended_code = '';
+            return $this;
+        }
+
+        /** Clear all prepended trusted code
+         *
+         * @alias   $this->clearPrepended()
+         *
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
+         */
         public function clearPrependedCode(){
             $this->prepended_code = '';
             return $this;
         }
 
         /** Clear all appended trusted code
+         *
+         * @return  $this               Returns the PHPSandbox instance for fluent querying
+         */
+        public function clearAppend(){
+            $this->appended_code = '';
+            return $this;
+        }
+
+        /** Clear all appended trusted code
+         *
+         * @alias   $this->clearAppend()
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
          */
@@ -7646,7 +7927,7 @@
          *
          * @param   \Exception|Error|string     $error      Error to throw if Error is not handled, or error message string
          * @param   int                         $code       The error code
-         * @param   Node|null        $node       The error parser node
+         * @param   Node|null                   $node       The error parser node
          * @param   mixed                       $data       The error data
          * @param   \Exception|Error|null       $previous   The previous Error thrown
          *
@@ -7672,8 +7953,8 @@
         }
 
         /** Get a named PHPSandbox instance (used to retrieve the sandbox instance from within sandboxed code)
-         * @param $name
-         * @return null|PHPSandbox
+         * @param   string                      $name       The name of the PHPSandbox instance to retrieve
+         * @return  null|PHPSandbox
          */
         public static function getSandbox($name){
             return isset(static::$sandboxes[$name]) ? static::$sandboxes[$name] : null;
@@ -7684,5 +7965,19 @@
          */
         public function getIterator(){
             return new \ArrayIterator(get_object_vars($this));
+        }
+
+        /** Magic method to provide API compatibility for v1.* code
+         * @param   string                     $method       The method name to call
+         * @param   array                      $arguments    The method arguments to call
+         * @return  mixed
+         */
+        public function __call($method, $arguments){
+            $renamed_method = lcfirst(str_replace('_', '', ucwords($method, '_')));
+            if(method_exists($this, $renamed_method)){
+                return call_user_func_array([$this, $renamed_method], $arguments);
+            }
+            trigger_error('Fatal error: Call to undefined method PHPSandbox::' . $method, E_ERROR);
+            return null;
         }
     }
