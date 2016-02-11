@@ -14,11 +14,11 @@
      * @version 2.0
      */
     class SandboxedString implements \ArrayAccess, \IteratorAggregate {
-        /**
+        /** Value of the SandboxedString
          * @var string
          */
         private $value;
-        /**
+        /** PHPSandbox instance invoked by the SandboxedString
          * @var PHPSandbox
          */
         private $sandbox;

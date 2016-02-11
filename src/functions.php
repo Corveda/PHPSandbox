@@ -1,4 +1,7 @@
 <?php
+    /** PHPSandbox utility functions
+     * @package PHPSandbox
+     */
     namespace PHPSandbox;
 
     /** Wrap output value in SandboxString

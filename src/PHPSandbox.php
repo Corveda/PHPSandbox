@@ -813,8 +813,6 @@
 
         /** PHPSandbox class constructor
          *
-         * @example $sandbox = new PHPSandbox\PHPSandbox;
-         *
          * You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor
          *
          * @param   array   $options            Optional array of options to set for the sandbox
@@ -858,8 +856,6 @@
          *
          * You can pass optional arrays of predefined functions, variables, etc. to the sandbox through the constructor
          *
-         * @example $sandbox = PHPSandbox\PHPSandbox::create();
-         *
          * @param   array   $options            Optional array of options to set for the sandbox
          * @param   array   $functions          Optional array of functions to define for the sandbox
          * @param   array   $variables          Optional array of variables to define for the sandbox
@@ -892,8 +888,6 @@
          *
          * Besides the code or closure to be executed, you can also pass additional arguments that will overwrite the default values of their respective arguments defined in the code
          *
-         * @example $sandbox = new PHPSandbox\PHPSandbox; $sandbox(function(){ echo 'Hello world!'; });
-         *
          * @param   \Closure|callable|string   $code          The closure, callable or string of code to execute
          *
          * @return  mixed                      The output of the executed sandboxed code
@@ -904,8 +898,6 @@
 
         /** PHPSandbox __sleep magic method
          *
-         * @example $sandbox = new PHPSandbox\PHPSandbox; serialize($sandbox);
-         *
          * @return  array                      An array of property keys to be serialized
          */
         public function __sleep(){
@@ -914,14 +906,8 @@
 
         /** PHPSandbox __wakeup magic method
          *
-         * @example $sandbox = unserialize($sandbox_string);
-         */
-        public function __wakeup(){}
-
-        /** Import JSON template into sandbox
+         ** Import JSON template into sandbox
          *
-         * @example $sandbox->import(['code' => 'echo "Hello World!";']);
-         * @example $sandbox->import(file_get_contents("template.json"));
          *
          * @param   array|string    $template          The JSON array or string template to import
          * @param   int             $import_flag       Binary flags signifying which parts of the JSON template to import
@@ -1033,9 +1019,6 @@
          *
          * @alias   import();
          *
-         * @example $sandbox->importJSON(['code' => 'echo "Hello World!";']);
-         * @example $sandbox->importJSON(file_get_contents("template.json"));
-         *
          * @param   array|string    $template          The JSON array or string template to import
          * @param   int             $import_flag       Binary flags signifying which parts of the JSON template to import
          *
@@ -1058,11 +1041,7 @@
          *
          * You can pass an $option name to set to $value, an array of $option names to set to $value, or an associative array of $option names and their values to set.
          *
-         * @example $sandbox->setOption(['allow_functions' => true]);
          *
-         * @example $sandbox->setOption(['allow_functions', 'allow_classes'], true);
-         *
-         * @example $sandbox->setOption('allow_functions', true);
          *
          * @param   string|array    $option     String or array of strings or associative array of keys of option names to set $value to
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
@@ -1141,10 +1120,6 @@
          *
          * You can pass an array of option names to set to $value, or an associative array of option names and their values to set.
          *
-         * @example $sandbox->setOption(['allow_functions' => true]);
-         *
-         * @example $sandbox->setOption(['allow_functions', 'allow_classes'], true);
-         *
          * @param   array|string    $options    Array of strings or associative array of keys of option names to set $value to, or JSON array or string template to import
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
          *
@@ -1162,8 +1137,6 @@
 
         /** Reset PHPSandbox options to their default values
          *
-         * @example $sandbox->resetOptions();
-         *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
         public function resetOptions(){
@@ -1178,8 +1151,6 @@
         /** Get PHPSandbox option
          *
          * You pass a string $option name to get its associated value
-         *
-         * @example $sandbox->getOption('allow_functions');
          *
          * @param   string          $option     String of $option name to get
          *
@@ -1250,8 +1221,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setValidator('function', function($function, PHPSandbox $sandbox){ return true; });
-         *
          * @param   string          $type       String of $type name to set validator for
          * @param   callable        $callable   Callable that validates the passed element
          *
@@ -1267,8 +1236,6 @@
 
         /** Get validation callable for specified $type
          *
-         * @example $sandbox->getValidator('function'); //return callable
-         *
          * @param   string          $type       String of $type to return
          *
          * @return  callable|null
@@ -1279,8 +1246,6 @@
         }
 
         /** Unset validation callable for specified $type
-         *
-         * @example $sandbox->unsetValidator('function'); //clear custom validation
          *
          * @param   string          $type       String of $type to unset
          *
@@ -1299,8 +1264,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized function names include the namespace and are lowercase!
          *
-         * @example $sandbox->setFuncValidator(function($function, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the normalized passed function name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1312,8 +1275,6 @@
 
         /** Get validation for functions
          *
-         * @example $sandbox->getFuncValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getFuncValidator(){
@@ -1321,8 +1282,6 @@
         }
 
         /** Unset validation callable for functions
-         *
-         * @example $sandbox->unsetFuncValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1336,8 +1295,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setVarValidator(function($variable, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed variable name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1349,8 +1306,6 @@
 
         /** Get validation callable for variables
          *
-         * @example $sandbox->getVarValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getVarValidator(){
@@ -1358,8 +1313,6 @@
         }
 
         /** Unset validation callable for variables
-         *
-         * @example $sandbox->unsetVarValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1373,8 +1326,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setGlobalValidator(function($global, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed global name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1386,8 +1337,6 @@
 
         /** Get validation callable for globals
          *
-         * @example $sandbox->getGlobalValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getGlobalValidator(){
@@ -1395,8 +1344,6 @@
         }
 
         /** Unset validation callable for globals
-         *
-         * @example $sandbox->unsetGlobalValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1410,8 +1357,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized superglobal names are uppercase and without a leading _
          *
-         * @example $sandbox->setSuperglobalValidator(function($superglobal, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed superglobal name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1423,8 +1368,6 @@
 
         /** Get validation callable for superglobals
          *
-         * @example $sandbox->getSuperglobalValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getSuperglobalValidator(){
@@ -1432,8 +1375,6 @@
         }
 
         /** Unset validation callable for superglobals
-         *
-         * @example $sandbox->unsetSuperglobalValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1447,8 +1388,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setConstValidator(function($constant, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed constant name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1460,8 +1399,6 @@
 
         /** Get validation callable for constants
          *
-         * @example $sandbox->getConstValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getConstValidator(){
@@ -1469,8 +1406,6 @@
         }
 
         /** Unset validation callable for constants
-         *
-         * @example $sandbox->unsetConstValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1484,8 +1419,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized magic constant names are upper case and trimmed of __
          *
-         * @example $sandbox->setMagicConstValidator(function($magic_constant, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed magic constant name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1497,8 +1430,6 @@
 
         /** Get validation callable for magic constants
          *
-         * @example $sandbox->getMagicConstValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getMagicConstValidator(){
@@ -1506,8 +1437,6 @@
         }
 
         /** Unset validation callable for magic constants
-         *
-         * @example $sandbox->unsetMagicConstValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1521,8 +1450,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setNamespaceValidator(function($namespace, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed namespace name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1534,8 +1461,6 @@
 
         /** Get validation callable for namespaces
          *
-         * @example $sandbox->getNamespaceValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getNamespaceValidator(){
@@ -1543,8 +1468,6 @@
         }
 
         /** Unset validation callable for namespaces
-         *
-         * @example $sandbox->unsetNamespaceValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1558,8 +1481,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setAliasValidator(function($alias, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed alias name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1571,8 +1492,6 @@
 
         /** Get validation callable for aliases
          *
-         * @example $sandbox->getAliasValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getAliasValidator(){
@@ -1580,8 +1499,6 @@
         }
 
         /** Unset validation callable for aliases
-         *
-         * @example $sandbox->unsetAliasValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1597,8 +1514,6 @@
          *
          * @alias setAliasValidator();
          *
-         * @example $sandbox->setUseValidator(function($use, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed use (aka alias) name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1611,8 +1526,6 @@
          *
          * @alias getAliasValidator();
          *
-         * @example $sandbox->getUseValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getUseValidator(){
@@ -1622,8 +1535,6 @@
         /** Unset validation callable for uses (aka aliases)
          *
          * @alias unsetAliasValidator();
-         *
-         * @example $sandbox->unsetUseValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1636,8 +1547,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized class names are lowercase
          *
-         * @example $sandbox->setClassValidator(function($class, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed class name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1649,8 +1558,6 @@
 
         /** Get validation callable for classes
          *
-         * @example $sandbox->getClassValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getClassValidator(){
@@ -1658,8 +1565,6 @@
         }
 
         /** Unset validation callable for classes
-         *
-         * @example $sandbox->unsetClassValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1673,8 +1578,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized interface names are lowercase
          *
-         * @example $sandbox->setInterfaceValidator(function($interface, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed interface name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1686,8 +1589,6 @@
 
         /** Get validation callable for interfaces
          *
-         * @example $sandbox->getInterfaceValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getInterfaceValidator(){
@@ -1695,8 +1596,6 @@
         }
 
         /** Unset validation callable for interfaces
-         *
-         * @example $sandbox->unsetInterfaceValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1710,8 +1609,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized trait names are lowercase
          *
-         * @example $sandbox->setTraitValidator(function($trait, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed trait name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1723,8 +1620,6 @@
 
         /** Get validation callable for traits
          *
-         * @example $sandbox->getTraitValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getTraitValidator(){
@@ -1732,8 +1627,6 @@
         }
 
         /** Unset validation callable for traits
-         *
-         * @example $sandbox->unsetTraitValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1747,8 +1640,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setKeywordValidator(function($keyword, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed keyword name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1760,8 +1651,6 @@
 
         /** Get validation callable for keywords
          *
-         * @example $sandbox->getKeywordValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getKeywordValidator(){
@@ -1769,8 +1658,6 @@
         }
 
         /** Unset validation callable for keywords
-         *
-         * @example $sandbox->unsetKeywordValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1784,8 +1671,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setOperatorValidator(function($operator, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed operator name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1797,8 +1682,6 @@
 
         /** Get validation callable for operators
          *
-         * @example $sandbox->getOperatorValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getOperatorValidator(){
@@ -1806,8 +1689,6 @@
         }
 
         /** Unset validation callable for operators
-         *
-         * @example $sandbox->unsetOperatorValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1821,8 +1702,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setPrimitiveValidator(function($primitive, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed primitive name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1834,8 +1713,6 @@
 
         /** Get validation callable for primitives
          *
-         * @example $sandbox->getPrimitiveValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getPrimitiveValidator(){
@@ -1843,8 +1720,6 @@
         }
 
         /** Unset validation callable for primitives
-         *
-         * @example $sandbox->unsetPrimitiveValidator(); //clear custom validation
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
          */
@@ -1858,8 +1733,6 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @example $sandbox->setTypeValidator(function($type, PHPSandbox $sandbox){ return true; });
-         *
          * @param   callable        $callable   Callable that validates the passed type name
          *
          * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
@@ -1871,8 +1744,6 @@
 
         /** Get validation callable for types
          *
-         * @example $sandbox->getTypeValidator(); //return callable
-         *
          * @return  callable|null
          */
         public function getTypeValidator(){
@@ -1880,8 +1751,6 @@
         }
 
         /** Unset validation callable for types
-         *
-         * @example $sandbox->unsetTypeValidator(); //clear custom validation
          *
          * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
@@ -2638,10 +2507,6 @@
          * You can pass a string of the $type, $name and $value, or pass an associative array of definitions types and
          * an associative array of their corresponding values
          *
-         * @example $sandbox->define('functions', 'test', function(){ echo 'test'; });
-         *
-         * @example $sandbox->define(['functions' => ['test' => function(){ echo 'test'; }]]);
-         *
          * @param   string|array        $type       Associative array or string of definition type to define
          * @param   string|array|null   $name       Associative array or string of definition name to define
          * @param   mixed|null          $value      Value of definition to define
@@ -2691,10 +2556,6 @@
          *
          * You can pass a string of the $type and $name to undefine, or pass an associative array of definitions types
          * and an array of key names to undefine
-         *
-         * @example $sandbox->undefine('functions', 'test');
-         *
-         * @example $sandbox->undefine(['functions' => ['test']]);
          *
          * @param   string|array    $type       Associative array or string of definition type to undefine
          * @param   string|array    $name       Associative array or string of definition name to undefine
@@ -2750,12 +2611,6 @@
          * You can pass the function $name and $function closure or callable to define, or an associative array of
          * functions to define, which can have callable values or arrays of the function callable and $pass_sandbox flag
          *
-         * @example $sandbox->defineFunc('test', function(){ echo 'test'; });
-         *
-         * @example $sandbox->defineFunc(['test' => function(){ echo 'test'; }]]);
-         *
-         * @example $sandbox->defineFunc(['test' => [function(){ echo 'test'; }, true]]);
-         *
          * @param   string|array    $name           Associative array or string of function $name to define
          * @param   callable        $function       Callable to define $function to
          * @param   bool            $pass_sandbox   Pass PHPSandbox instance to defined function when called? Default is false
@@ -2791,8 +2646,6 @@
          *
          * You can pass an associative array of functions to define
          *
-         * @example $sandbox->defineFuncs(['test' => function(){ echo 'test'; }]);
-         *
          * @param   array           $functions       Associative array of $functions to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -2806,8 +2659,6 @@
 
         /** Query whether PHPSandbox instance has defined functions
          *
-         * @example $sandbox->hasDefinedFuncs(); //returns number of defined functions, or zero if none defined
-         *
          * @return  int           Returns the number of functions this instance has defined
          */
         public function hasDefinedFuncs(){
@@ -2815,8 +2666,6 @@
         }
 
         /** Check if PHPSandbox instance has $name function defined
-         *
-         * @example $sandbox->isDefinedFunc('test');
          *
          * @param   string          $name       String of function $name to query
          *
@@ -2830,10 +2679,6 @@
         /** Undefine PHPSandbox function
          *
          * You can pass a string of function $name to undefine, or pass an array of function names to undefine
-         *
-         * @example $sandbox->undefineFunc('test');
-         *
-         * @example $sandbox->undefineFunc(['test', 'test2']);
          *
          * @param   string|array          $name       String of function name or array of function names to undefine
          *
@@ -2854,10 +2699,6 @@
          *
          * You can pass an array of function names to undefine, or an empty array or null argument to undefine all functions
          *
-         * @example $sandbox->undefineFuncs(['test', 'test2']);
-         *
-         * @example $sandbox->undefineFuncs(); //WILL UNDEFINE ALL FUNCTIONS!
-         *
          * @param   array           $functions       Array of function names to undefine. Passing an empty array or no argument will result in undefining all functions
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -2876,10 +2717,6 @@
         /** Define PHPSandbox variable
          *
          * You can pass the variable $name and $value to define, or an associative array of variables to define
-         *
-         * @example $sandbox->defineVar('test', 1);
-         *
-         * @example $sandbox->defineVar(['test' => 1]);
          *
          * @param   string|array    $name       String of variable $name or associative array to define
          * @param   mixed           $value      Value to define variable to
@@ -2903,8 +2740,6 @@
          *
          * You can pass an associative array of variables to define
          *
-         * @example $sandbox->defineVars(['test' => 1]);
-         *
          * @param   array           $variables  Associative array of $variables to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -2918,8 +2753,6 @@
 
         /** Query whether PHPSandbox instance has defined variables
          *
-         * @example $sandbox->hasDefinedVars(); //returns number of defined variables, or zero if none defined
-         *
          * @return  int           Returns the number of variables this instance has defined
          */
         public function hasDefinedVars(){
@@ -2927,8 +2760,6 @@
         }
 
         /** Check if PHPSandbox instance has $name variable defined
-         *
-         * @example $sandbox->isDefinedVar('test');
          *
          * @param   string          $name       String of variable $name to query
          *
@@ -2941,10 +2772,6 @@
         /** Undefine PHPSandbox variable
          *
          * You can pass a string of variable $name to undefine, or an array of variable names to undefine
-         *
-         * @example $sandbox->undefineVar('test');
-         *
-         * @example $sandbox->undefineVar(['test', 'test2']);
          *
          * @param   string|array          $name       String of variable name or an array of variable names to undefine
          *
@@ -2964,10 +2791,6 @@
          *
          * You can pass an array of variable names to undefine, or an empty array or null argument to undefine all variables
          *
-         * @example $sandbox->undefineVars(['test', 'test2']);
-         *
-         * @example $sandbox->undefineVars(); //WILL UNDEFINE ALL VARIABLES!
-         *
          * @param   array           $variables       Array of variable names to undefine. Passing an empty array or no argument will result in undefining all variables
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -2986,12 +2809,6 @@
         /** Define PHPSandbox superglobal
          *
          * You can pass the superglobal $name and $value to define, or an associative array of superglobals to define, or a third variable to define the $key
-         *
-         * @example $sandbox->defineSuperglobal('_GET',  ['page' => 1]);
-         *
-         * @example $sandbox->defineSuperglobal(['_GET' => ['page' => 1]]);
-         *
-         * @example $sandbox->defineSuperglobal('_GET', 'page', 1);
          *
          * @param   string|array    $name       String of superglobal $name or associative array of superglobal names to define
          * @param   mixed           $value      Value to define superglobal to, can be callable
@@ -3022,8 +2839,6 @@
          *
          * You can pass an associative array of superglobals to define
          *
-         * @example $sandbox->defineSuperglobals(['_GET' => ['page' => 1]]);
-         *
          * @param   array           $superglobals  Associative array of $superglobals to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3037,10 +2852,6 @@
 
         /** Query whether PHPSandbox instance has defined superglobals, or if superglobal $name has defined keys
          *
-         * @example $sandbox->hasDefinedSuperglobals(); //returns number of defined superglobals, or zero if none defined
-         *
-         * @example $sandbox->hasDefinedSuperglobals('_GET'); //returns number of defined superglobal _GET keys, or zero if none defined
-         *
          * @param   string|null     $name       String of superglobal $name to check for keys
          *
          * @return  int|bool        Returns the number of superglobals or superglobal keys this instance has defined, or false if invalid superglobal name specified
@@ -3051,10 +2862,6 @@
         }
 
         /** Check if PHPSandbox instance has $name superglobal defined, or if superglobal $name key is defined
-         *
-         * @example $sandbox->isDefinedSuperglobal('_GET');
-         *
-         * @example $sandbox->isDefinedSuperglobal('_GET', 'page');
          *
          * @param   string          $name       String of superglobal $name to query
          * @param   string|null     $key        String of key to to query in superglobal
@@ -3070,12 +2877,6 @@
          *
          * You can pass a string of superglobal $name to undefine, or a superglobal $key to undefine, or an array of
          * superglobal names to undefine, or an an associative array of superglobal names and keys to undefine
-         *
-         * @example $sandbox->undefineSuperglobal('_GET');
-         *
-         * @example $sandbox->undefineSuperglobal('_GET', 'page');
-         *
-         * @example $sandbox->undefineSuperglobal(['_GET', '_POST']);
          *
          * @param   string|array          $name       String of superglobal $name, or array of superglobal names, or associative array of superglobal names and keys to undefine
          * @param   string|null           $key        String of superglobal $key to undefine
@@ -3102,12 +2903,6 @@
          * You can pass an array of superglobal names to undefine, or an associative array of superglobals names and key
          * to undefine, or an empty array or null to undefine all superglobals
          *
-         * @example $sandbox->undefineSuperglobals(['_GET', '_POST']);
-         *
-         * @example $sandbox->undefineSuperglobals(['_GET' => 'page', '_POST' => 'page']);
-         *
-         * @example $sandbox->undefineSuperglobals(); //WILL UNDEFINE ALL SUPERGLOBALS!
-         *
          * @param   array          $superglobals       Associative array of superglobal names and keys or array of superglobal names to undefine
          *
          * @return  $this          Returns the PHPSandbox instance for fluent querying
@@ -3127,10 +2922,6 @@
         /** Define PHPSandbox constant
          *
          * You can pass the constant $name and $value to define, or an associative array of constants to define
-         *
-         * @example $sandbox->defineConst('TEST', 1);
-         *
-         * @example $sandbox->defineConst(['TEST' => 1]);
          *
          * @param   string|array    $name       String of constant $name or associative array to define
          * @param   mixed           $value      Value to define constant to
@@ -3154,8 +2945,6 @@
          *
          * You can pass an associative array of constants to define
          *
-         * @example $sandbox->defineConsts(['test' => 1]);
-         *
          * @param   array           $constants  Associative array of $constants to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3169,8 +2958,6 @@
 
         /** Query whether PHPSandbox instance has defined constants
          *
-         * @example $sandbox->hasDefinedConsts(); //returns number of defined constants, or zero if none defined
-         *
          * @return  int           Returns the number of constants this instance has defined
          */
         public function hasDefinedConsts(){
@@ -3178,8 +2965,6 @@
         }
 
         /** Check if PHPSandbox instance has $name constant defined
-         *
-         * @example $sandbox->isDefinedConst('test');
          *
          * @param   string          $name       String of constant $name to query
          *
@@ -3192,10 +2977,6 @@
         /** Undefine PHPSandbox constant
          *
          * You can pass a string of constant $name to undefine, or an array of constant names to undefine
-         *
-         * @example $sandbox->undefineConst('test');
-         *
-         * @example $sandbox->undefineConst(['test', 'test2']);
          *
          * @param   string|array          $name       String of constant name or array of constant names to undefine
          *
@@ -3215,10 +2996,6 @@
          *
          * You can pass an array of constant names to undefine, or an empty array or null argument to undefine all constants
          *
-         * @example $sandbox->undefineConsts(['test', 'test2']);
-         *
-         * @example $sandbox->undefineConsts(); //WILL UNDEFINE ALL CONSTANTS!
-         *
          * @param   array           $constants       Array of constant names to undefine. Passing an empty array or no argument will result in undefining all constants
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3237,10 +3014,6 @@
         /** Define PHPSandbox magic constant
          *
          * You can pass the magic constant $name and $value to define, or an associative array of magic constants to define
-         *
-         * @example $sandbox->defineMagicConst('__LINE__', 1);
-         *
-         * @example $sandbox->defineMagicConst(['__LINE__' => 1]);
          *
          * @param   string|array    $name       String of magic constant $name or associative array to define
          * @param   mixed           $value      Value to define magic constant to, can be callable
@@ -3265,8 +3038,6 @@
          *
          * You can pass an associative array of magic constants to define
          *
-         * @example $sandbox->defineMagicConsts(['__LINE__' => 1]);
-         *
          * @param   array           $magic_constants  Associative array of $magic_constants to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3280,8 +3051,6 @@
 
         /** Query whether PHPSandbox instance has defined magic constants
          *
-         * @example $sandbox->hasDefinedMagicConsts(); //returns number of defined magic constants, or zero if none defined
-         *
          * @return  int           Returns the number of magic constants this instance has defined
          */
         public function hasDefinedMagicConsts(){
@@ -3289,8 +3058,6 @@
         }
 
         /** Check if PHPSandbox instance has $name magic constant defined
-         *
-         * @example $sandbox->isDefinedMagicConst('__LINE__');
          *
          * @param   string          $name       String of magic constant $name to query
          *
@@ -3304,10 +3071,6 @@
         /** Undefine PHPSandbox magic constant
          *
          * You can pass an a string of magic constant $name to undefine, or array of magic constant names to undefine
-         *
-         * @example $sandbox->undefineMagicConst('__LINE__');
-         *
-         * @example $sandbox->undefineMagicConst(['__LINE__', '__FILE__']);
          *
          * @param   string|array          $name       String of magic constant name, or array of magic constant names to undefine
          *
@@ -3328,10 +3091,6 @@
          *
          * You can pass an array of magic constant names to undefine, or an empty array or null argument to undefine all magic constants
          *
-         * @example $sandbox->undefineMagicConsts(['__LINE__', '__FILE__']);
-         *
-         * @example $sandbox->undefineMagicConsts(); //WILL UNDEFINE ALL MAGIC CONSTANTS!
-         *
          * @param   array           $magic_constants       Array of magic constant names to undefine. Passing an empty array or no argument will result in undefining all magic constants
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3350,10 +3109,6 @@
         /** Define PHPSandbox namespace
          *
          * You can pass the namespace $name and $value to define, or an array of namespaces to define
-         *
-         * @example $sandbox->defineNamespace('Foo');
-         *
-         * @example $sandbox->defineNamespace(['Foo', 'Bar']);
          *
          * @param   string|array    $name       String of namespace $name, or an array of namespace names to define
          *
@@ -3377,8 +3132,6 @@
          *
          * You can pass an array of namespaces to define
          *
-         * @example $sandbox->defineNamespaces(['Foo', 'Bar']);
-         *
          * @param   array           $namespaces  Array of $namespaces to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3392,8 +3145,6 @@
 
         /** Query whether PHPSandbox instance has defined namespaces
          *
-         * @example $sandbox->hasDefinedNamespaces(); //returns number of defined namespaces, or zero if none defined
-         *
          * @return  int           Returns the number of namespaces this instance has defined
          */
         public function hasDefinedNamespaces(){
@@ -3401,8 +3152,6 @@
         }
 
         /** Check if PHPSandbox instance has $name namespace defined
-         *
-         * @example $sandbox->isDefinedNamespace('Foo');
          *
          * @param   string          $name       String of namespace $name to query
          *
@@ -3414,8 +3163,6 @@
         }
 
         /** Get defined namespace of $name
-         *
-         * @example $sandbox->getDefinedNamespace('Test');
          *
          * @param   string          $name       String of namespace $name to get
          *
@@ -3434,10 +3181,6 @@
         /** Undefine PHPSandbox namespace
          *
          * You can pass a string of namespace $name to undefine, or an array of namespace names to undefine
-         *
-         * @example $sandbox->undefineNamespace('Foo');
-         *
-         * @example $sandbox->undefineNamespace(['Foo', 'Bar']);
          *
          * @param   string|array          $name       String of namespace $name, or an array of namespace names to undefine
          *
@@ -3458,10 +3201,6 @@
          *
          * You can pass an array of namespace names to undefine, or an empty array or null argument to undefine all namespaces
          *
-         * @example $sandbox->undefineNamespaces(['Foo', 'Bar']);
-         *
-         * @example $sandbox->undefineNamespaces(); //WILL UNDEFINE ALL NAMESPACES!
-         *
          * @param   array           $namespaces       Array of namespace names to undefine. Passing an empty array or no argument will result in undefining all namespaces
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3480,14 +3219,6 @@
         /** Define PHPSandbox alias
          *
          * You can pass the namespace $name and $alias to use, an array of namespaces to use, or an associative array of namespaces to use and their aliases
-         *
-         * @example $sandbox->defineAlias('Foo');  //use Foo;
-         *
-         * @example $sandbox->defineAlias('Foo', 'Bar');  //use Foo as Bar;
-         *
-         * @example $sandbox->defineAlias(['Foo', 'Bar']); //use Foo; use Bar;
-         *
-         * @example $sandbox->defineAlias(['Foo' => 'Bar']); //use Foo as Bar;
          *
          * @param   string|array    $name       String of namespace $name to use, or  or an array of namespaces to use, or an associative array of namespaces and their aliases to use
          * @param   string|null     $alias      String of $alias to use
@@ -3513,10 +3244,6 @@
          *
          * You can pass an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
-         * @example $sandbox->defineAliases(['Foo', 'Bar']); //use Foo; use Bar;
-         *
-         * @example $sandbox->defineAliases(['Foo' => 'Bar']); //use Foo as Bar;
-         *
          * @param   array           $aliases       Array of namespaces to use, or an associative array of namespaces and their aliases to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
@@ -3532,8 +3259,6 @@
 
         /** Query whether PHPSandbox instance has defined aliases
          *
-         * @example $sandbox->hasDefinedAliases(); //returns number of defined aliases, or zero if none defined
-         *
          * @return  int           Returns the number of aliases this instance has defined
          */
         public function hasDefinedAliases(){
@@ -3541,8 +3266,6 @@
         }
 
         /** Check if PHPSandbox instance has $name alias defined
-         *
-         * @example $sandbox->isDefinedAlias('Foo');
          *
          * @param   string          $name       String of alias $name to query
          *
@@ -3556,10 +3279,6 @@
         /** Undefine PHPSandbox alias
          *
          * You can pass a string of alias $name to undefine, or an array of alias names to undefine
-         *
-         * @example $sandbox->undefineAlias('Foo');
-         *
-         * @example $sandbox->undefineAlias(['Foo', 'Bar']);
          *
          * @param   string|array          $name       String of alias name, or array of alias names to undefine
          *
@@ -3579,10 +3298,6 @@
         /** Undefine PHPSandbox aliases by array
          *
          * You can pass an array of alias names to undefine, or an empty array or null argument to undefine all aliases
-         *
-         * @example $sandbox->undefineAliases(['Foo', 'Bar']);
-         *
-         * @example $sandbox->undefineAliases(); //WILL UNDEFINE ALL ALIASES!
          *
          * @param   array           $aliases       Array of alias names to undefine. Passing an empty array or no argument will result in undefining all aliases
          *
@@ -3605,14 +3320,6 @@
          *
          * You can pass the namespace $name and $alias to use, an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
-         * @example $sandbox->defineUse('Foo');  //use Foo;
-         *
-         * @example $sandbox->defineUse('Foo', 'Bar');  //use Foo as Bar;
-         *
-         * @example $sandbox->defineUse(['Foo', 'Bar']); //use Foo; use Bar;
-         *
-         * @example $sandbox->defineUse(['Foo' => 'Bar']); //use Foo as Bar;
-         *
          * @param   string|array    $name       String of namespace $name to use, or  or an array of namespaces to use, or an associative array of namespaces and their aliases to use
          * @param   string|null     $alias      String of $alias to use
          *
@@ -3630,10 +3337,6 @@
          *
          * You can pass an array of namespaces to use, or an associative array of namespaces to use and their aliases
          *
-         * @example $sandbox->defineUses(['Foo', 'Bar']); //use Foo; use Bar;
-         *
-         * @example $sandbox->defineUses(['Foo' => 'Bar']); //use Foo as Bar;
-         *
          * @param   array           $uses       Array of namespaces to use, or an associative array of namespaces and their aliases to use
          *
          * @throws  Error           Throws exception if unnamed namespace is used
@@ -3648,8 +3351,6 @@
          *
          * @alias   hasDefinedAliases();
          *
-         * @example $sandbox->hasDefinedUses(); //returns number of defined uses (or aliases) or zero if none defined
-         *
          * @return  int           Returns the number of uses (or aliases) this instance has defined
          */
         public function hasDefinedUses(){
@@ -3659,8 +3360,6 @@
         /** Check if PHPSandbox instance has $name uses (or alias) defined
          *
          * @alias   isDefinedAlias();
-         *
-         * @example $sandbox->isDefinedUse('Foo');
          *
          * @param   string          $name       String of use (or alias) $name to query
          *
@@ -3673,10 +3372,6 @@
         /** Undefine PHPSandbox use (or alias)
          *
          * You can pass a string of use (or alias) $name to undefine, or an array of use (or alias) names to undefine
-         *
-         * @example $sandbox->undefineUse('Foo');
-         *
-         * @example $sandbox->undefineUse(['Foo', 'Bar']);
          *
          * @param   string|array          $name       String of use (or alias) name, or array of use (or alias) names to undefine
          *
@@ -3692,10 +3387,6 @@
          *
          * You can pass an array of use (or alias) names to undefine, or an empty array or null argument to undefine all uses (or aliases)
          *
-         * @example $sandbox->undefineUses(['Foo', 'Bar']);
-         *
-         * @example $sandbox->undefineUses(); //WILL UNDEFINE ALL USES (OR ALIASES!)
-         *
          * @param   array           $uses       Array of use (or alias) names to undefine. Passing an empty array or no argument will result in undefining all uses (or aliases)
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3707,10 +3398,6 @@
         /** Define PHPSandbox class
          *
          * You can pass the class $name and $value to define, or an associative array of classes to define
-         *
-         * @example $sandbox->defineClass('Test', 'Test2');
-         *
-         * @example $sandbox->defineClass(['Test' => 'Test2']);
          *
          * @param   string|array    $name       String of class $name or associative array to define
          * @param   mixed           $value      Value to define class to
@@ -3735,8 +3422,6 @@
          *
          * You can pass an associative array of classes to define
          *
-         * @example $sandbox->defineClasses(['Test' => 'Test2']);
-         *
          * @param   array           $classes  Associative array of $classes to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3750,16 +3435,12 @@
 
         /** Query whether PHPSandbox instance has defined classes
          *
-         * @example $sandbox->hasDefinedClasses(); //returns number of defined classes, or zero if none defined
-         *
          * @return  int           Returns the number of classes this instance has defined
          */
         public function hasDefinedClasses(){
             return count($this->definitions['classes']);
         }
         /** Check if PHPSandbox instance has $name class defined
-         *
-         * @example $sandbox->isDefinedClass('Test');
          *
          * @param   string          $name       String of class $name to query
          *
@@ -3771,8 +3452,6 @@
         }
 
         /** Get defined class of $name
-         *
-         * @example $sandbox->getDefinedClass('Test');
          *
          * @param   string          $name       String of class $name to get
          *
@@ -3791,10 +3470,6 @@
         /** Undefine PHPSandbox class
          *
          * You can pass a string of class $name to undefine, or an array of class names to undefine
-         *
-         * @example $sandbox->undefineClass('Test');
-         *
-         * @example $sandbox->undefineClass(['Test', 'Test2']);
          *
          * @param   string|array          $name       String of class name or an array of class names to undefine
          *
@@ -3815,10 +3490,6 @@
          *
          * You can pass an array of class names to undefine, or an empty array or null argument to undefine all classes
          *
-         * @example $sandbox->undefineClasses(['Test', 'Test2']);
-         *
-         * @example $sandbox->undefineClasses(); //WILL UNDEFINE ALL CLASSES!
-         *
          * @param   array           $classes       Array of class names to undefine. Passing an empty array or no argument will result in undefining all classes
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3837,10 +3508,6 @@
         /** Define PHPSandbox interface
          *
          * You can pass the interface $name and $value to define, or an associative array of interfaces to define
-         *
-         * @example $sandbox->defineInterface('Test', 'Test2');
-         *
-         * @example $sandbox->defineInterface(['Test' => 'Test2']);
          *
          * @param   string|array    $name       String of interface $name or associative array to define
          * @param   mixed           $value      Value to define interface to
@@ -3865,8 +3532,6 @@
          *
          * You can pass an associative array of interfaces to define
          *
-         * @example $sandbox->defineInterfaces(['Test' => 'Test2']);
-         *
          * @param   array           $interfaces  Associative array of $interfaces to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3880,8 +3545,6 @@
 
         /** Query whether PHPSandbox instance has defined interfaces
          *
-         * @example $sandbox->hasDefinedInterfaces(); //returns number of defined interfaces, or zero if none defined
-         *
          * @return  int           Returns the number of interfaces this instance has defined
          */
         public function hasDefinedInterfaces(){
@@ -3889,8 +3552,6 @@
         }
 
         /** Check if PHPSandbox instance has $name interface defined
-         *
-         * @example $sandbox->isDefinedInterface('Test');
          *
          * @param   string          $name       String of interface $name to query
          *
@@ -3902,8 +3563,6 @@
         }
 
         /** Get defined interface of $name
-         *
-         * @example $sandbox->getDefinedInterface('Test');
          *
          * @param   string          $name       String of interface $name to get
          *
@@ -3922,10 +3581,6 @@
         /** Undefine PHPSandbox interface
          *
          * You can pass a string of interface $name to undefine, or an array of interface names to undefine
-         *
-         * @example $sandbox->undefineInterface('Test');
-         *
-         * @example $sandbox->undefineInterface(['Test', 'Test2']);
          *
          * @param   string|array          $name       String of interface name or an array of interface names to undefine
          *
@@ -3946,10 +3601,6 @@
          *
          * You can pass an array of interface names to undefine, or an empty array or null argument to undefine all interfaces
          *
-         * @example $sandbox->undefineInterfaces(['Test', 'Test2']);
-         *
-         * @example $sandbox->undefineInterfaces(); //WILL UNDEFINE ALL INTERFACES!
-         *
          * @param   array           $interfaces       Array of interface names to undefine. Passing an empty array or no argument will result in undefining all interfaces
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -3968,10 +3619,6 @@
         /** Define PHPSandbox trait
          *
          * You can pass the trait $name and $value to define, or an associative array of traits to define
-         *
-         * @example $sandbox->defineTrait('Test', 'Test2');
-         *
-         * @example $sandbox->defineTrait(['Test' => 'Test2']);
          *
          * @param   string|array    $name       String of trait $name or associative array to define
          * @param   mixed           $value      Value to define trait to
@@ -3996,8 +3643,6 @@
          *
          * You can pass an associative array of traits to define
          *
-         * @example $sandbox->defineTraits(['Test' => 'Test2']);
-         *
          * @param   array           $traits  Associative array of $traits to define
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -4011,8 +3656,6 @@
 
         /** Query whether PHPSandbox instance has defined traits
          *
-         * @example $sandbox->hasDefinedTraits(); //returns number of defined traits, or zero if none defined
-         *
          * @return  int           Returns the number of traits this instance has defined
          */
         public function hasDefinedTraits(){
@@ -4020,8 +3663,6 @@
         }
 
         /** Check if PHPSandbox instance has $name trait defined
-         *
-         * @example $sandbox->isDefinedTrait('Test');
          *
          * @param   string          $name       String of trait $name to query
          *
@@ -4033,8 +3674,6 @@
         }
 
         /** Get defined trait of $name
-         *
-         * @example $sandbox->getDefinedTrait('Test');
          *
          * @param   string          $name       String of trait $name to get
          *
@@ -4054,10 +3693,6 @@
          *
          * You can pass a string of trait $name to undefine, or an array of trait names to undefine
          *
-         * @example $sandbox->undefineTrait('Test');
-         *
-         * @example $sandbox->undefineTrait(['Test', 'Test2']);
-         *
          * @param   string|array          $name       String of trait name or an array of trait names to undefine
          *
          * @return  $this           Returns the PHPSandbox instance for fluent querying
@@ -4076,10 +3711,6 @@
         /** Undefine PHPSandbox traits by array
          *
          * You can pass an array of trait names to undefine, or an empty array or null argument to undefine all traits
-         *
-         * @example $sandbox->undefineTraits(['Test', 'Test2']);
-         *
-         * @example $sandbox->undefineTraits(); //WILL UNDEFINE ALL TRAITS!
          *
          * @param   array           $traits       Array of trait names to undefine. Passing an empty array or no argument will result in undefining all traits
          *
@@ -4349,12 +3980,6 @@
          *
          * You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name
          *
-         * @example $sandbox->whitelist(['functions' => ['test']]);
-         *
-         * @example $sandbox->whitelist('functions', ['test']);
-         *
-         * @example $sandbox->whitelist('functions', 'test');
-         *
          * @param   string|array        $type       Associative array or string of whitelist type to set
          * @param   string|array|null   $name       Array or string of whitelist name to set
          *
@@ -4388,12 +4013,6 @@
         /** Blacklist PHPSandbox definitions, such as functions, constants, classes, etc. to set
          *
          * You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name
-         *
-         * @example $sandbox->blacklist(['functions' => ['test']]);
-         *
-         * @example $sandbox->blacklist('functions', ['test']);
-         *
-         * @example $sandbox->blacklist('functions', 'test');
          *
          * @param   string|array        $type       Associative array or string of blacklist type to set
          * @param   string|array|null   $name       Array or string of blacklist name to set
@@ -4429,12 +4048,6 @@
          *
          * You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset
          *
-         * @example $sandbox->dewhitelist(['functions' => ['test']]);
-         *
-         * @example $sandbox->dewhitelist('functions', ['test']);
-         *
-         * @example $sandbox->dewhitelist('functions', 'test');
-         *
          * @param   string|array        $type       Associative array or string of whitelist type to unset
          * @param   string|array|null   $name       Array or string of whitelist name to unset
          *
@@ -4463,12 +4076,6 @@
          *
          * You can pass an associative array of blacklist types and their names, or a string $type and array of $names, or pass a string of the $type and $name to unset
          *
-         * @example $sandbox->deblacklist(['functions' => ['test']]);
-         *
-         * @example $sandbox->deblacklist('functions', ['test']);
-         *
-         * @example $sandbox->deblacklist('functions', 'test');
-         *
          * @param   string|array        $type       Associative array or string of blacklist type to unset
          * @param   string|array|null   $name       Array or string of blacklist name to unset
          *
@@ -4495,8 +4102,6 @@
 
         /** Query whether PHPSandbox instance has whitelist type
          *
-         * @example $sandbox->hasWhitelist('functions'); //returns number of whitelisted functions, or zero if none whitelisted
-         *
          * @param   string        $type     The whitelist type to query
          *
          * @return  int           Returns the number of whitelists this instance has defined
@@ -4507,8 +4112,6 @@
 
         /** Query whether PHPSandbox instance has blacklist type.
          *
-         * @example $sandbox->hasBlacklist('functions'); //returns number of blacklisted functions, or zero if none blacklisted
-         *
          * @param   string        $type     The blacklist type to query
          *
          * @return  int           Returns the number of blacklists this instance has defined
@@ -4518,8 +4121,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelist type and name set
-         *
-         * @example $sandbox->isWhitelisted('functions', 'test');
          *
          * @param   string          $type       String of whitelist $type to query
          * @param   string          $name       String of whitelist $name to query
@@ -4532,8 +4133,6 @@
 
         /** Check if PHPSandbox instance has blacklist type and name set
          *
-         * @example $sandbox->isBlacklisted('functions', 'test');
-         *
          * @param   string          $type       String of blacklist $type to query
          * @param   string          $name       String of blacklist $name to query
          *
@@ -4545,8 +4144,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted functions.
          *
-         * @example $sandbox->hasWhitelistedFuncs(); //returns number of whitelisted functions, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted functions this instance has defined
          */
         public function hasWhitelistedFuncs(){
@@ -4555,8 +4152,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted functions.
          *
-         * @example $sandbox->hasBlacklistedFuncs(); //returns number of blacklisted functions, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted functions this instance has defined
          */
         public function hasBlacklistedFuncs(){
@@ -4564,8 +4159,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted function name set
-         *
-         * @example $sandbox->isWhitelistedFunc('test');
          *
          * @param   string          $name       String of function $name to query
          *
@@ -4578,8 +4171,6 @@
 
         /** Check if PHPSandbox instance has blacklisted function name set
          *
-         * @example $sandbox->isBlacklistedFunc('test');
-         *
          * @param   string          $name       String of function $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted function $name, false otherwise
@@ -4591,8 +4182,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted variables.
          *
-         * @example $sandbox->hasWhitelistedVars(); //returns number of whitelisted variables, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted variables this instance has defined
          */
         public function hasWhitelistedVars(){
@@ -4601,8 +4190,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted variables.
          *
-         * @example $sandbox->hasBlacklistedVars(); //returns number of blacklisted variables, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted variables this instance has defined
          */
         public function hasBlacklistedVars(){
@@ -4610,8 +4197,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted variable name set
-         *
-         * @example $sandbox->isWhitelistedVar('test');
          *
          * @param   string          $name       String of variable $name to query
          *
@@ -4623,8 +4208,6 @@
 
         /** Check if PHPSandbox instance has blacklisted variable name set
          *
-         * @example $sandbox->isBlacklistedVar('test');
-         *
          * @param   string          $name       String of variable $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted variable $name, false otherwise
@@ -4635,8 +4218,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted globals.
          *
-         * @example $sandbox->hasWhitelistedGlobals(); //returns number of whitelisted globals, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted globals this instance has defined
          */
         public function hasWhitelistedGlobals(){
@@ -4645,8 +4226,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted globals.
          *
-         * @example $sandbox->hasBlacklistedGlobals(); //returns number of blacklisted globals, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted globals this instance has defined
          */
         public function hasBlacklistedGlobals(){
@@ -4654,8 +4233,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted global name set
-         *
-         * @example $sandbox->isWhitelistedGlobal('test');
          *
          * @param   string          $name       String of global $name to query
          *
@@ -4667,8 +4244,6 @@
 
         /** Check if PHPSandbox instance has blacklisted global name set
          *
-         * @example $sandbox->isBlacklistedGlobal('test');
-         *
          * @param   string          $name       String of global $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted global $name, false otherwise
@@ -4678,10 +4253,6 @@
         }
 
         /** Query whether PHPSandbox instance has whitelisted superglobals, or superglobal keys
-         *
-         * @example $sandbox->hasWhitelistedSuperglobals(); //returns number of whitelisted superglobals, or zero if none whitelisted
-         *
-         * @example $sandbox->hasWhitelistedSuperglobals('_GET'); //returns number of whitelisted superglobal keys, or zero if none whitelisted
          *
          * @param   string        $name     The whitelist superglobal key to query
          *
@@ -4694,10 +4265,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted superglobals, or superglobal keys
          *
-         * @example $sandbox->hasBlacklistedSuperglobals(); //returns number of blacklisted superglobals, or zero if none blacklisted
-         *
-         * @example $sandbox->hasBlacklistedSuperglobals('_GET'); //returns number of blacklisted superglobal keys, or zero if none blacklisted
-         *
          * @param   string        $name     The blacklist superglobal key to query
          *
          * @return  int           Returns the number of blacklisted superglobals or superglobal keys this instance has defined
@@ -4708,10 +4275,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted superglobal or superglobal key set
-         *
-         * @example $sandbox->isWhitelistedSuperglobal('_GET');
-         *
-         * @example $sandbox->isWhitelistedSuperglobal('_GET', 'page');
          *
          * @param   string          $name       String of whitelisted superglobal $name to query
          * @param   string          $key        String of whitelisted superglobal $key to query
@@ -4725,10 +4288,6 @@
 
         /** Check if PHPSandbox instance has blacklisted superglobal or superglobal key set
          *
-         * @example $sandbox->isBlacklistedSuperglobal('_GET');
-         *
-         * @example $sandbox->isBlacklistedSuperglobal('_GET', 'page');
-         *
          * @param   string          $name       String of blacklisted superglobal $name to query
          * @param   string          $key        String of blacklisted superglobal $key to query
          *
@@ -4741,8 +4300,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted constants.
          *
-         * @example $sandbox->hasWhitelistedConsts(); //returns number of whitelisted constants, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted constants this instance has defined
          */
         public function hasWhitelistedConsts(){
@@ -4751,8 +4308,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted constants.
          *
-         * @example $sandbox->hasBlacklistedConsts(); //returns number of blacklisted constants, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted constants this instance has defined
          */
         public function hasBlacklistedConsts(){
@@ -4760,8 +4315,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted constant name set
-         *
-         * @example $sandbox->isWhitelistedConst('TEST');
          *
          * @param   string          $name       String of constant $name to query
          *
@@ -4773,8 +4326,6 @@
 
         /** Check if PHPSandbox instance has blacklisted constant name set
          *
-         * @example $sandbox->isBlacklistedConst('TEST');
-         *
          * @param   string          $name       String of constant $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted constant $name, false otherwise
@@ -4785,8 +4336,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted magic constants.
          *
-         * @example $sandbox->hasWhitelistedMagicConsts(); //returns number of whitelisted magic constants, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted magic constants this instance has defined
          */
         public function hasWhitelistedMagicConsts(){
@@ -4795,8 +4344,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted magic constants.
          *
-         * @example $sandbox->hasBlacklistedMagicConsts(); //returns number of blacklisted magic constants, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted magic constants this instance has defined
          */
         public function hasBlacklistedMagicConsts(){
@@ -4804,8 +4351,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted magic constant name set
-         *
-         * @example $sandbox->isWhitelistedMagicConst('__LINE__');
          *
          * @param   string          $name       String of magic constant $name to query
          *
@@ -4818,8 +4363,6 @@
 
         /** Check if PHPSandbox instance has blacklisted magic constant name set
          *
-         * @example $sandbox->isBlacklistedMagicConst('__LINE__');
-         *
          * @param   string          $name       String of magic constant $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted magic constant $name, false otherwise
@@ -4831,8 +4374,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted namespaces.
          *
-         * @example $sandbox->hasWhitelistedNamespaces(); //returns number of whitelisted namespaces, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted namespaces this instance has defined
          */
         public function hasWhitelistedNamespaces(){
@@ -4841,8 +4382,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted namespaces.
          *
-         * @example $sandbox->hasBlacklistedNamespaces(); //returns number of blacklisted namespaces, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted namespaces this instance has defined
          */
         public function hasBlacklistedNamespaces(){
@@ -4850,8 +4389,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted namespace name set
-         *
-         * @example $sandbox->isWhitelistedNamespace('Test');
          *
          * @param   string          $name       String of namespace $name to query
          *
@@ -4864,8 +4401,6 @@
 
         /** Check if PHPSandbox instance has blacklisted namespace name set
          *
-         * @example $sandbox->isBlacklistedNamespace('Test');
-         *
          * @param   string          $name       String of namespace $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted namespace $name, false otherwise
@@ -4877,8 +4412,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted aliases.
          *
-         * @example $sandbox->hasWhitelistedAliases(); //returns number of whitelisted aliases, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted aliases this instance has defined
          */
         public function hasWhitelistedAliases(){
@@ -4887,8 +4420,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted aliases.
          *
-         * @example $sandbox->hasBlacklistedAliases(); //returns number of blacklisted aliases, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted aliases this instance has defined
          */
         public function hasBlacklistedAliases(){
@@ -4896,8 +4427,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted alias name set
-         *
-         * @example $sandbox->isWhitelistedAlias('Test');
          *
          * @param   string          $name       String of alias $name to query
          *
@@ -4909,8 +4438,6 @@
         }
 
         /** Check if PHPSandbox instance has blacklisted alias name set
-         *
-         * @example $sandbox->isBlacklistedAlias('Test');
          *
          * @param   string          $name       String of alias $name to query
          *
@@ -4925,8 +4452,6 @@
          *
          * @alias   hasWhitelistedAliases();
          *
-         * @example $sandbox->hasWhitelistedUses(); //returns number of whitelisted uses (or aliases) or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted uses (or aliases) this instance has defined
          */
         public function hasWhitelistedUses(){
@@ -4937,8 +4462,6 @@
          *
          * @alias   hasBlacklistedAliases();
          *
-         * @example $sandbox->hasBlacklistedUses(); //returns number of blacklisted uses (or aliases) or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted uses (or aliases) this instance has defined
          */
         public function hasBlacklistedUses(){
@@ -4948,8 +4471,6 @@
         /** Check if PHPSandbox instance has whitelisted use (or alias) name set
          *
          * @alias   isWhitelistedAlias();
-         *
-         * @example $sandbox->isWhitelistedUse('Test');
          *
          * @param   string          $name       String of use (or alias) $name to query
          *
@@ -4963,8 +4484,6 @@
          *
          * @alias   isBlacklistedAlias();
          *
-         * @example $sandbox->isBlacklistedUse('Test');
-         *
          * @param   string          $name       String of use (or alias) $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted use (or alias) $name, false otherwise
@@ -4975,8 +4494,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted classes.
          *
-         * @example $sandbox->hasWhitelistClasses(); //returns number of whitelisted classes, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted classes this instance has defined
          */
         public function hasWhitelistedClasses(){
@@ -4985,8 +4502,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted classes.
          *
-         * @example $sandbox->hasBlacklistedClasses(); //returns number of blacklisted classes, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted classes this instance has defined
          */
         public function hasBlacklistedClasses(){
@@ -4994,8 +4509,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted class name set
-         *
-         * @example $sandbox->isWhitelistedClass('Test');
          *
          * @param   string          $name       String of class $name to query
          *
@@ -5008,8 +4521,6 @@
 
         /** Check if PHPSandbox instance has blacklisted class name set
          *
-         * @example $sandbox->isBlacklistedClass('Test');
-         *
          * @param   string          $name       String of class $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted class $name, false otherwise
@@ -5021,8 +4532,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted interfaces.
          *
-         * @example $sandbox->hasWhitelistedInterfaces(); //returns number of whitelisted interfaces, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted interfaces this instance has defined
          */
         public function hasWhitelistedInterfaces(){
@@ -5031,8 +4540,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted interfaces.
          *
-         * @example $sandbox->hasBlacklistedInterfaces(); //returns number of blacklisted interfaces, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted interfaces this instance has defined
          */
         public function hasBlacklistedInterfaces(){
@@ -5040,8 +4547,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted interface name set
-         *
-         * @example $sandbox->isWhitelistedInterface('Test');
          *
          * @param   string          $name       String of interface $name to query
          *
@@ -5054,8 +4559,6 @@
 
         /** Check if PHPSandbox instance has blacklisted interface name set
          *
-         * @example $sandbox->isBlacklistedInterface('Test');
-         *
          * @param   string          $name       String of interface $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted interface $name, false otherwise
@@ -5067,8 +4570,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted traits.
          *
-         * @example $sandbox->hasWhitelistedTraits(); //returns number of whitelisted traits, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted traits this instance has defined
          */
         public function hasWhitelistedTraits(){
@@ -5077,8 +4578,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted traits.
          *
-         * @example $sandbox->hasBlacklistedTraits(); //returns number of blacklisted traits, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted traits this instance has defined
          */
         public function hasBlacklistedTraits(){
@@ -5086,8 +4585,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted trait name set
-         *
-         * @example $sandbox->isWhitelistedTrait('Test');
          *
          * @param   string          $name       String of trait $name to query
          *
@@ -5100,8 +4597,6 @@
 
         /** Check if PHPSandbox instance has blacklisted trait name set
          *
-         * @example $sandbox->isBlacklistedTrait('Test');
-         *
          * @param   string          $name       String of trait $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted trait $name, false otherwise
@@ -5113,8 +4608,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted keywords.
          *
-         * @example $sandbox->hasWhitelistKeywords(); //returns number of whitelisted keywords, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted keywords this instance has defined
          */
         public function hasWhitelistKeywords(){
@@ -5123,8 +4616,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted keywords.
          *
-         * @example $sandbox->hasBlacklistedKeywords(); //returns number of blacklisted keywords, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted keywords this instance has defined
          */
         public function hasBlacklistedKeywords(){
@@ -5132,8 +4623,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted keyword name set
-         *
-         * @example $sandbox->isWhitelistedKeyword('echo');
          *
          * @param   string          $name       String of keyword $name to query
          *
@@ -5146,8 +4635,6 @@
 
         /** Check if PHPSandbox instance has blacklisted keyword name set
          *
-         * @example $sandbox->isBlacklistedKeyword('echo');
-         *
          * @param   string          $name       String of keyword $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted keyword $name, false otherwise
@@ -5159,8 +4646,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted operators.
          *
-         * @example $sandbox->hasWhitelistOperators(); //returns number of whitelisted operators, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted operators this instance has defined
          */
         public function hasWhitelistedOperators(){
@@ -5169,8 +4654,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted operators.
          *
-         * @example $sandbox->hasBlacklistOperators(); //returns number of blacklisted operators, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted operators this instance has defined
          */
         public function hasBlacklistedOperators(){
@@ -5178,8 +4661,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted operator name set
-         *
-         * @example $sandbox->isWhitelistedOperator('+');
          *
          * @param   string          $name       String of operator $name to query
          *
@@ -5192,8 +4673,6 @@
 
         /** Check if PHPSandbox instance has blacklisted operator name set
          *
-         * @example $sandbox->isBlacklistedOperator('+');
-         *
          * @param   string          $name       String of operator $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted operator $name, false otherwise
@@ -5205,8 +4684,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted primitives.
          *
-         * @example $sandbox->hasWhitelistedPrimitives(); //returns number of whitelisted primitives, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted primitives this instance has defined
          */
         public function hasWhitelistedPrimitives(){
@@ -5215,8 +4692,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted primitives.
          *
-         * @example $sandbox->hasBlacklistedPrimitives(); //returns number of blacklisted primitives, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted primitives this instance has defined
          */
         public function hasBlacklistedPrimitives(){
@@ -5224,8 +4699,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted primitive name set
-         *
-         * @example $sandbox->isWhitelistedPrimitive('array');
          *
          * @param   string          $name       String of primitive $name to query
          *
@@ -5238,8 +4711,6 @@
 
         /** Check if PHPSandbox instance has blacklisted primitive name set
          *
-         * @example $sandbox->isBlacklistedPrimitive('array');
-         *
          * @param   string          $name       String of primitive $name to query
          *
          * @return  bool            Returns true if PHPSandbox instance has blacklisted primitive $name, false otherwise
@@ -5251,8 +4722,6 @@
 
         /** Query whether PHPSandbox instance has whitelisted types.
          *
-         * @example $sandbox->hasWhitelistedTypes(); //returns number of whitelisted types, or zero if none whitelisted
-         *
          * @return  int           Returns the number of whitelisted types this instance has defined
          */
         public function hasWhitelistedTypes(){
@@ -5261,8 +4730,6 @@
 
         /** Query whether PHPSandbox instance has blacklisted types.
          *
-         * @example $sandbox->hasBlacklistedTypes(); //returns number of blacklisted types, or zero if none blacklisted
-         *
          * @return  int           Returns the number of blacklisted types this instance has defined
          */
         public function hasBlacklistedTypes(){
@@ -5270,8 +4737,6 @@
         }
 
         /** Check if PHPSandbox instance has whitelisted type name set
-         *
-         * @example $sandbox->isWhitelistedType('array');
          *
          * @param   string          $name       String of type $name to query
          *
@@ -5283,8 +4748,6 @@
         }
 
         /** Check if PHPSandbox instance has blacklisted type name set
-         *
-         * @example $sandbox->isBlacklistedType('array');
          *
          * @param   string          $name       String of type $name to query
          *
@@ -5298,12 +4761,6 @@
         /** Whitelist function
          *
          * You can pass a string of the function name, or pass an array of function names to whitelist
-         *
-         * @example $sandbox->whitelistFunc('var_dump');
-         *
-         * @example $sandbox->whitelistFunc('var_dump', 'print_r');
-         *
-         * @example $sandbox->whitelistFunc(['var_dump', 'print_r']);
          *
          * @param   string|array        $name       String of function name, or array of function names to whitelist
          *
@@ -5321,10 +4778,6 @@
          *
          * You can pass a string of the function name, or pass an array of function names to blacklist
          *
-         * @example $sandbox->blacklistFunc('var_dump');
-         *
-         * @example $sandbox->blacklistFunc(['var_dump', 'print_r']);
-         *
          * @param   string|array        $name       String of function name, or array of function names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5340,10 +4793,6 @@
         /** Remove function from whitelist
          *
          * You can pass a string of the function name, or pass an array of function names to remove from whitelist
-         *
-         * @example $sandbox->dewhitelistFunc('var_dump');
-         *
-         * @example $sandbox->dewhitelistFunc(['var_dump', 'print_r']);
          *
          * @param   string|array        $name       String of function name or array of function names to remove from whitelist
          *
@@ -5361,10 +4810,6 @@
          *
          * You can pass a string of the function name, or pass an array of function names to remove from blacklist
          *
-         * @example $sandbox->deblacklistFunc('var_dump');
-         *
-         * @example $sandbox->deblacklistFunc(['var_dump', 'print_r']);
-         *
          * @param   string|array        $name       String of function name or array of function names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5381,10 +4826,6 @@
          *
          * You can pass a string of variable name, or pass an array of the variable names to whitelist
          *
-         * @example $sandbox->whitelistVar('a');
-         *
-         * @example $sandbox->whitelistVar(['a', 'b']);
-         *
          * @param   string|array        $name       String of variable name or array of variable names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5399,10 +4840,6 @@
         /** Blacklist variable
          *
          * You can pass a string of variable name, or pass an array of the variable names to blacklist
-         *
-         * @example $sandbox->blacklistVar('a');
-         *
-         * @example $sandbox->blacklistVar(['a', 'b']);
          *
          * @param   string|array        $name       String of variable name or array of variable names to blacklist
          *
@@ -5419,10 +4856,6 @@
          *
          * You can pass a string of variable name, or pass an array of the variable names to remove from whitelist
          *
-         * @example $sandbox->dewhitelistVar('a');
-         *
-         * @example $sandbox->dewhitelistVar(['a', 'b']);
-         *
          * @param   string|array        $name       String of variable name or array of variable names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5437,10 +4870,6 @@
         /** Remove function from blacklist
          *
          * You can pass a string of variable name, or pass an array of the variable names to remove from blacklist
-         *
-         * @example $sandbox->deblacklistVar('a');
-         *
-         * @example $sandbox->deblacklistVar(['a', 'b']);
          *
          * @param   string|array        $name       String of variable name or array of variable names to remove from blacklist
          *
@@ -5457,10 +4886,6 @@
          *
          * You can pass a string of global name, or pass an array of the global names to whitelist
          *
-         * @example $sandbox->whitelistGlobal('a');
-         *
-         * @example $sandbox->whitelistGlobal(['a', 'b']);
-         *
          * @param   string|array        $name       String of global name or array of global names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5475,10 +4900,6 @@
         /** Blacklist global
          *
          * You can pass a string of global name, or pass an array of the global names to blacklist
-         *
-         * @example $sandbox->blacklistGlobal('a');
-         *
-         * @example $sandbox->blacklistGlobal(['a', 'b']);
          *
          * @param   string|array        $name       String of global name or array of global names to blacklist
          *
@@ -5495,10 +4916,6 @@
          *
          * You can pass a string of global name, or pass an array of the global names to remove from whitelist
          *
-         * @example $sandbox->dewhitelistGlobal('a');
-         *
-         * @example $sandbox->dewhitelistGlobal(['a', 'b']);
-         *
          * @param   string|array        $name       String of global name or array of global names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5513,10 +4930,6 @@
         /** Remove global from blacklist
          *
          * You can pass a string of global name, or pass an array of the global names to remove from blacklist
-         *
-         * @example $sandbox->deblacklistGlobal('a');
-         *
-         * @example $sandbox->deblacklistGlobal(['a', 'b']);
          *
          * @param   string|array        $name       String of global name or array of global names to remove from blacklist
          *
@@ -5533,14 +4946,6 @@
          *
          * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
          * or pass an array of superglobal names, or an associative array of superglobal names and their keys to whitelist
-         *
-         * @example $sandbox->whitelistSuperglobal('_GET');
-         *
-         * @example $sandbox->whitelistSuperglobal('_GET', 'page');
-         *
-         * @example $sandbox->whitelistSuperglobal(['_GET', '_POST']);
-         *
-         * @example $sandbox->whitelistSuperglobal(['_GET' => 'page']);
          *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to whitelist
          * @param   string              $key        String of superglobal key to whitelist
@@ -5593,14 +4998,6 @@
          * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
          * or pass an array of superglobal names, or an associative array of superglobal names and their keys to blacklist
          *
-         * @example $sandbox->blacklistSuperglobal('_GET');
-         *
-         * @example $sandbox->blacklistSuperglobal('_GET', 'page');
-         *
-         * @example $sandbox->blacklistSuperglobal(['_GET', '_POST']);
-         *
-         * @example $sandbox->blacklistSuperglobal(['_GET' => 'page']);
-         *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to blacklist
          * @param   string              $key        String of superglobal key to blacklist
          *
@@ -5652,14 +5049,6 @@
          * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
          * or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist
          *
-         * @example $sandbox->dewhitelistSuperglobal('_GET');
-         *
-         * @example $sandbox->dewhitelistSuperglobal('_GET', 'page');
-         *
-         * @example $sandbox->dewhitelistSuperglobal(['_GET', '_POST']);
-         *
-         * @example $sandbox->dewhitelistSuperglobal(['_GET' => 'page']);
-         *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from whitelist
          * @param   string              $key        String of superglobal key to remove from whitelist
          *
@@ -5704,14 +5093,6 @@
          * You can pass a string of the superglobal name, or a string of the superglobal name and a string of the key,
          * or pass an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist
          *
-         * @example $sandbox->deblacklistSuperglobal('_GET');
-         *
-         * @example $sandbox->deblacklistSuperglobal('_GET', 'page');
-         *
-         * @example $sandbox->deblacklistSuperglobal(['_GET', '_POST']);
-         *
-         * @example $sandbox->deblacklistSuperglobal(['_GET' => 'page']);
-         *
          * @param   string|array        $name       String of superglobal name, or an array of superglobal names, or an associative array of superglobal names and their keys to remove from blacklist
          * @param   string              $key        String of superglobal key to remove from blacklist
          *
@@ -5755,10 +5136,6 @@
          *
          * You can pass a string of constant name, or pass an array of the constant names to whitelist
          *
-         * @example $sandbox->whitelistConst('FOO');
-         *
-         * @example $sandbox->whitelistConst(['FOO', 'BAR']);
-         *
          * @param   string|array        $name       String of constant name or array of constant names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5773,10 +5150,6 @@
         /** Blacklist constant
          *
          * You can pass a string of constant name, or pass an array of the constant names to blacklist
-         *
-         * @example $sandbox->blacklistConst('FOO');
-         *
-         * @example $sandbox->blacklistConst(['FOO', 'BAR']);
          *
          * @param   string|array        $name       String of constant name or array of constant names to blacklist
          *
@@ -5793,10 +5166,6 @@
          *
          * You can pass a string of constant name, or pass an array of the constant names to remove from whitelist
          *
-         * @example $sandbox->dewhitelistConst('FOO');
-         *
-         * @example $sandbox->dewhitelistConst(['FOO', 'BAR']);
-         *
          * @param   string|array        $name       String of constant name or array of constant names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5812,10 +5181,6 @@
          *
          * You can pass a string of constant name, or pass an array of the constant names to remove from blacklist
          *
-         * @example $sandbox->deblacklistConst('FOO');
-         *
-         * @example $sandbox->deblacklistConst(['FOO', 'BAR']);
-         *
          * @param   string|array        $name       String of constant name or array of constant names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5830,10 +5195,6 @@
         /** Whitelist magic constant
          *
          * You can pass a string of magic constant name, or pass an array of the magic constant names to whitelist
-         *
-         * @example $sandbox->whitelistMagicConst('__LINE__');
-         *
-         * @example $sandbox->whitelistMagicConst(['__LINE__', '__FILE__']);
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to whitelist
          *
@@ -5851,10 +5212,6 @@
          *
          * You can pass a string of magic constant name, or pass an array of the magic constant names to blacklist
          *
-         * @example $sandbox->blacklistMagicConst('__LINE__');
-         *
-         * @example $sandbox->blacklistMagicConst(['__LINE__', '__FILE__']);
-         *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5870,10 +5227,6 @@
         /** Remove magic constant from whitelist
          *
          * You can pass a string of magic constant name, or pass an array of the magic constant names to remove from whitelist
-         *
-         * @example $sandbox->dewhitelistMagicConst('__LINE__');
-         *
-         * @example $sandbox->dewhitelistMagicConst(['__LINE__', '__FILE__']);
          *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from whitelist
          *
@@ -5891,10 +5244,6 @@
          *
          * You can pass a string of magic constant name, or pass an array of the magic constant names to remove from blacklist
          *
-         * @example $sandbox->deblacklistMagicConst('__LINE__');
-         *
-         * @example $sandbox->deblacklistMagicConst(['__LINE__', '__FILE__']);
-         *
          * @param   string|array        $name       String of magic constant name or array of magic constant names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5910,10 +5259,6 @@
         /** Whitelist namespace
          *
          * You can pass a string of namespace name, or pass an array of the namespace names to whitelist
-         *
-         * @example $sandbox->whitelistNamespace('Foo');
-         *
-         * @example $sandbox->whitelistNamespace(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to whitelist
          *
@@ -5931,10 +5276,6 @@
          *
          * You can pass a string of namespace name, or pass an array of the namespace names to blacklist
          *
-         * @example $sandbox->blacklistNamespace('Foo');
-         *
-         * @example $sandbox->blacklistNamespace(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of namespace name or array of namespace names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5950,10 +5291,6 @@
         /** Remove namespace from whitelist
          *
          * You can pass a string of namespace name, or pass an array of the namespace names to remove from whitelist
-         *
-         * @example $sandbox->dewhitelistNamespace('Foo');
-         *
-         * @example $sandbox->dewhitelistNamespace(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of namespace name or array of namespace names to remove from whitelist
          *
@@ -5971,10 +5308,6 @@
          *
          * You can pass a string of namespace name, or pass an array of the namespace names to remove from blacklist
          *
-         * @example $sandbox->deblacklistNamespace('Foo');
-         *
-         * @example $sandbox->deblacklistNamespace(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of namespace name or array of namespace names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -5990,10 +5323,6 @@
         /** Whitelist alias
          *
          * You can pass a string of alias name, or pass an array of the alias names to whitelist
-         *
-         * @example $sandbox->whitelistAlias('Foo');
-         *
-         * @example $sandbox->whitelistAlias(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of alias names  or array of alias names to whitelist
          *
@@ -6011,10 +5340,6 @@
          *
          * You can pass a string of alias name, or pass an array of the alias names to blacklist
          *
-         * @example $sandbox->blacklistAlias('Foo');
-         *
-         * @example $sandbox->blacklistAlias(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of alias name or array of alias names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6031,10 +5356,6 @@
          *
          * You can pass a string of alias name, or pass an array of the alias names to remove from whitelist
          *
-         * @example $sandbox->dewhitelistAlias('Foo');
-         *
-         * @example $sandbox->dewhitelistAlias(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of alias name or array of alias names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6050,10 +5371,6 @@
         /** Remove alias from blacklist
          *
          * You can pass a string of alias name, or pass an array of the alias names to remove from blacklist
-         *
-         * @example $sandbox->deblacklistAlias('Foo');
-         *
-         * @example $sandbox->deblacklistAlias(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of alias name or array of alias names to remove from blacklist
          *
@@ -6073,10 +5390,6 @@
          *
          * @alias   whitelistAlias();
          *
-         * @example $sandbox->whitelistUse('Foo');
-         *
-         * @example $sandbox->whitelistUse(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6093,10 +5406,6 @@
          * You can pass a string of use (or alias) name, or pass an array of the use (or alias) names to blacklist
          *
          * @alias   blacklistAlias();
-         *
-         * @example $sandbox->blacklistUse('Foo');
-         *
-         * @example $sandbox->blacklistUse(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to blacklist
          *
@@ -6115,10 +5424,6 @@
          *
          * @alias   dewhitelistAlias();
          *
-         * @example $sandbox->dewhitelistUse('Foo');
-         *
-         * @example $sandbox->dewhitelistUse(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6136,10 +5441,6 @@
          *
          * @alias   deblacklistAlias();
          *
-         * @example $sandbox->deblacklistUse('Foo');
-         *
-         * @example $sandbox->deblacklistUse(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of use (or alias) name or array of use (or alias) names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6154,10 +5455,6 @@
         /** Whitelist class
          *
          * You can pass a string of class name, or pass an array of the class names to whitelist
-         *
-         * @example $sandbox->whitelistClass('Foo');
-         *
-         * @example $sandbox->whitelistClass(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of class name or array of class names to whitelist
          *
@@ -6175,10 +5472,6 @@
          *
          * You can pass a string of class name, or pass an array of the class names to blacklist
          *
-         * @example $sandbox->blacklistClass('Foo');
-         *
-         * @example $sandbox->blacklistClass(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of class name or array of class names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6194,10 +5487,6 @@
         /** Remove class from whitelist
          *
          * You can pass a string of class name, or pass an array of the class names to remove from whitelist
-         *
-         * @example $sandbox->dewhitelistClass('Foo');
-         *
-         * @example $sandbox->dewhitelistClass(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of class name or array of class names to remove from whitelist
          *
@@ -6215,10 +5504,6 @@
          *
          * You can pass a string of class name, or pass an array of the class names to remove from blacklist
          *
-         * @example $sandbox->deblacklistClass('Foo');
-         *
-         * @example $sandbox->deblacklistClass(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of class name or array of class names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6234,10 +5519,6 @@
         /** Whitelist interface
          *
          * You can pass a string of interface name, or pass an array of the interface names to whitelist
-         *
-         * @example $sandbox->whitelistInterface('Foo');
-         *
-         * @example $sandbox->whitelistInterface(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of interface name or array of interface names to whitelist
          *
@@ -6255,10 +5536,6 @@
          *
          * You can pass a string of interface name, or pass an array of the interface names to blacklist
          *
-         * @example $sandbox->blacklistInterface('Foo');
-         *
-         * @example $sandbox->blacklistInterface(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of interface name or array of interface names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6274,10 +5551,6 @@
         /** Remove interface from whitelist
          *
          * You can pass a string of interface name, or pass an array of the interface names to remove from whitelist
-         *
-         * @example $sandbox->dewhitelistInterface('Foo');
-         *
-         * @example $sandbox->dewhitelistInterface(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of interface name or array of interface names to remove from whitelist
          *
@@ -6295,10 +5568,6 @@
          *
          * You can pass a string of interface name, or pass an array of the interface names to remove from blacklist
          *
-         * @example $sandbox->deblacklistInterface('Foo');
-         *
-         * @example $sandbox->deblacklistInterface(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of interface name or array of interface names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6314,10 +5583,6 @@
         /** Whitelist trait
          *
          * You can pass a string of trait name, or pass an array of the trait names to whitelist
-         *
-         * @example $sandbox->whitelistTrait('Foo');
-         *
-         * @example $sandbox->whitelistTrait(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of trait name or array of trait names to whitelist
          *
@@ -6335,10 +5600,6 @@
          *
          * You can pass a string of trait name, or pass an array of the trait names to blacklist
          *
-         * @example $sandbox->blacklistTrait('Foo');
-         *
-         * @example $sandbox->blacklistTrait(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of trait name or array of trait names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6354,10 +5615,6 @@
         /** Remove trait from whitelist
          *
          * You can pass a string of trait name, or pass an array of the trait names to remove from whitelist
-         *
-         * @example $sandbox->dewhitelistTrait('Foo');
-         *
-         * @example $sandbox->dewhitelistTrait(['Foo', 'Bar']);
          *
          * @param   string|array        $name       String of trait name or array of trait names to remove from whitelist
          *
@@ -6375,10 +5632,6 @@
          *
          * You can pass a string of trait name, or pass an array of the trait names to remove from blacklist
          *
-         * @example $sandbox->deblacklistTrait('Foo');
-         *
-         * @example $sandbox->deblacklistTrait(['Foo', 'Bar']);
-         *
          * @param   string|array        $name       String of trait name or array of trait names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6394,10 +5647,6 @@
         /** Whitelist keyword
          *
          * You can pass a string of keyword name, or pass an array of the keyword names to whitelist
-         *
-         * @example $sandbox->whitelistKeyword('echo');
-         *
-         * @example $sandbox->whitelistKeyword(['echo', 'eval']);
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to whitelist
          *
@@ -6415,10 +5664,6 @@
          *
          * You can pass a string of keyword name, or pass an array of the keyword names to blacklist
          *
-         * @example $sandbox->blacklistKeyword('echo');
-         *
-         * @example $sandbox->blacklistKeyword(['echo', 'eval']);
-         *
          * @param   string|array        $name       String of keyword name or array of keyword names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6434,10 +5679,6 @@
         /** Remove keyword from whitelist
          *
          * You can pass a string of keyword name, or pass an array of the keyword names to remove from whitelist
-         *
-         * @example $sandbox->dewhitelistKeyword('echo');
-         *
-         * @example $sandbox->dewhitelistKeyword(['echo', 'eval']);
          *
          * @param   string|array        $name       String of keyword name or array of keyword names to remove from whitelist
          *
@@ -6455,10 +5696,6 @@
          *
          * You can pass a string of keyword name, or pass an array of the keyword names to remove from blacklist
          *
-         * @example $sandbox->deblacklistKeyword('echo');
-         *
-         * @example $sandbox->deblacklistKeyword(['echo', 'eval']);
-         *
          * @param   string|array        $name       String of keyword name or array of keyword names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6474,10 +5711,6 @@
         /** Whitelist operator
          *
          * You can pass a string of operator name, or pass an array of the operator names to whitelist
-         *
-         * @example $sandbox->whitelistOperator('+');
-         *
-         * @example $sandbox->whitelistOperator(['+', '-']);
          *
          * @param   string|array        $name       String of operator name or array of operator names to whitelist
          *
@@ -6495,10 +5728,6 @@
          *
          * You can pass a string of operator name, or pass an array of the operator names to blacklist
          *
-         * @example $sandbox->blacklistOperator('+');
-         *
-         * @example $sandbox->blacklistOperator(['+', '-']);
-         *
          * @param   string|array        $name       String of operator name or array of operator names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6514,10 +5743,6 @@
         /** Remove operator from whitelist
          *
          * You can pass a string of operator name, or pass an array of the operator names to remove from whitelist
-         *
-         * @example $sandbox->dewhitelistOperator('+');
-         *
-         * @example $sandbox->dewhitelistOperator(['+', '-']);
          *
          * @param   string|array        $name       String of operator name or array of operator names to remove from whitelist
          *
@@ -6535,10 +5760,6 @@
          *
          * You can pass a string of operator name, or pass an array of the operator names to remove from blacklist
          *
-         * @example $sandbox->deblacklistOperator('+');
-         *
-         * @example $sandbox->deblacklistOperator(['+', '-']);
-         *
          * @param   string|array        $name       String of operator name or array of operator names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6554,10 +5775,6 @@
         /** Whitelist primitive
          *
          * You can pass a string of primitive name, or pass an array of the primitive names to whitelist
-         *
-         * @example $sandbox->whitelistPrimitive('int');
-         *
-         * @example $sandbox->whitelistPrimitive(['int', 'float']);
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to whitelist
          *
@@ -6575,10 +5792,6 @@
          *
          * You can pass a string of primitive name, or pass an array of the primitive names to blacklist
          *
-         * @example $sandbox->blacklistPrimitive('int');
-         *
-         * @example $sandbox->blacklistPrimitive(['int', 'float']);
-         *
          * @param   string|array        $name       String of primitive name or array of primitive names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6594,10 +5807,6 @@
         /** Remove primitive from whitelist
          *
          * You can pass a string of primitive name, or pass an array of the primitive names to remove from whitelist
-         *
-         * @example $sandbox->dewhitelistPrimitive('int');
-         *
-         * @example $sandbox->dewhitelistPrimitive(['int', 'float']);
          *
          * @param   string|array        $name       String of primitive name or array of primitive names to remove from whitelist
          *
@@ -6615,10 +5824,6 @@
          *
          * You can pass a string of primitive name, or pass an array of the primitive names to remove from blacklist
          *
-         * @example $sandbox->deblacklistPrimitive('int');
-         *
-         * @example $sandbox->deblacklistPrimitive(['int', 'float']);
-         *
          * @param   string|array        $name       String of primitive name or array of primitive names to remove from blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6634,10 +5839,6 @@
         /** Whitelist type
          *
          * You can pass a string of type name, or pass an array of the type names to whitelist
-         *
-         * @example $sandbox->whitelistType('PHPSandbox');
-         *
-         * @example $sandbox->whitelistType(['PHPSandbox', 'PhpParser']);
          *
          * @param   string|array        $name       String of type name or array of type names to whitelist
          *
@@ -6655,10 +5856,6 @@
          *
          * You can pass a string of type name, or pass an array of the type names to blacklist
          *
-         * @example $sandbox->blacklistType('PHPSandbox');
-         *
-         * @example $sandbox->blacklistType(['PHPSandbox', 'PhpParser']);
-         *
          * @param   string|array        $name       String of type name or array of type names to blacklist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6675,10 +5872,6 @@
          *
          * You can pass a string of type name, or pass an array of the type names to remove from whitelist
          *
-         * @example $sandbox->dewhitelistType('PHPSandbox');
-         *
-         * @example $sandbox->dewhitelistType(['PHPSandbox', 'PhpParser']);
-         *
          * @param   string|array        $name       String of type name or array of type names to remove from whitelist
          *
          * @return  $this               Returns the PHPSandbox instance for fluent querying
@@ -6694,10 +5887,6 @@
         /** Remove type from blacklist
          *
          * You can pass a string of type name, or pass an array of the type names to remove from blacklist
-         *
-         * @example $sandbox->deblacklistType('PHPSandbox');
-         *
-         * @example $sandbox->deblacklistType(['PHPSandbox', 'PhpParser']);
          *
          * @param   string|array        $name       String of type name or array of type names to remove from blacklist
          *
@@ -7529,10 +6718,6 @@
          *
          * You can pass the number of digits you wish to round the return value
          *
-         * @example $sandbox->getPreparedTime();
-         *
-         * @example $sandbox->getPreparedTime(3);
-         *
          * @param   int|null        $round      The number of digits to round the return value
          *
          * @return  float           The amount of time in microseconds it took to prepare the sandboxed code
@@ -7544,10 +6729,6 @@
         /** Return the amount of time the sandbox spent executing the sandboxed code
          *
          * You can pass the number of digits you wish to round the return value
-         *
-         * @example $sandbox->getExecutionTime();
-         *
-         * @example $sandbox->getExecutionTime(3);
          *
          * @param   int|null        $round      The number of digits to round the return value
          *
@@ -7561,10 +6742,6 @@
          *
          * You can pass the number of digits you wish to round the return value
          *
-         * @example $sandbox->getTime();
-         *
-         * @example $sandbox->getTime(3);
-         *
          * @param   int|null        $round      The number of digits to round the return value
          *
          * @return  float           The amount of time in microseconds it took to prepare and execute the sandboxed code
@@ -7577,10 +6754,6 @@
          *
          * You can pass the number of digits you wish to round the return value
          *
-         * @example $sandbox->getMemoryUsage();
-         *
-         * @example $sandbox->getMemoryUsage(3);
-         *
          * @param   int|null        $round      The number of digits to round the return value
          *
          * @return  int             The amount of bytes in memory it took to prepare and execute the sandboxed code
@@ -7590,8 +6763,6 @@
         }
 
         /** Validate passed callable for execution
-         *
-         * @example $sandbox->validate('<?php echo "Hello World!"; ?>');
          *
          * @param   callable|string $code      The callable or string of code to validate
          *
@@ -7640,8 +6811,6 @@
          *
          * This function validates your code and automatically whitelists it according to your specified configuration
          *
-         * @example $sandbox->prepare(function(){ var_dump('Hello world!'); });
-         *
          * @param   callable    $code               The callable to prepare for execution
          * @param   boolean     $skip_validation    Boolean flag to indicate whether the sandbox should skip validation. Default is false.
          *
@@ -7682,8 +6851,6 @@
         /** Prepare and execute callable and return output
          *
          * This function validates your code and automatically whitelists it according to your specified configuration, then executes it.
-         *
-         * @example $sandbox->execute(function(){ var_dump('Hello world!'); });
          *
          * @param   callable|string     $callable           Callable or string of PHP code to prepare and execute within the sandbox
          * @param   boolean             $skip_validation    Boolean flag to indicate whether the sandbox should skip validation of the pass callable. Default is false.
@@ -7740,8 +6907,6 @@
          * the error message, the error file, the error line, the error context and the sandbox instance as arguments.
          * If the error handler does not handle errors correctly then the sandbox's security may become compromised!
          *
-         * @example $sandbox->setErrorHandler(function($errno, $errstr, $errfile, $errline, $errcontext, PHPSandbox $s){
-         *  return false;
          * }, E_ALL);  //ignore all errors, INSECURE
          *
          * @param   callable        $handler       Callable to handle thrown Errors
@@ -7759,8 +6924,6 @@
          *
          * This function returns the sandbox error handler.
          *
-         * @example $sandbox->getErrorHandler();  //callable
-         *
          * @return null|callable
          */
         public function getErrorHandler(){
@@ -7770,8 +6933,6 @@
         /** Unset error handler
          *
          * This function unsets the sandbox error handler.
-         *
-         * @example $sandbox->unsetErrorHandler();
          *
          * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
@@ -7788,8 +6949,6 @@
         }
 
         /** Invoke sandbox error handler
-         *
-         * @example $sandbox->error(0, "Unknown error");
          *
          * @param   int                         $errno          Error number
          * @param   string                      $errstr         Error message
@@ -7812,8 +6971,6 @@
          * as arguments. If the exception handler does not handle exceptions correctly then the sandbox's security may
          * become compromised!
          *
-         * @example $sandbox->setExceptionHandler(function(Exception $e, PHPSandbox $s){});  //ignore all thrown exceptions, INSECURE
-         *
          * @param   callable        $handler       Callable to handle thrown exceptions
          *
          * @return  $this      Returns the PHPSandbox instance for fluent querying
@@ -7827,8 +6984,6 @@
          *
          * This function returns the sandbox exception handler.
          *
-         * @example $sandbox->getExceptionHandler();  //callable
-         *
          * @return null|callable
          */
         public function getExceptionHandler(){
@@ -7838,8 +6993,6 @@
         /** Unset exception handler
          *
          * This function unsets the sandbox exception handler.
-         *
-         * @example $sandbox->unsetExceptionHandler();
          *
          * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
@@ -7856,8 +7009,6 @@
         }
 
         /** Invoke sandbox exception handler
-         *
-         * @example $sandbox->exception(new Exception("Unknown error!", 0));
          *
          * @param   \Exception                  $exception      Error number
          * @throws  \Exception
@@ -7878,8 +7029,6 @@
          * instance as arguments. If the error handler does not handle validation errors correctly then the sandbox's
          * security may become compromised!
          *
-         * @example $sandbox->setValidationErrorHandler(function(Error $e, PHPSandbox $s){});  //ignore all thrown Errors, INSECURE
-         *
          * @param   callable        $handler       Callable to handle thrown validation Errors
          *
          * @return  $this      Returns the PHPSandbox instance for fluent querying
@@ -7893,8 +7042,6 @@
          *
          * This function returns the sandbox validation error handler.
          *
-         * @example $sandbox->getValidationErrorHandler();  //callable
-         *
          * @return null|callable
          */
         public function getValidationErrorHandler(){
@@ -7904,8 +7051,6 @@
         /** Unset validation error handler
          *
          * This function unsets the sandbox validation error handler.
-         *
-         * @example $sandbox->unsetValidationErrorHandler();
          *
          * @return  $this      Returns the PHPSandbox instance for fluent querying
          */
@@ -7922,8 +7067,6 @@
         }
 
         /** Invoke sandbox error validation handler if it exists, throw Error otherwise
-         *
-         * @example $sandbox->validationError("Error!", 10000);
          *
          * @param   \Exception|Error|string     $error      Error to throw if Error is not handled, or error message string
          * @param   int                         $code       The error code

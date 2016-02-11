@@ -10,7 +10,7 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="PHPSandbox Test Suite">
-            <directory>./tests/</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
