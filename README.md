@@ -1,4 +1,4 @@
-![PHPSandbox](http://www.phpsandbox.org/wp-content/uploads/2015/07/logo.png)
+![PHPSandbox](https://phpsandbox.org/images/logo.png)
 
 ##A full-scale PHP 5.4+ sandbox class that utilizes [PHP-Parser](https://github.com/nikic/PHP-Parser) to prevent sandboxed code from running unsafe code.
 
