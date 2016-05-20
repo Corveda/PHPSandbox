@@ -6484,7 +6484,7 @@
                     } else if(is_float($value)){
                         $output[] = '$' . $name . ' = ' . ($value ? $value : '0.0');
                     } else if(is_string($value)){
-                        $output[] = '$' . $name . " = '" . addcslashes($value, "'") . "'";
+                        $output[] = '$' . $name . " = '" . addcslashes($value, "'\\") . "'";
                     } else {
                         $output[] = '$' . $name . " = null";
                     }
@@ -6508,7 +6508,7 @@
                     } else if(is_float($value)){
                         $output[] = '\define(' . "'" . $name . "', " . ($value ? $value : '0.0') . ');';
                     } else if(is_string($value)){
-                        $output[] = '\define(' . "'" . $name . "', '" . addcslashes($value, "'") . "');";
+                        $output[] = '\define(' . "'" . $name . "', '" . addcslashes($value, "'\\") . "');";
                     } else {
                         $output[] = '\define(' . "'" . $name . "', null);";
                     }
