@@ -431,4 +431,24 @@
             $this->sandbox->whitelistMagicConst('DIR');
             $this->assertEquals(str_replace('tests', 'src', __DIR__), $this->sandbox->execute(function(){ return __DIR__; }));
         }
+
+        /**
+         * Test whether sandbox disallows non-whitelisted classes in use statements
+         */
+        public function testDisallowsTypeInUse(){
+            $this->expectException('PHPSandbox\Error');
+            $this->sandbox->allow_aliases = true;
+            $this->sandbox->execute('use TestClass;');
+        }
+
+        /**
+         * Test whether sandbox disallows non-whitelisted classes in parameter type hints
+         */
+        public function testDisallowsTypeInParam(){
+            $this->expectException('PHPSandbox\Error');
+            $this->sandbox->allow_functions = true;
+            $this->sandbox->execute(function() {
+                function testTypeInParam(TestClass $param) {};
+            });
+        }
     }
