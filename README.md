@@ -1,6 +1,6 @@
 ![PHPSandbox](https://phpsandbox.org/images/logo.png)
 
-##A full-scale PHP 5.4+ sandbox class that utilizes [PHP-Parser](https://github.com/nikic/PHP-Parser) to prevent sandboxed code from running unsafe code.
+## A full-scale PHP 5.4+ sandbox class that utilizes [PHP-Parser](https://github.com/nikic/PHP-Parser) to prevent sandboxed code from running unsafe code.
 
 It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) to disassemble callables passed to the sandbox, so that PHP callables can also be run in sandboxes without first converting them into strings.
 
@@ -11,7 +11,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 [![Build Status](https://travis-ci.org/Corveda/PHPSandbox.png?branch=master)](https://travis-ci.org/Corveda/PHPSandbox) [![Latest Stable Version](https://poser.pugx.org/corveda/php-sandbox/v/stable.png)](https://packagist.org/packages/corveda/php-sandbox) [![Total Downloads](https://poser.pugx.org/corveda/php-sandbox/downloads.png)](https://packagist.org/packages/corveda/php-sandbox) [![Latest Unstable Version](https://poser.pugx.org/corveda/php-sandbox/v/unstable.png)](https://packagist.org/packages/corveda/php-sandbox) [![License](https://poser.pugx.org/corveda/php-sandbox/license.png)](https://packagist.org/packages/corveda/php-sandbox)
 [![Dependency Status](https://www.versioneye.com/user/projects/56ba5cc22a29ed002d2af5e2/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56ba5cc22a29ed002d2af5e2)
 
-##Features:
+## Features:
 
 - Finegrained whitelisting and blacklisting, with sensible defaults configured.
 - **Includes dynamic demonstration system that allows for local testing of custom sandbox configurations**
@@ -29,7 +29,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 - Can specify a validation error handler to intercept thrown validation errors and handle them with custom logic.
 - **Can intercept callbacks and validate them against function whitelists and blacklists, even if they are called as strings**
 
-##Example usage:
+## Example usage:
 
     function test($string){
         return 'Hello ' . $string;
@@ -43,7 +43,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 
     var_dump($result);  //Hello world
 
-##Custom validation example:
+## Custom validation example:
 
     function custom_func(){
         echo 'I am valid!';
@@ -59,7 +59,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
     });
     //echoes "I am valid!"
 
-##Custom validation error handler example:
+## Custom validation error handler example:
 
     $sandbox = new PHPSandbox\PHPSandbox;
     //this will intercept parser validation errors and quietly exit, otherwise it will throw the validation error
@@ -72,7 +72,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
     $sandbox->execute('<?php i am malformed PHP code; ?>');
     //does nothing
 
-##Disable validation example:
+## Disable validation example:
 
     $sandbox = new PHPSandbox\PHPSandbox;
     //this will disable function validation
@@ -80,14 +80,14 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
     $sandbox->execute('<?php echo system("ping google.com"); ?>');
     //Pinging google.com. . .
 
-##Requirements
+## Requirements
 
 - PHP 5.4+
 - [PHP-Parser](https://github.com/nikic/PHP-Parser)
 - [FunctionParser](https://github.com/jeremeamia/FunctionParser) (if you wish to use closures)
 - PHP should be compiled with *--enable-tokenizer* option (it typically is)
 
-##Installation
+## Installation
 
 To install using [composer](http://getcomposer.org/), simply add the following to your composer.json file in the root of your project:
 
@@ -99,7 +99,7 @@ To install using [composer](http://getcomposer.org/), simply add the following t
 
 Then run *composer install --dry-run* to check for any potential problems, and *composer install* to install.
 
-##LICENSE
+## LICENSE
 
     Copyright (c) 2013-2016 by Corveda, LLC.
 
