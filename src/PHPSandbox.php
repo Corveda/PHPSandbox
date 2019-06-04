@@ -810,6 +810,10 @@
          * @var    \Exception|Error    The last validation error thrown by the sandbox
          */
         protected $last_validation_error;
+        /**
+         * @var string         The current file being executed
+         */
+        protected $executing_file;
 
         /** PHPSandbox class constructor
          *
@@ -2408,7 +2412,7 @@
             if(!in_array($file, $this->_get_included_files())){
                 $this->includes[] = $file;
             }
-            return $this->execute($code);
+            return $this->execute($code, false, $file);
         }
 
         /** Sandbox included once file
@@ -2428,7 +2432,7 @@
                     return false;
                 }
                 $this->includes[] = $file;
-                return $this->execute($code);
+                return $this->execute($code, false, $file);
             }
             return null;
         }
@@ -2452,7 +2456,7 @@
             if(!in_array($file, $this->_get_included_files())){
                 $this->includes[] = $file;
             }
-            return $this->execute($code);
+            return $this->execute($code, false, $file);
         }
 
         /** Sandbox required once file
@@ -2473,7 +2477,7 @@
                     return false;
                 }
                 $this->includes[] = $file;
-                return $this->execute($code);
+                return $this->execute($code, false, $file);
             }
             return null;
         }
@@ -6738,6 +6742,14 @@
             return $round ? round($this->execution_time, $round) : $this->execution_time;
         }
 
+        /** Return the current file being executed in the sandbox
+         *
+         * @return  string           The current file being executed
+         */
+        public function getExecutingFile(){
+            return $this->executing_file;
+        }
+
         /** Return the amount of time the sandbox spent preparing and executing the sandboxed code
          *
          * You can pass the number of digits you wish to round the return value
@@ -6854,12 +6866,15 @@
          *
          * @param   callable|string     $callable           Callable or string of PHP code to prepare and execute within the sandbox
          * @param   boolean             $skip_validation    Boolean flag to indicate whether the sandbox should skip validation of the pass callable. Default is false.
+         * @param   string              $executing_file     The file path of the code to execute
          *
          * @throws  Error       Throws exception if error occurs in parsing, validation or whitelisting or if generated closure is invalid
          *
          * @return  mixed       The output from the executed sandboxed code
          */
-        public function execute($callable = null, $skip_validation = false){
+        public function execute($callable = null, $skip_validation = false, $executing_file = false){
+            if ($executing_file)
+              $this->executing_file = realpath($executing_file);
             $this->execution_time = microtime(true);
             $this->memory_usage = memory_get_peak_usage();
             if($callable !== null){
