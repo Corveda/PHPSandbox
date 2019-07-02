@@ -3,7 +3,7 @@
      * @package PHPSandbox
      */
     namespace PHPSandbox;
-    
+
     use PhpParser\Node,
         \PhpParser\NodeVisitorAbstract;
 
@@ -383,7 +383,7 @@
                     $this->sandbox->validationError("Magic constant failed custom validation!", Error::VALID_MAGIC_CONST_ERROR, $node, $name);
                 }
                 if($this->sandbox->isDefinedMagicConst($name)){
-                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_get_magic_const', [new Node\Arg(new Node\Scalar\String_($name)), new Node\Arg(new Node\Scalar\String_($this->sandbox->getExecutingFile()))], $node->getAttributes());
+                    return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Scalar\String_($this->sandbox->name)]), '_get_magic_const', [new Node\Arg(new Node\Scalar\String_($name))], $node->getAttributes());
                 }
             } else if($name = $this->isKeyword($node)){
                 if(!$this->sandbox->checkKeyword($name)){

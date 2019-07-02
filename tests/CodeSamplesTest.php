@@ -24,4 +24,14 @@
             $this->sandbox->allow_includes = true;
             $this->sandbox->execute(file_get_contents($path), false, $path);
         }
+
+        public function testPropertiesWithMagickConstants(){
+            $path = __DIR__ . '/samples/properties_with_magic_constants/index.php';
+            $this->sandbox->validate_magic_constants = false;
+            $this->sandbox->allow_classes = true;
+            $this->sandbox->validate_classes = false;
+            $this->sandbox->allow_includes = true;
+            $this->sandbox->capture_output = true;
+            $this->sandbox->execute(file_get_contents($path), false, $path);
+        }
     }

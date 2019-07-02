@@ -2008,12 +2008,12 @@
          *
          * @return  array           Returns the redefined magic constant
          */
-        public function _get_magic_const($name, $executingFile = null){
+        public function _get_magic_const($name){
             $name = $this->normalizeMagicConst($name);
             if(isset($this->definitions['magic_constants'][$name])){
                 $magic_constant = $this->definitions['magic_constants'][$name];
                 if(is_callable($magic_constant)){
-                    return call_user_func_array($magic_constant, [$this, $executingFile]);
+                    return call_user_func_array($magic_constant, [$this]);
                 }
                 return $magic_constant;
             }
@@ -3047,13 +3047,6 @@
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
         public function defineMagicConsts(array $magic_constants = []){
-            $this->defineMagicConst('__DIR__', function (PHPSandbox $sandbox, $executingFile = null) {
-                return dirname($executingFile);
-            });
-            $this->defineMagicConst('__FILE__', function (PHPSandbox $sandbox, $executingFile = null) {
-                return $executingFile;
-            });
-
             foreach($magic_constants as $name => $value){
                 $this->defineMagicConst($name, $value);
             }
@@ -6880,8 +6873,10 @@
          * @return  mixed       The output from the executed sandboxed code
          */
         public function execute($callable = null, $skip_validation = false, $executing_file = false){
-            if ($executing_file)
-              $this->executing_file = realpath($executing_file);
+            if ($executing_file) {
+                $this->executing_file = realpath($executing_file);
+                $callable = $this->replaceMagicConstants($callable, $executing_file);
+            }
             $this->execution_time = microtime(true);
             $this->memory_usage = memory_get_peak_usage();
             if($callable !== null){
@@ -7144,5 +7139,17 @@
             }
             trigger_error('Fatal error: Call to undefined method PHPSandbox::' . $method, E_ERROR);
             return null;
+        }
+
+        /**
+         * @param $code string
+         * @param $executing_file string
+         * @return string
+         */
+        private function replaceMagicConstants($code, $executing_file)
+        {
+            $code = str_replace('__DIR__' , '\'' . dirname($executing_file) . '\'', $code);
+            $code = str_replace('__FILE__' , '\'' . $executing_file . '\'', $code);
+            return $code;
         }
     }
