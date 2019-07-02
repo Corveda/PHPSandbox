@@ -2008,12 +2008,12 @@
          *
          * @return  array           Returns the redefined magic constant
          */
-        public function _get_magic_const($name){
+        public function _get_magic_const($name, $executingFile = null){
             $name = $this->normalizeMagicConst($name);
             if(isset($this->definitions['magic_constants'][$name])){
                 $magic_constant = $this->definitions['magic_constants'][$name];
                 if(is_callable($magic_constant)){
-                    return call_user_func_array($magic_constant, [$this]);
+                    return call_user_func_array($magic_constant, [$this, $executingFile]);
                 }
                 return $magic_constant;
             }
@@ -3047,6 +3047,13 @@
          * @return  $this           Returns the PHPSandbox instance for fluent querying
          */
         public function defineMagicConsts(array $magic_constants = []){
+            $this->defineMagicConst('__DIR__', function (PHPSandbox $sandbox, $executingFile = null) {
+                return dirname($executingFile);
+            });
+            $this->defineMagicConst('__FILE__', function (PHPSandbox $sandbox, $executingFile = null) {
+                return $executingFile;
+            });
+
             foreach($magic_constants as $name => $value){
                 $this->defineMagicConst($name, $value);
             }
