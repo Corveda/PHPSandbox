@@ -3,7 +3,7 @@
      * @package PHPSandbox
      */
     namespace PHPSandbox;
-    
+
     use PhpParser\Node,
         \PhpParser\NodeVisitorAbstract;
 

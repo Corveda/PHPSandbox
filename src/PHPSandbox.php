@@ -6873,8 +6873,10 @@
          * @return  mixed       The output from the executed sandboxed code
          */
         public function execute($callable = null, $skip_validation = false, $executing_file = false){
-            if ($executing_file)
-              $this->executing_file = realpath($executing_file);
+            if ($executing_file) {
+                $this->executing_file = realpath($executing_file);
+                $callable = $this->replaceMagicConstants($callable, $executing_file);
+            }
             $this->execution_time = microtime(true);
             $this->memory_usage = memory_get_peak_usage();
             if($callable !== null){
@@ -7137,5 +7139,17 @@
             }
             trigger_error('Fatal error: Call to undefined method PHPSandbox::' . $method, E_ERROR);
             return null;
+        }
+
+        /**
+         * @param $code string
+         * @param $executing_file string
+         * @return string
+         */
+        private function replaceMagicConstants($code, $executing_file)
+        {
+            $code = str_replace('__DIR__' , '\'' . dirname($executing_file) . '\'', $code);
+            $code = str_replace('__FILE__' , '\'' . $executing_file . '\'', $code);
+            return $code;
         }
     }
