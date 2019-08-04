@@ -287,6 +287,10 @@
                 if($this->sandbox->isDefinedClass($class)){
                     $node->type = new Node\Name($this->sandbox->getDefinedClass($class));
                 }
+                if ($this->sandbox->isWhitelistedInterface($class))
+                    $this->sandbox->checkInterface($class);
+                else
+                    $this->sandbox->checkType($class);
                 return $node;
             } else if($node instanceof Node\Expr\New_){
                 if(!$this->sandbox->allow_objects){
@@ -358,6 +362,10 @@
                     } else {
                         $this->sandbox->validationError("Sandboxed code attempted use invalid namespace or alias!", Error::DEFINE_ALIAS_ERROR, $node);
                     }
+                    if ($this->sandbox->isWhitelistedInterface($use->alias))
+                        $this->sandbox->checkInterface($use->alias);
+                    else
+                        $this->sandbox->checkType($use->alias);
                 }
                 return false;
             } else if($node instanceof Node\Expr\ShellExec){
