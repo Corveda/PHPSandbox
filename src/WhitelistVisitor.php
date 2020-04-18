@@ -43,8 +43,8 @@
         public function leaveNode(Node $node){
             if($node instanceof Node\Expr\FuncCall && $node->name instanceof Node\Name && !$this->sandbox->hasBlacklistedFuncs()){
                 $this->sandbox->whitelistFunc($node->name->toString());
-            } else if($node instanceof Node\Stmt\Function_ && is_string($node->name) && $node->name && !$this->sandbox->hasBlacklistedFuncs()){
-                $this->sandbox->whitelistFunc($node->name);
+            } else if($node instanceof Node\Stmt\Function_ && $node->name instanceof Node\Identifier && !$this->sandbox->hasBlacklistedFuncs()){
+                $this->sandbox->whitelistFunc($node->name->toString());
             } else if(($node instanceof Node\Expr\Variable || $node instanceof Node\Stmt\StaticVar) && is_string($node->name) && $this->sandbox->hasWhitelistedVars() && !$this->sandbox->allow_variables){
                 $this->sandbox->whitelistVar($node->name);
             } else if($node instanceof Node\Expr\FuncCall && $node->name instanceof Node\Name && $node->name->toString() == 'define' && !$this->sandbox->isDefinedFunc('define') && !$this->sandbox->hasBlacklistedConsts()){
@@ -54,8 +54,8 @@
                 }
             } else if($node instanceof Node\Expr\ConstFetch && $node->name instanceof Node\Name && !$this->sandbox->hasBlacklistedConsts()){
                 $this->sandbox->whitelistConst($node->name->toString());
-            } else if($node instanceof Node\Stmt\Class_ && is_string($node->name) && !$this->sandbox->hasBlacklistedClasses()){
-                $this->sandbox->whitelistClass($node->name);
+            } else if($node instanceof Node\Stmt\Class_ && $node->name instanceof Node\Identifier && !$this->sandbox->hasBlacklistedClasses()){
+                $this->sandbox->whitelistClass($node->name->toString());
             } else if($node instanceof Node\Stmt\Interface_ && is_string($node->name) && !$this->sandbox->hasBlacklistedInterfaces()){
                 $this->sandbox->whitelistInterface($node->name);
             } else if($node instanceof Node\Stmt\Trait_ && is_string($node->name) && !$this->sandbox->hasBlacklistedTraits()){

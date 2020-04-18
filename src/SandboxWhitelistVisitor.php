@@ -41,9 +41,9 @@
          * @return  null
          */
         public function leaveNode(Node $node){
-            if($node instanceof Node\Stmt\Class_ && is_string($node->name) && $this->sandbox->allow_classes && $this->sandbox->auto_whitelist_classes && !$this->sandbox->hasBlacklistedClasses()){
-                $this->sandbox->whitelistClass($node->name);
-                $this->sandbox->whitelistType($node->name);
+            if($node instanceof Node\Stmt\Class_ && $node->name instanceof Node\Identifier && $this->sandbox->allow_classes && $this->sandbox->auto_whitelist_classes && !$this->sandbox->hasBlacklistedClasses()){
+                $this->sandbox->whitelistClass($node->name->toString());
+                $this->sandbox->whitelistType($node->name->toString());
             } else if($node instanceof Node\Stmt\Interface_ && is_string($node->name) && $this->sandbox->allow_interfaces && $this->sandbox->auto_whitelist_interfaces && !$this->sandbox->hasBlacklistedInterfaces()){
                 $this->sandbox->whitelistInterface($node->name);
             } else if($node instanceof Node\Stmt\Trait_ && is_string($node->name) && $this->sandbox->allow_traits && $this->sandbox->auto_whitelist_traits && !$this->sandbox->hasBlacklistedTraits()){
@@ -62,8 +62,8 @@
                         $this->sandbox->whitelistVar($var->name);
                     }
                 }
-            } else if($node instanceof Node\Stmt\Function_ && is_string($node->name) && $node->name && $this->sandbox->allow_functions && $this->sandbox->auto_whitelist_functions && !$this->sandbox->hasBlacklistedFuncs()){
-                $this->sandbox->whitelistFunc($node->name);
+            } else if($node instanceof Node\Stmt\Function_ && $node->name instanceof Node\Identifier && $this->sandbox->allow_functions && $this->sandbox->auto_whitelist_functions && !$this->sandbox->hasBlacklistedFuncs()){
+                $this->sandbox->whitelistFunc($node->name->toString());
             }
         }
     }

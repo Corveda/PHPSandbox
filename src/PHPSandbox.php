@@ -6290,7 +6290,7 @@
                         $this->validationError("Sandboxed code attempted to call blacklisted interface: $original_name", Error::BLACKLIST_INTERFACE_ERROR, null, $original_name);
                     }
                 } else {
-                    $this->validationError("Sandboxed code attempted to call invalidnterface: $original_name", Error::VALID_INTERFACE_ERROR, null, $original_name);
+                    $this->validationError("Sandboxed code attempted to call invalid interface: $original_name", Error::VALID_INTERFACE_ERROR, null, $original_name);
                 }
             }
             return true;
@@ -6588,7 +6588,7 @@
          */
         protected function autoWhitelist($code, $appended = false){
             $factory = new ParserFactory;
-            $parser = $factory->create(ParserFactory::PREFER_PHP5);
+            $parser = $factory->create(ParserFactory::PREFER_PHP7);
             try {
                 $statements = $parser->parse($code);
             } catch (ParserError $error) {
@@ -6783,7 +6783,7 @@
         public function validate($code){
             $this->preparsed_code = $this->disassemble($code);
             $factory = new ParserFactory;
-            $parser = $factory->create(ParserFactory::PREFER_PHP5);
+            $parser = $factory->create(ParserFactory::PREFER_PHP7);
 
             try {
                 $this->parsed_ast = $parser->parse($this->preparsed_code);

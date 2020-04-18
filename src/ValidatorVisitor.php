@@ -249,10 +249,10 @@
                 if(!$this->sandbox->allow_static_variables){
                     $this->sandbox->validationError("Sandboxed code attempted to create static variable!", Error::STATIC_VAR_ERROR, $node);
                 }
-                if(!is_string($node->name)){
+                if(!is_string($node->var->name)){
                     $this->sandbox->validationError("Sandboxed code attempted dynamically-named static variable call!", Error::DYNAMIC_STATIC_VAR_ERROR, $node);
                 }
-                if(!$this->sandbox->checkVar($node->name)){
+                if(!$this->sandbox->checkVar($node->var->name)){
                     $this->sandbox->validationError("Variable failed custom validation!", Error::VALID_VAR_ERROR, $node, $node->name);
                 }
                 if($node->default instanceof Node\Expr\New_){
