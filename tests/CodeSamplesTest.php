@@ -1,9 +1,10 @@
 <?php
     use \PHPSandbox\PHPSandbox;
+    use \PHPUnit\Framework\TestCase;
 
     error_reporting(E_ALL);
 
-    class CodeSamplesTest extends PHPUnit_Framework_TestCase {
+    class CodeSamplesTest extends TestCase {
         /**
          * @var PHPSandbox
          */
