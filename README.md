@@ -93,7 +93,7 @@ To install using [composer](http://getcomposer.org/), simply add the following t
 
     {
         "require": {
-            "corveda/php-sandbox": "2.*"
+            "corveda/php-sandbox": "3.*"
         }
     }
 
