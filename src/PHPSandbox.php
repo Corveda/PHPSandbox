@@ -166,126 +166,126 @@
      * @method has_blacklist_types()
      * @method is_whitelisted_type()
      * @method is_blacklisted_type()
-     * @method whitelist_func()
-     * @method blacklist_func()
-     * @method dewhitelist_func()
-     * @method deblacklist_func()
-     * @method whitelist_var()
-     * @method blacklist_var()
-     * @method dewhitelist_var()
-     * @method deblacklist_var()
-     * @method whitelist_global()
-     * @method blacklist_global()
-     * @method dewhitelist_global()
-     * @method deblacklist_global()
-     * @method whitelist_superglobal()
-     * @method blacklist_superglobal()
-     * @method dewhitelist_superglobal()
-     * @method deblacklist_superglobal()
-     * @method whitelist_const()
-     * @method blacklist_const()
-     * @method dewhitelist_const()
-     * @method deblacklist_const()
-     * @method whitelist_magic_const()
-     * @method blacklist_magic_const()
-     * @method dewhitelist_magic_const()
-     * @method deblacklist_magic_const()
-     * @method whitelist_namespace()
-     * @method blacklist_namespace()
-     * @method dewhitelist_namespace()
-     * @method deblacklist_namespace()
-     * @method whitelist_alias()
-     * @method blacklist_alias()
-     * @method dewhitelist_alias()
-     * @method deblacklist_alias()
-     * @method whitelist_use()
-     * @method blacklist_use()
-     * @method dewhitelist_use()
-     * @method deblacklist_use()
-     * @method whitelist_class()
-     * @method blacklist_class()
-     * @method dewhitelist_class()
-     * @method deblacklist_class()
-     * @method whitelist_interface()
-     * @method blacklist_interface()
-     * @method dewhitelist_interface()
-     * @method deblacklist_interface()
-     * @method whitelist_trait()
-     * @method blacklist_trait()
-     * @method dewhitelist_trait()
-     * @method deblacklist_trait()
-     * @method whitelist_keyword()
-     * @method blacklist_keyword()
-     * @method dewhitelist_keyword()
-     * @method deblacklist_keyword()
-     * @method whitelist_operator()
-     * @method blacklist_operator()
-     * @method dewhitelist_operator()
-     * @method deblacklist_operator()
-     * @method whitelist_primitive()
-     * @method blacklist_primitive()
-     * @method dewhitelist_primitive()
-     * @method deblacklist_primitive()
-     * @method whitelist_type()
-     * @method blacklist_type()
-     * @method dewhitelist_type()
-     * @method deblacklist_type()
-     * @method check_func()
-     * @method check_var()
-     * @method check_global()
-     * @method check_superglobal()
-     * @method check_const()
-     * @method check_magic_const()
-     * @method check_namespace()
-     * @method check_alias()
-     * @method check_use()
-     * @method check_class()
-     * @method check_interface()
-     * @method check_trait()
-     * @method check_keyword()
-     * @method check_operator()
-     * @method check_primitive()
-     * @method check_type()
-     * @method clear_trusted_code()
-     * @method clear_prepend()
-     * @method clear_append()
-     * @method clear_code()
-     * @method get_prepared_time()
-     * @method get_execution_time()
-     * @method get_time()
-     * @method set_error_handler()
-     * @method get_error_handler()
-     * @method unset_error_handler()
-     * @method get_last_error()
-     * @method set_exception_handler()
-     * @method get_exception_handler()
-     * @method unset_exception_handler()
-     * @method get_last_exception()
-     * @method set_validation_error_handler()
-     * @method get_validation_error_handler()
-     * @method unset_validation_error_handler()
-     * @method get_last_validation_error()
+     * @method PHPSandbox whitelist_func()
+     * @method PHPSandbox blacklist_func()
+     * @method PHPSandbox dewhitelist_func()
+     * @method PHPSandbox deblacklist_func()
+     * @method PHPSandbox whitelist_var()
+     * @method PHPSandbox blacklist_var()
+     * @method PHPSandbox dewhitelist_var()
+     * @method PHPSandbox deblacklist_var()
+     * @method PHPSandbox whitelist_global()
+     * @method PHPSandbox blacklist_global()
+     * @method PHPSandbox dewhitelist_global()
+     * @method PHPSandbox deblacklist_global()
+     * @method PHPSandbox whitelist_superglobal()
+     * @method PHPSandbox blacklist_superglobal()
+     * @method PHPSandbox dewhitelist_superglobal()
+     * @method PHPSandbox deblacklist_superglobal()
+     * @method PHPSandbox whitelist_const()
+     * @method PHPSandbox blacklist_const()
+     * @method PHPSandbox dewhitelist_const()
+     * @method PHPSandbox deblacklist_const()
+     * @method PHPSandbox whitelist_magic_const()
+     * @method PHPSandbox blacklist_magic_const()
+     * @method PHPSandbox dewhitelist_magic_const()
+     * @method PHPSandbox deblacklist_magic_const()
+     * @method PHPSandbox whitelist_namespace()
+     * @method PHPSandbox blacklist_namespace()
+     * @method PHPSandbox dewhitelist_namespace()
+     * @method PHPSandbox deblacklist_namespace()
+     * @method PHPSandbox whitelist_alias()
+     * @method PHPSandbox blacklist_alias()
+     * @method PHPSandbox dewhitelist_alias()
+     * @method PHPSandbox deblacklist_alias()
+     * @method PHPSandbox whitelist_use()
+     * @method PHPSandbox blacklist_use()
+     * @method PHPSandbox dewhitelist_use()
+     * @method PHPSandbox deblacklist_use()
+     * @method PHPSandbox whitelist_class()
+     * @method PHPSandbox blacklist_class()
+     * @method PHPSandbox dewhitelist_class()
+     * @method PHPSandbox deblacklist_class()
+     * @method PHPSandbox whitelist_interface()
+     * @method PHPSandbox blacklist_interface()
+     * @method PHPSandbox dewhitelist_interface()
+     * @method PHPSandbox deblacklist_interface()
+     * @method PHPSandbox whitelist_trait()
+     * @method PHPSandbox blacklist_trait()
+     * @method PHPSandbox dewhitelist_trait()
+     * @method PHPSandbox deblacklist_trait()
+     * @method PHPSandbox whitelist_keyword()
+     * @method PHPSandbox blacklist_keyword()
+     * @method PHPSandbox dewhitelist_keyword()
+     * @method PHPSandbox deblacklist_keyword()
+     * @method PHPSandbox whitelist_operator()
+     * @method PHPSandbox blacklist_operator()
+     * @method PHPSandbox dewhitelist_operator()
+     * @method PHPSandbox deblacklist_operator()
+     * @method PHPSandbox whitelist_primitive()
+     * @method PHPSandbox blacklist_primitive()
+     * @method PHPSandbox dewhitelist_primitive()
+     * @method PHPSandbox deblacklist_primitive()
+     * @method PHPSandbox whitelist_type()
+     * @method PHPSandbox blacklist_type()
+     * @method PHPSandbox dewhitelist_type()
+     * @method PHPSandbox deblacklist_type()
+     * @method bool check_func(string $name)
+     * @method bool check_var()
+     * @method bool check_global()
+     * @method bool check_superglobal()
+     * @method bool check_const()
+     * @method bool check_magic_const()
+     * @method bool check_namespace()
+     * @method bool check_alias()
+     * @method bool check_use()
+     * @method bool check_class()
+     * @method bool check_interface()
+     * @method bool check_trait()
+     * @method bool check_keyword()
+     * @method bool check_operator()
+     * @method bool check_primitive()
+     * @method bool check_type()
+     * @method PHPSandbox clear_trusted_code()
+     * @method PHPSandbox clear_prepend()
+     * @method PHPSandbox clear_append()
+     * @method PHPSandbox clear_code()
+     * @method float get_prepared_time()
+     * @method float get_execution_time()
+     * @method float get_time()
+     * @method PHPSandbox set_error_handler()
+     * @method callable|null get_error_handler()
+     * @method PHPSandbox unset_error_handler()
+     * @method Throwable|null get_last_error()
+     * @method PHPSandbox set_exception_handler()
+     * @method callable|null get_exception_handler()
+     * @method PHPSandbox unset_exception_handler()
+     * @method Throwable|null get_last_exception()
+     * @method PHPSandbox set_validation_error_handler()
+     * @method callable|null get_validation_error_handler()
+     * @method PHPSandbox unset_validation_error_handler()
+     * @method Throwable|null get_last_validation_error()
      * @method validation_error()
-     * @method normalize_func()
-     * @method normalize_superglobal()
-     * @method normalize_magic_const()
-     * @method normalize_namespace()
-     * @method normalize_alias()
-     * @method normalize_use()
-     * @method normalize_class()
-     * @method normalize_interface()
-     * @method normalize_trait()
-     * @method normalize_keyword()
-     * @method normalize_operator()
-     * @method normalize_primitive()
-     * @method normalize_type()
-     * @method prepare_vars()
-     * @method prepare_consts()
-     * @method prepare_namespaces()
-     * @method prepare_aliases()
-     * @method prepare_uses()
-     * @method auto_whitelist()
-     * @method auto_define()
+     * @method string normalize_func()
+     * @method string normalize_superglobal()
+     * @method string normalize_magic_const()
+     * @method string normalize_namespace()
+     * @method string normalize_alias()
+     * @method string normalize_use()
+     * @method string normalize_class()
+     * @method string normalize_interface()
+     * @method string normalize_trait()
+     * @method string normalize_keyword()
+     * @method string normalize_operator()
+     * @method string normalize_primitive()
+     * @method string normalize_type()
+     * @method PHPSandbox prepare_vars()
+     * @method PHPSandbox prepare_consts()
+     * @method PHPSandbox prepare_namespaces()
+     * @method PHPSandbox prepare_aliases()
+     * @method PHPSandbox prepare_uses()
+     * @method PHPSandbox auto_whitelist()
+     * @method PHPSandbox auto_define()
      */
     class PHPSandbox implements IteratorAggregate {
         /**
@@ -354,13 +354,13 @@
          * @var    array          A static array of defined_* and declared_* functions names used for redefining defined_* and declared_* values
          */
         public static array $defined_funcs = [
-            'get_define_functions',
+            'get_defined_functions',
             'get_defined_vars',
             'get_defined_constants',
             'get_declared_classes',
             'get_declared_interfaces',
             'get_declared_traits',
-            'get_included_files'
+            'get_included_files',
         ];
         /**
          * @static
@@ -374,7 +374,7 @@
         /**
          * @static
          * @var    array          A static array of var_dump, print_r and var_export, intval, floatval, is_string, is_object,
-         *                          is_scalar and is_callable for redefining those functions
+         *                        is_scalar, is_callable, and array_key_exists for redefining those functions
          */
         public static array $sandboxed_string_funcs = [
             'var_dump',
@@ -386,7 +386,8 @@
             'is_string',
             'is_object',
             'is_scalar',
-            'is_callable'
+            'is_callable',
+            'array_key_exists',
         ];
         /**
          * @var    string       The randomly generated name of the PHPSandbox variable passed to the generated closure
@@ -632,7 +633,7 @@
          */
         public bool $auto_define_vars            = true;
         /**
-         * @var    bool       Should PHPSandbox overwrite get_define_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?
+         * @var    bool       Should PHPSandbox overwrite get_defined_functions, get_defined_vars, get_defined_constants, get_declared_classes, get_declared_interfaces and get_declared_traits?
          * @default true
          */
         public bool $overwrite_defined_funcs     = true;
@@ -746,6 +747,11 @@
          * @default false
          */
         public bool $allow_halting               = false;
+        /**
+         * @var    bool       Should PHPSandbox sandbox all string values?
+         * @default true
+         */
+        public bool $sandbox_strings             = true;
         /* TRUSTED CODE STRINGS */
         /**
          * @var    string     String of prepended code, will be automagically whitelisted for functions, variables, globals, constants, classes, interfaces and traits if $auto_whitelist_trusted_code is true
@@ -789,7 +795,7 @@
          */
         protected string $generated_code = '';
         /**
-         * @var    null|callable        Callable that handles any errors when set
+         * @var    callable|null        Callable that handles any errors when set
          */
         protected $error_handler;
         /**
@@ -801,7 +807,7 @@
          */
         protected ?array $last_error;
         /**
-         * @var    null|callable        Callable that handles any thrown exceptions when set
+         * @var    callable|null        Callable that handles any thrown exceptions when set
          */
         protected $exception_handler;
         /**
@@ -809,7 +815,7 @@
          */
         protected  ?Throwable $last_exception = null;
         /**
-         * @var    null|callable        Callable that handles any thrown validation errors when set
+         * @var    callable|null        Callable that handles any thrown validation errors when set
          */
         protected $validation_error_handler;
         /**
@@ -893,7 +899,7 @@
                                       array $classes = [],
                                       array $interfaces = [],
                                       array $traits = []){
-            return new static($options, $functions, $variables, $constants, $namespaces, $aliases, $superglobals, $magic_constants, $classes, $interfaces, $traits);
+            return new self($options, $functions, $variables, $constants, $namespaces, $aliases, $superglobals, $magic_constants, $classes, $interfaces, $traits);
         }
 
         /** PHPSandbox __invoke magic method
@@ -1034,7 +1040,7 @@
          * @param   array|string    $template          The JSON array or string template to import
          * @param   int             $import_flag       Binary flags signifying which parts of the JSON template to import
          *
-         * @throws  Error           Throws exception if JSON template could not be imported
+         * @throws  Throwable       Throws exception if JSON template could not be imported
          *
          * @return  PHPSandbox      Returns the PHPSandbox instance for fluent querying
          */
@@ -1045,15 +1051,13 @@
         /** Get name of PHPSandbox variable
          * @return  string                     The name of the PHPSandbox variable
          */
-        public function getName(){
+        public function getName() : string {
             return $this->name;
         }
 
         /** Set PHPSandbox option
          *
          * You can pass an $option name to set to $value, an array of $option names to set to $value, or an associative array of $option names and their values to set.
-         *
-         *
          *
          * @param   string|array    $option     String or array of strings or associative array of keys of option names to set $value to
          * @param   bool|int|null   $value      Boolean, integer or null $value to set $option to (optional)
@@ -1122,6 +1126,7 @@
                 case 'allow_references':
                 case 'allow_backticks':
                 case 'allow_halting':
+                case 'sandbox_strings':
                     $this->{$option} = !!$value;
                     break;
             }
@@ -1223,6 +1228,7 @@
                 case 'allow_references':
                 case 'allow_backticks':
                 case 'allow_halting':
+                case 'sandbox_strings':
                     return $this->{$option};
             }
             return null;
@@ -1233,10 +1239,10 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   string          $type       String of $type name to set validator for
-         * @param   callable        $callable   Callable that validates the passed element
+         * @param  string           $type       String of $type name to set validator for
+         * @param  callable         $callable   Callable that validates the passed element
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setValidator(string $type, callable $callable) : self {
             $type = strtolower($type);  //normalize type
@@ -1252,16 +1258,15 @@
          *
          * @return  callable|null
          */
-        public function getValidator(string $type){
-            $type = strtolower($type);  //normalize type
-            return isset($this->validation[$type]) ? $this->validation[$type] : null;
+        public function getValidator(string $type) : ?callable {
+            return $this->validation[strtolower($type)] ?? null;
         }
 
         /** Unset validation callable for specified $type
          *
          * @param   string          $type       String of $type to unset
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetValidator(string $type) : self {
             $type = strtolower($type);  //normalize type
@@ -1276,9 +1281,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized function names include the namespace and are lowercase!
          *
-         * @param   callable        $callable   Callable that validates the normalized passed function name
+         * @param  callable         $callable   Callable that validates the normalized passed function name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setFuncValidator(callable $callable) : self {
             $this->validation['function'] = $callable;
@@ -1289,13 +1294,13 @@
          *
          * @return  callable|null
          */
-        public function getFuncValidator(){
-            return isset($this->validation['function']) ? $this->validation['function'] : null;
+        public function getFuncValidator() : ?callable {
+            return $this->validation['function'] ?? null;
         }
 
         /** Unset validation callable for functions
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetFuncValidator() : self {
             $this->validation['function'] = null;
@@ -1307,9 +1312,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   callable        $callable   Callable that validates the passed variable name
+         * @param  callable         $callable   Callable that validates the passed variable name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setVarValidator(callable $callable) : self {
             $this->validation['variable'] = $callable;
@@ -1320,13 +1325,13 @@
          *
          * @return  callable|null
          */
-        public function getVarValidator(){
-            return isset($this->validation['variable']) ? $this->validation['variable'] : null;
+        public function getVarValidator() : ?callable {
+            return $this->validation['variable'] ?? null;
         }
 
         /** Unset validation callable for variables
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetVarValidator() : self {
             $this->validation['variable'] = null;
@@ -1338,9 +1343,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   callable        $callable   Callable that validates the passed global name
+         * @param  callable         $callable   Callable that validates the passed global name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setGlobalValidator(callable $callable) : self {
             $this->validation['global'] = $callable;
@@ -1351,13 +1356,13 @@
          *
          * @return  callable|null
          */
-        public function getGlobalValidator(){
-            return isset($this->validation['global']) ? $this->validation['global'] : null;
+        public function getGlobalValidator() : ?callable {
+            return $this->validation['global'] ?? null;
         }
 
         /** Unset validation callable for globals
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetGlobalValidator() : self {
             $this->validation['global'] = null;
@@ -1369,9 +1374,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized superglobal names are uppercase and without a leading _
          *
-         * @param   callable        $callable   Callable that validates the passed superglobal name
+         * @param  callable         $callable   Callable that validates the passed superglobal name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setSuperglobalValidator(callable $callable) : self {
             $this->validation['superglobal'] = $callable;
@@ -1382,13 +1387,13 @@
          *
          * @return  callable|null
          */
-        public function getSuperglobalValidator(){
-            return isset($this->validation['superglobal']) ? $this->validation['superglobal'] : null;
+        public function getSuperglobalValidator() : ?callable {
+            return $this->validation['superglobal'] ?? null;
         }
 
         /** Unset validation callable for superglobals
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetSuperglobalValidator() : self {
             $this->validation['superglobal'] = null;
@@ -1400,9 +1405,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   callable        $callable   Callable that validates the passed constant name
+         * @param  callable         $callable   Callable that validates the passed constant name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setConstValidator(callable $callable) : self {
             $this->validation['constant'] = $callable;
@@ -1413,13 +1418,13 @@
          *
          * @return  callable|null
          */
-        public function getConstValidator(){
-            return isset($this->validation['constant']) ? $this->validation['constant'] : null;
+        public function getConstValidator() : ?callable {
+            return $this->validation['constant'] ?? null;
         }
 
         /** Unset validation callable for constants
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetConstValidator() : self {
             $this->validation['constant'] = null;
@@ -1431,9 +1436,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized magic constant names are upper case and trimmed of __
          *
-         * @param   callable        $callable   Callable that validates the passed magic constant name
+         * @param  callable         $callable   Callable that validates the passed magic constant name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setMagicConstValidator(callable $callable) : self {
             $this->validation['magic_constant'] = $callable;
@@ -1444,13 +1449,13 @@
          *
          * @return  callable|null
          */
-        public function getMagicConstValidator(){
-            return isset($this->validation['magic_constant']) ? $this->validation['magic_constant'] : null;
+        public function getMagicConstValidator() : ?callable {
+            return $this->validation['magic_constant'] ?? null;
         }
 
         /** Unset validation callable for magic constants
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetMagicConstValidator() : self {
             $this->validation['magic_constant'] = null;
@@ -1462,9 +1467,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   callable        $callable   Callable that validates the passed namespace name
+         * @param  callable         $callable   Callable that validates the passed namespace name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setNamespaceValidator(callable $callable) : self {
             $this->validation['namespace'] = $callable;
@@ -1475,13 +1480,13 @@
          *
          * @return  callable|null
          */
-        public function getNamespaceValidator(){
-            return isset($this->validation['namespace']) ? $this->validation['namespace'] : null;
+        public function getNamespaceValidator() : ?callable {
+            return $this->validation['namespace'] ?? null;
         }
 
         /** Unset validation callable for namespaces
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetNamespaceValidator() : self {
             $this->validation['namespace'] = null;
@@ -1493,9 +1498,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   callable        $callable   Callable that validates the passed alias name
+         * @param  callable         $callable   Callable that validates the passed alias name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setAliasValidator(callable $callable) : self {
             $this->validation['alias'] = $callable;
@@ -1506,13 +1511,13 @@
          *
          * @return  callable|null
          */
-        public function getAliasValidator(){
-            return isset($this->validation['alias']) ? $this->validation['alias'] : null;
+        public function getAliasValidator() : ?callable {
+            return $this->validation['alias'] ?? null;
         }
 
         /** Unset validation callable for aliases
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetAliasValidator() : self {
             $this->validation['alias'] = null;
@@ -1526,9 +1531,9 @@
          *
          * @alias setAliasValidator();
          *
-         * @param   callable        $callable   Callable that validates the passed use (aka alias) name
+         * @param  callable         $callable   Callable that validates the passed use (aka alias) name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setUseValidator(callable $callable) : self {
             return $this->setAliasValidator($callable);
@@ -1540,7 +1545,7 @@
          *
          * @return  callable|null
          */
-        public function getUseValidator() : self {
+        public function getUseValidator() : ?callable {
             return $this->getAliasValidator();
         }
 
@@ -1548,7 +1553,7 @@
          *
          * @alias unsetAliasValidator();
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetUseValidator() : self {
             return $this->unsetAliasValidator();
@@ -1559,9 +1564,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized class names are lowercase
          *
-         * @param   callable        $callable   Callable that validates the passed class name
+         * @param  callable         $callable   Callable that validates the passed class name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setClassValidator(callable $callable) : self {
             $this->validation['class'] = $callable;
@@ -1572,13 +1577,13 @@
          *
          * @return  callable|null
          */
-        public function getClassValidator(){
-            return isset($this->validation['class']) ? $this->validation['class'] : null;
+        public function getClassValidator() : ?callable {
+            return $this->validation['class'] ?? null;
         }
 
         /** Unset validation callable for classes
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetClassValidator() : self {
             $this->validation['class'] = null;
@@ -1590,9 +1595,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized interface names are lowercase
          *
-         * @param   callable        $callable   Callable that validates the passed interface name
+         * @param  callable         $callable   Callable that validates the passed interface name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setInterfaceValidator(callable $callable) : self {
             $this->validation['interface'] = $callable;
@@ -1603,13 +1608,13 @@
          *
          * @return  callable|null
          */
-        public function getInterfaceValidator(){
-            return isset($this->validation['interface']) ? $this->validation['interface'] : null;
+        public function getInterfaceValidator() : ?callable {
+            return $this->validation['interface'] ?? null;
         }
 
         /** Unset validation callable for interfaces
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetInterfaceValidator() : self {
             $this->validation['interface'] = null;
@@ -1621,9 +1626,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance. NOTE: Normalized trait names are lowercase
          *
-         * @param   callable        $callable   Callable that validates the passed trait name
+         * @param  callable         $callable   Callable that validates the passed trait name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setTraitValidator(callable $callable) : self {
             $this->validation['trait'] = $callable;
@@ -1634,13 +1639,13 @@
          *
          * @return  callable|null
          */
-        public function getTraitValidator(){
-            return isset($this->validation['trait']) ? $this->validation['trait'] : null;
+        public function getTraitValidator() : ?callable {
+            return $this->validation['trait'] ?? null;
         }
 
         /** Unset validation callable for traits
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetTraitValidator() : self {
             $this->validation['trait'] = null;
@@ -1652,9 +1657,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   callable        $callable   Callable that validates the passed keyword name
+         * @param  callable         $callable   Callable that validates the passed keyword name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setKeywordValidator(callable $callable) : self {
             $this->validation['keyword'] = $callable;
@@ -1665,13 +1670,13 @@
          *
          * @return  callable|null
          */
-        public function getKeywordValidator(){
-            return isset($this->validation['keyword']) ? $this->validation['keyword'] : null;
+        public function getKeywordValidator() : ?callable {
+            return $this->validation['keyword'] ?? null;
         }
 
         /** Unset validation callable for keywords
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function unsetKeywordValidator() : self {
             $this->validation['keyword'] = null;
@@ -1683,9 +1688,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   callable        $callable   Callable that validates the passed operator name
+         * @param  callable         $callable   Callable that validates the passed operator name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setOperatorValidator(callable $callable) : self {
             $this->validation['operator'] = $callable;
@@ -1696,13 +1701,13 @@
          *
          * @return  callable|null
          */
-        public function getOperatorValidator(){
-            return isset($this->validation['operator']) ? $this->validation['operator'] : null;
+        public function getOperatorValidator() : ?callable {
+            return $this->validation['operator'] ?? null;
         }
 
         /** Unset validation callable for operators
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox      Returns the PHPSandbox instance for fluent querying
          */
         public function unsetOperatorValidator() : self {
             $this->validation['operator'] = null;
@@ -1714,9 +1719,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   callable        $callable   Callable that validates the passed primitive name
+         * @param  callable         $callable   Callable that validates the passed primitive name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setPrimitiveValidator(callable $callable) : self {
             $this->validation['primitive'] = $callable;
@@ -1727,8 +1732,8 @@
          *
          * @return  callable|null
          */
-        public function getPrimitiveValidator(){
-            return isset($this->validation['primitive']) ? $this->validation['primitive'] : null;
+        public function getPrimitiveValidator() : ?callable {
+            return $this->validation['primitive'] ?? null;
         }
 
         /** Unset validation callable for primitives
@@ -1745,9 +1750,9 @@
          * Validator callable must accept two parameters: a string of the normalized name of the checked element,
          * and the PHPSandbox instance
          *
-         * @param   callable        $callable   Callable that validates the passed type name
+         * @param  callable         $callable   Callable that validates the passed type name
          *
-         * @return PHPSandbox           Returns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setTypeValidator(callable $callable) : self {
             $this->validation['type'] = $callable;
@@ -1758,8 +1763,8 @@
          *
          * @return  callable|null
          */
-        public function getTypeValidator(){
-            return isset($this->validation['type']) ? $this->validation['type'] : null;
+        public function getTypeValidator() : ?callable {
+            return $this->validation['type'] ?? null;
         }
 
         /** Unset validation callable for types
@@ -1773,9 +1778,9 @@
 
         /** Set PHPSandbox prepended code
          *
-         * @param   string         $prepended_code      Sets a string of the prepended code
+         * @param  string           $prepended_code      Sets a string of the prepended code
          *
-         * @return PHPSandboxReturns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setPrependedCode(string $prepended_code = '') : self {
             $this->prepended_code = $prepended_code;
@@ -1784,9 +1789,9 @@
 
         /** Set PHPSandbox appended code
          *
-         * @param   string         $appended_code       Sets a string of the appended code
+         * @param  string           $appended_code       Sets a string of the appended code
          *
-         * @return PHPSandboxReturns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setAppendedCode(string $appended_code = '') : self {
             $this->appended_code = $appended_code;
@@ -1795,9 +1800,9 @@
 
         /** Set PHPSandbox preparsed code
          *
-         * @param   string         $preparsed_code       Sets a string of the preparsed code
+         * @param  string           $preparsed_code       Sets a string of the preparsed code
          *
-         * @return PHPSandboxReturns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setPreparsedCode(string $preparsed_code = '') : self {
             $this->preparsed_code = $preparsed_code;
@@ -1806,9 +1811,9 @@
 
         /** Set PHPSandbox parsed AST array
          *
-         * @param   array          $parsed_ast          Sets an array of the parsed AST code
+         * @param  array            $parsed_ast          Sets an array of the parsed AST code
          *
-         * @return PHPSandboxReturns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setParsedAST(array $parsed_ast = []) : self {
             $this->parsed_ast = $parsed_ast;
@@ -1817,9 +1822,9 @@
 
         /** Set PHPSandbox prepared code
          *
-         * @param   string         $prepared_code       Sets a string of the prepared code
+         * @param  string           $prepared_code       Sets a string of the prepared code
          *
-         * @return PHPSandboxReturns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setPreparedCode(string $prepared_code = '') : self {
             $this->prepared_code = $prepared_code;
@@ -1828,9 +1833,9 @@
 
         /** Set PHPSandbox prepared AST array
          *
-         * @param   array          $prepared_ast        Sets an array of the prepared AST code
+         * @param  array            $prepared_ast        Sets an array of the prepared AST code
          *
-         * @return PHPSandboxReturns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setPreparedAST(array $prepared_ast = []) : self {
             $this->prepared_ast = $prepared_ast;
@@ -1839,9 +1844,9 @@
 
         /** Set PHPSandbox generated code
          *
-         * @param   string         $generated_code      Sets a string of the generated code
+         * @param  string           $generated_code      Sets a string of the generated code
          *
-         * @return PHPSandboxReturns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setGeneratedCode(string $generated_code = '') : self {
             $this->generated_code = $generated_code;
@@ -1850,11 +1855,11 @@
 
         /** Set PHPSandbox generated code
          *
-         * @alias   setGeneratedCode();
+         * @alias  setGeneratedCode();
          *
-         * @param  string          $generated_code      Sets a string of the generated code
+         * @param  string           $generated_code      Sets a string of the generated code
          *
-         * @return PHPSandboxReturns the PHPSandbox instance for fluent querying
+         * @return PHPSandbox       Returns the PHPSandbox instance for fluent querying
          */
         public function setCode(string $generated_code = '') : self {
             $this->generated_code = $generated_code;
@@ -1912,6 +1917,7 @@
 
         /** Get PHPSandbox generated code
          * @alias   getGeneratedCode();
+         *
          * @return  string          Returns a string of the generated code
          */
         public function getCode() : string {
@@ -2292,6 +2298,20 @@
             return call_user_func_array('var_export', $arguments);
         }
 
+        /** Get PHPSandbox redefined array_key_exists
+         *
+         * @param   string|SandboxedString  $key      The key to check for
+         * @param   array                   $array    The array to check against
+         *
+         * @return  bool        Returns the value from array_key_exists()
+         */
+        public function _array_key_exists($key, array $array) : bool {
+            if($key instanceof SandboxedString){
+                $key = strval($key);
+            }
+            return array_key_exists($key, $array);
+        }
+
         /** Return integer value of SandboxedString or mixed value
          *
          * @param   mixed           $value      Value to return as integer
@@ -2501,6 +2521,11 @@
             $name = array_shift($arguments);
             $original_name = $name;
             $name = $this->normalizeFunc($name);
+            foreach($arguments as &$argument){
+                if($argument instanceof SandboxedString){
+                    $argument = strval($argument);
+                }
+            }
             if(isset($this->definitions['functions'][$name]) && is_callable($this->definitions['functions'][$name]['function'])){
                 $function = $this->definitions['functions'][$name]['function'];
                 if($this->definitions['functions'][$name]['pass_sandbox']){            //pass the PHPSandbox instance to the defined function?
@@ -2525,7 +2550,7 @@
          *
          * @throws  Throwable           Throws exception if definition fails
          *
-         * @return PHPSandbox          Returns the PHPSandbox instance for fluent querying
+         * @return  PHPSandbox          Returns the PHPSandbox instance for fluent querying
          */
         public function define($type, $name = null, $value = null) : self {
             if(is_array($type)){
@@ -2574,7 +2599,7 @@
          * @param   string|array    $type       Associative array or string of definition type to undefine
          * @param   string|array    $name       Associative array or string of definition name to undefine
          *
-         * @return PHPSandbox      Returns the PHPSandbox instance for fluent querying
+         * @return  PHPSandbox      Returns the PHPSandbox instance for fluent querying
          */
         public function undefine($type, $name = null) : self {
             if(is_array($type)){
@@ -2633,7 +2658,7 @@
          *
          * @return  PHPSandbox      Returns the PHPSandbox instance for fluent querying
          */
-        public function defineFunc($name, $function, bool $pass_sandbox = false) : self {
+        public function defineFunc($name, callable $function, bool $pass_sandbox = false) : self {
             if(is_array($name)){
                 return $this->defineFuncs($name);
             }
@@ -2641,7 +2666,7 @@
                 $this->validationError("Cannot define unnamed function!", Error::DEFINE_FUNC_ERROR, null, '');
             }
             if(is_array($function) && count($function)){    //so you can pass array of function names and array of function and pass_sandbox flag
-                $pass_sandbox = isset($function[1]) ? $function[1] : false;
+                $pass_sandbox = $function[1] ?? false;
                 $function = $function[0];
             }
             $original_name = $name;
@@ -5934,14 +5959,14 @@
             $original_name = $name;
             if($name instanceof Closure){
                 if(!$this->allow_closures){
-                    $this->validationError("Sandboxed code attempted to call closure!", Error::CLOSURE_ERROR);
+                    $this->validationError('Sandboxed code attempted to call closure!', Error::CLOSURE_ERROR);
                 }
                 return true;
             } else if($name instanceof SandboxedString){
                 $name = strval($name);
             }
             if(!$name || !is_string($name)){
-                $this->validationError("Sandboxed code attempted to call unnamed function!", Error::VALID_FUNC_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed function!', Error::VALID_FUNC_ERROR, null, '');
             }
             $name = $this->normalizeFunc($name);
             if(is_callable($this->validation['function'])){
@@ -5978,7 +6003,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed variable!", Error::VALID_VAR_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed variable!', Error::VALID_VAR_ERROR, null, '');
             }
             if(is_callable($this->validation['variable'])){
                 return call_user_func_array($this->validation['variable'], [$name, $this]);
@@ -6015,7 +6040,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed global!", Error::VALID_GLOBAL_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed global!', Error::VALID_GLOBAL_ERROR, null, '');
             }
             if(is_callable($this->validation['global'])){
                 return call_user_func_array($this->validation['global'], [$name, $this]);
@@ -6050,7 +6075,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed superglobal!", Error::VALID_SUPERGLOBAL_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed superglobal!', Error::VALID_SUPERGLOBAL_ERROR, null, '');
             }
             $name = $this->normalizeSuperglobal($name);
             if(is_callable($this->validation['superglobal'])){
@@ -6088,12 +6113,12 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed constant!", Error::VALID_CONST_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed constant!', Error::VALID_CONST_ERROR, null, '');
             }
-            if(strtolower($name) == 'true' || strtolower($name) == 'false'){
+            if(strtolower($name) === 'true' || strtolower($name) === 'false'){
                 return $this->checkPrimitive('bool');
             }
-            if(strtolower($name) == 'null'){
+            if(strtolower($name) === 'null'){
                 return $this->checkPrimitive('null');
             }
             if(is_callable($this->validation['constant'])){
@@ -6131,7 +6156,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed magic constant!", Error::VALID_MAGIC_CONST_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed magic constant!', Error::VALID_MAGIC_CONST_ERROR, null, '');
             }
             $name = $this->normalizeMagicConst($name);
             if(is_callable($this->validation['magic_constant'])){
@@ -6169,7 +6194,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed namespace!", Error::VALID_NAMESPACE_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed namespace!', Error::VALID_NAMESPACE_ERROR, null, '');
             }
             $name = $this->normalizeNamespace($name);
             if(is_callable($this->validation['namespace'])){
@@ -6207,7 +6232,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed alias!", Error::VALID_ALIAS_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed alias!', Error::VALID_ALIAS_ERROR, null, '');
             }
             $name = $this->normalizeAlias($name);
             if(is_callable($this->validation['alias'])){
@@ -6300,7 +6325,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed interface!", Error::VALID_INTERFACE_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed interface!', Error::VALID_INTERFACE_ERROR, null, '');
             }
             $name = $this->normalizeInterface($name);
             if(is_callable($this->validation['interface'])){
@@ -6338,7 +6363,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed trait!", Error::VALID_TRAIT_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed trait!', Error::VALID_TRAIT_ERROR, null, '');
             }
             $name = $this->normalizeTrait($name);
             if(is_callable($this->validation['trait'])){
@@ -6376,7 +6401,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed keyword!", Error::VALID_KEYWORD_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed keyword!', Error::VALID_KEYWORD_ERROR, null, '');
             }
             $name = $this->normalizeKeyword($name);
             if(is_callable($this->validation['keyword'])){
@@ -6410,7 +6435,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed operator!", Error::VALID_OPERATOR_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed operator!', Error::VALID_OPERATOR_ERROR, null, '');
             }
             $name = $this->normalizeOperator($name);
             if(is_callable($this->validation['operator'])){
@@ -6444,7 +6469,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed primitive!", Error::VALID_PRIMITIVE_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed primitive!', Error::VALID_PRIMITIVE_ERROR, null, '');
             }
             $name = $this->normalizePrimitive($name);
             if(is_callable($this->validation['primitive'])){
@@ -6478,7 +6503,7 @@
                 $name = strval($name);
             }
             if(!$name){
-                $this->validationError("Sandboxed code attempted to call unnamed type!", Error::VALID_TYPE_ERROR, null, '');
+                $this->validationError('Sandboxed code attempted to call unnamed type!', Error::VALID_TYPE_ERROR, null, '');
             }
             $name = $this->normalizeType($name);
             if(is_callable($this->validation['type'])){
@@ -6510,7 +6535,7 @@
             $output = [];
             foreach($this->definitions['variables'] as $name => $value){
                 if(is_int($name)){  //can't define numeric variable names
-                    $this->validationError("Cannot define variable name that begins with an integer!", Error::DEFINE_VAR_ERROR, null, $name);
+                    $this->validationError('Cannot define variable name that begins with an integer!', Error::DEFINE_VAR_ERROR, null, $name);
                 }
                 if(is_scalar($value) || is_null($value)){
                     if(is_bool($value)){
@@ -7126,7 +7151,7 @@
          *
          * This function returns the sandbox validation error handler.
          *
-         * @return null|callable
+         * @return callable|null
          */
         public function getValidationErrorHandler() : ?callable {
             return $this->validation_error_handler;

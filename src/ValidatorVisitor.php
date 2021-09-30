@@ -42,7 +42,7 @@
          * @return  Node|bool|null        Return rewritten node, false if node must be removed, or null if no changes to the node are made
          */
         public function leaveNode(Node $node){
-            if($node instanceof Node\Arg){
+            if($node instanceof Node\Arg && $this->sandbox->sandbox_strings){
                 return new Node\Expr\FuncCall(new Node\Name\FullyQualified(($node->value instanceof Node\Expr\Variable) ? 'PHPSandbox\\wrapByRef' : 'PHPSandbox\\wrap'), [$node, new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))])], $node->getAttributes());
             } else if($node instanceof Node\Stmt\InlineHTML){
                 if(!$this->sandbox->allow_escaping){
@@ -93,7 +93,7 @@
                     }
                 } else {
                     return new Node\Expr\Ternary(
-                        new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]), 'check_func', [new Node\Arg($node->name)], $node->getAttributes()),
+                        new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]), 'checkFunc', [new Node\Arg($node->name)], $node->getAttributes()),
                         $node,
                         new Node\Expr\ConstFetch(new Node\Name('null'))
                     );

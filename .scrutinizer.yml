@@ -1,6 +1,0 @@
-# .scrutinizer.yml
-tools:
-    external_code_coverage: true
-    php_pdepend: true
-    php_cpd: true
-    php_analyzer: true
