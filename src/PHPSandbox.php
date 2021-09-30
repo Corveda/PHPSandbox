@@ -486,32 +486,32 @@
          * @var    bool       Flag to indicate whether the sandbox should validate functions
          * @default true
          */
-        public bool $validate_functions         = true;
+        public bool $validate_functions          = true;
         /**
          * @var    bool       Flag to indicate whether the sandbox should validate variables
          * @default true
          */
-        public bool $validate_variables         = true;
+        public bool $validate_variables          = true;
         /**
          * @var    bool       Flag to indicate whether the sandbox should validate globals
          * @default true
          */
-        public bool $validate_globals           = true;
+        public bool $validate_globals            = true;
         /**
          * @var    bool       Flag to indicate whether the sandbox should validate superglobals
          * @default true
          */
-        public bool $validate_superglobals      = true;
+        public bool $validate_superglobals       = true;
         /**
          * @var    bool       Flag to indicate whether the sandbox should validate constants
          * @default true
          */
-        public bool $validate_constants         = true;
+        public bool $validate_constants          = true;
         /**
          * @var    bool       Flag to indicate whether the sandbox should validate magic constants
          * @default true
          */
-        public bool $validate_magic_constants   = true;
+        public bool $validate_magic_constants    = true;
         /**
          * @var    bool       Flag to indicate whether the sandbox should validate namespaces
          * @default true
@@ -566,12 +566,12 @@
          * @var    int        Integer value of maximum number of seconds the sandbox should be allowed to execute
          * @default 0
          */
-        public int $time_limit                 = 0;
+        public int $time_limit                   = 0;
         /**
          * @var    bool       Flag to indicate whether the sandbox should allow included files
          * @default false
          */
-        public bool $allow_includes            = false;
+        public bool $allow_includes              = false;
         /**
          * @var    bool       Flag to indicate whether the sandbox should automatically sandbox included files
          * @default true
@@ -6875,7 +6875,7 @@
             try {
                 $this->parsed_ast = $parser->parse($this->preparsed_code);
             } catch (ParserError $error) {
-                $this->validationError("Could not parse sandboxed code!", Error::PARSER_ERROR, null, $this->preparsed_code, $error);
+                $this->validationError('Could not parse sandboxed code!', Error::PARSER_ERROR, null, $this->preparsed_code, $error);
             }
 
             $prettyPrinter = new Standard();
@@ -7209,7 +7209,7 @@
          * @param   string                      $name       The name of the PHPSandbox instance to retrieve
          * @return  PHPSandbox|null
          */
-        public static function getSandbox($name) : ?self {
+        public static function getSandbox(string $name) : ?self {
             return static::$sandboxes[$name] ?? null;
         }
 

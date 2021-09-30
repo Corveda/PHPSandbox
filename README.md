@@ -101,7 +101,7 @@ Then run *composer install --dry-run* to check for any potential problems, and *
 
 ## LICENSE
 
-    Copyright (c) 2013-2016 by Corveda, LLC.
+    Copyright (c) 2013-2021 by Corveda, LLC.
 
     Some rights reserved.
 
