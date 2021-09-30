@@ -1,6 +1,6 @@
 <?php
-    use \PHPSandbox\PHPSandbox;
-    use \PHPUnit\Framework\TestCase;
+    use PHPSandbox\PHPSandbox,
+        PHPUnit\Framework\TestCase;
 
     error_reporting(E_ALL);
 
@@ -8,31 +8,33 @@
         /**
          * @var PHPSandbox
          */
-        protected $sandbox;
+        protected PHPSandbox $sandbox;
 
         /**
          * Sets up the test
          */
-        public function setUp(){
+        public function setUp() : void {
             $this->sandbox = new PHPSandbox;
         }
 
-        public function testMultipleIncludes(){
+        public function testMultipleIncludes() : void {
             $path = __DIR__ . '/samples/multiple-includes/index.php';
             $this->sandbox->validate_magic_constants = false;
             $this->sandbox->allow_classes = true;
             $this->sandbox->validate_classes = false;
             $this->sandbox->allow_includes = true;
-            $this->sandbox->execute(file_get_contents($path), false, $path);
+            $result = $this->sandbox->execute(file_get_contents($path), false, $path);
+            $this->assertEquals(['ok', null], $result);
         }
 
-        public function testPropertiesWithMagickConstants(){
+        public function testPropertiesWithMagickConstants() : void {
             $path = __DIR__ . '/samples/properties_with_magic_constants/index.php';
             $this->sandbox->validate_magic_constants = false;
             $this->sandbox->allow_classes = true;
             $this->sandbox->validate_classes = false;
             $this->sandbox->allow_includes = true;
             $this->sandbox->capture_output = true;
-            $this->sandbox->execute(file_get_contents($path), false, $path);
+            $result = $this->sandbox->execute(file_get_contents($path), false, $path);
+            $this->assertEquals($path, $result);
         }
     }

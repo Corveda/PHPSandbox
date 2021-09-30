@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 09/11/2021
+- Updated dependencies and support for PHP 8.0. Minimum PHP version raised to 7.0.
+
 ## 02/09/2016
 - Updated to use namespaced PHPParser library, modernized method naming conventions. Minimum PHP version raised to 5.4.
 

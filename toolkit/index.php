@@ -317,7 +317,7 @@
             <a href="javascript:;" class="help">Help</a>
         </strong>
     </p>
-    <div align="center" style="font-size: 8px; font-weight: bold;">&copy; Copyright 2013 - <?php echo date("Y"); ?> Elijah Horton. - Some Rights Reserved.<br/>See <a href="../LICENSE" target="_blank">LICENSE</a> for details.</div>
+    <div align="center" style="font-size: 8px; font-weight: bold;">&copy; Copyright 2013 - <?php echo date("Y"); ?> Corveda, LLC. - Some Rights Reserved.<br/>See <a href="../LICENSE" target="_blank">LICENSE</a> for details.</div>
     <hr class="hr"/>
     <h3 style="margin: 0;">Choose Template:</h3>
     <br/>

@@ -11,7 +11,7 @@
      *
      * @return  mixed|SandboxedString   Returns the wrapped value
      */
-    function wrap($value, $sandbox){
+    function wrap($value, PHPSandbox $sandbox){
         if(!($value instanceof SandboxedString) && is_object($value) && method_exists($value, '__toString')){
             $strval = $value->__toString();
             return is_callable($strval) ? new SandboxedString($strval, $sandbox) : $value;
@@ -41,7 +41,7 @@
      *
      * @return  mixed|SandboxedString   Returns the wrapped value
      */
-    function &wrapByRef(&$value, $sandbox){
+    function &wrapByRef(&$value, PHPSandbox $sandbox){
         if(!($value instanceof SandboxedString) && is_object($value) && method_exists($value, '__toString')){
             $strVal = $value->__toString();
 	        if (is_callable($strVal)) {
