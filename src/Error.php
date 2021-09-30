@@ -4,7 +4,9 @@
      */
     namespace PHPSandbox;
 
-    use \PhpParser\Node;
+    use Exception,
+        PhpParser\Node,
+        Throwable;
 
     /**
      * Error class for PHP Sandboxes.
@@ -14,9 +16,9 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <elijah@corveda.com>
-     * @version 2.0
+     * @version 3.0
      */
-    class Error extends \Exception {
+    class Error extends Exception {
         /* START ERROR CODES */
         /* MISC ERRORS                      (1-99)    */
         const PARSER_ERROR              =       1;
@@ -108,7 +110,7 @@
         /**
          * @var Node|null      The node of the Error
          */
-        protected $node;
+        protected ?Node $node;
         /**
          * @var mixed      The data of the Error
          */
@@ -116,11 +118,11 @@
         /** Constructs the Error
          * @param string                $message        The message to pass to the Error
          * @param int                   $code           The error code to pass to the Error
-         * @param Node       $node           The parser node to pass to the Error
+         * @param Node|null             $node           The parser node to pass to the Error
          * @param mixed                 $data           The error data to pass to the Error
-         * @param \Exception            $previous       The previous exception to pass to the Error
+         * @param Throwable|null        $previous       The previous exception to pass to the Error
          */
-        public function __construct($message = '', $code = 0, Node $node = null, $data = null, \Exception $previous = null){
+        public function __construct($message = '', $code = 0, ?Node $node = null, $data = null, ?Throwable $previous = null){
             $this->node = $node;
             $this->data = $data;
             parent::__construct($message, $code, $previous);
@@ -140,7 +142,7 @@
          *
          * @return  Node|null  The parser node of the error to return
          */
-        public function getNode(){
+        public function getNode() : ?Node {
             return $this->node;
         }
     }

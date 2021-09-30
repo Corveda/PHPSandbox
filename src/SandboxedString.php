@@ -3,6 +3,12 @@
      * @package PHPSandbox
      */
     namespace PHPSandbox;
+
+    use ArrayAccess,
+        ArrayIterator,
+        IteratorAggregate,
+        Throwable;
+
     /**
      * Sandboxed string class for PHP Sandboxes.
      *
@@ -11,35 +17,38 @@
      * @namespace PHPSandbox
      *
      * @author  Elijah Horton <elijah@corveda.com>
-     * @version 2.0
+     * @version 3.0
      */
-    class SandboxedString implements \ArrayAccess, \IteratorAggregate {
+    class SandboxedString implements ArrayAccess, IteratorAggregate {
         /** Value of the SandboxedString
          * @var string
          */
-        private $value;
+        private string $value;
         /** PHPSandbox instance invoked by the SandboxedString
          * @var PHPSandbox
          */
-        private $sandbox;
+        private PHPSandbox $sandbox;
         /** Constructs the SandboxedString
          * @param   string      $value          Original string value
          * @param   PHPSandbox  $sandbox        The current sandbox instance to test against
          */
-        public function __construct($value, PHPSandbox $sandbox){
+        public function __construct(string $value, PHPSandbox $sandbox){
             $this->value = $value;
             $this->sandbox = $sandbox;
         }
         /** Returns the original string value
          * @return string
          */
-        public function __toString(){
-            return strval($this->value);
+        public function __toString() : string {
+            return $this->value;
         }
         /** Checks the string value against the sandbox function whitelists and blacklists for callback violations
+         *
+         * @throws Throwable
+         *
          * @return mixed|null
          */
-        public function __invoke(){
+        public function __invoke() : string {
             if($this->sandbox->checkFunc($this->value)){
                 $name = strtolower($this->value);
                 if((in_array($name, PHPSandbox::$defined_funcs) && $this->sandbox->overwrite_defined_funcs)
@@ -67,7 +76,7 @@
          *
          * @return  string      Value to return
          */
-        public function offsetGet($offset){
+        public function offsetGet($offset) : string {
             return $this->value[$offset];
         }
         /** Check if specified offset exists in string value
@@ -75,7 +84,7 @@
          *
          * @return  bool        Return true if offset exists, false otherwise
          */
-        public function offsetExists($offset){
+        public function offsetExists($offset) : bool {
             return isset($this->value[$offset]);
         }
         /** Unset string value at specified offset
@@ -85,9 +94,9 @@
             unset($this->value[$offset]);
         }
         /** Return iterator for string value
-         * @return  \ArrayIterator      Array iterator to return
+         * @return  ArrayIterator      Array iterator to return
          */
-        public function getIterator(){
-            return new \ArrayIterator(str_split(strval($this->value)));
+        public function getIterator() : ArrayIterator {
+            return new ArrayIterator(str_split($this->value));
         }
     }

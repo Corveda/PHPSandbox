@@ -1,6 +1,6 @@
 ![PHPSandbox](https://phpsandbox.org/images/logo.png)
 
-## A full-scale PHP 5.4+ sandbox class that utilizes [PHP-Parser](https://github.com/nikic/PHP-Parser) to prevent sandboxed code from running unsafe code.
+## A full-scale PHP 7.4+ sandbox class that utilizes [PHP-Parser](https://github.com/nikic/PHP-Parser) to prevent sandboxed code from running unsafe code.
 
 It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) to disassemble callables passed to the sandbox, so that PHP callables can also be run in sandboxes without first converting them into strings.
 
@@ -82,7 +82,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 
 ## Requirements
 
-- PHP 5.4+
+- PHP 7.4+
 - [PHP-Parser](https://github.com/nikic/PHP-Parser)
 - [FunctionParser](https://github.com/jeremeamia/FunctionParser) (if you wish to use closures)
 - PHP should be compiled with *--enable-tokenizer* option (it typically is)
