@@ -10,6 +10,7 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 
 [![Latest Stable Version](https://poser.pugx.org/corveda/php-sandbox/v/stable.png)](https://packagist.org/packages/corveda/php-sandbox) [![Total Downloads](https://poser.pugx.org/corveda/php-sandbox/downloads.png)](https://packagist.org/packages/corveda/php-sandbox) [![Latest Unstable Version](https://poser.pugx.org/corveda/php-sandbox/v/unstable.png)](https://packagist.org/packages/corveda/php-sandbox) [![License](https://poser.pugx.org/corveda/php-sandbox/license.png)](https://packagist.org/packages/corveda/php-sandbox)
 [![Dependency Status](https://www.versioneye.com/user/projects/56ba5cc22a29ed002d2af5e2/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56ba5cc22a29ed002d2af5e2)
+[![PHP Composer](https://github.com/Corveda/PHPSandbox/actions/workflows/php.yml/badge.svg)](https://github.com/Corveda/PHPSandbox/actions/workflows/php.yml)
 
 ## Features:
 
