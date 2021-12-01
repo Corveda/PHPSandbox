@@ -34,5 +34,10 @@
     "psr-4": {
       "PHPSandbox\\": "src/"
     }
+  },
+  "scripts": {
+    "test": [
+      "vendor/bin/phpunit"
+    ]
   }
 }
