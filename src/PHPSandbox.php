@@ -5946,13 +5946,13 @@
         }
 
         /** Check function name against PHPSandbox validation rules. This is an internal PHPSandbox function but requires public access to work.
-         * @param   string      $name      String of the function name to check
+         * @param   string|Closure|SandboxedString      $name      String of the function name to check
          *
-         * @throws  Throwable   Throws exception if validation error occurs
+         * @throws  Throwable                           Throws exception if validation error occurs
          *
-         * @return  bool        Returns true if function is valid, this is also used for testing closures
+         * @return  bool                                Returns true if function is valid, this is also used for testing closures
          */
-        public function checkFunc(string $name) : bool {
+        public function checkFunc($name) : bool {
             if(!$this->validate_functions){
                 return true;
             }

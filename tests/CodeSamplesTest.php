@@ -37,4 +37,22 @@
             $result = $this->sandbox->execute(file_get_contents($path), false, $path);
             $this->assertEquals($path, $result);
         }
+
+        public function testTraits() : void {
+            $path = __DIR__ . '/samples/traits/index.php';
+            $this->sandbox->allow_traits = true;
+            $this->sandbox->allow_classes = true;
+            $this->sandbox->capture_output = true;
+            $result = $this->sandbox->execute(file_get_contents($path), false, $path);
+            $this->assertEquals('ok', $result);
+        }
+
+        public function testClosures() : void {
+            $path = __DIR__ . '/samples/closures/index.php';
+            $this->sandbox->allow_closures = true;
+            $this->sandbox->allow_functions = true;
+            $this->sandbox->capture_output = true;
+            $result = $this->sandbox->execute(file_get_contents($path), false, $path);
+            $this->assertEquals('ok', $result);
+        }
     }
