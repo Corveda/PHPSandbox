@@ -5,6 +5,7 @@
     namespace PHPSandbox;
 
     use PhpParser\Node,
+        PhpParser\NodeTraverser,
         PhpParser\NodeVisitorAbstract,
         Throwable;
 
@@ -115,7 +116,7 @@
                         $this->sandbox->defineNamespace($name);
                     }
                 }
-                return false;
+                return NodeTraverser::REMOVE_NODE;
             } else if($node instanceof Node\Stmt\Use_){
                 foreach($node->uses as $use){
                     if($use instanceof Node\Stmt\UseUse
@@ -129,7 +130,7 @@
                         }
                     }
                 }
-                return false;
+                return NodeTraverser::REMOVE_NODE;
             }
             return null;
         }

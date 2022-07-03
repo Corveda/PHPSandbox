@@ -49,14 +49,14 @@
                 $this->sandbox->whitelistClass($node->name->toString());
                 $this->sandbox->whitelistType($node->name->toString());
             } else if($node instanceof Node\Stmt\Interface_
-                && is_string($node->name)
+                && (is_string($node->name) || $node->name instanceof Node\Identifier)
                 && $this->sandbox->allow_interfaces
                 && $this->sandbox->auto_whitelist_interfaces
                 && !$this->sandbox->hasBlacklistedInterfaces()
             ){
                 $this->sandbox->whitelistInterface($node->name);
             } else if($node instanceof Node\Stmt\Trait_
-                && is_string($node->name)
+                && (is_string($node->name) || $node->name instanceof Node\Identifier)
                 && $this->sandbox->allow_traits
                 && $this->sandbox->auto_whitelist_traits
                 && !$this->sandbox->hasBlacklistedTraits()
