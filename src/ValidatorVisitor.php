@@ -5,6 +5,7 @@
     namespace PHPSandbox;
 
     use PhpParser\Node,
+        PhpParser\NodeTraverser,
         PhpParser\NodeVisitorAbstract,
         Throwable;
 
@@ -348,19 +349,21 @@
                     /**
                      * @var Node\Stmt\UseUse    $use
                      */
-                    if($use instanceof Node\Stmt\UseUse && $use->name instanceof Node\Name && (is_string($use->alias) || is_null($use->alias))){
+                    if($use instanceof Node\Stmt\UseUse && $use->name instanceof Node\Name && (is_string($use->alias) || $use->alias instanceof Node\Identifier || is_null($use->alias))){
                         $this->sandbox->checkAlias($use->name->toString());
                         if($use->alias){
                             if(!$this->sandbox->checkKeyword('as')){
                                 $this->sandbox->validationError('Keyword failed custom validation!', Error::VALID_KEYWORD_ERROR, $node, 'as');
                             }
                         }
-                        $this->sandbox->defineAlias($use->name->toString(), $use->alias);
+                        $this->sandbox->whitelistClass($use->getAlias());
+                        $this->sandbox->whitelistType($use->getAlias());
+                        $this->sandbox->defineAlias($use->name->toString(), $use->getAlias());
                     } else {
                         $this->sandbox->validationError('Sandboxed code attempted use invalid namespace or alias!', Error::DEFINE_ALIAS_ERROR, $node);
                     }
                 }
-                return false;
+                return NodeTraverser::REMOVE_NODE;
             } else if($node instanceof Node\Expr\ShellExec){
                 if($this->sandbox->isDefinedFunc('shell_exec')){
                     $args = [

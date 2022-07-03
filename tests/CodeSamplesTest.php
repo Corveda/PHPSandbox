@@ -64,4 +64,14 @@
             $result = $this->sandbox->execute(file_get_contents($path), false, $path);
             $this->assertEquals('ok', $result);
         }
+
+        public function testAliases() : void {
+            $path = __DIR__ . '/samples/aliases/index.php';
+            $this->sandbox->allow_aliases = true;
+            $this->sandbox->capture_output = true;
+            $this->sandbox->whitelistType('PHPUnit\Framework\Exception');
+            $this->sandbox->whitelistType('Exception');
+            $result = $this->sandbox->execute(file_get_contents($path), false, $path);
+            $this->assertEquals('okok', $result);
+        }
     }

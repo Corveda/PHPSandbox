@@ -6612,7 +6612,7 @@
             $output = [];
             foreach($this->definitions['aliases'] as $alias){
                 if(is_array($alias) && isset($alias['original']) && is_string($alias['original']) && $alias['original']){
-                    $output[] = 'use ' . $alias['original'] . ((isset($alias['alias']) && is_string($alias['alias']) && $alias['alias']) ? ' as ' . $alias['alias'] : '') . ';';
+                    $output[] = 'use ' . $alias['original'] . ((isset($alias['alias']) && (is_string($alias['alias']) || $alias['alias'] instanceof Node\Identifier) && $alias['alias']) ? ' as ' . $alias['alias'] : '') . ';';
                 } else {
                     $this->validationError("Sandboxed code attempted to use invalid namespace alias: " . $alias['original'], Error::DEFINE_ALIAS_ERROR, null, $alias['original']);
                 }
