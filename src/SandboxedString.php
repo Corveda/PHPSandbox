@@ -64,7 +64,7 @@
          * @param   mixed       $offset            Offset to set value
          * @param   mixed       $value             Value to set
          */
-        public function offsetSet($offset, $value){
+        public function offsetSet($offset, $value) : void {
             if($offset === null){
                 $this->value .= $value;
             } else {
@@ -90,7 +90,7 @@
         /** Unset string value at specified offset
          * @param   mixed       $offset            Offset to unset
          */
-        public function offsetUnset($offset){
+        public function offsetUnset($offset) : void {
             unset($this->value[$offset]);
         }
         /** Return iterator for string value
