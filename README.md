@@ -31,56 +31,56 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 - **Can intercept callbacks and validate them against function whitelists and blacklists, even if they are called as strings**
 
 ## Example usage:
+```php
+function test($string){
+    return 'Hello ' . $string;
+}
 
-    function test($string){
-        return 'Hello ' . $string;
-    }
+$sandbox = new PHPSandbox\PHPSandbox;
+$sandbox->whitelistFunc('test');
+$result = $sandbox->execute(function(){
+   return test('world');
+});
 
-    $sandbox = new PHPSandbox\PHPSandbox;
-    $sandbox->whitelistFunc('test');
-    $result = $sandbox->execute(function(){
-        return test('world');
-    });
-
-    var_dump($result);  //Hello world
-
+var_dump($result);  //Hello world
+```
 ## Custom validation example:
+```php
+function custom_func(){
+    echo 'I am valid!';
+}
 
-    function custom_func(){
-        echo 'I am valid!';
-    }
-
-    $sandbox = new PHPSandbox\PHPSandbox;
-    //this will mark any function valid that begins with "custom_"
-    $sandbox->setFuncValidator(function($function_name, PHPSandbox\PHPSandbox $sandbox){
-        return (substr($function_name, 0, 7) == 'custom_');  //return true if function is valid, false otherwise
-    });
-    $sandbox->execute(function(){
-        custom_func();
-    });
-    //echoes "I am valid!"
-
+$sandbox = new PHPSandbox\PHPSandbox;
+//this will mark any function valid that begins with "custom_"
+$sandbox->setFuncValidator(function($function_name, PHPSandbox\PHPSandbox $sandbox){
+    return (substr($function_name, 0, 7) == 'custom_');  //return true if function is valid, false otherwise
+});
+$sandbox->execute(function(){
+    custom_func();
+});
+//echoes "I am valid!"
+```
 ## Custom validation error handler example:
-
-    $sandbox = new PHPSandbox\PHPSandbox;
-    //this will intercept parser validation errors and quietly exit, otherwise it will throw the validation error
-    $sandbox->setValidationErrorHandler(function(PHPSandbox\Error $error, PHPSandbox\PHPSandbox $sandbox){
-        if($error->getCode() == PHPSandbox\Error::PARSER_ERROR){ //PARSER_ERROR == 1
-            exit;
-        }
-        throw $error;
-    });
-    $sandbox->execute('<?php i am malformed PHP code; ?>');
-    //does nothing
-
+```php
+$sandbox = new PHPSandbox\PHPSandbox;
+//this will intercept parser validation errors and quietly exit, otherwise it will throw the validation error
+$sandbox->setValidationErrorHandler(function(PHPSandbox\Error $error, PHPSandbox\PHPSandbox $sandbox){
+    if($error->getCode() == PHPSandbox\Error::PARSER_ERROR){ //PARSER_ERROR == 1
+        exit;
+    }
+    throw $error;
+});
+$sandbox->execute('<?php i am malformed PHP code; ?>');
+//does nothing
+```
 ## Disable validation example:
-
-    $sandbox = new PHPSandbox\PHPSandbox;
-    //this will disable function validation
-    $sandbox->setOption('validate_functions', false); // or $sandbox->validate_functions = false;
-    $sandbox->execute('<?php echo system("ping google.com"); ?>');
-    //Pinging google.com. . .
-
+```php
+$sandbox = new PHPSandbox\PHPSandbox;
+//this will disable function validation
+$sandbox->setOption('validate_functions', false); // or $sandbox->validate_functions = false;
+$sandbox->execute('<?php echo system("ping google.com"); ?>');
+//Pinging google.com. . .
+```
 ## Requirements
 
 - PHP 7.4+
@@ -91,13 +91,13 @@ It also utilizes [FunctionParser](https://github.com/jeremeamia/FunctionParser) 
 ## Installation
 
 To install using [composer](http://getcomposer.org/), simply add the following to your composer.json file in the root of your project:
-
-    {
-        "require": {
-            "corveda/php-sandbox": "3.*"
-        }
+```composer.json
+{
+    "require": {
+        "corveda/php-sandbox": "3.*"
     }
-
+}
+```
 Then run *composer install --dry-run* to check for any potential problems, and *composer install* to install.
 
 ## LICENSE
