@@ -7230,7 +7230,7 @@
             if(method_exists($this, $renamed_method)){
                 return call_user_func_array([$this, $renamed_method], $arguments);
             }
-            trigger_error('Fatal error: Call to undefined method PHPSandbox::' . $method, E_ERROR);
+            trigger_error('Fatal error: Call to undefined method PHPSandbox::' . $method, E_USER_ERROR);
             return null;
         }
     }
