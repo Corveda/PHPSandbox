@@ -6661,7 +6661,7 @@
          */
         protected function autoWhitelist(string $code, bool $appended = false){
             $factory = new ParserFactory;
-            $parser = $factory->create(ParserFactory::PREFER_PHP7);
+            $parser = $factory->createForHostVersion();
             try {
                 $statements = $parser->parse($code);
             } catch (ParserError $error) {
@@ -6870,7 +6870,7 @@
         public function validate($code) : self {
             $this->preparsed_code = $this->disassemble($code);
             $factory = new ParserFactory;
-            $parser = $factory->create(ParserFactory::PREFER_PHP7);
+            $parser = $factory->createForHostVersion();
 
             try {
                 $this->parsed_ast = $parser->parse($this->preparsed_code);
