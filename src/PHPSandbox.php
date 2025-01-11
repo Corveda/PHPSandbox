@@ -7187,7 +7187,7 @@
          * 
          * @return  mixed
          */
-        public function validationError($error, int $code = 0, Node $node = null, $data = null, ?Throwable $previous = null){
+        public function validationError($error, int $code = 0, ?Node $node = null, $data = null, ?Throwable $previous = null){
             $error = ($error instanceof Throwable)
                 ? (($error instanceof Error)
                     ? new Error($error->getMessage(), $error->getCode(), $error->getNode(), $error->getData(), $error->getPrevious() ?: $this->last_validation_error)
