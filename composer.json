@@ -17,12 +17,12 @@
   "require": {
     "php": ">=7.4|>=8.0",
     "ext-json": "*",
-    "nikic/php-parser": "^4.4",
+    "nikic/php-parser": "^5.3",
     "jeremeamia/functionparser": "^1.0"
   },
   "require-dev": {
     "symfony/yaml": "~3.0|~4.0|~5.0",
-    "phpunit/phpunit": "^9.5"
+    "phpunit/phpunit": "^11.0"
   },
   "replace": {
     "fieryprophet/php-sandbox": "*"
