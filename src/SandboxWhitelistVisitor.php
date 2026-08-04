@@ -23,6 +23,10 @@
          * @var PHPSandbox
          */
         protected PHPSandbox $sandbox;
+        /** @var array<int, string|null> */
+        protected array $classStack = [];
+        /** @var array<string, string[]> */
+        protected array $declaredMethods = [];
 
         /** SandboxWhitelistVisitor class constructor
          *
@@ -34,6 +38,13 @@
             $this->sandbox = $sandbox;
         }
 
+        public function enterNode(Node $node){
+            if($node instanceof Node\Stmt\ClassLike){
+                $this->classStack[] = $node->name instanceof Node\Identifier ? $node->name->toString() : null;
+            }
+            return null;
+        }
+
         /** Examine the current PhpParser\Node node against the PHPSandbox configuration for whitelisting sandboxed code
          *
          * @param   Node   $node          The sandboxed $node to examine
@@ -41,13 +52,56 @@
          * @return  void
          */
         public function leaveNode(Node $node){
-            if($node instanceof Node\Stmt\Class_
+            $currentClass = count($this->classStack) ? $this->classStack[count($this->classStack) - 1] : null;
+            if($currentClass && $node instanceof Node\Stmt\ClassMethod
+                && $this->sandbox->auto_whitelist_members
+            ){
+                $this->sandbox->whitelistMethod($currentClass, $node->name->toString());
+                $this->declaredMethods[strtolower($currentClass)][] = $node->name->toString();
+            } else if($currentClass && $node instanceof Node\Stmt\TraitUse
+                && $this->sandbox->auto_whitelist_members
+            ){
+                foreach($node->traits as $trait){
+                    foreach($this->declaredMethods[strtolower($trait->toString())] ?? [] as $method){
+                        $this->sandbox->whitelistMethod($currentClass, $method);
+                    }
+                }
+            } else if($currentClass && $node instanceof Node\Stmt\Property
+                && $this->sandbox->auto_whitelist_members
+            ){
+                foreach($node->props as $property){
+                    $this->sandbox->whitelistProperty($currentClass, $property->name->toString());
+                }
+            } else if($currentClass && $node instanceof Node\Stmt\ClassConst
+                && $this->sandbox->auto_whitelist_members
+            ){
+                foreach($node->consts as $constant){
+                    $this->sandbox->whitelistClassConstant($currentClass, $constant->name->toString());
+                }
+            } else if($currentClass && $node instanceof Node\Stmt\EnumCase
+                && $this->sandbox->auto_whitelist_members
+            ){
+                $this->sandbox->whitelistClassConstant($currentClass, $node->name->toString());
+            } else if($node instanceof Node\Stmt\Class_
                 && $node->name instanceof Node\Identifier
                 && $this->sandbox->allow_classes
                 && $this->sandbox->auto_whitelist_classes && !$this->sandbox->hasBlacklistedClasses()
             ){
                 $this->sandbox->whitelistClass($node->name->toString());
                 $this->sandbox->whitelistType($node->name->toString());
+            } else if($node instanceof Node\Stmt\Enum_
+                && $node->name instanceof Node\Identifier
+                && $this->sandbox->allow_enums
+                && $this->sandbox->auto_whitelist_enums
+                && !$this->sandbox->hasBlacklist('enums')
+            ){
+                $this->sandbox->whitelistEnum($node->name->toString());
+                $this->sandbox->whitelistClass($node->name->toString());
+                $this->sandbox->whitelistType($node->name->toString());
+                $this->sandbox->whitelistProperty($node->name->toString(), 'name');
+                if($node->scalarType !== null){
+                    $this->sandbox->whitelistProperty($node->name->toString(), 'value');
+                }
             } else if($node instanceof Node\Stmt\Interface_
                 && (is_string($node->name) || $node->name instanceof Node\Identifier)
                 && $this->sandbox->allow_interfaces
@@ -55,6 +109,7 @@
                 && !$this->sandbox->hasBlacklistedInterfaces()
             ){
                 $this->sandbox->whitelistInterface($node->name);
+                $this->sandbox->whitelistType($node->name->toString());
             } else if($node instanceof Node\Stmt\Trait_
                 && (is_string($node->name) || $node->name instanceof Node\Identifier)
                 && $this->sandbox->allow_traits
@@ -78,6 +133,14 @@
                 ){
                     $this->sandbox->whitelistConst($name->value->value);
                 }
+            } else if($node instanceof Node\Stmt\Const_
+                && $this->sandbox->allow_constants
+                && $this->sandbox->auto_whitelist_constants
+                && !$this->sandbox->hasBlacklistedConsts()
+            ){
+                foreach($node->consts as $constant){
+                    $this->sandbox->whitelistConst($constant->name->toString());
+                }
             } else if($node instanceof Node\Stmt\Global_
                 && $this->sandbox->allow_globals
                 && $this->sandbox->auto_whitelist_globals
@@ -95,6 +158,9 @@
                 && !$this->sandbox->hasBlacklistedFuncs()
             ){
                 $this->sandbox->whitelistFunc($node->name->toString());
+            }
+            if($node instanceof Node\Stmt\ClassLike){
+                array_pop($this->classStack);
             }
         }
     }

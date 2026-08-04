@@ -8,11 +8,13 @@
         Closure,
         ErrorException,
         IteratorAggregate,
+        ReflectionFunctionAbstract,
         ReflectionParameter,
         Throwable,
-        FunctionParser\FunctionParser,
+        WeakReference,
         PhpParser\Node,
         PhpParser\NodeTraverser,
+        PhpParser\NodeVisitor\ParentConnectingVisitor,
         PhpParser\ParserFactory,
         PhpParser\PrettyPrinter\Standard,
         PhpParser\Error as ParserError;
@@ -320,6 +322,8 @@
          * @const    int           A bit flag for the import() method, signifies to import only sandboxed code from a template
          */
         const IMPORT_CODE = 32;
+        /** Current JSON template schema version. */
+        const TEMPLATE_VERSION = 4;
         /**
          * @static
          * @var    array         A static array of superglobal names used for redefining superglobal values
@@ -406,7 +410,8 @@
             'aliases' => [],
             'classes' => [],
             'interfaces' => [],
-            'traits' => []
+            'traits' => [],
+            'enums' => []
         ];
         /**
          * @var    array       Array of whitelisted functions, classes, etc. If an array type contains elements, then it overrides its blacklist counterpart
@@ -423,6 +428,11 @@
             'classes' => [],
             'interfaces' => [],
             'traits' => [],
+            'enums' => [],
+            'attributes' => [],
+            'methods' => [],
+            'properties' => [],
+            'class_constants' => [],
             'keywords' => [],
             'operators' => [],
             'primitives' => [],
@@ -443,6 +453,11 @@
             'classes' => [],
             'interfaces' => [],
             'traits' => [],
+            'enums' => [],
+            'attributes' => [],
+            'methods' => [],
+            'properties' => [],
+            'class_constants' => [],
             'keywords' => [
                 'declare' => true,
                 'eval' => true,
@@ -468,6 +483,11 @@
             'class' => null,
             'interface' => null,
             'trait' => null,
+            'enum' => null,
+            'attribute' => null,
+            'method' => null,
+            'property' => null,
+            'class_constant' => null,
             'keyword' => null,
             'operator' => null,
             'primitive' => null,
@@ -477,10 +497,20 @@
          * @var     array       Array of sandboxed included files
          */
         protected array $includes = [];
+        /** @var string[] Canonical roots from which sandboxed includes may read. Empty preserves legacy unrestricted roots. */
+        protected array $allowed_include_paths = [];
+        /** @var string[] Stream wrappers allowed for sandboxed includes. */
+        protected array $allowed_stream_wrappers = ['file' => 'file'];
+        public int $max_include_depth = 32;
+        public int $max_include_bytes = 1048576;
+        protected int $include_depth = 0;
         /**
          * @var     PHPSandbox[]       Array of PHPSandboxes
          */
         protected static array $sandboxes = [];
+
+        /** Number of active, potentially nested executions for this sandbox. */
+        protected int $execution_depth = 0;
         /* CONFIGURATION OPTION FLAGS */
         /**
          * @var    bool       Flag to indicate whether the sandbox should validate functions
@@ -557,6 +587,11 @@
          * @default true
          */
         public bool $validate_types              = true;
+        public bool $validate_enums              = true;
+        public bool $validate_attributes         = true;
+        public bool $validate_methods            = true;
+        public bool $validate_properties         = true;
+        public bool $validate_class_constants    = true;
         /**
          * @var    int|null   The error_reporting level to set the PHPSandbox scope to when executing the generated closure, if set to null it will use parent scope error level.
          * @default true
@@ -627,6 +662,8 @@
          * @default true
          */
         public bool $auto_whitelist_traits       = true;
+        public bool $auto_whitelist_enums        = true;
+        public bool $auto_whitelist_members      = true;
         /**
          * @var    bool       Should PHPSandbox automagically define variables passed to prepended, appended and prepared code closures?
          * @default true
@@ -712,6 +749,13 @@
          * @default false
          */
         public bool $allow_traits                = false;
+        public bool $allow_enums                 = false;
+        public bool $allow_attributes            = false;
+        public bool $allow_property_hooks        = false;
+        public bool $allow_named_arguments       = true;
+        public bool $allow_dynamic_methods       = false;
+        public bool $allow_dynamic_properties    = false;
+        public bool $allow_dynamic_class_constants = false;
         /**
          * @var    bool       Should PHPSandbox allow sandboxed code to create generators?
          * @default true
@@ -786,6 +830,8 @@
          * @var    string     String of prepared code, for debugging and serialization purposes
          */
         protected string $prepared_code = '';
+        /** Validated declarations that PHP requires at file scope rather than inside the execution closure. */
+        protected string $prepared_declarations = '';
         /**
          * @var    array      Array of prepared code broken down into AST tokens, for debugging and serialization purposes
          */
@@ -794,6 +840,9 @@
          * @var    string     String of generated code, for debugging and serialization purposes
          */
         protected string $generated_code = '';
+        /** Receiver and visibility scope retained when executable source came from a callable. */
+        protected ?object $callable_receiver = null;
+        protected ?string $callable_scope = null;
         /**
          * @var    callable|null        Callable that handles any errors when set
          */
@@ -805,7 +854,7 @@
         /**
          * @var    array|null           The last error thrown by the sandbox
          */
-        protected ?array $last_error;
+        protected ?array $last_error = null;
         /**
          * @var    callable|null        Callable that handles any thrown exceptions when set
          */
@@ -922,6 +971,11 @@
             return array_keys(get_object_vars($this));
         }
 
+        /** Remove this sandbox's weak registry entry when the instance is destroyed. */
+        public function __destruct(){
+            unset(static::$sandboxes[$this->name]);
+        }
+
         /** PHPSandbox __wakeup magic method
          *
          ** Import JSON template into sandbox
@@ -936,10 +990,18 @@
          */
         public function import($template, int $import_flag = 0) : self {
             if(is_string($template)){
-                $template = json_decode($template);
+                try {
+                    $template = json_decode($template, true, 512, JSON_THROW_ON_ERROR);
+                } catch(\JsonException $error){
+                    return $this->validationError('Sandbox could not import malformed JSON template!', Error::IMPORT_ERROR, null, $template, $error);
+                }
             }
             if(!is_array($template)){
                 $this->validationError("Sandbox could not import malformed JSON template!", Error::IMPORT_ERROR, null, $template);
+            }
+            $schema_version = (int) ($template['schema_version'] ?? 3);
+            if($schema_version < 3 || $schema_version > static::TEMPLATE_VERSION){
+                $this->validationError("Unsupported sandbox template schema version: $schema_version", Error::IMPORT_ERROR, null, $schema_version);
             }
             if(isset($template['options']) && is_array($template['options']) && (!$import_flag || ($import_flag & static::IMPORT_OPTIONS))){
                 $this->setOptions($template['options']);
@@ -950,6 +1012,9 @@
                     if(method_exists($this, $method)){
                         switch($type){
                             case 'func':
+                                if(!($import_flag & static::IMPORT_TRUSTED_CODE)){
+                                    $this->validationError('Executable function definitions require IMPORT_TRUSTED_CODE.', Error::IMPORT_ERROR, null, $data);
+                                }
                                 foreach($data as $key => $value){
                                     $function = function(){};
                                     @eval('$function = ' . $value["fullcode"] .';');
@@ -1003,7 +1068,17 @@
                 foreach($template['whitelist'] as $type => $data){
                     $method = 'whitelist' . str_replace('_', '', ucwords($type, '_'));
                     if(method_exists($this, $method)){
-                        call_user_func_array([$this, $method], [$data]);
+                        if(in_array($type, ['method', 'property', 'class_constant'], true)){
+                            foreach((array) $data as $member){
+                                $parts = explode('::', (string) $member, 2);
+                                if(count($parts) !== 2){
+                                    $this->validationError("Invalid $type policy entry: $member", Error::IMPORT_ERROR, null, $member);
+                                }
+                                call_user_func_array([$this, $method], $parts);
+                            }
+                        } else {
+                            call_user_func_array([$this, $method], [$data]);
+                        }
                     }
                 }
             }
@@ -1011,11 +1086,21 @@
                 foreach($template['blacklist'] as $type => $data){
                     $method = 'blacklist' . str_replace('_', '', ucwords($type, '_'));
                     if(method_exists($this, $method)){
-                        call_user_func_array([$this, $method], [$data]);
+                        if(in_array($type, ['method', 'property', 'class_constant'], true)){
+                            foreach((array) $data as $member){
+                                $parts = explode('::', (string) $member, 2);
+                                if(count($parts) !== 2){
+                                    $this->validationError("Invalid $type policy entry: $member", Error::IMPORT_ERROR, null, $member);
+                                }
+                                call_user_func_array([$this, $method], $parts);
+                            }
+                        } else {
+                            call_user_func_array([$this, $method], [$data]);
+                        }
                     }
                 }
             }
-            if(!$import_flag || ($import_flag & static::IMPORT_TRUSTED_CODE)){
+            if($import_flag & static::IMPORT_TRUSTED_CODE){
                 $this->clearTrustedCode();
                 if(isset($template['prepend_code']) && $template['prepend_code']){
                     $this->prepend($template['prepend_code']);
@@ -1074,7 +1159,13 @@
                     $this->error_level = is_numeric($value) ? intval($value) : null;
                     break;
                 case 'time_limit':
-                    $this->time_limit = is_numeric($value) ? intval($value) : null;
+                    $this->time_limit = is_numeric($value) ? max(0, intval($value)) : 0;
+                    break;
+                case 'max_include_depth':
+                    $this->max_include_depth = is_numeric($value) ? max(1, intval($value)) : 32;
+                    break;
+                case 'max_include_bytes':
+                    $this->max_include_bytes = is_numeric($value) ? max(1, intval($value)) : 1048576;
                     break;
                 case 'validate_functions':
                 case 'validate_variables':
@@ -1091,6 +1182,11 @@
                 case 'validate_operators':
                 case 'validate_primitives':
                 case 'validate_types':
+                case 'validate_enums':
+                case 'validate_attributes':
+                case 'validate_methods':
+                case 'validate_properties':
+                case 'validate_class_constants':
                 case 'sandbox_includes':
                 case 'restore_error_level':
                 case 'convert_errors':
@@ -1102,6 +1198,8 @@
                 case 'auto_whitelist_classes':
                 case 'auto_whitelist_interfaces':
                 case 'auto_whitelist_traits':
+                case 'auto_whitelist_enums':
+                case 'auto_whitelist_members':
                 case 'auto_define_vars':
                 case 'overwrite_defined_funcs':
                 case 'overwrite_sandboxed_string_funcs':
@@ -1119,6 +1217,13 @@
                 case 'allow_classes':
                 case 'allow_interfaces':
                 case 'allow_traits':
+                case 'allow_enums':
+                case 'allow_attributes':
+                case 'allow_property_hooks':
+                case 'allow_named_arguments':
+                case 'allow_dynamic_methods':
+                case 'allow_dynamic_properties':
+                case 'allow_dynamic_class_constants':
                 case 'allow_generators':
                 case 'allow_escaping':
                 case 'allow_casting':
@@ -1158,7 +1263,7 @@
          */
         public function resetOptions() : self {
             foreach(get_class_vars(__CLASS__) as $option => $value){
-                if($option == 'error_level' || is_bool($value)){
+                if(in_array($option, ['error_level', 'time_limit', 'max_include_depth', 'max_include_bytes'], true) || is_bool($value)){
                     $this->setOption($option, $value);
                 }
             }
@@ -1191,8 +1296,15 @@
                 case 'validate_operators':
                 case 'validate_primitives':
                 case 'validate_types':
+                case 'validate_enums':
+                case 'validate_attributes':
+                case 'validate_methods':
+                case 'validate_properties':
+                case 'validate_class_constants':
                 case 'error_level':
                 case 'time_limit':
+                case 'max_include_depth':
+                case 'max_include_bytes':
                 case 'sandbox_includes':
                 case 'restore_error_level':
                 case 'convert_errors':
@@ -1204,6 +1316,8 @@
                 case 'auto_whitelist_classes':
                 case 'auto_whitelist_interfaces':
                 case 'auto_whitelist_traits':
+                case 'auto_whitelist_enums':
+                case 'auto_whitelist_members':
                 case 'auto_define_vars':
                 case 'overwrite_defined_funcs':
                 case 'overwrite_sandboxed_string_funcs':
@@ -1221,6 +1335,13 @@
                 case 'allow_classes':
                 case 'allow_interfaces':
                 case 'allow_traits':
+                case 'allow_enums':
+                case 'allow_attributes':
+                case 'allow_property_hooks':
+                case 'allow_named_arguments':
+                case 'allow_dynamic_methods':
+                case 'allow_dynamic_properties':
+                case 'allow_dynamic_class_constants':
                 case 'allow_generators':
                 case 'allow_escaping':
                 case 'allow_casting':
@@ -1776,6 +1897,23 @@
             return $this;
         }
 
+        /** Modern symbol validator helpers. Validators receive the canonical name and this sandbox. */
+        public function setEnumValidator(callable $callable) : self { return $this->setValidator('enum', $callable); }
+        public function getEnumValidator() : ?callable { return $this->getValidator('enum'); }
+        public function unsetEnumValidator() : self { return $this->unsetValidator('enum'); }
+        public function setAttributeValidator(callable $callable) : self { return $this->setValidator('attribute', $callable); }
+        public function getAttributeValidator() : ?callable { return $this->getValidator('attribute'); }
+        public function unsetAttributeValidator() : self { return $this->unsetValidator('attribute'); }
+        public function setMethodValidator(callable $callable) : self { return $this->setValidator('method', $callable); }
+        public function getMethodValidator() : ?callable { return $this->getValidator('method'); }
+        public function unsetMethodValidator() : self { return $this->unsetValidator('method'); }
+        public function setPropertyValidator(callable $callable) : self { return $this->setValidator('property', $callable); }
+        public function getPropertyValidator() : ?callable { return $this->getValidator('property'); }
+        public function unsetPropertyValidator() : self { return $this->unsetValidator('property'); }
+        public function setClassConstantValidator(callable $callable) : self { return $this->setValidator('class_constant', $callable); }
+        public function getClassConstantValidator() : ?callable { return $this->getValidator('class_constant'); }
+        public function unsetClassConstantValidator() : self { return $this->unsetValidator('class_constant'); }
+
         /** Set PHPSandbox prepended code
          *
          * @param  string           $prepended_code      Sets a string of the prepended code
@@ -1828,6 +1966,7 @@
          */
         public function setPreparedCode(string $prepared_code = '') : self {
             $this->prepared_code = $prepared_code;
+            $this->prepared_declarations = '';
             return $this;
         }
 
@@ -1969,6 +2108,11 @@
                 unset($variables[$this->name]); //hide PHPSandbox variable
             }
             return $variables;
+        }
+
+        /** Return host-provided values in generated closure parameter order. */
+        public function _get_input_vars() : array {
+            return array_values($this->definitions['variables']);
         }
 
         /** Get PHPSandbox redefined superglobal. This is an internal PHPSandbox function but requires public access to work.
@@ -2422,6 +2566,85 @@
             return array_merge(get_included_files(), $this->includes);
         }
 
+        public function allowIncludePath(string $path) : self {
+            $canonical = realpath($path);
+            if($canonical === false || !is_dir($canonical)){
+                $this->validationError("Invalid sandbox include root: $path", Error::INCLUDE_ERROR, null, $path);
+            }
+            $this->allowed_include_paths[$canonical] = $canonical;
+            return $this;
+        }
+
+        public function clearIncludePaths() : self {
+            $this->allowed_include_paths = [];
+            return $this;
+        }
+
+        /** Clear all canonical roots permitted for sandboxed includes. */
+        public function clearAllowedIncludePaths() : self {
+            return $this->clearIncludePaths();
+        }
+
+        public function allowStreamWrapper(string $wrapper) : self {
+            $this->allowed_stream_wrappers[strtolower($wrapper)] = strtolower($wrapper);
+            return $this;
+        }
+
+        public function disallowStreamWrapper(string $wrapper) : self {
+            unset($this->allowed_stream_wrappers[strtolower($wrapper)]);
+            return $this;
+        }
+
+        /** @return array{0:string,1:string|false} */
+        protected function readSandboxInclude($file) : array {
+            $file = $file instanceof SandboxedString ? strval($file) : (string) $file;
+            $scheme = parse_url($file, PHP_URL_SCHEME);
+            $scheme = is_string($scheme) ? strtolower($scheme) : 'file';
+            if(!isset($this->allowed_stream_wrappers[$scheme])){
+                $this->validationError("Sandboxed include used a disallowed stream wrapper: $scheme", Error::INCLUDE_ERROR, null, $file);
+            }
+            $resolved = $file;
+            if($scheme === 'file'){
+                if(!$this->allowed_include_paths){
+                    $this->validationError('Sandboxed file includes require at least one canonical root configured with allowIncludePath().', Error::INCLUDE_ERROR, null, $file);
+                }
+                $resolved = realpath(str_starts_with($file, 'file://') ? substr($file, 7) : $file);
+                if($resolved === false){
+                    return [$file, false];
+                }
+                $allowed = false;
+                foreach($this->allowed_include_paths as $root){
+                    if($resolved === $root || str_starts_with($resolved, $root . DIRECTORY_SEPARATOR)){
+                        $allowed = true;
+                        break;
+                    }
+                }
+                if(!$allowed){
+                    $this->validationError("Sandboxed include escaped its allowed roots: $file", Error::INCLUDE_ERROR, null, $file);
+                }
+            }
+            $code = @file_get_contents($resolved, true);
+            if($code === false){
+                return [$resolved, false];
+            }
+            if(strlen($code) > $this->max_include_bytes){
+                $this->validationError("Sandboxed include exceeded the source size limit: $file", Error::INCLUDE_ERROR, null, $file);
+            }
+            return [$resolved, $code];
+        }
+
+        protected function executeIncluded(string $code, string $file){
+            if(++$this->include_depth > $this->max_include_depth){
+                $this->include_depth--;
+                return $this->validationError('Sandboxed include depth limit exceeded.', Error::INCLUDE_ERROR, null, $file);
+            }
+            try {
+                return $this->execute($code, false, $file);
+            } finally {
+                $this->include_depth--;
+            }
+        }
+
         /** Sandbox included file
          *
          * @param   string          $file      Included file to sandbox
@@ -2429,10 +2652,7 @@
          * @return  mixed           Returns value passed from included file
          */
         public function _include($file){
-            if($file instanceof SandboxedString){
-                $file = strval($file);
-            }
-            $code = @file_get_contents($file, true);
+            [$file, $code] = $this->readSandboxInclude($file);
             if($code === false){
                 trigger_error("include('" . $file . "') [function.include]: failed to open stream. No such file or directory", E_USER_WARNING);
                 return false;
@@ -2440,7 +2660,7 @@
             if(!in_array($file, $this->_get_included_files())){
                 $this->includes[] = $file;
             }
-            return $this->execute($code, false, $file);
+            return $this->executeIncluded($code, $file);
         }
 
         /** Sandbox included once file
@@ -2450,17 +2670,14 @@
          * @return  mixed           Returns value passed from included once file
          */
         public function _include_once($file){
-            if($file instanceof SandboxedString){
-                $file = strval($file);
-            }
+            [$file, $code] = $this->readSandboxInclude($file);
             if(!in_array($file, $this->_get_included_files())){
-                $code = @file_get_contents($file, true);
                 if($code === false){
                     trigger_error("include_once('" . $file . "') [function.include-once]: failed to open stream. No such file or directory", E_USER_WARNING);
                     return false;
                 }
                 $this->includes[] = $file;
-                return $this->execute($code, false, $file);
+                return $this->executeIncluded($code, $file);
             }
             return null;
         }
@@ -2472,10 +2689,7 @@
          * @return  mixed           Returns value passed from required file
          */
         public function _require($file){
-            if($file instanceof SandboxedString){
-                $file = strval($file);
-            }
-            $code = @file_get_contents($file, true);
+            [$file, $code] = $this->readSandboxInclude($file);
             if($code === false){
                 trigger_error("require('" . $file . "') [function.require]: failed to open stream. No such file or directory", E_USER_WARNING);
                 trigger_error("Failed opening required '" . $file . "' (include_path='" . get_include_path() . "')", E_USER_ERROR);
@@ -2484,7 +2698,7 @@
             if(!in_array($file, $this->_get_included_files())){
                 $this->includes[] = $file;
             }
-            return $this->execute($code, false, $file);
+            return $this->executeIncluded($code, $file);
         }
 
         /** Sandbox required once file
@@ -2494,18 +2708,15 @@
          * @return  mixed           Returns value passed from required once file
          */
         public function _require_once($file){
-            if($file instanceof SandboxedString){
-                $file = strval($file);
-            }
+            [$file, $code] = $this->readSandboxInclude($file);
             if(!in_array($file,  $this->_get_included_files())){
-                $code = @file_get_contents($file, true);
                 if($code === false){
                     trigger_error("require_once('" . $file . "') [function.require-once]: failed to open stream. No such file or directory", E_USER_WARNING);
                     trigger_error("Failed opening required '" . $file . "' (include_path='" . get_include_path() . "')", E_USER_ERROR);
                     return false;
                 }
                 $this->includes[] = $file;
-                return $this->execute($code, false, $file);
+                return $this->executeIncluded($code, $file);
             }
             return null;
         }
@@ -2537,6 +2748,18 @@
                 return call_user_func_array($name, $arguments);
             }
             return $this->validationError("Sandboxed code attempted to call invalid function: $original_name", Error::VALID_FUNC_ERROR, null, $original_name);
+        }
+
+        /** Return a validated callable for a sandbox-defined or native function. */
+        public function _get_func_callable(string $name) : Closure {
+            $this->checkFunc($name);
+            $normalized = $this->normalizeFunc($name);
+            if(isset($this->definitions['functions'][$normalized])){
+                return function(...$arguments) use ($normalized){
+                    return $this->call_func($normalized, ...$arguments);
+                };
+            }
+            return Closure::fromCallable($normalized);
         }
 
         /** Define PHPSandbox definitions, such as functions, constants, namespaces, etc.
@@ -2772,6 +2995,9 @@
             }
             if(!$name){
                 $this->validationError("Cannot define unnamed variable!", Error::DEFINE_VAR_ERROR, null, '');
+            }
+            if(!is_string($name) || !$this->isValidIdentifier($name) || strtolower($name) === 'this' || str_starts_with($name, '__PHPSandbox_')){
+                $this->validationError("Cannot define invalid variable name: $name", Error::DEFINE_VAR_ERROR, null, $name);
             }
             $this->definitions['variables'][$name] = $value;
             return $this;
@@ -3166,6 +3392,9 @@
             if(!$name){
                 $this->validationError("Cannot define unnamed namespace!", Error::DEFINE_NAMESPACE_ERROR, null, '');
             }
+            if(!is_string($name) || !$this->isValidIdentifier($name, true)){
+                $this->validationError("Cannot define invalid namespace: $name", Error::DEFINE_NAMESPACE_ERROR, null, $name);
+            }
             $normalized_name = $this->normalizeNamespace($name);
             $this->definitions['namespaces'][$normalized_name] = $name;
             return $this;
@@ -3277,6 +3506,13 @@
             if(!$name){
                 $this->validationError("Cannot define unnamed namespace alias!", Error::DEFINE_ALIAS_ERROR, null, '');
             }
+            if($alias instanceof Node\Identifier){
+                $alias = $alias->toString();
+            }
+            if(!is_string($name) || !$this->isValidIdentifier($name, true)
+                || ($alias !== null && (!is_string($alias) || !$this->isValidIdentifier($alias)))){
+                $this->validationError("Cannot define invalid namespace alias: $name", Error::DEFINE_ALIAS_ERROR, null, $name);
+            }
             $original_name = $name;
             $name = $this->normalizeAlias($name);
             $this->definitions['aliases'][$name] = ['original' => $original_name, 'alias' => $alias];
@@ -3317,6 +3553,26 @@
         public function isDefinedAlias($name) : bool {
             $name = $this->normalizeAlias($name);
             return isset($this->definitions['aliases'][$name]);
+        }
+
+        /** Resolve a source-level class alias to the class name usable by dynamic runtime dispatch. */
+        public function resolveAlias(string $name) : string {
+            $parts = explode('\\', ltrim($name, '\\'));
+            $head = strtolower($parts[0]);
+            foreach($this->definitions['aliases'] as $alias){
+                if(!is_array($alias) || !isset($alias['original'])){
+                    continue;
+                }
+                $original = ltrim((string) $alias['original'], '\\');
+                $effective = isset($alias['alias']) && $alias['alias'] !== null && (string) $alias['alias'] !== ''
+                    ? (string) $alias['alias']
+                    : substr($original, strrpos('\\' . $original, '\\'));
+                if(strtolower($effective) === $head){
+                    array_shift($parts);
+                    return $original . (count($parts) ? '\\' . implode('\\', $parts) : '');
+                }
+            }
+            return $name;
         }
 
         /** Undefine PHPSandbox alias
@@ -4021,6 +4277,15 @@
             return strtolower($name);
         }
 
+        /** Validate a PHP identifier, optionally containing namespace separators. */
+        protected function isValidIdentifier(string $name, bool $namespaced = false) : bool {
+            $identifier = '[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*';
+            return (bool) preg_match(
+                $namespaced ? '/^\\\\?' . $identifier . '(?:\\\\' . $identifier . ')*$/D' : '/^' . $identifier . '$/D',
+                $name
+            );
+        }
+
         /** Whitelist PHPSandbox definitions, such as functions, constants, classes, etc. to set
          *
          * You can pass an associative array of whitelist types and their names, or a string $type and array of $names, or pass a string of the $type and $name
@@ -4111,6 +4376,12 @@
                         }
                     }
                 }
+            } else if(isset($this->whitelist[$type]) && is_array($name)){
+                foreach($name as $_name){
+                    if(is_string($_name) && isset($this->whitelist[$type][$_name])){
+                        unset($this->whitelist[$type][$_name]);
+                    }
+                }
             } else if(isset($this->whitelist[$type]) && is_string($name) && $name && isset($this->whitelist[$type][$name])){
                 unset($this->whitelist[$type][$name]);
             }
@@ -4139,6 +4410,12 @@
                         }
                     }
                 }
+            } else if(isset($this->blacklist[$type]) && is_array($name)){
+                foreach($name as $_name){
+                    if(is_string($_name) && isset($this->blacklist[$type][$_name])){
+                        unset($this->blacklist[$type][$_name]);
+                    }
+                }
             } else if(isset($this->blacklist[$type]) && is_string($name) && $name && isset($this->blacklist[$type][$name])){
                 unset($this->blacklist[$type][$name]);
             }
@@ -4152,7 +4429,7 @@
          * @return  int           Returns the number of whitelists this instance has defined
          */
         public function hasWhitelist(string $type) : int {
-            return count($this->whitelist[$type]);
+            return isset($this->whitelist[$type]) ? count($this->whitelist[$type]) : 0;
         }
 
         /** Query whether PHPSandbox instance has blacklist type.
@@ -4162,7 +4439,7 @@
          * @return  int           Returns the number of blacklists this instance has defined
          */
         public function hasBlacklist(string $type) : int {
-            return count($this->blacklist[$type]);
+            return isset($this->blacklist[$type]) ? count($this->blacklist[$type]) : 0;
         }
 
         /** Check if PHPSandbox instance has whitelist type and name set
@@ -6525,6 +6802,293 @@
             return true;
         }
 
+        /** Build the canonical key used by member policies. */
+        protected function normalizeMember($class, string $member, string $type) : string {
+            if(is_object($class)){
+                $class = get_class($class);
+            }
+            $class = strtolower(ltrim((string) $class, '\\'));
+            if($type === 'methods'){
+                $member = strtolower($member);
+            } else if($type === 'properties'){
+                $member = ltrim($member, '$');
+            }
+            return $class . '::' . ($type === 'properties' ? '$' : '') . $member;
+        }
+
+        /** Apply a whitelist/blacklist/custom-validator policy to a modern PHP symbol. */
+        protected function checkNamedPolicy(
+            string $type,
+            string $validation_type,
+            string $name,
+            bool $enabled,
+            int $valid_error,
+            int $whitelist_error,
+            int $blacklist_error
+        ) : bool {
+            if(!$enabled){
+                return true;
+            }
+            if(is_callable($this->validation[$validation_type])){
+                if(!call_user_func_array($this->validation[$validation_type], [$name, $this])){
+                    $this->validationError("$validation_type failed custom validation: $name", $valid_error, null, $name);
+                }
+                return true;
+            }
+            if(count($this->whitelist[$type])){
+                if(!isset($this->whitelist[$type][$name])){
+                    $this->validationError("Sandboxed code attempted to access non-whitelisted $validation_type: $name", $whitelist_error, null, $name);
+                }
+            } else if(count($this->blacklist[$type])){
+                if(isset($this->blacklist[$type][$name])){
+                    $this->validationError("Sandboxed code attempted to access blacklisted $validation_type: $name", $blacklist_error, null, $name);
+                }
+            } else {
+                $this->validationError("Sandboxed code attempted to access unconfigured $validation_type: $name", $valid_error, null, $name);
+            }
+            return true;
+        }
+
+        public function checkEnum(string $name) : bool {
+            $name = strtolower(ltrim($name, '\\'));
+            return $this->checkNamedPolicy('enums', 'enum', $name, $this->validate_enums, Error::VALID_ENUM_ERROR, Error::WHITELIST_ENUM_ERROR, Error::BLACKLIST_ENUM_ERROR);
+        }
+
+        public function checkAttribute(string $name) : bool {
+            $name = strtolower(ltrim($name, '\\'));
+            return $this->checkNamedPolicy('attributes', 'attribute', $name, $this->validate_attributes, Error::VALID_ATTRIBUTE_ERROR, Error::WHITELIST_ATTRIBUTE_ERROR, Error::BLACKLIST_ATTRIBUTE_ERROR);
+        }
+
+        public function checkMethod($class, string $method) : bool {
+            if(is_object($class) && method_exists($class, $method)){
+                $class = (new \ReflectionMethod($class, $method))->getDeclaringClass()->getName();
+            }
+            $key = $this->normalizeMember($class, $method, 'methods');
+            return $this->checkNamedPolicy('methods', 'method', $key, $this->validate_methods, Error::VALID_METHOD_ERROR, Error::WHITELIST_METHOD_ERROR, Error::BLACKLIST_METHOD_ERROR);
+        }
+
+        public function checkProperty($class, string $property) : bool {
+            if(is_object($class) && property_exists($class, $property)){
+                $class = (new \ReflectionProperty($class, $property))->getDeclaringClass()->getName();
+            }
+            $key = $this->normalizeMember($class, $property, 'properties');
+            return $this->checkNamedPolicy('properties', 'property', $key, $this->validate_properties, Error::VALID_PROPERTY_ERROR, Error::WHITELIST_PROPERTY_ERROR, Error::BLACKLIST_PROPERTY_ERROR);
+        }
+
+        public function checkClassConstant(string $class, string $constant) : bool {
+            $key = $this->normalizeMember($class, $constant, 'class_constants');
+            return $this->checkNamedPolicy('class_constants', 'class_constant', $key, $this->validate_class_constants, Error::VALID_CLASS_CONST_ERROR, Error::WHITELIST_CLASS_CONST_ERROR, Error::BLACKLIST_CLASS_CONST_ERROR);
+        }
+
+        public function whitelistEnum($name) : self { return $this->whitelist('enums', $this->normalizeClass($name)); }
+        public function blacklistEnum($name) : self { return $this->blacklist('enums', $this->normalizeClass($name)); }
+        public function dewhitelistEnum($name) : self { return $this->dewhitelist('enums', $this->normalizeClass($name)); }
+        public function deblacklistEnum($name) : self { return $this->deblacklist('enums', $this->normalizeClass($name)); }
+        public function hasWhitelistedEnums() : int { return $this->hasWhitelist('enums'); }
+        public function hasBlacklistedEnums() : int { return $this->hasBlacklist('enums'); }
+        public function isWhitelistedEnum(string $name) : bool { return $this->isWhitelisted('enums', $this->normalizeClass($name)); }
+        public function isBlacklistedEnum(string $name) : bool { return $this->isBlacklisted('enums', $this->normalizeClass($name)); }
+        public function whitelistAttribute($name) : self { return $this->whitelist('attributes', $this->normalizeClass($name)); }
+        public function blacklistAttribute($name) : self { return $this->blacklist('attributes', $this->normalizeClass($name)); }
+        public function dewhitelistAttribute($name) : self { return $this->dewhitelist('attributes', $this->normalizeClass($name)); }
+        public function deblacklistAttribute($name) : self { return $this->deblacklist('attributes', $this->normalizeClass($name)); }
+        public function hasWhitelistedAttributes() : int { return $this->hasWhitelist('attributes'); }
+        public function hasBlacklistedAttributes() : int { return $this->hasBlacklist('attributes'); }
+        public function isWhitelistedAttribute(string $name) : bool { return $this->isWhitelisted('attributes', $this->normalizeClass($name)); }
+        public function isBlacklistedAttribute(string $name) : bool { return $this->isBlacklisted('attributes', $this->normalizeClass($name)); }
+        public function whitelistMethod($class, $method) : self { return $this->whitelist('methods', $this->normalizeMember($class, (string) $method, 'methods')); }
+        public function blacklistMethod($class, $method) : self { return $this->blacklist('methods', $this->normalizeMember($class, (string) $method, 'methods')); }
+        public function dewhitelistMethod($class, $method) : self { return $this->dewhitelist('methods', $this->normalizeMember($class, (string) $method, 'methods')); }
+        public function deblacklistMethod($class, $method) : self { return $this->deblacklist('methods', $this->normalizeMember($class, (string) $method, 'methods')); }
+        public function hasWhitelistedMethods() : int { return $this->hasWhitelist('methods'); }
+        public function hasBlacklistedMethods() : int { return $this->hasBlacklist('methods'); }
+        public function isWhitelistedMethod($class, string $method) : bool { return $this->isWhitelisted('methods', $this->normalizeMember($class, $method, 'methods')); }
+        public function isBlacklistedMethod($class, string $method) : bool { return $this->isBlacklisted('methods', $this->normalizeMember($class, $method, 'methods')); }
+        public function whitelistProperty($class, $property) : self { return $this->whitelist('properties', $this->normalizeMember($class, (string) $property, 'properties')); }
+        public function blacklistProperty($class, $property) : self { return $this->blacklist('properties', $this->normalizeMember($class, (string) $property, 'properties')); }
+        public function dewhitelistProperty($class, $property) : self { return $this->dewhitelist('properties', $this->normalizeMember($class, (string) $property, 'properties')); }
+        public function deblacklistProperty($class, $property) : self { return $this->deblacklist('properties', $this->normalizeMember($class, (string) $property, 'properties')); }
+        public function hasWhitelistedProperties() : int { return $this->hasWhitelist('properties'); }
+        public function hasBlacklistedProperties() : int { return $this->hasBlacklist('properties'); }
+        public function isWhitelistedProperty($class, string $property) : bool { return $this->isWhitelisted('properties', $this->normalizeMember($class, $property, 'properties')); }
+        public function isBlacklistedProperty($class, string $property) : bool { return $this->isBlacklisted('properties', $this->normalizeMember($class, $property, 'properties')); }
+        public function whitelistClassConstant($class, $constant) : self { return $this->whitelist('class_constants', $this->normalizeMember($class, (string) $constant, 'class_constants')); }
+        public function blacklistClassConstant($class, $constant) : self { return $this->blacklist('class_constants', $this->normalizeMember($class, (string) $constant, 'class_constants')); }
+        public function dewhitelistClassConstant($class, $constant) : self { return $this->dewhitelist('class_constants', $this->normalizeMember($class, (string) $constant, 'class_constants')); }
+        public function deblacklistClassConstant($class, $constant) : self { return $this->deblacklist('class_constants', $this->normalizeMember($class, (string) $constant, 'class_constants')); }
+        public function hasWhitelistedClassConstants() : int { return $this->hasWhitelist('class_constants'); }
+        public function hasBlacklistedClassConstants() : int { return $this->hasBlacklist('class_constants'); }
+        public function isWhitelistedClassConstant($class, string $constant) : bool { return $this->isWhitelisted('class_constants', $this->normalizeMember($class, $constant, 'class_constants')); }
+        public function isBlacklistedClassConstant($class, string $constant) : bool { return $this->isBlacklisted('class_constants', $this->normalizeMember($class, $constant, 'class_constants')); }
+
+        /** Invoke an explicitly allowed instance method. */
+        public function _call_method(object $object, string $method, array $arguments){
+            $this->checkMethod($object, $method);
+            return call_user_func_array([$object, $method], $arguments);
+        }
+
+        public function _get_method_callable(object $object, string $method) : Closure {
+            $this->checkMethod($object, $method);
+            return Closure::fromCallable([$object, $method]);
+        }
+
+        /** Internal binding metadata used by generated callable-source closures. */
+        public function _get_callable_receiver() : ?object {
+            return $this->callable_receiver;
+        }
+
+        /** Internal visibility scope retained for generated callable-source closures. */
+        public function _get_callable_scope() : ?string {
+            return $this->callable_scope;
+        }
+
+        public function _call_static(string $class, string $method, array $arguments){
+            $this->checkMethod($class, $method);
+            return call_user_func_array([$class, $method], $arguments);
+        }
+
+        public function _get_static_callable(string $class, string $method) : Closure {
+            $this->checkMethod($class, $method);
+            return Closure::fromCallable([$class, $method]);
+        }
+
+        public function _get_class_constant(string $class, string $constant){
+            $this->checkClassConstant($class, $constant);
+            return constant($class . '::' . $constant);
+        }
+
+        public function _get_static_property(string $class, string $property){
+            $this->checkProperty($class, $property);
+            return $class::${$property};
+        }
+
+        public function &_get_static_property_reference(string $class, string $property){
+            $this->checkProperty($class, $property);
+            return $class::${$property};
+        }
+
+        public function _set_static_property(string $class, string $property, $value){
+            $this->checkProperty($class, $property);
+            return $class::${$property} = $value;
+        }
+
+        public function &_set_static_property_reference(string $class, string $property, &$value){
+            $this->checkProperty($class, $property);
+            $class::${$property} =& $value;
+            return $class::${$property};
+        }
+
+        public function _assign_static_property(string $class, string $property, string $operator, $value){
+            $this->checkProperty($class, $property);
+            return match($operator){
+                '+=' => $class::${$property} += $value, '-=' => $class::${$property} -= $value,
+                '*=' => $class::${$property} *= $value, '/=' => $class::${$property} /= $value,
+                '%=' => $class::${$property} %= $value, '.=' => $class::${$property} .= $value,
+                '**=' => $class::${$property} **= $value, '&=' => $class::${$property} &= $value,
+                '|=' => $class::${$property} |= $value, '^=' => $class::${$property} ^= $value,
+                '<<=' => $class::${$property} <<= $value, '>>=' => $class::${$property} >>= $value,
+                '??=' => $class::${$property} ??= $value,
+                default => $this->validationError("Unsupported static property assignment operator: $operator", Error::VALID_OPERATOR_ERROR, null, $operator),
+            };
+        }
+
+        public function _update_static_property(string $class, string $property, string $operator){
+            $this->checkProperty($class, $property);
+            return match($operator){
+                '++' => ++$class::${$property}, '--' => --$class::${$property},
+                'post++' => $class::${$property}++, 'post--' => $class::${$property}--,
+                default => $this->validationError("Unsupported static property update operator: $operator", Error::VALID_OPERATOR_ERROR, null, $operator),
+            };
+        }
+
+        public function _isset_static_property(string $class, string $property) : bool {
+            $this->checkProperty($class, $property);
+            return isset($class::${$property});
+        }
+
+        public function _unset_static_property(string $class, string $property) : void {
+            $this->checkProperty($class, $property);
+            unset($class::${$property});
+        }
+
+        public function _get_property(object $object, string $property){
+            $this->checkProperty($object, $property);
+            return $object->{$property};
+        }
+
+        public function &_get_property_reference(object $object, string $property){
+            $this->checkProperty($object, $property);
+            return $object->{$property};
+        }
+
+        /** Implement PHP 8.5 clone-with after validating every initialized property. */
+        public function _clone_with(object $object, array $properties) : object {
+            if(PHP_VERSION_ID < 80500){
+                $this->validationError('Clone-with requires PHP 8.5 or newer.', Error::VALID_KEYWORD_ERROR, null, 'clone');
+            }
+            foreach(array_keys($properties) as $property){
+                if(!is_string($property)){
+                    $this->validationError('Clone-with property names must be strings.', Error::DYNAMIC_PROPERTY_ERROR, null, $property);
+                }
+                $this->checkProperty($object, $property);
+            }
+            /** @noinspection PhpUsageOfSilenceOperatorInspection -- parsed only at runtime on PHP 8.5+. */
+            return eval('return clone($object, $properties);');
+        }
+
+        public function _set_property(object $object, string $property, $value){
+            $this->checkProperty($object, $property);
+            $object->{$property} = $value;
+            return $value;
+        }
+
+        public function &_set_property_reference(object $object, string $property, &$value){
+            $this->checkProperty($object, $property);
+            $object->{$property} =& $value;
+            return $object->{$property};
+        }
+
+        public function _assign_property(object $object, string $property, string $operator, $value){
+            $this->checkProperty($object, $property);
+            return match($operator){
+                '+=' => $object->{$property} += $value,
+                '-=' => $object->{$property} -= $value,
+                '*=' => $object->{$property} *= $value,
+                '/=' => $object->{$property} /= $value,
+                '%=' => $object->{$property} %= $value,
+                '.=' => $object->{$property} .= $value,
+                '**=' => $object->{$property} **= $value,
+                '&=' => $object->{$property} &= $value,
+                '|=' => $object->{$property} |= $value,
+                '^=' => $object->{$property} ^= $value,
+                '<<=' => $object->{$property} <<= $value,
+                '>>=' => $object->{$property} >>= $value,
+                '??=' => $object->{$property} ??= $value,
+                default => $this->validationError("Unsupported property assignment operator: $operator", Error::VALID_OPERATOR_ERROR, null, $operator),
+            };
+        }
+
+        public function _update_property(object $object, string $property, string $operator){
+            $this->checkProperty($object, $property);
+            return match($operator){
+                '++' => ++$object->{$property},
+                '--' => --$object->{$property},
+                'post++' => $object->{$property}++,
+                'post--' => $object->{$property}--,
+                default => $this->validationError("Unsupported property update operator: $operator", Error::VALID_OPERATOR_ERROR, null, $operator),
+            };
+        }
+
+        public function _isset_property(object $object, string $property) : bool {
+            $this->checkProperty($object, $property);
+            return isset($object->{$property});
+        }
+
+        public function _unset_property(object $object, string $property) : void {
+            $this->checkProperty($object, $property);
+            unset($object->{$property});
+        }
+
         /** Prepare defined variables for execution
          *
          * @throws  Throwable   Throws exception if validation error occurs
@@ -6534,26 +7098,9 @@
         protected function prepareVars() : string {
             $output = [];
             foreach($this->definitions['variables'] as $name => $value){
-                if(is_int($name)){  //can't define numeric variable names
-                    $this->validationError('Cannot define variable name that begins with an integer!', Error::DEFINE_VAR_ERROR, null, $name);
-                }
-                if(is_scalar($value) || is_null($value)){
-                    if(is_bool($value)){
-                        $output[] = '$' . $name . ' = ' . ($value ? 'true' : 'false');
-                    } else if(is_int($value)){
-                        $output[] = '$' . $name . ' = ' . ($value ? $value : '0');
-                    } else if(is_float($value)){
-                        $output[] = '$' . $name . ' = ' . ($value ? $value : '0.0');
-                    } else if(is_string($value)){
-                        $output[] = '$' . $name . " = '" . addcslashes($value, "'\\") . "'";
-                    } else {
-                        $output[] = '$' . $name . " = null";
-                    }
-                } else {
-                    $output[] = '$' . $name . " = unserialize('" . addcslashes(serialize($value), "'\\") . "')";
-                }
+                $output[] = '$' . $name;
             }
-            return count($output) ? "\r\n" . implode(";\r\n", $output) . ";\r\n" : '';
+            return implode(', ', $output);
         }
 
         /** Prepare defined constants for execution
@@ -6639,15 +7186,23 @@
          *
          * @return  string      Return the disassembled code string
          */
-        protected function disassemble($closure) : string {
+        protected function disassemble($closure, bool $capture_binding = true) : string {
             if(is_string($closure) && !is_callable($closure)){
+                if($capture_binding){
+                    $this->callable_receiver = null;
+                    $this->callable_scope = null;
+                }
                 return substr($closure, 0, 2) == '<?' ? $closure : '<?php ' . $closure;
             }
-            $disassembled_closure = FunctionParser::fromCallable($closure);
-            if($this->auto_define_vars){
-                $this->autoDefine($disassembled_closure);
+            $disassembled_closure = (new CallableSourceExtractor)->extract($closure);
+            if($capture_binding){
+                $this->callable_receiver = $disassembled_closure['receiver'];
+                $this->callable_scope = $disassembled_closure['scope'];
             }
-            return '<?php' . $disassembled_closure->getBody();
+            if($this->auto_define_vars){
+                $this->autoDefine($disassembled_closure['reflection']);
+            }
+            return '<?php ' . $disassembled_closure['body'];
         }
 
         /** Automatically whitelisted trusted code
@@ -6679,13 +7234,18 @@
          *
          * @return  PHPSandbox          Returns the PHPSandbox instance for fluent querying
          */
-        protected function autoDefine(FunctionParser $disassembled_closure) : self {
-            $parameters = $disassembled_closure->getReflection()->getParameters();
+        protected function autoDefine(ReflectionFunctionAbstract $reflection) : self {
+            $parameters = $reflection->getParameters();
             foreach($parameters as $param){
                 /**
                  * @var ReflectionParameter $param
                  */
                 $this->defineVar($param->getName(), $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null);
+            }
+            if($reflection instanceof \ReflectionFunction){
+                foreach($reflection->getStaticVariables() as $name => $value){
+                    $this->defineVar($name, $value);
+                }
             }
             return $this;
         }
@@ -6699,7 +7259,7 @@
             if(!$code){
                 return $this;
             }
-            $code = $this->disassemble($code);
+            $code = $this->disassemble($code, false);
             if($this->auto_whitelist_trusted_code){
                 $this->autoWhitelist($code);
             }
@@ -6716,7 +7276,7 @@
             if(!$code){
                 return $this;
             }
-            $code = $this->disassemble($code);
+            $code = $this->disassemble($code, false);
             if($this->auto_whitelist_trusted_code){
                 $this->autoWhitelist($code, true);
             }
@@ -6825,7 +7385,12 @@
          * @return  PHPSandbox      Returns the PHPSandbox instance for fluent querying
          */
         public function setExecutingFile(?string $executing_file) : self {
-            $this->executing_file = realpath($executing_file);
+            if($executing_file === null){
+                $this->executing_file = null;
+            } else {
+                $canonical = realpath($executing_file);
+                $this->executing_file = $canonical !== false ? $canonical : $executing_file;
+            }
             return $this;
         }
 
@@ -6885,6 +7450,7 @@
                 ($this->allow_classes && $this->auto_whitelist_classes) ||
                 ($this->allow_interfaces && $this->auto_whitelist_interfaces) ||
                 ($this->allow_traits && $this->auto_whitelist_traits) ||
+                ($this->allow_enums && $this->auto_whitelist_enums) ||
                 ($this->allow_globals && $this->auto_whitelist_globals)){
 
                 $traverser = new NodeTraverser;
@@ -6897,11 +7463,22 @@
 
             $validator = new ValidatorVisitor($this);
 
+            $traverser->addVisitor(new ParentConnectingVisitor);
+            $traverser->addVisitor(new AstPolicyVisitor($this));
             $traverser->addVisitor($validator);
 
             $this->prepared_ast = $traverser->traverse($this->parsed_ast);
-
-            $this->prepared_code = $prettyPrinter->prettyPrint($this->prepared_ast);
+            $declarations = [];
+            $statements = [];
+            foreach($this->prepared_ast as $statement){
+                if($statement instanceof Node\Stmt\Const_){
+                    $declarations[] = $statement;
+                } else {
+                    $statements[] = $statement;
+                }
+            }
+            $this->prepared_declarations = $prettyPrinter->prettyPrint($declarations);
+            $this->prepared_code = $prettyPrinter->prettyPrint($statements);
 
             return $this;
         }
@@ -6926,21 +7503,25 @@
 
             if(!$skip_validation){
                 $this->validate($code);
+            } else {
+                $this->prepared_declarations = '';
             }
 
-            static::$sandboxes[$this->name] = $this;
+            static::$sandboxes[$this->name] = WeakReference::create($this);
 
             $this->generated_code = $this->prepareNamespaces() .
                 $this->prepareAliases() .
+                ($this->prepared_declarations !== '' ? $this->prepared_declarations . "\r\n" : '') .
                 $this->prepareConsts() .
-                "\r\n" . '$closure = function(){' . "\r\n" .
-                $this->prepareVars() .
+                "\r\n" . '$closure = function(' . $this->prepareVars() . '){' . "\r\n" .
                 $this->prepended_code .
                 ($skip_validation ? $code : $this->prepared_code) .
                 $this->appended_code .
                 "\r\n" . '};' .
-                "\r\n" . 'if(method_exists($closure, "bindTo")){ $closure = $closure->bindTo(null); }' .
-                "\r\n" . 'return $closure();';
+                "\r\n" . '$sandbox = \\PHPSandbox\\PHPSandbox::getSandbox(' . var_export($this->name, true) . ');' .
+                "\r\n" . 'if(method_exists($closure, "bindTo")){ $closure = $closure->bindTo($sandbox->_get_callable_receiver(), $sandbox->_get_callable_scope() ?? "static"); }' .
+                "\r\n" . 'if(!$closure){ throw new \\RuntimeException("Unable to bind sandbox callable to its original receiver and scope."); }' .
+                "\r\n" . 'return $closure(...$sandbox->_get_input_vars());';
 
             usleep(1); //guarantee at least some time passes
             $this->prepare_time = (microtime(true) - $this->prepare_time);
@@ -6960,21 +7541,45 @@
          * @return  mixed       The output from the executed sandboxed code
          */
         public function execute($callable = null, bool $skip_validation = false, ?string $executing_file = null){
+            $previous_executing_file = $this->executing_file;
+            $previous_generated_code = $this->generated_code;
+            $is_nested_execution = $this->execution_depth > 0;
+            $previous_pipeline = $is_nested_execution ? [
+                $this->preparsed_code, $this->parsed_ast, $this->prepared_code,
+                $this->prepared_declarations, $this->prepared_ast, $this->prepare_time,
+                $this->callable_receiver, $this->callable_scope,
+            ] : null;
+            $this->execution_depth++;
             if($executing_file){
                 $this->setExecutingFile($executing_file);
             }
-            $this->execution_time = microtime(true);
-            $this->memory_usage = memory_get_peak_usage();
-            if($callable !== null){
-                $this->prepare($callable, $skip_validation);
+            $execution_started = microtime(true);
+            $memory_started = memory_get_peak_usage();
+            try {
+                if($callable !== null){
+                    $this->prepare($callable, $skip_validation);
+                }
+            } catch(Throwable $preparation_exception){
+                $this->executing_file = $previous_executing_file;
+                if($is_nested_execution){
+                    $this->generated_code = $previous_generated_code;
+                    [$this->preparsed_code, $this->parsed_ast, $this->prepared_code,
+                        $this->prepared_declarations, $this->prepared_ast, $this->prepare_time,
+                        $this->callable_receiver, $this->callable_scope] = $previous_pipeline;
+                }
+                $this->execution_depth--;
+                throw $preparation_exception;
             }
-            $saved_error_level = null;
+            $saved_error_level = error_reporting();
+            $saved_time_limit = (int) ini_get('max_execution_time');
+            $initial_buffer_level = ob_get_level();
+            $installed_error_handler = false;
             if($this->error_level !== null){
-                $saved_error_level = error_reporting();
                 error_reporting(intval($this->error_level));
             }
             if(is_callable($this->error_handler) || $this->convert_errors){
                 set_error_handler([$this, 'error'], $this->error_handler_types);
+                $installed_error_handler = true;
             }
             if($this->time_limit){
                 set_time_limit($this->time_limit);
@@ -6991,16 +7596,31 @@
                 }
             } catch(Throwable $exception){
                 //swallow any exceptions
-            }
-            if(is_callable($this->error_handler) || $this->convert_errors){
-                restore_error_handler();
+            } finally {
+                while(ob_get_level() > $initial_buffer_level){
+                    ob_end_clean();
+                }
+                if($installed_error_handler){
+                    restore_error_handler();
+                }
+                if($this->time_limit){
+                    set_time_limit($saved_time_limit);
+                }
+                if($this->error_level !== null && $this->restore_error_level){
+                    error_reporting($saved_error_level);
+                }
+                $this->executing_file = $previous_executing_file;
+                if($is_nested_execution){
+                    $this->generated_code = $previous_generated_code;
+                    [$this->preparsed_code, $this->parsed_ast, $this->prepared_code,
+                        $this->prepared_declarations, $this->prepared_ast, $this->prepare_time,
+                        $this->callable_receiver, $this->callable_scope] = $previous_pipeline;
+                }
+                $this->execution_depth--;
             }
             usleep(1); //guarantee at least some time passes
-            $this->memory_usage = (memory_get_peak_usage() - $this->memory_usage);
-            $this->execution_time = (microtime(true) - $this->execution_time);
-            if($this->error_level !== null && $this->restore_error_level){
-                error_reporting($saved_error_level);
-            }
+            $this->memory_usage = (memory_get_peak_usage() - $memory_started);
+            $this->execution_time = (microtime(true) - $execution_started);
             return $exception instanceof Throwable ? $this->exception($exception) : $result;
         }
 
@@ -7210,7 +7830,14 @@
          * @return  PHPSandbox|null
          */
         public static function getSandbox(string $name) : ?self {
-            return static::$sandboxes[$name] ?? null;
+            $sandbox = static::$sandboxes[$name] ?? null;
+            if($sandbox instanceof WeakReference){
+                $sandbox = $sandbox->get();
+                if($sandbox === null){
+                    unset(static::$sandboxes[$name]);
+                }
+            }
+            return $sandbox instanceof self ? $sandbox : null;
         }
 
         /** Get an iterator of all the public PHPSandbox properties

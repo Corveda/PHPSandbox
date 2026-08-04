@@ -1,33 +1,39 @@
-name: PHP Composer
+name: PHP
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4', '8.5']
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v2
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
         with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
-
-      - name: Run test suite
-        run: composer run-script test
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+      - name: Validate package metadata
+        run: composer validate --strict
+      - name: Resolve dependencies for this PHP runtime
+        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: Run tests
+        run: composer test
+      - name: Check dependency advisories
+        if: matrix.php == '8.5'
+        run: composer audit
+      - name: Verify generated API documentation
+        if: matrix.php == '8.5'
+        run: |
+          composer docs:api
+          git diff --exit-code -- documentation/api-reference.md

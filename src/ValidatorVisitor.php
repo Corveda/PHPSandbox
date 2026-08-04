@@ -43,8 +43,38 @@
          * @return  Node|bool|null        Return rewritten node, false if node must be removed, or null if no changes to the node are made
          */
         public function leaveNode(Node $node){
-            if($node instanceof Node\Arg && $this->sandbox->sandbox_strings){
-                return new Node\Expr\FuncCall(new Node\Name\FullyQualified(($node->value instanceof Node\Expr\Variable) ? 'PHPSandbox\\wrapByRef' : 'PHPSandbox\\wrap'), [$node, new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))])], $node->getAttributes());
+            if($node instanceof Node\Param){
+                $this->validateTypeNode($node->type, $node);
+            }
+            if($node instanceof Node\Stmt\Property){
+                $this->validateTypeNode($node->type, $node);
+            }
+            if($node instanceof Node\Stmt\ClassConst){
+                $this->validateTypeNode($node->type, $node);
+            }
+            if($node instanceof Node\FunctionLike){
+                $this->validateTypeNode($node->getReturnType(), $node);
+            }
+            if($node instanceof Node\Arg && $this->sandbox->sandbox_strings && !$this->memberArgumentNeedsReference($node)){
+                if($node->name !== null && !$this->sandbox->allow_named_arguments){
+                    $this->sandbox->validationError('Sandboxed code attempted to use named arguments!', Error::VALID_KEYWORD_ERROR, $node, $node->name->toString());
+                }
+                $wrapped = new Node\Expr\FuncCall(
+                    new Node\Name\FullyQualified(($node->value instanceof Node\Expr\Variable) ? 'PHPSandbox\\wrapByRef' : 'PHPSandbox\\wrap'),
+                    [
+                        new Node\Arg($node->value),
+                        new Node\Arg(new Node\Expr\StaticCall(new Node\Name\FullyQualified("PHPSandbox\\PHPSandbox"), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))])),
+                    ],
+                    $node->getAttributes()
+                );
+                return new Node\Arg($wrapped, $node->byRef, $node->unpack, $node->getAttributes(), $node->name);
+            } else if($node instanceof Node\Arg && $node->name !== null && !$this->sandbox->allow_named_arguments){
+                $this->sandbox->validationError('Sandboxed code attempted to use named arguments!', Error::VALID_KEYWORD_ERROR, $node, $node->name->toString());
+            } else if($node instanceof Node\Attribute){
+                if(!$this->sandbox->allow_attributes){
+                    $this->sandbox->validationError('Sandboxed code attempted to use an attribute!', Error::ATTRIBUTE_ERROR, $node, $node->name->toString());
+                }
+                $this->sandbox->checkAttribute($node->name->toString());
             } else if($node instanceof Node\Stmt\InlineHTML){
                 if(!$this->sandbox->allow_escaping){
                     $this->sandbox->validationError("Sandboxed code attempted to escape to HTML!", Error::ESCAPE_ERROR, $node);
@@ -52,6 +82,9 @@
             }else if($node instanceof Node\Expr\Cast){
                 if(!$this->sandbox->allow_casting){
                     $this->sandbox->validationError("Sandboxed code attempted to cast!", Error::CAST_ERROR, $node);
+                }
+                if($this->isConstantExpression($node)){
+                    return null;
                 }
                 if($node instanceof Node\Expr\Cast\Int_){
                     return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]), '_intval', [new Node\Arg($node->expr)], $node->getAttributes());
@@ -65,10 +98,36 @@
                     return new Node\Expr\MethodCall(new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]), '_objectval', [new Node\Arg($node->expr)], $node->getAttributes());
                 }
             } else if($node instanceof Node\Expr\FuncCall){
+                if($node->isFirstClassCallable() && !$this->sandbox->allow_closures){
+                    $this->sandbox->validationError('Sandboxed code attempted to create a first-class callable!', Error::CLOSURE_ERROR, $node);
+                }
                 if($node->name instanceof Node\Name){
                     $name = strtolower($node->name->toString());
+                    if($name === 'clone' && PHP_VERSION_ID >= 80500){
+                        $this->sandbox->checkKeyword('clone');
+                        if(count($node->args) > 1){
+                            return new Node\Expr\MethodCall(
+                                new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]),
+                                '_clone_with',
+                                $node->args,
+                                $node->getAttributes()
+                            );
+                        }
+                        return null;
+                    }
                     if(!$this->sandbox->checkFunc($name)){
                         $this->sandbox->validationError('Function failed custom validation!', Error::VALID_FUNC_ERROR, $node);
+                    }
+                    if($node->isFirstClassCallable()){
+                        if($this->sandbox->isDefinedFunc($name)){
+                            return new Node\Expr\MethodCall(
+                                new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]),
+                                '_get_func_callable',
+                                [new Node\Arg(new Node\Scalar\String_($name))],
+                                $node->getAttributes()
+                            );
+                        }
+                        return null;
                     }
                     if($this->sandbox->isDefinedFunc($name)){
                         $args = $node->args;
@@ -118,6 +177,31 @@
             } else if($node instanceof Node\Expr\Closure){
                 if(!$this->sandbox->allow_closures){
                     $this->sandbox->validationError('Sandboxed code attempted to create a closure!', Error::CLOSURE_ERROR, $node);
+                }
+            } else if($node instanceof Node\Expr\ArrowFunction){
+                if(!$this->sandbox->allow_closures){
+                    $this->sandbox->validationError('Sandboxed code attempted to create an arrow function!', Error::CLOSURE_ERROR, $node);
+                }
+                if(!$this->sandbox->checkKeyword('fn')){
+                    $this->sandbox->validationError('Keyword failed custom validation!', Error::VALID_KEYWORD_ERROR, $node, 'fn');
+                }
+            } else if($node instanceof Node\Stmt\Enum_){
+                if(!$this->sandbox->allow_enums){
+                    $this->sandbox->validationError('Sandboxed code attempted to define an enum!', Error::ENUM_ERROR, $node);
+                }
+                if(!$this->sandbox->checkKeyword('enum')){
+                    $this->sandbox->validationError('Keyword failed custom validation!', Error::VALID_KEYWORD_ERROR, $node, 'enum');
+                }
+                if(!$node->name){
+                    $this->sandbox->validationError('Sandboxed code attempted to define an unnamed enum!', Error::ENUM_ERROR, $node);
+                }
+                $this->sandbox->checkEnum($node->name->toString());
+                foreach($node->implements as $implement){
+                    $this->sandbox->checkInterface($implement->toString());
+                }
+            } else if($node instanceof Node\PropertyHook){
+                if(!$this->sandbox->allow_property_hooks){
+                    $this->sandbox->validationError('Sandboxed code attempted to define a property hook!', Error::PROPERTY_HOOK_ERROR, $node, $node->name->toString());
                 }
             } else if($node instanceof Node\Stmt\Class_){
                 if(!$this->sandbox->allow_classes){
@@ -261,7 +345,15 @@
                     $node->default = $node->default->args[0];
                 }
             } else if($node instanceof Node\Stmt\Const_){
-                $this->sandbox->validationError('Sandboxed code cannot use const keyword in the global scope!', Error::GLOBAL_CONST_ERROR, $node);
+                if(!$this->sandbox->allow_constants){
+                    $this->sandbox->validationError('Sandboxed code attempted to declare a global constant!', Error::GLOBAL_CONST_ERROR, $node);
+                }
+                if(!$this->sandbox->checkKeyword('const')){
+                    $this->sandbox->validationError('Keyword failed custom validation!', Error::VALID_KEYWORD_ERROR, $node, 'const');
+                }
+                foreach($node->consts as $constant){
+                    $this->sandbox->checkConst($constant->name->toString());
+                }
             } else if($node instanceof Node\Expr\ConstFetch){
                 if(!$node->name instanceof Node\Name){
                     $this->sandbox->validationError('Sandboxed code attempted dynamically-named constant call!', Error::DYNAMIC_CONST_ERROR, $node);
@@ -269,19 +361,249 @@
                 if(!$this->sandbox->checkConst($node->name->toString())){
                     $this->sandbox->validationError('Constant failed custom validation!', Error::VALID_CONST_ERROR, $node, $node->name->toString());
                 }
+            } else if($node instanceof Node\Expr\Assign && $node->var instanceof Node\Expr\StaticPropertyFetch){
+                if($this->isExternalStaticProperty($node->var)){
+                    return $this->sandboxStaticPropertyCall('_set_static_property', $node->var, [$node->expr], $node);
+                }
+            } else if($node instanceof Node\Expr\AssignRef && $node->var instanceof Node\Expr\StaticPropertyFetch){
+                if($this->isExternalStaticProperty($node->var)){
+                    return $this->sandboxStaticPropertyCall('_set_static_property_reference', $node->var, [$node->expr], $node);
+                }
+            } else if($node instanceof Node\Expr\AssignOp && $node->var instanceof Node\Expr\StaticPropertyFetch){
+                if($this->isExternalStaticProperty($node->var)){
+                    return $this->sandboxStaticPropertyCall('_assign_static_property', $node->var, [new Node\Scalar\String_($this->isOperator($node)), $node->expr], $node);
+                }
+            } else if(($node instanceof Node\Expr\PreInc || $node instanceof Node\Expr\PreDec || $node instanceof Node\Expr\PostInc || $node instanceof Node\Expr\PostDec)
+                && $node->var instanceof Node\Expr\StaticPropertyFetch
+            ){
+                if($this->isExternalStaticProperty($node->var)){
+                    $operator = $node instanceof Node\Expr\PreInc ? '++' : ($node instanceof Node\Expr\PreDec ? '--' : ($node instanceof Node\Expr\PostInc ? 'post++' : 'post--'));
+                    return $this->sandboxStaticPropertyCall('_update_static_property', $node->var, [new Node\Scalar\String_($operator)], $node);
+                }
+            } else if($node instanceof Node\Expr\Assign && $node->var instanceof Node\Expr\PropertyFetch){
+                if(!$node->var->name instanceof Node\Identifier){
+                    if(!$this->sandbox->allow_dynamic_properties){
+                        $this->sandbox->validationError('Sandboxed code attempted dynamically-named property assignment!', Error::DYNAMIC_PROPERTY_ERROR, $node);
+                    }
+                }
+                return $this->sandboxPropertyCall('_set_property', $node->var, [$node->expr], $node);
+            } else if($node instanceof Node\Expr\AssignRef && $node->var instanceof Node\Expr\PropertyFetch){
+                if(!$node->var->name instanceof Node\Identifier){
+                    if(!$this->sandbox->allow_dynamic_properties){
+                        $this->sandbox->validationError('Sandboxed code attempted dynamically-named property reference assignment!', Error::DYNAMIC_PROPERTY_ERROR, $node);
+                    }
+                }
+                return $this->sandboxPropertyCall('_set_property_reference', $node->var, [$node->expr], $node);
+            } else if($node instanceof Node\Expr\AssignOp && $node->var instanceof Node\Expr\PropertyFetch){
+                if(!$node->var->name instanceof Node\Identifier){
+                    if(!$this->sandbox->allow_dynamic_properties){
+                        $this->sandbox->validationError('Sandboxed code attempted dynamically-named property assignment!', Error::DYNAMIC_PROPERTY_ERROR, $node);
+                    }
+                }
+                return $this->sandboxPropertyCall('_assign_property', $node->var, [new Node\Scalar\String_($this->isOperator($node)), $node->expr], $node);
+            } else if(($node instanceof Node\Expr\PreInc || $node instanceof Node\Expr\PreDec || $node instanceof Node\Expr\PostInc || $node instanceof Node\Expr\PostDec)
+                && $node->var instanceof Node\Expr\PropertyFetch
+            ){
+                if(!$node->var->name instanceof Node\Identifier && !$this->sandbox->allow_dynamic_properties){
+                    $this->sandbox->validationError('Sandboxed code attempted dynamically-named property update!', Error::DYNAMIC_PROPERTY_ERROR, $node);
+                }
+                $operator = $node instanceof Node\Expr\PreInc ? '++' : ($node instanceof Node\Expr\PreDec ? '--' : ($node instanceof Node\Expr\PostInc ? 'post++' : 'post--'));
+                return $this->sandboxPropertyCall('_update_property', $node->var, [new Node\Scalar\String_($operator)], $node);
+            } else if($node instanceof Node\Expr\Isset_){
+                $expressions = [];
+                $remaining = [];
+                foreach($node->vars as $variable){
+                    if($variable instanceof Node\Expr\PropertyFetch){
+                        if(!$variable->name instanceof Node\Identifier && !$this->sandbox->allow_dynamic_properties){
+                            $this->sandbox->validationError('Sandboxed code attempted dynamically-named property isset!', Error::DYNAMIC_PROPERTY_ERROR, $node);
+                        }
+                        $expressions[] = $this->sandboxPropertyCall('_isset_property', $variable, [], $node);
+                    } else if($variable instanceof Node\Expr\StaticPropertyFetch && $this->isExternalStaticProperty($variable)){
+                        $expressions[] = $this->sandboxStaticPropertyCall('_isset_static_property', $variable, [], $node);
+                    } else {
+                        $remaining[] = $variable;
+                    }
+                }
+                if($remaining){
+                    $expressions[] = new Node\Expr\Isset_($remaining, $node->getAttributes());
+                }
+                if($expressions){
+                    $result = array_shift($expressions);
+                    foreach($expressions as $expression){
+                        $result = new Node\Expr\BinaryOp\BooleanAnd($result, $expression, $node->getAttributes());
+                    }
+                    return $result;
+                }
+            } else if($node instanceof Node\Stmt\Unset_){
+                $statements = [];
+                $rewritten = false;
+                foreach($node->vars as $variable){
+                    if($variable instanceof Node\Expr\PropertyFetch){
+                        if(!$variable->name instanceof Node\Identifier){
+                            if(!$this->sandbox->allow_dynamic_properties){
+                                $this->sandbox->validationError('Sandboxed code attempted dynamically-named property unset!', Error::DYNAMIC_PROPERTY_ERROR, $node);
+                            }
+                        }
+                        $statements[] = new Node\Stmt\Expression($this->sandboxPropertyCall('_unset_property', $variable, [], $node), $node->getAttributes());
+                        $rewritten = true;
+                    } else if($variable instanceof Node\Expr\StaticPropertyFetch && $this->isExternalStaticProperty($variable)){
+                        $statements[] = new Node\Stmt\Expression($this->sandboxStaticPropertyCall('_unset_static_property', $variable, [], $node), $node->getAttributes());
+                        $rewritten = true;
+                    } else {
+                        $statements[] = new Node\Stmt\Unset_([$variable], $node->getAttributes());
+                    }
+                }
+                if($rewritten){
+                    return $statements;
+                }
+            } else if($node instanceof Node\Expr\PropertyFetch || $node instanceof Node\Expr\NullsafePropertyFetch){
+                if(!$node->name instanceof Node\Identifier){
+                    if(!$this->sandbox->allow_dynamic_properties){
+                        $this->sandbox->validationError('Sandboxed code attempted dynamically-named property access!', Error::DYNAMIC_PROPERTY_ERROR, $node);
+                    }
+                }
+                $parent = $node->getAttribute('parent');
+                if(($parent instanceof Node\Expr\Assign || $parent instanceof Node\Expr\AssignOp) && $parent->var === $node){
+                    return null;
+                }
+                if($parent instanceof Node\Expr\AssignRef && $parent->var === $node){
+                    return null;
+                }
+                if(($parent instanceof Node\Expr\PreInc || $parent instanceof Node\Expr\PreDec || $parent instanceof Node\Expr\PostInc || $parent instanceof Node\Expr\PostDec) && $parent->var === $node){
+                    return null;
+                }
+                if($parent instanceof Node\Expr\Isset_){
+                    return null;
+                }
+                if($parent instanceof Node\Stmt\Unset_){
+                    return null;
+                }
+                if($node instanceof Node\Expr\NullsafePropertyFetch){
+                    $this->sandbox->checkOperator('?->');
+                    $temporary = new Node\Expr\Variable('__PHPSandbox_nullsafe_' . substr(md5($this->sandbox->name . $node->getStartFilePos()), 0, 12));
+                    $fetch = new Node\Expr\PropertyFetch($temporary, $node->name, $node->getAttributes());
+                    return new Node\Expr\Ternary(
+                        new Node\Expr\BinaryOp\Identical(new Node\Expr\Assign($temporary, $node->var), new Node\Expr\ConstFetch(new Node\Name('null'))),
+                        new Node\Expr\ConstFetch(new Node\Name('null')),
+                        $this->sandboxPropertyCall('_get_property', $fetch, [], $node),
+                        $node->getAttributes()
+                    );
+                }
+                return $this->sandboxPropertyCall($this->propertyNeedsReference($node) ? '_get_property_reference' : '_get_property', $node, [], $node);
+            } else if($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\NullsafeMethodCall){
+                if($node instanceof Node\Expr\NullsafeMethodCall){
+                    $this->sandbox->checkOperator('?->');
+                }
+                if($node->isFirstClassCallable() && !$this->sandbox->allow_closures){
+                    $this->sandbox->validationError('Sandboxed code attempted to create a first-class method callable!', Error::CLOSURE_ERROR, $node);
+                }
+                if(!$node->name instanceof Node\Identifier){
+                    if(!$this->sandbox->allow_dynamic_methods){
+                        $this->sandbox->validationError('Sandboxed code attempted dynamically-named method call!', Error::DYNAMIC_METHOD_ERROR, $node);
+                    }
+                }
+                $method = $node->name instanceof Node\Identifier ? new Node\Scalar\String_($node->name->toString()) : $node->name;
+                if($node->isFirstClassCallable()){
+                    return new Node\Expr\MethodCall(
+                        new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]),
+                        '_get_method_callable',
+                        [new Node\Arg($node->var), new Node\Arg($method)],
+                        $node->getAttributes()
+                    );
+                }
+                $args = [new Node\Arg($node->var), new Node\Arg($method), new Node\Arg($this->argumentArray($node->args))];
+                $call = new Node\Expr\MethodCall(
+                    new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]),
+                    '_call_method',
+                    $args,
+                    $node->getAttributes()
+                );
+                if($node instanceof Node\Expr\NullsafeMethodCall){
+                    $temporary = new Node\Expr\Variable('__PHPSandbox_nullsafe_' . substr(md5($this->sandbox->name . $node->getStartFilePos()), 0, 12));
+                    $call->args[0] = new Node\Arg($temporary);
+                    return new Node\Expr\Ternary(
+                        new Node\Expr\BinaryOp\Identical(new Node\Expr\Assign($temporary, $node->var), new Node\Expr\ConstFetch(new Node\Name('null'))),
+                        new Node\Expr\ConstFetch(new Node\Name('null')),
+                        $call,
+                        $node->getAttributes()
+                    );
+                }
+                return $call;
             } else if($node instanceof Node\Expr\ClassConstFetch || $node instanceof Node\Expr\StaticCall || $node instanceof Node\Expr\StaticPropertyFetch){
                 $class = $node->class;
                 if(!$class instanceof Node\Name){
                     $this->sandbox->validationError('Sandboxed code attempted dynamically-named class call!', Error::DYNAMIC_CLASS_ERROR, $node);
                 }
-                if($this->sandbox->isDefinedClass($class)){
-                    $node->class = new Node\Name($this->sandbox->getDefinedClass($class));
+                if($this->sandbox->isDefinedClass($class->toString())){
+                    $node->class = new Node\Name\FullyQualified($this->sandbox->getDefinedClass($class->toString()));
+                    $class = $node->class;
                 }
                 /**
                  * @var Node\Name    $class
                  */
                 if(!$this->sandbox->checkClass($class->toString())){
                     $this->sandbox->validationError('Class constant failed custom validation!', Error::VALID_CLASS_ERROR, $node, $class->toString());
+                }
+                $className = $class->toString();
+                $runtimeClassName = $this->sandbox->resolveAlias($className);
+                if(!in_array(strtolower($className), ['self', 'static', 'parent'], true)){
+                    $node->class = new Node\Name\FullyQualified($runtimeClassName, $node->class->getAttributes());
+                }
+                if($node instanceof Node\Expr\StaticCall){
+                    if($node->isFirstClassCallable() && !$this->sandbox->allow_closures){
+                        $this->sandbox->validationError('Sandboxed code attempted to create a first-class static callable!', Error::CLOSURE_ERROR, $node);
+                    }
+                    if(!$node->name instanceof Node\Identifier){
+                        if(!$this->sandbox->allow_dynamic_methods){
+                            $this->sandbox->validationError('Sandboxed code attempted dynamically-named static method call!', Error::DYNAMIC_METHOD_ERROR, $node);
+                        }
+                    }
+                    if(!in_array(strtolower($className), ['self', 'static', 'parent'], true)){
+                        $method = $node->name instanceof Node\Identifier ? new Node\Scalar\String_($node->name->toString()) : $node->name;
+                        return new Node\Expr\MethodCall(
+                            new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]),
+                            $node->isFirstClassCallable() ? '_get_static_callable' : '_call_static',
+                            [
+                                new Node\Arg(new Node\Scalar\String_($runtimeClassName)),
+                                new Node\Arg($method),
+                                ...($node->isFirstClassCallable() ? [] : [new Node\Arg($this->argumentArray($node->args))]),
+                            ],
+                            $node->getAttributes()
+                        );
+                    }
+                } else if($node instanceof Node\Expr\StaticPropertyFetch){
+                    if(!$node->name instanceof Node\VarLikeIdentifier){
+                        if(!$this->sandbox->allow_dynamic_properties){
+                            $this->sandbox->validationError('Sandboxed code attempted dynamically-named static property access!', Error::DYNAMIC_PROPERTY_ERROR, $node);
+                        }
+                    }
+                    if(!in_array(strtolower($className), ['self', 'static', 'parent'], true)){
+                        $parent = $node->getAttribute('parent');
+                        if((($parent instanceof Node\Expr\Assign || $parent instanceof Node\Expr\AssignOp || $parent instanceof Node\Expr\AssignRef) && $parent->var === $node)
+                            || (($parent instanceof Node\Expr\PreInc || $parent instanceof Node\Expr\PreDec || $parent instanceof Node\Expr\PostInc || $parent instanceof Node\Expr\PostDec) && $parent->var === $node)
+                            || $parent instanceof Node\Expr\Isset_
+                            || $parent instanceof Node\Stmt\Unset_
+                        ){
+                            return null;
+                        }
+                        return $this->sandboxStaticPropertyCall($this->staticPropertyNeedsReference($node) ? '_get_static_property_reference' : '_get_static_property', $node, [], $node);
+                    }
+                } else if($node instanceof Node\Expr\ClassConstFetch){
+                    if(!$node->name instanceof Node\Identifier){
+                        if(!$this->sandbox->allow_dynamic_class_constants){
+                            $this->sandbox->validationError('Sandboxed code attempted dynamically-named class constant access!', Error::DYNAMIC_CLASS_CONST_ERROR, $node);
+                        }
+                        if(!in_array(strtolower($className), ['self', 'static', 'parent'], true)){
+                            return new Node\Expr\MethodCall(
+                                new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]),
+                                '_get_class_constant',
+                                [new Node\Arg(new Node\Scalar\String_($runtimeClassName)), new Node\Arg($node->name)],
+                                $node->getAttributes()
+                            );
+                        }
+                    } else if(strtolower($node->name->toString()) !== 'class' && !in_array(strtolower($className), ['self', 'static', 'parent'], true)){
+                        $this->sandbox->checkClassConstant($runtimeClassName, $node->name->toString());
+                    }
                 }
                 return $node;
             } else if($node instanceof Node\Param && $node->type instanceof Node\Name){
@@ -431,6 +753,164 @@
             }
             return null;
         }
+
+        /** Rewrite an instance-property operation through the runtime member guard. */
+        protected function sandboxPropertyCall(string $method, Node\Expr\PropertyFetch $property, array $extra, Node $origin) : Node\Expr\MethodCall {
+            $name = $property->name instanceof Node\Identifier
+                ? new Node\Scalar\String_($property->name->toString())
+                : $property->name;
+            $arguments = [
+                new Node\Arg($property->var),
+                new Node\Arg($name),
+            ];
+            foreach($extra as $argument){
+                $arguments[] = new Node\Arg($argument);
+            }
+            return new Node\Expr\MethodCall(
+                new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]),
+                $method,
+                $arguments,
+                $origin->getAttributes()
+            );
+        }
+
+        /** Rewrite a static-property operation through the same runtime member policy. */
+        protected function sandboxStaticPropertyCall(string $method, Node\Expr\StaticPropertyFetch $property, array $extra, Node $origin) : Node\Expr\MethodCall {
+            $name = $property->name instanceof Node\VarLikeIdentifier
+                ? new Node\Scalar\String_($property->name->toString())
+                : $property->name;
+            $arguments = [
+                new Node\Arg(new Node\Scalar\String_($property->class->toString())),
+                new Node\Arg($name),
+            ];
+            foreach($extra as $argument){
+                $arguments[] = new Node\Arg($argument);
+            }
+            return new Node\Expr\MethodCall(
+                new Node\Expr\StaticCall(new Node\Name\FullyQualified('PHPSandbox\\PHPSandbox'), 'getSandbox', [new Node\Arg(new Node\Scalar\String_($this->sandbox->name))]),
+                $method,
+                $arguments,
+                $origin->getAttributes()
+            );
+        }
+
+        /** Convert call arguments to an invoke-array while retaining references and named/unpacked semantics. */
+        protected function argumentArray(array $arguments) : Node\Expr\Array_ {
+            $items = [];
+            foreach($arguments as $argument){
+                $key = $argument->name !== null ? new Node\Scalar\String_($argument->name->toString()) : null;
+                $items[] = new Node\ArrayItem(
+                    $argument->value,
+                    $key,
+                    !$argument->unpack && $this->isReferenceableExpression($argument->value),
+                    $argument->getAttributes(),
+                    $argument->unpack
+                );
+            }
+            return new Node\Expr\Array_($items, ['kind' => Node\Expr\Array_::KIND_SHORT]);
+        }
+
+        protected function memberArgumentNeedsReference(Node\Arg $argument) : bool {
+            $parent = $argument->getAttribute('parent');
+            return ($parent instanceof Node\Expr\MethodCall
+                    || $parent instanceof Node\Expr\NullsafeMethodCall
+                    || $parent instanceof Node\Expr\StaticCall)
+                && $this->isReferenceableExpression($argument->value);
+        }
+
+        protected function isReferenceableExpression(Node\Expr $expression) : bool {
+            return $expression instanceof Node\Expr\Variable
+                || $expression instanceof Node\Expr\ArrayDimFetch
+                || $expression instanceof Node\Expr\PropertyFetch
+                || $expression instanceof Node\Expr\StaticPropertyFetch;
+        }
+
+        protected function isExternalStaticProperty(Node\Expr\StaticPropertyFetch $property) : bool {
+            if(!$property->class instanceof Node\Name){
+                $this->sandbox->validationError('Sandboxed code attempted dynamically-named class access!', Error::DYNAMIC_CLASS_ERROR, $property);
+            }
+            if(!$property->name instanceof Node\VarLikeIdentifier && !$this->sandbox->allow_dynamic_properties){
+                $this->sandbox->validationError('Sandboxed code attempted dynamically-named static property access!', Error::DYNAMIC_PROPERTY_ERROR, $property);
+            }
+            return !in_array(strtolower($property->class->toString()), ['self', 'static', 'parent'], true);
+        }
+
+        /** Determine whether a property must remain a writable reference through nested array dimensions. */
+        protected function propertyNeedsReference(Node\Expr\PropertyFetch $property) : bool {
+            $current = $property;
+            $parent = $current->getAttribute('parent');
+            while($parent instanceof Node\Expr\ArrayDimFetch && $parent->var === $current){
+                $current = $parent;
+                $parent = $current->getAttribute('parent');
+            }
+            if($parent instanceof Node\Expr\AssignRef && ($parent->var === $current || $parent->expr === $current)){
+                return true;
+            }
+            if(($parent instanceof Node\Expr\Assign || $parent instanceof Node\Expr\AssignOp) && $parent->var === $current){
+                return true;
+            }
+            if(($parent instanceof Node\Expr\PreInc || $parent instanceof Node\Expr\PreDec || $parent instanceof Node\Expr\PostInc || $parent instanceof Node\Expr\PostDec) && $parent->var === $current){
+                return true;
+            }
+            return $parent instanceof Node\Stmt\Unset_;
+        }
+
+        protected function staticPropertyNeedsReference(Node\Expr\StaticPropertyFetch $property) : bool {
+            $current = $property;
+            $parent = $current->getAttribute('parent');
+            while($parent instanceof Node\Expr\ArrayDimFetch && $parent->var === $current){
+                $current = $parent;
+                $parent = $current->getAttribute('parent');
+            }
+            return (($parent instanceof Node\Expr\Assign || $parent instanceof Node\Expr\AssignOp || $parent instanceof Node\Expr\AssignRef) && ($parent->var === $current || ($parent instanceof Node\Expr\AssignRef && $parent->expr === $current)))
+                || (($parent instanceof Node\Expr\PreInc || $parent instanceof Node\Expr\PreDec || $parent instanceof Node\Expr\PostInc || $parent instanceof Node\Expr\PostDec) && $parent->var === $current)
+                || $parent instanceof Node\Stmt\Unset_;
+        }
+
+        /** Constant expressions cannot contain runtime guard calls; their syntax is still policy-validated. */
+        protected function isConstantExpression(Node $node) : bool {
+            $parent = $node->getAttribute('parent');
+            while($parent instanceof Node){
+                if($parent instanceof Node\Expr\Closure || $parent instanceof Node\Expr\ArrowFunction){
+                    return false;
+                }
+                if($parent instanceof Node\Stmt\Const_
+                    || $parent instanceof Node\Stmt\ClassConst
+                    || $parent instanceof Node\Attribute
+                ){
+                    return true;
+                }
+                $parent = $parent->getAttribute('parent');
+            }
+            return false;
+        }
+
+        /** Validate all leaves in nullable, union, intersection, and DNF type declarations. */
+        protected function validateTypeNode($type, Node $origin) : void {
+            if($type === null){
+                return;
+            }
+            if($type instanceof Node\NullableType || $type instanceof Node\UnionType || $type instanceof Node\IntersectionType){
+                $types = $type instanceof Node\NullableType ? [$type->type] : $type->types;
+                foreach($types as $nested){
+                    $this->validateTypeNode($nested, $origin);
+                }
+                return;
+            }
+            if($type instanceof Node\Identifier){
+                $this->sandbox->checkPrimitive($type->toString());
+                return;
+            }
+            if($type instanceof Node\Name){
+                $name = $type->toString();
+                if(!in_array(strtolower($name), ['self', 'static', 'parent'], true)){
+                    $this->sandbox->checkType($name);
+                }
+                return;
+            }
+            $this->sandbox->validationError('Sandboxed code used an unsupported type declaration!', Error::VALID_TYPE_ERROR, $origin, $type);
+        }
+
         /** Test the current PhpParser_Node node to see if it is a magic constant, and return the name if it is and null if it is not
          *
          * @param   Node   $node          The sandboxed $node to test
@@ -463,6 +943,16 @@
                     return 'empty';
                 case 'Expr_Yield':
                     return 'yield';
+                case 'Expr_YieldFrom':
+                    return 'yield from';
+                case 'Expr_Throw':
+                    return 'throw';
+                case 'Expr_ArrowFunction':
+                    return 'fn';
+                case 'Expr_Match':
+                    return 'match';
+                case 'Stmt_Enum':
+                    return 'enum';
                 case 'Stmt_Goto':
                 case 'Stmt_Label':  //no point in using labels without goto
                     return 'goto';
@@ -487,6 +977,8 @@
                     return 'return';
                 case 'Stmt_Static':
                     return 'static';
+                case 'Stmt_Const':
+                    return 'const';
                 case 'Stmt_While':
                 case 'Stmt_Do':       //no point in using do without while
                     return 'while';
@@ -512,7 +1004,8 @@
          * @return  string|null       Return string name of node, or null if it is not an operator
          */
         protected function isOperator(Node $node) : ?string {
-            switch($node->getType()){
+            $type = str_replace(['Expr_AssignOp_', 'Expr_BinaryOp_'], ['Expr_Assign', 'Expr_'], $node->getType());
+            switch($type){
                 case 'Expr_Assign':
                     return '=';
                 case 'Expr_AssignBitwiseAnd':
@@ -539,6 +1032,10 @@
                     return '<<=';
                 case 'Expr_AssignShiftRight':
                     return '>>=';
+                case 'Expr_AssignCoalesce':
+                    return '??=';
+                case 'Expr_AssignPow':
+                    return '**=';
                 case 'Expr_BitwiseAnd':
                     return '&';
                 case 'Expr_BitwiseNot':
@@ -555,6 +1052,8 @@
                     return '||';
                 case 'Expr_Concat':
                     return '.';
+                case 'Expr_Coalesce':
+                    return '??';
                 case 'Expr_Div':
                     return '/';
                 case 'Expr_Equal':
@@ -577,6 +1076,8 @@
                     return '%';
                 case 'Expr_Mul':
                     return '*';
+                case 'Expr_Pow':
+                    return '**';
                 case 'Expr_NotEqual':
                     return '!=';
                 case 'Expr_NotIdentical':
@@ -599,6 +1100,10 @@
                     return '<';
                 case 'Expr_SmallerOrEqual':
                     return '<=';
+                case 'Expr_Spaceship':
+                    return '<=>';
+                case 'Expr_Pipe':
+                    return '|>';
                 case 'Expr_Ternary':
                     return '?';
                 case 'Expr_UnaryMinus':
@@ -627,9 +1132,11 @@
                     return 'string';
                 case 'Expr_Cast_Double':
                 case 'Scalar_DNumber':
+                case 'Scalar_Float':
                     return 'float';
                 case 'Expr_Cast_Int':
                 case 'Scalar_LNumber':
+                case 'Scalar_Int':
                     return 'int';
                 case 'Expr_Cast_Object':
                     return 'object';

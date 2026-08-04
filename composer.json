@@ -1,7 +1,7 @@
 {
   "name": "corveda/php-sandbox",
-  "description": "A PHP library that can be used to run PHP code in a sandboxed environment",
-  "keywords": ["php", "sandbox", "parser", "whitelist", "blacklist"],
+  "description": "An in-process PHP AST policy-enforcement toolkit for constrained code execution",
+  "keywords": ["php", "policy", "sandbox", "parser", "allowlist", "denylist"],
   "type": "library",
   "homepage": "https://phpsandbox.org/",
   "license": "BSD-3-Clause",
@@ -15,14 +15,13 @@
     }
   ],
   "require": {
-    "php": ">=7.4|>=8.0",
+    "php": "^8.1",
     "ext-json": "*",
-    "nikic/php-parser": "^5.0",
-    "simpletools/functionparser": "^1.0"
+    "ext-tokenizer": "*",
+    "nikic/php-parser": "^5.7"
   },
   "require-dev": {
-    "symfony/yaml": "~3.0|~4.0|~5.0",
-    "phpunit/phpunit": "^9.5"
+    "phpunit/phpunit": "^10.5|^11.5|^12.0"
   },
   "replace": {
     "fieryprophet/php-sandbox": "*"
@@ -38,6 +37,9 @@
   "scripts": {
     "test": [
       "vendor/bin/phpunit"
+    ],
+    "docs:api": [
+      "php tools/generate-api.php"
     ]
   }
 }

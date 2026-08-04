@@ -247,7 +247,7 @@
          */
         public function testDisallowsBackticks(){
             $this->expectException('PHPSandbox\Error');
-            $this->sandbox->execute(function(){ return `ping google.com`; });
+            $this->sandbox->execute('return `echo sandbox`;');
         }
 
         /**

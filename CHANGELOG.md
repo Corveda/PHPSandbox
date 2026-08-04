@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 08/04/2026 — v4 modernization
+
+- Raised the supported runtime to PHP 8.1–8.5 and migrated to PHP-Parser 5.7+ and current PHPUnit versions.
+- Added explicit, fail-closed AST coverage for modern syntax, including enums, attributes, named arguments, first-class callables, DNF types, property hooks, asymmetric visibility, clone-with, and the pipe operator.
+- Added granular enum, attribute, method, property, and class-constant policy with custom validators and dynamic-member switches; external members are denied by default.
+- Reworked callable extraction without FunctionParser and pass host variables as generated-closure parameters without source serialization.
+- Preserved callable receiver/scope, namespaced function matching, class aliases in guarded static access, and references in guarded method arguments.
+- Hardened includes with canonical roots, wrapper controls, depth limits, and byte limits; repaired nested execution state restoration and weak sandbox registration.
+- Introduced strict template schema v4 and explicit `IMPORT_TRUSTED_CODE` handling for executable imports.
+- Hardened and documented the local-only toolkit, replaced stale manual content, and added generated API documentation and PHP 8.1–8.5 CI.
+- Clarified throughout the project that PHPSandbox is an in-process policy layer, not an OS or process isolation boundary.
+
 ## 09/11/2021
 - Updated dependencies and support for PHP 8.0. Minimum PHP version raised to 7.0.
 

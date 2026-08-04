@@ -23,8 +23,11 @@
             $this->sandbox->allow_classes = true;
             $this->sandbox->validate_classes = false;
             $this->sandbox->allow_includes = true;
+            $this->sandbox->allowIncludePath(dirname($path));
             $result = $this->sandbox->execute(file_get_contents($path), false, $path);
             $this->assertEquals(['ok', null], $result);
+            $this->assertStringContainsString('$result2', $this->sandbox->getPreparedCode());
+            $this->assertStringContainsString('$result2', $this->sandbox->getGeneratedCode());
         }
 
         public function testPropertiesWithMagickConstants() : void {
@@ -70,7 +73,9 @@
             $this->sandbox->allow_aliases = true;
             $this->sandbox->capture_output = true;
             $this->sandbox->whitelistType('PHPUnit\Framework\Exception');
+            $this->sandbox->whitelistType('RuntimeException');
             $this->sandbox->whitelistType('Exception');
+            $this->sandbox->whitelistMethod('Exception', 'getMessage');
             $result = $this->sandbox->execute(file_get_contents($path), false, $path);
             $this->assertEquals('okok', $result);
         }

@@ -1,14 +1,52 @@
 <?php
-    require_once('../vendor/autoload.php');
+    require_once(__DIR__ . '/../vendor/autoload.php');
+
+    const TOOLKIT_MAX_REQUEST_BYTES = 2097152;
+    $template_directory = __DIR__ . '/templates';
+
+    function toolkit_escape($value){
+        return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    $remote_address = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+    $remote_override = filter_var(getenv('PHPSANDBOX_TOOLKIT_ALLOW_REMOTE') ?: 'false', FILTER_VALIDATE_BOOLEAN);
+    if(!$remote_override && !in_array($remote_address, array('127.0.0.1', '::1'), true)){
+        http_response_code(403);
+        die('The PHPSandbox toolkit is local-only. Set PHPSANDBOX_TOOLKIT_ALLOW_REMOTE=1 only behind your own authentication and TLS controls.');
+    }
+    if(isset($_SERVER['CONTENT_LENGTH']) && (int) $_SERVER['CONTENT_LENGTH'] > TOOLKIT_MAX_REQUEST_BYTES){
+        http_response_code(413);
+        die('Toolkit request is too large.');
+    }
+    if(session_status() !== PHP_SESSION_ACTIVE){
+        session_start(array('cookie_httponly' => true, 'cookie_samesite' => 'Strict', 'use_strict_mode' => true));
+    }
+    if(!isset($_SESSION['php_sandbox_csrf'])){
+        $_SESSION['php_sandbox_csrf'] = bin2hex(random_bytes(32));
+    }
+    $csrf_token = $_SESSION['php_sandbox_csrf'];
+    if(($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST'
+        && (!isset($_POST['_csrf']) || !hash_equals($csrf_token, (string) $_POST['_csrf']))){
+        http_response_code(403);
+        die('Invalid toolkit CSRF token.');
+    }
 
     if(isset($_REQUEST['load'])){
         header('Content-type: text/html');
-        die('<html><body><form id="load_form" action="./" method="POST" enctype="multipart/form-data"><input type="file" name="load" onchange="javascript:document.getElementById(\'load_form\').submit();"/></form></body></html>');
+        die('<html><body><form id="load_form" action="./" method="POST" enctype="multipart/form-data">'
+            . '<input type="hidden" name="_csrf" value="' . toolkit_escape($csrf_token) . '"/>'
+            . '<input type="file" accept="application/json,.json" name="load" onchange="document.getElementById(\'load_form\').submit();"/>'
+            . '</form></body></html>');
     }
     if(isset($_FILES['load'])){
-        if($_FILES['load']['error'] == 0 && ($data = file_get_contents($_FILES['load']['tmp_name']))){
+        $uploaded_template = null;
+        if($_FILES['load']['error'] == 0 && $_FILES['load']['size'] <= TOOLKIT_MAX_REQUEST_BYTES
+            && ($data = file_get_contents($_FILES['load']['tmp_name']))
+            && is_array($uploaded_template = json_decode($data, true))){
             header('Content-type: text/html');
-            die('<html><body><script>window.parent.load_template(\'' . addslashes($data) . '\');window.location.href=\'./?load=true\';</script></body></html>');
+            die('<html><body><script>window.parent.load_template('
+                . json_encode($uploaded_template, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
+                . ');window.location.href="./?load=true";</script></body></html>');
         }
         header('Content-type: text/html');
         die('<html><body><script>alert("Template could not be loaded!");</script></body></html>');
@@ -29,7 +67,8 @@
             $whitelist = isset($data['whitelist']) ? $data['whitelist'] : null;
             $blacklist = isset($data['blacklist']) ? $data['blacklist'] : null;
             $definitions = isset($data['definitions']) ? $data['definitions'] : null;
-            $filename = $template = stripslashes($data['save']);
+            $template = stripslashes((string) $data['save']);
+            $filename = trim(preg_replace('/[^a-zA-Z0-9_ -]/', '_', $template), '_ ');
         } else {
             $code = $_POST['code'];
             $setup_code = isset($_POST['setup_code']) ? $_POST['setup_code'] : null;
@@ -40,10 +79,10 @@
             $blacklist = isset($_POST['blacklist']) ? $_POST['blacklist'] : null;
             $definitions = isset($_POST['definitions']) ? $_POST['definitions'] : null;
             $template = stripslashes(isset($_POST['save']) ? $_POST['save'] : $_POST['download']);
-            $filename = isset($_POST['download']) ? $template : trim(preg_replace('/[^a-zA-Z0-9_ ]/', '_', $template), '_');
+            $filename = trim(preg_replace('/[^a-zA-Z0-9_ -]/', '_', $template), '_ ');
         }
         if(!$filename){
-            header('Content-type: text/html');
+            header('Content-type: application/json');
             die(json_encode(array(
                 'message' => 'The template could not be saved because the requested template name was invalid. Please rename your template and try again.',
                 'success' => false
@@ -53,17 +92,18 @@
         if(isset($_POST['download'])){
             $filename = $filename . '.json';
         } else {
-            $cnt = count(glob('templates/*.json')) + 1;
+            $cnt = count(glob($template_directory . '/*.json')) + 1;
             $filename = str_pad($cnt, 3, '0', STR_PAD_LEFT) . ' - ' . $filename . '.json';
         }
-        if(!isset($_POST['download']) && file_exists('templates/' . $filename)){
-            header('Content-type: text/html');
+        if(!isset($_POST['download']) && file_exists($template_directory . '/' . $filename)){
+            header('Content-type: application/json');
             die(json_encode(array(
                 'message' => 'The template could not be saved because the another template already exists with the same name. Please rename your template and try again.',
                 'success' => false
             )));
         }
         $data = array(
+            'schema_version' => 4,
             'code' => $code,
             'setup_code' => $setup_code,
             'prepend_code' => $prepend_code,
@@ -85,8 +125,8 @@
             header('Content-disposition: attachment; filename="' . $filename . '";');
             header('Content-type: application/json');
             die(json_encode($data));
-        } else if(file_put_contents('templates/' . $filename, json_encode($data))){
-            header('Content-type: text/html');
+        } else if(file_put_contents($template_directory . '/' . $filename, json_encode($data))){
+            header('Content-type: application/json');
             die(json_encode(array(
                 'message' => 'The template "' . $template . '" was saved successfully!',
                 'name' => $cnt . ' - ' . $template,
@@ -94,7 +134,7 @@
                 'success' => true
             )));
         }
-        header('Content-type: text/html');
+        header('Content-type: application/json');
         die(json_encode(array(
             'message' => 'An error occurred that prevented your template from being saved!',
             'success' => false
@@ -102,6 +142,7 @@
     }
 
     if(isset($_POST['code'])){
+        header('Content-type: text/plain; charset=utf-8');
         $code = $_POST['code'];
         $setup_code = isset($_POST['setup_code']) ? $_POST['setup_code'] : null;
         $prepend_code = isset($_POST['prepend_code']) ? $_POST['prepend_code'] : null;
@@ -111,6 +152,7 @@
         $blacklist = isset($_POST['blacklist']) ? $_POST['blacklist'] : null;
         $definitions = isset($_POST['definitions']) ? $_POST['definitions'] : null;
         $sandbox = \PHPSandbox\PHPSandbox::create()->import(array(
+            'schema_version' => 4,
             'setup_code' => $setup_code,
             'prepend_code' => $prepend_code,
             'append_code' => $append_code,
@@ -118,10 +160,20 @@
             'whitelist' => $whitelist,
             'blacklist' => $blacklist,
             'definitions' => $definitions
-        ));
-        $sandbox->setErrorHandler(function($errno, $errmsg, $errfile, $errline){ die('<h2 style="color: red;">Error: ' . $errmsg . ' on line ' . $errline . '</h2>'); });
-        $sandbox->setExceptionHandler(function(\Exception $e){ die('<h2 style="color: red;">Exception: ' . $e->getMessage() . ' on line ' . $e->getLine() . '</h2>'); });
-        $sandbox->setValidationErrorHandler(function(\PHPSandbox\Error $e){ die('<h2 style="color: red;">Validation Error: ' . $e->getMessage() . '</h2>'); });
+        ), \PHPSandbox\PHPSandbox::IMPORT_OPTIONS
+            | \PHPSandbox\PHPSandbox::IMPORT_DEFINITIONS
+            | \PHPSandbox\PHPSandbox::IMPORT_WHITELIST
+            | \PHPSandbox\PHPSandbox::IMPORT_BLACKLIST
+            | \PHPSandbox\PHPSandbox::IMPORT_TRUSTED_CODE);
+        $sandbox->setErrorHandler(function($errno, $errmsg, $errfile, $errline){
+            die('Error: ' . $errmsg . ' on line ' . (int) $errline);
+        });
+        $sandbox->setExceptionHandler(function(\Throwable $e){
+            die('Exception: ' . $e->getMessage() . ' on line ' . (int) $e->getLine());
+        });
+        $sandbox->setValidationErrorHandler(function(\PHPSandbox\Error $e){
+            die('Validation Error: ' . $e->getMessage());
+        });
         try {
             ob_start();
             if($setup_code){
@@ -129,26 +181,30 @@
             }
             $result = $sandbox->execute($code);
             if($result !== null){
-                echo (ob_get_contents() ? '<hr class="hr"/>' : '') . '<h3>The sandbox returned this value:</h3>';
+                echo (ob_get_contents() ? "\n---\n" : '') . "The sandbox returned this value:\n";
                 var_dump($result);
             }
-            echo '<hr class="hr"/>Preparation time: ' . round($sandbox->getPreparedTime()*1000, 2) .
+            echo "\n---\nPreparation time: " . round($sandbox->getPreparedTime()*1000, 2) .
                 ' ms, execution time: ' . round($sandbox->getExecutionTime()*1000, 2) .
-                ' ms, total time: ' . round($sandbox->getPreparedTime()*1000, 2) . ' ms' .
-                '<hr class="hr"/>Generated Code: <code>' . $sandbox->getGeneratedCode() . '</code>';
+                ' ms, total time: ' . round(($sandbox->getPreparedTime() + $sandbox->getExecutionTime())*1000, 2) . ' ms' .
+                "\n---\nGenerated Code:\n" . $sandbox->getGeneratedCode();
             $buffer = ob_get_contents();
             ob_end_clean();
-            die('<pre>' . $buffer . '</pre>');
+            die($buffer);
         } catch(\PHPSandbox\Error $e){
-            die('<h2 style="color: red;">' . $e->getMessage() . '</h2>');
+            die($e->getMessage());
         }
     }
 
     if(isset($_GET['template'])){
-        $template = stripslashes($_GET['template']);
-        if(file_exists($template)){
-            header('Content-type: text/html');
+        $template_root = realpath(__DIR__ . '/templates');
+        $template = realpath(__DIR__ . '/' . ltrim(stripslashes((string) $_GET['template']), '/'));
+        if($template_root && $template && str_starts_with($template, $template_root . DIRECTORY_SEPARATOR)
+            && strtolower(pathinfo($template, PATHINFO_EXTENSION)) === 'json'){
+            header('Content-type: application/json');
             readfile($template);
+        } else {
+            http_response_code(404);
         }
         exit;
     }
@@ -157,15 +213,15 @@
         exit;
     }
 
-    $data = json_decode(file_get_contents("templates/001 - Hello World.json"), true);
+    $data = json_decode(file_get_contents($template_directory . '/001 - Hello World.json'), true);
 ?>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>PHPSandbox - Toolkit</title>
-    <link href="//code.jquery.com/ui/1.11.4/themes/vader/jquery-ui.css" type="text/css" rel="stylesheet"/>
-    <script src="//code.jquery.com/jquery-1.12.0.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+    <link href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css" type="text/css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
         var JSON;JSON||(JSON={});
         (function(){function k(a){return a<10?"0"+a:a}function o(a){p.lastIndex=0;return p.test(a)?'"'+a.replace(p,function(a){var c=r[a];return typeof c==="string"?c:"\\u"+("0000"+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+a+'"'}function l(a,j){var c,d,h,m,g=e,f,b=j[a];b&&typeof b==="object"&&typeof b.toJSON==="function"&&(b=b.toJSON(a));typeof i==="function"&&(b=i.call(j,a,b));switch(typeof b){case "string":return o(b);case "number":return isFinite(b)?String(b):"null";case "boolean":case "null":return String(b);case "object":if(!b)return"null";
@@ -181,6 +237,17 @@
             font-family: "Trebuchet MS", sans, sans-serif;
             font-size: 14px;
             background: #ccc;
+        }
+        #policy_warning {
+            background: #fff3cd;
+            border-bottom: 1px solid #d39e00;
+            color: #533f03;
+            left: 0;
+            padding: .45em 1em;
+            position: fixed;
+            right: 303px;
+            top: 0;
+            z-index: 10;
         }
         #instructions {
             position: absolute;
@@ -288,17 +355,19 @@
             setup_code = <?php echo json_encode(isset($data['setup_code']) ? $data['setup_code'] : ''); ?>,
             prepend_code = <?php echo json_encode(isset($data['prepend_code']) ? $data['prepend_code'] : ''); ?>,
             append_code = <?php echo json_encode(isset($data['append_code']) ? $data['append_code'] : ''); ?>,
+            csrf_token = <?php echo json_encode($csrf_token); ?>,
             current_mode = 'code';
     </script>
 </head>
 <body id="body">
+<div id="policy_warning"><strong>Local policy toolkit:</strong> this UI executes PHP in the web-server process. It is not an OS, process, container, or security boundary. Setup code is fully trusted host code.</div>
 <div id="instructions">
     <span id="mode_container">
         <label for="mode"><strong>Editor Mode:</strong></label>
         <select id="mode">
             <option value="code">Sandboxed Code</option>
             <optgroup label="Trusted Code">
-                <option value="setup_code">Setup Code (runs before code and outside sandbox)</option>
+                <option value="setup_code">Setup Code (trusted host eval; outside policy)</option>
                 <option value="prepend_code">Prepended Code (runs before code inside sandbox)</option>
                 <option value="append_code">Appended Code (runs after code inside sandbox)</option>
             </optgroup>
@@ -324,8 +393,10 @@
     <select id="templates">
         <option disabled="disabled">Select a template. . .</option>
     <?php
-        foreach(glob("templates/*.json") as $index => $template){
-            echo '<option value="' . htmlentities($template) . '">' . ($index + 1) . ' - ' . htmlentities(substr($template, 16, strlen($template) - 21)) . '</option>';
+        foreach(glob($template_directory . '/*.json') as $index => $template){
+            $basename = basename($template);
+            $label = preg_replace('/^\d+\s*-\s*|\.json$/', '', $basename);
+            echo '<option value="templates/' . htmlentities($basename) . '">' . ($index + 1) . ' - ' . htmlentities($label) . '</option>';
         }
     ?>
     </select>
@@ -355,6 +426,11 @@
                     }
                 }
                 ?>
+                <label for="max_include_depth">Maximum Include Depth</label>
+                <input type="number" min="1" max="128" name="max_include_depth" id="max_include_depth" value="<?php echo (int) $sandbox->max_include_depth; ?>"/>
+                <br/>
+                <label for="max_include_bytes">Maximum Include Bytes</label>
+                <input type="number" min="1" max="16777216" name="max_include_bytes" id="max_include_bytes" value="<?php echo (int) $sandbox->max_include_bytes; ?>"/>
             </div>
             <h3>Whitelists</h3>
             <div>
@@ -371,6 +447,11 @@
                     <option value="class">Classes</option>
                     <option value="interface">Interfaces</option>
                     <option value="trait">Traits</option>
+                    <option value="enum">Enums</option>
+                    <option value="attribute">Attributes</option>
+                    <option value="method">Methods (Class::method)</option>
+                    <option value="property">Properties (Class::$property)</option>
+                    <option value="class_constant">Class Constants (Class::NAME)</option>
                     <option value="keyword">Keywords</option>
                     <option value="operator">Operators</option>
                     <option value="primitive">Primitives</option>
@@ -415,6 +496,11 @@
                 <div id="whitelist_trait" style="display: none;">
                     <strong>Traits:</strong>
                 </div>
+                <div id="whitelist_enum" style="display: none;"><strong>Enums:</strong></div>
+                <div id="whitelist_attribute" style="display: none;"><strong>Attributes:</strong></div>
+                <div id="whitelist_method" style="display: none;"><strong>Methods:</strong></div>
+                <div id="whitelist_property" style="display: none;"><strong>Properties:</strong></div>
+                <div id="whitelist_class_constant" style="display: none;"><strong>Class Constants:</strong></div>
                 <div id="whitelist_keyword" style="display: none;">
                     <strong>Keywords:</strong>
                 </div>
@@ -443,6 +529,11 @@
                     <option value="class">Classes</option>
                     <option value="interface">Interfaces</option>
                     <option value="trait">Traits</option>
+                    <option value="enum">Enums</option>
+                    <option value="attribute">Attributes</option>
+                    <option value="method">Methods (Class::method)</option>
+                    <option value="property">Properties (Class::$property)</option>
+                    <option value="class_constant">Class Constants (Class::NAME)</option>
                     <option value="keyword">Keywords</option>
                     <option value="operator">Operators</option>
                     <option value="primitive">Primitives</option>
@@ -487,6 +578,11 @@
                 <div id="blacklist_trait" style="display: none;">
                     <strong>Traits:</strong>
                 </div>
+                <div id="blacklist_enum" style="display: none;"><strong>Enums:</strong></div>
+                <div id="blacklist_attribute" style="display: none;"><strong>Attributes:</strong></div>
+                <div id="blacklist_method" style="display: none;"><strong>Methods:</strong></div>
+                <div id="blacklist_property" style="display: none;"><strong>Properties:</strong></div>
+                <div id="blacklist_class_constant" style="display: none;"><strong>Class Constants:</strong></div>
                 <div id="blacklist_keyword" style="display: none;">
                     <strong>Keywords:</strong>
                 </div>
@@ -753,6 +849,7 @@
 <iframe src="./?load=true" id="load" name="load"></iframe>
 <iframe src="./?download=true" id="download" name="download"></iframe>
 <form action="./" id="download_form" target="download" method="post">
+    <input type="hidden" name="_csrf" value="<?php echo toolkit_escape($csrf_token); ?>"/>
     <input type="hidden" id="download_data" name="download" value=""/>
 </form>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -761,9 +858,12 @@
     editor.setTheme("ace/theme/github");
     editor.getSession().setMode("ace/mode/php");
     function invalid(name, type){
+        if(type == 'method' || type == 'property' || type == 'class_constant'){
+            return !/^[a-z_\\][a-z0-9_\\]*::\$?[a-z_][a-z0-9_]*$/i.test(name);
+        }
         if(type == 'var' || type == 'global' || type == 'const'){
             return ((/[^a-z0-9_]+/i.test(name)) || (/[^a-z_]+/i.test(name.substring(0, 1))));
-        } else if(type == 'func' || type == 'namespace' || type == 'alias' || type == 'class' || type == 'interface' || type == 'trait' || type == 'type'){
+        } else if(type == 'func' || type == 'namespace' || type == 'alias' || type == 'class' || type == 'interface' || type == 'trait' || type == 'enum' || type == 'attribute' || type == 'type'){
             return ((/[^a-z0-9_\\]+/i.test(name)) || (/[^a-z_\\]+/i.test(name.substring(0, 1))));
         } else if(type == 'keyword' || type == 'primitive'){
             return (/[^a-z]+/.test(name));
@@ -871,12 +971,17 @@
         append_code = response.append_code ? response.append_code : "";
         sync_code(true);
         var x, type, name, list, button_name, i, button, data;
-        if(response.options && response.options.length){
+        if(response.options && typeof response.options === 'object'){
             for(x in response.options){
                 if(x == 'error_level'){
                     $('#error_level').val(response.options[x])
                 } else {
-                    $("#" + x).prop('checked', response.options[x] ? true : false);
+                    var option = $("#" + x);
+                    if(option.attr('type') === 'checkbox'){
+                        option.prop('checked', response.options[x] ? true : false);
+                    } else {
+                        option.val(response.options[x]);
+                    }
                 }
             }
         }
@@ -985,6 +1090,11 @@
                     "class": {},
                     "interface": {},
                     "trait": {},
+                    "enum": {},
+                    "attribute": {},
+                    "method": {},
+                    "property": {},
+                    "class_constant": {},
                     "keyword": {},
                     "operator": {},
                     "primitive": {},
@@ -1004,7 +1114,7 @@
             };
             $("#options").find("input").each(function(){
                var name = $(this).attr('name');
-               options[name] = $(this).is(":checked") ? 1 : 0;
+               options[name] = $(this).attr('type') === 'checkbox' ? ($(this).is(":checked") ? 1 : 0) : parseInt($(this).val(), 10);
             });
             var x, i;
             for(x in whitelist){
@@ -1078,15 +1188,15 @@
                     $("#download_form").submit();
                     return;
                 }
-                $.post("./", {"code": code, "setup_code": setup_code, "prepend_code": prepend_code, "append_code": append_code, "options": options, "whitelist" : whitelist, "blacklist": blacklist, "definitions": definitions, "save": name}, function(response){
+                $.post("./", {"_csrf": csrf_token, "code": code, "setup_code": setup_code, "prepend_code": prepend_code, "append_code": append_code, "options": options, "whitelist" : whitelist, "blacklist": blacklist, "definitions": definitions, "save": name}, function(response){
                     alert(response.message);
                     if(response.success){
                         $("#templates").append('<option value="templates/' + response.file + '">' + response.name + '</option>').val('templates/' + response.file);
                     }
                 }, 'json');
             } else {
-                $.post("./", {"code": code, "setup_code": setup_code, "prepend_code": prepend_code, "append_code": append_code, "options": options, "whitelist" : whitelist, "blacklist": blacklist, "definitions": definitions}, function(response){
-                    $("#output").html(response);
+                $.post("./", {"_csrf": csrf_token, "code": code, "setup_code": setup_code, "prepend_code": prepend_code, "append_code": append_code, "options": options, "whitelist" : whitelist, "blacklist": blacklist, "definitions": definitions}, function(response){
+                    $("#output").text(response);
                 })
             }
         });

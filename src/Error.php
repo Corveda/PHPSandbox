@@ -42,6 +42,13 @@
         const SANDBOX_ACCESS_ERROR      =       30;
         const GLOBAL_CONST_ERROR        =       31;
         const CREATE_OBJECT_ERROR       =       32;
+        const ENUM_ERROR                =       33;
+        const ATTRIBUTE_ERROR           =       34;
+        const PROPERTY_HOOK_ERROR       =       35;
+        const DYNAMIC_METHOD_ERROR      =       36;
+        const DYNAMIC_PROPERTY_ERROR    =       37;
+        const DYNAMIC_CLASS_CONST_ERROR =       38;
+        const UNKNOWN_NODE_ERROR        =       39;
         /* VALIDATION ERRORS                (100-199) */
         const VALID_FUNC_ERROR          =       100;
         const VALID_KEYWORD_ERROR       =       101;
@@ -58,6 +65,11 @@
         const VALID_ALIAS_ERROR         =       112;
         const VALID_OPERATOR_ERROR      =       113;
         const VALID_PRIMITIVE_ERROR     =       114;
+        const VALID_ENUM_ERROR          =       115;
+        const VALID_ATTRIBUTE_ERROR     =       116;
+        const VALID_METHOD_ERROR        =       117;
+        const VALID_PROPERTY_ERROR      =       118;
+        const VALID_CLASS_CONST_ERROR   =       119;
         /* DEFINITION ERRORS                (200-299) */
         const DEFINE_FUNC_ERROR         =       200;
         const DEFINE_KEYWORD_ERROR      =       201;
@@ -90,6 +102,11 @@
         const WHITELIST_ALIAS_ERROR         =       312;
         const WHITELIST_OPERATOR_ERROR      =       313;
         const WHITELIST_PRIMITIVE_ERROR     =       314;
+        const WHITELIST_ENUM_ERROR          =       315;
+        const WHITELIST_ATTRIBUTE_ERROR     =       316;
+        const WHITELIST_METHOD_ERROR        =       317;
+        const WHITELIST_PROPERTY_ERROR      =       318;
+        const WHITELIST_CLASS_CONST_ERROR   =       319;
         /* BLACKLIST ERRORS                     (400-499) */
         const BLACKLIST_FUNC_ERROR          =       400;
         const BLACKLIST_KEYWORD_ERROR       =       401;
@@ -106,6 +123,11 @@
         const BLACKLIST_ALIAS_ERROR         =       412;
         const BLACKLIST_OPERATOR_ERROR      =       413;
         const BLACKLIST_PRIMITIVE_ERROR     =       414;
+        const BLACKLIST_ENUM_ERROR          =       415;
+        const BLACKLIST_ATTRIBUTE_ERROR     =       416;
+        const BLACKLIST_METHOD_ERROR        =       417;
+        const BLACKLIST_PROPERTY_ERROR      =       418;
+        const BLACKLIST_CLASS_CONST_ERROR   =       419;
         /* END ERROR CODES */
         /**
          * @var Node|null      The node of the Error
